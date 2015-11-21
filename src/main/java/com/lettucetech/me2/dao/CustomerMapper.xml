@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Customer" >
+    <id column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="unionid" property="unionid" jdbcType="CHAR" />
+    <result column="openid" property="openid" jdbcType="CHAR" />
+    <result column="subscribe" property="subscribe" jdbcType="BIT" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="language" property="language" jdbcType="VARCHAR" />
+    <result column="headimgurl" property="headimgurl" jdbcType="VARCHAR" />
+    <result column="subscribe_time" property="subscribeTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="groupid" property="groupid" jdbcType="INTEGER" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="total_credit" property="totalCredit" jdbcType="INTEGER" />
+    <result column="current_shop" property="currentShop" jdbcType="INTEGER" />
+    <result column="current_latitude" property="currentLatitude" jdbcType="REAL" />
+    <result column="current_longtitude" property="currentLongtitude" jdbcType="REAL" />
+    <result column="current_precision" property="currentPrecision" jdbcType="REAL" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="CHAR" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="sourceid" property="sourceid" jdbcType="VARCHAR" />
+    <result column="del" property="del" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.unionid != null" >
+         and unionid = #{condition.unionid}
+      </if>
+      <if test="condition.openid != null" >
+         and openid = #{condition.openid}
+      </if>
+      <if test="condition.subscribe != null" >
+         and subscribe = #{condition.subscribe}
+      </if>
+      <if test="condition.nickname != null" >
+         and nickname = #{condition.nickname}
+      </if>
+      <if test="condition.sex != null" >
+         and sex = #{condition.sex}
+      </if>
+      <if test="condition.city != null" >
+         and city = #{condition.city}
+      </if>
+      <if test="condition.country != null" >
+         and country = #{condition.country}
+      </if>
+      <if test="condition.province != null" >
+         and province = #{condition.province}
+      </if>
+      <if test="condition.language != null" >
+         and language = #{condition.language}
+      </if>
+      <if test="condition.headimgurl != null" >
+         and headimgurl = #{condition.headimgurl}
+      </if>
+      <if test="condition.subscribeTime != null" >
+         and subscribe_time = #{condition.subscribeTime}
+      </if>
+      <if test="condition.remark != null" >
+         and remark = #{condition.remark}
+      </if>
+      <if test="condition.groupid != null" >
+         and groupid = #{condition.groupid}
+      </if>
+      <if test="condition.realname != null" >
+         and realname = #{condition.realname}
+      </if>
+      <if test="condition.password != null" >
+         and password = #{condition.password}
+      </if>
+      <if test="condition.totalCredit != null" >
+         and total_credit = #{condition.totalCredit}
+      </if>
+      <if test="condition.currentShop != null" >
+         and current_shop = #{condition.currentShop}
+      </if>
+      <if test="condition.currentLatitude != null" >
+         and current_latitude = #{condition.currentLatitude}
+      </if>
+      <if test="condition.currentLongtitude != null" >
+         and current_longtitude = #{condition.currentLongtitude}
+      </if>
+      <if test="condition.currentPrecision != null" >
+         and current_precision = #{condition.currentPrecision}
+      </if>
+      <if test="condition.phone != null" >
+         and phone = #{condition.phone}
+      </if>
+      <if test="condition.username != null" >
+         and username = #{condition.username}
+      </if>
+      <if test="condition.source != null" >
+         and source = #{condition.source}
+      </if>
+      <if test="condition.creatTime != null" >
+         and creat_time = #{condition.creatTime}
+      </if>
+      <if test="condition.updateTime != null" >
+         and update_time = #{condition.updateTime}
+      </if>
+      <if test="condition.loginTime != null" >
+         and login_time = #{condition.loginTime}
+      </if>
+      <if test="condition.sourceid != null" >
+         and sourceid = #{condition.sourceid}
+      </if>
+      <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    customer_id, unionid, openid, subscribe, nickname, sex, city, country, province, 
+    language, headimgurl, subscribe_time, remark, groupid, realname, password, total_credit, 
+    current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
+    source, creat_time, update_time, login_time, sourceid, del
+  </sql>
+    
+  <select id="selectByPhoneOrUsername" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <include refid="Base_Column_List" />
+    from customer t
+     where t.phone = #{condition.id} or t.username=#{condition.id}
+  </select>
+ 
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from customer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where customer_id = #{customerId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from customer
+    where customer_id = #{customerId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from customer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Customer" >
+    insert into customer (customer_id, unionid, openid, subscribe, nickname, sex, 
+      city, country, province, language, headimgurl, subscribe_time, 
+      remark, groupid, realname, password, total_credit, current_shop, 
+      current_latitude, current_longtitude, current_precision, phone, username, 
+      source, creat_time, update_time, login_time, sourceid, del)
+    values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
+      #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
+      #{remark}, #{groupid}, #{realname}, #{password}, #{totalCredit}, #{currentShop}, 
+      #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
+      #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
+   	<selectKey keyProperty="customerId" order="AFTER" resultType="java.lang.Integer">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="unionid != null" >
+        unionid,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="subscribe != null" >
+        subscribe,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="language != null" >
+        language,
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl,
+      </if>
+      <if test="subscribeTime != null" >
+        subscribe_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="groupid != null" >
+        groupid,
+      </if>
+      <if test="realname != null" >
+        realname,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="totalCredit != null" >
+        total_credit,
+      </if>
+      <if test="currentShop != null" >
+        current_shop,
+      </if>
+      <if test="currentLatitude != null" >
+        current_latitude,
+      </if>
+      <if test="currentLongtitude != null" >
+        current_longtitude,
+      </if>
+      <if test="currentPrecision != null" >
+        current_precision,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="creatTime != null" >
+        creat_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+      <if test="sourceid != null" >
+        sourceid,
+      </if>
+      <if test="del != null" >
+        del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="unionid != null" >
+        #{unionid},
+      </if>
+      <if test="openid != null" >
+        #{openid},
+      </if>
+      <if test="subscribe != null" >
+        #{subscribe},
+      </if>
+      <if test="nickname != null" >
+        #{nickname},
+      </if>
+      <if test="sex != null" >
+        #{sex},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="country != null" >
+        #{country},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="language != null" >
+        #{language},
+      </if>
+      <if test="headimgurl != null" >
+        #{headimgurl},
+      </if>
+      <if test="subscribeTime != null" >
+        #{subscribeTime},
+      </if>
+      <if test="remark != null" >
+        #{remark},
+      </if>
+      <if test="groupid != null" >
+        #{groupid},
+      </if>
+      <if test="realname != null" >
+        #{realname},
+      </if>
+      <if test="password != null" >
+        #{password},
+      </if>
+      <if test="totalCredit != null" >
+        #{totalCredit},
+      </if>
+      <if test="currentShop != null" >
+        #{currentShop},
+      </if>
+      <if test="currentLatitude != null" >
+        #{currentLatitude},
+      </if>
+      <if test="currentLongtitude != null" >
+        #{currentLongtitude},
+      </if>
+      <if test="currentPrecision != null" >
+        #{currentPrecision},
+      </if>
+      <if test="phone != null" >
+        #{phone},
+      </if>
+      <if test="username != null" >
+        #{username},
+      </if>
+      <if test="source != null" >
+        #{source},
+      </if>
+      <if test="creatTime != null" >
+        #{creatTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime},
+      </if>
+      <if test="sourceid != null" >
+        #{sourceid},
+      </if>
+      <if test="del != null" >
+        #{del},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from customer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update customer
+    <set >
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.unionid != null" >
+        unionid = #{record.unionid},
+      </if>
+      <if test="record.openid != null" >
+        openid = #{record.openid},
+      </if>
+      <if test="record.subscribe != null" >
+        subscribe = #{record.subscribe},
+      </if>
+      <if test="record.nickname != null" >
+        nickname = #{record.nickname},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city},
+      </if>
+      <if test="record.country != null" >
+        country = #{record.country},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province},
+      </if>
+      <if test="record.language != null" >
+        language = #{record.language},
+      </if>
+      <if test="record.headimgurl != null" >
+        headimgurl = #{record.headimgurl},
+      </if>
+      <if test="record.subscribeTime != null" >
+        subscribe_time = #{record.subscribeTime},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark},
+      </if>
+      <if test="record.groupid != null" >
+        groupid = #{record.groupid},
+      </if>
+      <if test="record.realname != null" >
+        realname = #{record.realname},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password},
+      </if>
+      <if test="record.totalCredit != null" >
+        total_credit = #{record.totalCredit},
+      </if>
+      <if test="record.currentShop != null" >
+        current_shop = #{record.currentShop},
+      </if>
+      <if test="record.currentLatitude != null" >
+        current_latitude = #{record.currentLatitude},
+      </if>
+      <if test="record.currentLongtitude != null" >
+        current_longtitude = #{record.currentLongtitude},
+      </if>
+      <if test="record.currentPrecision != null" >
+        current_precision = #{record.currentPrecision},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username},
+      </if>
+      <if test="record.source != null" >
+        source = #{record.source},
+      </if>
+      <if test="record.creatTime != null" >
+        creat_time = #{record.creatTime},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime},
+      </if>
+      <if test="record.loginTime != null" >
+        login_time = #{record.loginTime},
+      </if>
+      <if test="record.sourceid != null" >
+        sourceid = #{record.sourceid},
+      </if>
+      <if test="record.del != null" >
+        del = #{record.del},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update customer
+    set customer_id = #{record.customerId},
+      unionid = #{record.unionid},
+      openid = #{record.openid},
+      subscribe = #{record.subscribe},
+      nickname = #{record.nickname},
+      sex = #{record.sex},
+      city = #{record.city},
+      country = #{record.country},
+      province = #{record.province},
+      language = #{record.language},
+      headimgurl = #{record.headimgurl},
+      subscribe_time = #{record.subscribeTime},
+      remark = #{record.remark},
+      groupid = #{record.groupid},
+      realname = #{record.realname},
+      password = #{record.password},
+      total_credit = #{record.totalCredit},
+      current_shop = #{record.currentShop},
+      current_latitude = #{record.currentLatitude},
+      current_longtitude = #{record.currentLongtitude},
+      current_precision = #{record.currentPrecision},
+      phone = #{record.phone},
+      username = #{record.username},
+      source = #{record.source},
+      creat_time = #{record.creatTime},
+      update_time = #{record.updateTime},
+      login_time = #{record.loginTime},
+      sourceid = #{record.sourceid},
+      del = #{record.del}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Customer" >
+    update customer
+    <set >
+      <if test="unionid != null" >
+        unionid = #{unionid},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid},
+      </if>
+      <if test="subscribe != null" >
+        subscribe = #{subscribe},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="country != null" >
+        country = #{country},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="language != null" >
+        language = #{language},
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl = #{headimgurl},
+      </if>
+      <if test="subscribeTime != null" >
+        subscribe_time = #{subscribeTime},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark},
+      </if>
+      <if test="groupid != null" >
+        groupid = #{groupid},
+      </if>
+      <if test="realname != null" >
+        realname = #{realname},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="totalCredit != null" >
+        total_credit = #{totalCredit},
+      </if>
+      <if test="currentShop != null" >
+        current_shop = #{currentShop},
+      </if>
+      <if test="currentLatitude != null" >
+        current_latitude = #{currentLatitude},
+      </if>
+      <if test="currentLongtitude != null" >
+        current_longtitude = #{currentLongtitude},
+      </if>
+      <if test="currentPrecision != null" >
+        current_precision = #{currentPrecision},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone},
+      </if>
+      <if test="username != null" >
+        username = #{username},
+      </if>
+      <if test="source != null" >
+        source = #{source},
+      </if>
+      <if test="creatTime != null" >
+        creat_time = #{creatTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime},
+      </if>
+      <if test="sourceid != null" >
+        sourceid = #{sourceid},
+      </if>
+      <if test="del != null" >
+        del = #{del},
+      </if>
+    </set>
+    where customer_id = #{customerId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Customer" >
+    update customer
+    set unionid = #{unionid},
+      openid = #{openid},
+      subscribe = #{subscribe},
+      nickname = #{nickname},
+      sex = #{sex},
+      city = #{city},
+      country = #{country},
+      province = #{province},
+      language = #{language},
+      headimgurl = #{headimgurl},
+      subscribe_time = #{subscribeTime},
+      remark = #{remark},
+      groupid = #{groupid},
+      realname = #{realname},
+      password = #{password},
+      total_credit = #{totalCredit},
+      current_shop = #{currentShop},
+      current_latitude = #{currentLatitude},
+      current_longtitude = #{currentLongtitude},
+      current_precision = #{currentPrecision},
+      phone = #{phone},
+      username = #{username},
+      source = #{source},
+      creat_time = #{creatTime},
+      update_time = #{updateTime},
+      login_time = #{loginTime},
+      sourceid = #{sourceid},
+      del = #{del}
+    where customer_id = #{customerId}
+  </update>
+</mapper>

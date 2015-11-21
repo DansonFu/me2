@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.CreditMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Credit" >
+    <id column="credit_id" property="creditId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="event_id" property="eventId" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.eventId != null" >
+         and event_id = #{condition.eventId}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+      <if test="condition.amount != null" >
+         and amount = #{condition.amount}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    credit_id, customer_id, event_id, create_time, amount
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from credit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from credit
+    where credit_id = #{creditId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from credit
+    where credit_id = #{creditId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from credit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Credit" >
+    insert into credit (credit_id, customer_id, event_id, create_time, amount)
+    values (#{creditId}, #{customerId}, #{eventId}, #{createTime}, #{amount})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Credit" >
+    insert into credit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="creditId != null" >
+        credit_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="eventId != null" >
+        event_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="creditId != null" >
+        #{creditId},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="eventId != null" >
+        #{eventId},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="amount != null" >
+        #{amount},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from credit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update credit
+    <set >
+      <if test="record.creditId != null" >
+        credit_id = #{record.creditId},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.eventId != null" >
+        event_id = #{record.eventId},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update credit
+    set credit_id = #{record.creditId},
+      customer_id = #{record.customerId},
+      event_id = #{record.eventId},
+      create_time = #{record.createTime},
+      amount = #{record.amount}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Credit" >
+    update credit
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+      <if test="eventId != null" >
+        event_id = #{eventId},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount},
+      </if>
+    </set>
+    where credit_id = #{creditId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Credit" >
+    update credit
+    set customer_id = #{customerId},
+      event_id = #{eventId},
+      create_time = #{createTime},
+      amount = #{amount}
+    where credit_id = #{creditId}
+  </update>
+</mapper>

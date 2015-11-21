@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.ConsumptionMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Consumption" >
+    <id column="consumption_id" property="consumptionId" jdbcType="INTEGER" />
+    <result column="metoo_img_key" property="metooImgKey" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="longtitude" property="longtitude" jdbcType="REAL" />
+    <result column="precision" property="precision" jdbcType="REAL" />
+    <result column="cost" property="cost" jdbcType="INTEGER" />
+    <result column="is_private" property="isPrivate" jdbcType="BIT" />
+    <result column="param_1" property="param1" jdbcType="VARCHAR" />
+    <result column="param_2" property="param2" jdbcType="VARCHAR" />
+    <result column="param_3" property="param3" jdbcType="VARCHAR" />
+    <result column="param_4" property="param4" jdbcType="VARCHAR" />
+    <result column="param_5" property="param5" jdbcType="VARCHAR" />
+    <result column="is_metoo_generated" property="isMetooGenerated" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="refer_id" property="referId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.metooImgKey != null" >
+         and metoo_img_key = #{condition.metooImgKey}
+      </if>
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.shopId != null" >
+         and shop_id = #{condition.shopId}
+      </if>
+      <if test="condition.latitude != null" >
+         and latitude = #{condition.latitude}
+      </if>
+      <if test="condition.longtitude != null" >
+         and longtitude = #{condition.longtitude}
+      </if>
+      <if test="condition.precision != null" >
+         and precision = #{condition.precision}
+      </if>
+      <if test="condition.cost != null" >
+         and cost = #{condition.cost}
+      </if>
+      <if test="condition.isPrivate != null" >
+         and is_private = #{condition.isPrivate}
+      </if>
+      <if test="condition.param1 != null" >
+         and param_1 = #{condition.param1}
+      </if>
+      <if test="condition.param2 != null" >
+         and param_2 = #{condition.param2}
+      </if>
+      <if test="condition.param3 != null" >
+         and param_3 = #{condition.param3}
+      </if>
+      <if test="condition.param4 != null" >
+         and param_4 = #{condition.param4}
+      </if>
+      <if test="condition.param5 != null" >
+         and param_5 = #{condition.param5}
+      </if>
+      <if test="condition.isMetooGenerated != null" >
+         and is_metoo_generated = #{condition.isMetooGenerated}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+      <if test="condition.referId != null" >
+         and refer_id = #{condition.referId}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    consumption_id, metoo_img_key, customer_id, shop_id, latitude, longtitude, precision, 
+    cost, is_private, param_1, param_2, param_3, param_4, param_5, is_metoo_generated, 
+    create_time, refer_id
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from consumption
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from consumption
+    where consumption_id = #{consumptionId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from consumption
+    where consumption_id = #{consumptionId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from consumption
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Consumption" >
+    insert into consumption (consumption_id, metoo_img_key, customer_id, shop_id, latitude, 
+      longtitude, precision, cost, is_private, param_1, param_2, param_3, 
+      param_4, param_5, is_metoo_generated, create_time, refer_id)
+    values (#{consumptionId}, #{metooImgKey}, #{customerId}, #{shopId}, #{latitude}, 
+      #{longtitude}, #{precision}, #{cost}, #{isPrivate}, #{param1}, #{param2}, #{param3}, 
+      #{param4}, #{param5}, #{isMetooGenerated}, #{createTime}, #{referId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Consumption" >
+    insert into consumption
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="consumptionId != null" >
+        consumption_id,
+      </if>
+      <if test="metooImgKey != null" >
+        metoo_img_key,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longtitude != null" >
+        longtitude,
+      </if>
+      <if test="precision != null" >
+        precision,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="isPrivate != null" >
+        is_private,
+      </if>
+      <if test="param1 != null" >
+        param_1,
+      </if>
+      <if test="param2 != null" >
+        param_2,
+      </if>
+      <if test="param3 != null" >
+        param_3,
+      </if>
+      <if test="param4 != null" >
+        param_4,
+      </if>
+      <if test="param5 != null" >
+        param_5,
+      </if>
+      <if test="isMetooGenerated != null" >
+        is_metoo_generated,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="referId != null" >
+        refer_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="consumptionId != null" >
+        #{consumptionId},
+      </if>
+      <if test="metooImgKey != null" >
+        #{metooImgKey},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="shopId != null" >
+        #{shopId},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+      <if test="longtitude != null" >
+        #{longtitude},
+      </if>
+      <if test="precision != null" >
+        #{precision},
+      </if>
+      <if test="cost != null" >
+        #{cost},
+      </if>
+      <if test="isPrivate != null" >
+        #{isPrivate},
+      </if>
+      <if test="param1 != null" >
+        #{param1},
+      </if>
+      <if test="param2 != null" >
+        #{param2},
+      </if>
+      <if test="param3 != null" >
+        #{param3},
+      </if>
+      <if test="param4 != null" >
+        #{param4},
+      </if>
+      <if test="param5 != null" >
+        #{param5},
+      </if>
+      <if test="isMetooGenerated != null" >
+        #{isMetooGenerated},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="referId != null" >
+        #{referId},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from consumption
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update consumption
+    <set >
+      <if test="record.consumptionId != null" >
+        consumption_id = #{record.consumptionId},
+      </if>
+      <if test="record.metooImgKey != null" >
+        metoo_img_key = #{record.metooImgKey},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude},
+      </if>
+      <if test="record.longtitude != null" >
+        longtitude = #{record.longtitude},
+      </if>
+      <if test="record.precision != null" >
+        precision = #{record.precision},
+      </if>
+      <if test="record.cost != null" >
+        cost = #{record.cost},
+      </if>
+      <if test="record.isPrivate != null" >
+        is_private = #{record.isPrivate},
+      </if>
+      <if test="record.param1 != null" >
+        param_1 = #{record.param1},
+      </if>
+      <if test="record.param2 != null" >
+        param_2 = #{record.param2},
+      </if>
+      <if test="record.param3 != null" >
+        param_3 = #{record.param3},
+      </if>
+      <if test="record.param4 != null" >
+        param_4 = #{record.param4},
+      </if>
+      <if test="record.param5 != null" >
+        param_5 = #{record.param5},
+      </if>
+      <if test="record.isMetooGenerated != null" >
+        is_metoo_generated = #{record.isMetooGenerated},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+      <if test="record.referId != null" >
+        refer_id = #{record.referId},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update consumption
+    set consumption_id = #{record.consumptionId},
+      metoo_img_key = #{record.metooImgKey},
+      customer_id = #{record.customerId},
+      shop_id = #{record.shopId},
+      latitude = #{record.latitude},
+      longtitude = #{record.longtitude},
+      precision = #{record.precision},
+      cost = #{record.cost},
+      is_private = #{record.isPrivate},
+      param_1 = #{record.param1},
+      param_2 = #{record.param2},
+      param_3 = #{record.param3},
+      param_4 = #{record.param4},
+      param_5 = #{record.param5},
+      is_metoo_generated = #{record.isMetooGenerated},
+      create_time = #{record.createTime},
+      refer_id = #{record.referId}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Consumption" >
+    update consumption
+    <set >
+      <if test="metooImgKey != null" >
+        metoo_img_key = #{metooImgKey},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+      <if test="longtitude != null" >
+        longtitude = #{longtitude},
+      </if>
+      <if test="precision != null" >
+        precision = #{precision},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost},
+      </if>
+      <if test="isPrivate != null" >
+        is_private = #{isPrivate},
+      </if>
+      <if test="param1 != null" >
+        param_1 = #{param1},
+      </if>
+      <if test="param2 != null" >
+        param_2 = #{param2},
+      </if>
+      <if test="param3 != null" >
+        param_3 = #{param3},
+      </if>
+      <if test="param4 != null" >
+        param_4 = #{param4},
+      </if>
+      <if test="param5 != null" >
+        param_5 = #{param5},
+      </if>
+      <if test="isMetooGenerated != null" >
+        is_metoo_generated = #{isMetooGenerated},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="referId != null" >
+        refer_id = #{referId},
+      </if>
+    </set>
+    where consumption_id = #{consumptionId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Consumption" >
+    update consumption
+    set metoo_img_key = #{metooImgKey},
+      customer_id = #{customerId},
+      shop_id = #{shopId},
+      latitude = #{latitude},
+      longtitude = #{longtitude},
+      precision = #{precision},
+      cost = #{cost},
+      is_private = #{isPrivate},
+      param_1 = #{param1},
+      param_2 = #{param2},
+      param_3 = #{param3},
+      param_4 = #{param4},
+      param_5 = #{param5},
+      is_metoo_generated = #{isMetooGenerated},
+      create_time = #{createTime},
+      refer_id = #{referId}
+    where consumption_id = #{consumptionId}
+  </update>
+</mapper>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Device" >
+    <id column="device_id" property="deviceId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="user_role" property="userRole" jdbcType="BIT" />
+    <result column="param_1" property="param1" jdbcType="VARCHAR" />
+    <result column="param_2" property="param2" jdbcType="VARCHAR" />
+    <result column="param_3" property="param3" jdbcType="VARCHAR" />
+    <result column="param_4" property="param4" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.type != null" >
+         and type = #{condition.type}
+      </if>
+      <if test="condition.userRole != null" >
+         and user_role = #{condition.userRole}
+      </if>
+      <if test="condition.param1 != null" >
+         and param_1 = #{condition.param1}
+      </if>
+      <if test="condition.param2 != null" >
+         and param_2 = #{condition.param2}
+      </if>
+      <if test="condition.param3 != null" >
+         and param_3 = #{condition.param3}
+      </if>
+      <if test="condition.param4 != null" >
+         and param_4 = #{condition.param4}
+      </if>
+      <if test="condition.shopId != null" >
+         and shop_id = #{condition.shopId}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    device_id, type, user_role, param_1, param_2, param_3, param_4, shop_id
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from device
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from device
+    where device_id = #{deviceId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from device
+    where device_id = #{deviceId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from device
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Device" >
+    insert into device (device_id, type, user_role, param_1, param_2, param_3, param_4, 
+      shop_id)
+    values (#{deviceId}, #{type}, #{userRole}, #{param1}, #{param2}, #{param3}, #{param4}, 
+      #{shopId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Device" >
+    insert into device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="userRole != null" >
+        user_role,
+      </if>
+      <if test="param1 != null" >
+        param_1,
+      </if>
+      <if test="param2 != null" >
+        param_2,
+      </if>
+      <if test="param3 != null" >
+        param_3,
+      </if>
+      <if test="param4 != null" >
+        param_4,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceId != null" >
+        #{deviceId},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="userRole != null" >
+        #{userRole},
+      </if>
+      <if test="param1 != null" >
+        #{param1},
+      </if>
+      <if test="param2 != null" >
+        #{param2},
+      </if>
+      <if test="param3 != null" >
+        #{param3},
+      </if>
+      <if test="param4 != null" >
+        #{param4},
+      </if>
+      <if test="shopId != null" >
+        #{shopId},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from device
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update device
+    <set >
+      <if test="record.deviceId != null" >
+        device_id = #{record.deviceId},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type},
+      </if>
+      <if test="record.userRole != null" >
+        user_role = #{record.userRole},
+      </if>
+      <if test="record.param1 != null" >
+        param_1 = #{record.param1},
+      </if>
+      <if test="record.param2 != null" >
+        param_2 = #{record.param2},
+      </if>
+      <if test="record.param3 != null" >
+        param_3 = #{record.param3},
+      </if>
+      <if test="record.param4 != null" >
+        param_4 = #{record.param4},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update device
+    set device_id = #{record.deviceId},
+      type = #{record.type},
+      user_role = #{record.userRole},
+      param_1 = #{record.param1},
+      param_2 = #{record.param2},
+      param_3 = #{record.param3},
+      param_4 = #{record.param4},
+      shop_id = #{record.shopId}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Device" >
+    update device
+    <set >
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="userRole != null" >
+        user_role = #{userRole},
+      </if>
+      <if test="param1 != null" >
+        param_1 = #{param1},
+      </if>
+      <if test="param2 != null" >
+        param_2 = #{param2},
+      </if>
+      <if test="param3 != null" >
+        param_3 = #{param3},
+      </if>
+      <if test="param4 != null" >
+        param_4 = #{param4},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId},
+      </if>
+    </set>
+    where device_id = #{deviceId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Device" >
+    update device
+    set type = #{type},
+      user_role = #{userRole},
+      param_1 = #{param1},
+      param_2 = #{param2},
+      param_3 = #{param3},
+      param_4 = #{param4},
+      shop_id = #{shopId}
+    where device_id = #{deviceId}
+  </update>
+</mapper>

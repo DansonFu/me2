@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.CardMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Card" >
+    <id column="card_id" property="cardId" jdbcType="INTEGER" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+    <result column="notice" property="notice" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="effective_date" property="effectiveDate" jdbcType="TIMESTAMP" />
+    <result column="expire_date" property="expireDate" jdbcType="TIMESTAMP" />
+    <result column="is_customer_appointed" property="isCustomerAppointed" jdbcType="BIT" />
+    <result column="is_sharable" property="isSharable" jdbcType="BIT" />
+    <result column="is_transferable" property="isTransferable" jdbcType="BIT" />
+    <result column="service_phone" property="servicePhone" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="service_id" property="serviceId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.logoUrl != null" >
+         and logo_url = #{condition.logoUrl}
+      </if>
+      <if test="condition.brandName != null" >
+         and brand_name = #{condition.brandName}
+      </if>
+      <if test="condition.title != null" >
+         and title = #{condition.title}
+      </if>
+      <if test="condition.subTitle != null" >
+         and sub_title = #{condition.subTitle}
+      </if>
+      <if test="condition.notice != null" >
+         and notice = #{condition.notice}
+      </if>
+      <if test="condition.description != null" >
+         and description = #{condition.description}
+      </if>
+      <if test="condition.effectiveDate != null" >
+         and effective_date = #{condition.effectiveDate}
+      </if>
+      <if test="condition.expireDate != null" >
+         and expire_date = #{condition.expireDate}
+      </if>
+      <if test="condition.isCustomerAppointed != null" >
+         and is_customer_appointed = #{condition.isCustomerAppointed}
+      </if>
+      <if test="condition.isSharable != null" >
+         and is_sharable = #{condition.isSharable}
+      </if>
+      <if test="condition.isTransferable != null" >
+         and is_transferable = #{condition.isTransferable}
+      </if>
+      <if test="condition.servicePhone != null" >
+         and service_phone = #{condition.servicePhone}
+      </if>
+      <if test="condition.shopId != null" >
+         and shop_id = #{condition.shopId}
+      </if>
+      <if test="condition.serviceId != null" >
+         and service_id = #{condition.serviceId}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    card_id, logo_url, brand_name, title, sub_title, notice, description, effective_date, 
+    expire_date, is_customer_appointed, is_sharable, is_transferable, service_phone, 
+    shop_id, service_id
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from card
+    where card_id = #{cardId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from card
+    where card_id = #{cardId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Card" >
+    insert into card (card_id, logo_url, brand_name, title, sub_title, notice, description, 
+      effective_date, expire_date, is_customer_appointed, is_sharable, is_transferable, 
+      service_phone, shop_id, service_id)
+    values (#{cardId}, #{logoUrl}, #{brandName}, #{title}, #{subTitle}, #{notice}, #{description}, 
+      #{effectiveDate}, #{expireDate}, #{isCustomerAppointed}, #{isSharable}, #{isTransferable}, 
+      #{servicePhone}, #{shopId}, #{serviceId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Card" >
+    insert into card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        card_id,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="subTitle != null" >
+        sub_title,
+      </if>
+      <if test="notice != null" >
+        notice,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date,
+      </if>
+      <if test="expireDate != null" >
+        expire_date,
+      </if>
+      <if test="isCustomerAppointed != null" >
+        is_customer_appointed,
+      </if>
+      <if test="isSharable != null" >
+        is_sharable,
+      </if>
+      <if test="isTransferable != null" >
+        is_transferable,
+      </if>
+      <if test="servicePhone != null" >
+        service_phone,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="serviceId != null" >
+        service_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        #{cardId},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl},
+      </if>
+      <if test="brandName != null" >
+        #{brandName},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="subTitle != null" >
+        #{subTitle},
+      </if>
+      <if test="notice != null" >
+        #{notice},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="effectiveDate != null" >
+        #{effectiveDate},
+      </if>
+      <if test="expireDate != null" >
+        #{expireDate},
+      </if>
+      <if test="isCustomerAppointed != null" >
+        #{isCustomerAppointed},
+      </if>
+      <if test="isSharable != null" >
+        #{isSharable},
+      </if>
+      <if test="isTransferable != null" >
+        #{isTransferable},
+      </if>
+      <if test="servicePhone != null" >
+        #{servicePhone},
+      </if>
+      <if test="shopId != null" >
+        #{shopId},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update card
+    <set >
+      <if test="record.cardId != null" >
+        card_id = #{record.cardId},
+      </if>
+      <if test="record.logoUrl != null" >
+        logo_url = #{record.logoUrl},
+      </if>
+      <if test="record.brandName != null" >
+        brand_name = #{record.brandName},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title},
+      </if>
+      <if test="record.subTitle != null" >
+        sub_title = #{record.subTitle},
+      </if>
+      <if test="record.notice != null" >
+        notice = #{record.notice},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description},
+      </if>
+      <if test="record.effectiveDate != null" >
+        effective_date = #{record.effectiveDate},
+      </if>
+      <if test="record.expireDate != null" >
+        expire_date = #{record.expireDate},
+      </if>
+      <if test="record.isCustomerAppointed != null" >
+        is_customer_appointed = #{record.isCustomerAppointed},
+      </if>
+      <if test="record.isSharable != null" >
+        is_sharable = #{record.isSharable},
+      </if>
+      <if test="record.isTransferable != null" >
+        is_transferable = #{record.isTransferable},
+      </if>
+      <if test="record.servicePhone != null" >
+        service_phone = #{record.servicePhone},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId},
+      </if>
+      <if test="record.serviceId != null" >
+        service_id = #{record.serviceId},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update card
+    set card_id = #{record.cardId},
+      logo_url = #{record.logoUrl},
+      brand_name = #{record.brandName},
+      title = #{record.title},
+      sub_title = #{record.subTitle},
+      notice = #{record.notice},
+      description = #{record.description},
+      effective_date = #{record.effectiveDate},
+      expire_date = #{record.expireDate},
+      is_customer_appointed = #{record.isCustomerAppointed},
+      is_sharable = #{record.isSharable},
+      is_transferable = #{record.isTransferable},
+      service_phone = #{record.servicePhone},
+      shop_id = #{record.shopId},
+      service_id = #{record.serviceId}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Card" >
+    update card
+    <set >
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="subTitle != null" >
+        sub_title = #{subTitle},
+      </if>
+      <if test="notice != null" >
+        notice = #{notice},
+      </if>
+      <if test="description != null" >
+        description = #{description},
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date = #{effectiveDate},
+      </if>
+      <if test="expireDate != null" >
+        expire_date = #{expireDate},
+      </if>
+      <if test="isCustomerAppointed != null" >
+        is_customer_appointed = #{isCustomerAppointed},
+      </if>
+      <if test="isSharable != null" >
+        is_sharable = #{isSharable},
+      </if>
+      <if test="isTransferable != null" >
+        is_transferable = #{isTransferable},
+      </if>
+      <if test="servicePhone != null" >
+        service_phone = #{servicePhone},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId},
+      </if>
+      <if test="serviceId != null" >
+        service_id = #{serviceId},
+      </if>
+    </set>
+    where card_id = #{cardId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Card" >
+    update card
+    set logo_url = #{logoUrl},
+      brand_name = #{brandName},
+      title = #{title},
+      sub_title = #{subTitle},
+      notice = #{notice},
+      description = #{description},
+      effective_date = #{effectiveDate},
+      expire_date = #{expireDate},
+      is_customer_appointed = #{isCustomerAppointed},
+      is_sharable = #{isSharable},
+      is_transferable = #{isTransferable},
+      service_phone = #{servicePhone},
+      shop_id = #{shopId},
+      service_id = #{serviceId}
+    where card_id = #{cardId}
+  </update>
+</mapper>

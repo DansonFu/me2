@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.MemberMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Member" >
+    <id column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    customer_id, shop_id, create_time
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.MemberKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from member
+    where customer_id = #{customerId}
+      and shop_id = #{shopId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.lettucetech.me2.pojo.MemberKey" >
+    delete from member
+    where customer_id = #{customerId}
+      and shop_id = #{shopId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Member" >
+    insert into member (customer_id, shop_id, create_time)
+    values (#{customerId}, #{shopId}, #{createTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Member" >
+    insert into member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="shopId != null" >
+        #{shopId},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update member
+    <set >
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update member
+    set customer_id = #{record.customerId},
+      shop_id = #{record.shopId},
+      create_time = #{record.createTime}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Member" >
+    update member
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+    </set>
+    where customer_id = #{customerId}
+      and shop_id = #{shopId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Member" >
+    update member
+    set create_time = #{createTime}
+    where customer_id = #{customerId}
+      and shop_id = #{shopId}
+  </update>
+</mapper>

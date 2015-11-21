@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.ShopMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Shop" >
+    <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="poi_id" property="poiId" jdbcType="INTEGER" />
+    <result column="business_name" property="businessName" jdbcType="VARCHAR" />
+    <result column="branch_name" property="branchName" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="categories" property="categories" jdbcType="VARCHAR" />
+    <result column="offset_type" property="offsetType" jdbcType="BIT" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="photo_list" property="photoList" jdbcType="VARCHAR" />
+    <result column="recommend" property="recommend" jdbcType="VARCHAR" />
+    <result column="special" property="special" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="open_time" property="openTime" jdbcType="VARCHAR" />
+    <result column="avg_price" property="avgPrice" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.poiId != null" >
+         and poi_id = #{condition.poiId}
+      </if>
+      <if test="condition.businessName != null" >
+         and business_name = #{condition.businessName}
+      </if>
+      <if test="condition.branchName != null" >
+         and branch_name = #{condition.branchName}
+      </if>
+      <if test="condition.province != null" >
+         and province = #{condition.province}
+      </if>
+      <if test="condition.city != null" >
+         and city = #{condition.city}
+      </if>
+      <if test="condition.district != null" >
+         and district = #{condition.district}
+      </if>
+      <if test="condition.address != null" >
+         and address = #{condition.address}
+      </if>
+      <if test="condition.telephone != null" >
+         and telephone = #{condition.telephone}
+      </if>
+      <if test="condition.categories != null" >
+         and categories = #{condition.categories}
+      </if>
+      <if test="condition.offsetType != null" >
+         and offset_type = #{condition.offsetType}
+      </if>
+      <if test="condition.longitude != null" >
+         and longitude = #{condition.longitude}
+      </if>
+      <if test="condition.latitude != null" >
+         and latitude = #{condition.latitude}
+      </if>
+      <if test="condition.photoList != null" >
+         and photo_list = #{condition.photoList}
+      </if>
+      <if test="condition.recommend != null" >
+         and recommend = #{condition.recommend}
+      </if>
+      <if test="condition.special != null" >
+         and special = #{condition.special}
+      </if>
+      <if test="condition.introduction != null" >
+         and introduction = #{condition.introduction}
+      </if>
+      <if test="condition.openTime != null" >
+         and open_time = #{condition.openTime}
+      </if>
+      <if test="condition.avgPrice != null" >
+         and avg_price = #{condition.avgPrice}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    shop_id, poi_id, business_name, branch_name, province, city, district, address, telephone, 
+    categories, offset_type, longitude, latitude, photo_list, recommend, special, introduction, 
+    open_time, avg_price
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shop
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop
+    where shop_id = #{shopId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shop
+    where shop_id = #{shopId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from shop
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Shop" >
+    insert into shop (shop_id, poi_id, business_name, branch_name, province, city, 
+      district, address, telephone, categories, offset_type, longitude, 
+      latitude, photo_list, recommend, special, introduction, open_time, 
+      avg_price)
+    values (#{shopId}, #{poiId}, #{businessName}, #{branchName}, #{province}, #{city}, 
+      #{district}, #{address}, #{telephone}, #{categories}, #{offsetType}, #{longitude}, 
+      #{latitude}, #{photoList}, #{recommend}, #{special}, #{introduction}, #{openTime}, 
+      #{avgPrice})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Shop" >
+    insert into shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="poiId != null" >
+        poi_id,
+      </if>
+      <if test="businessName != null" >
+        business_name,
+      </if>
+      <if test="branchName != null" >
+        branch_name,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="categories != null" >
+        categories,
+      </if>
+      <if test="offsetType != null" >
+        offset_type,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="photoList != null" >
+        photo_list,
+      </if>
+      <if test="recommend != null" >
+        recommend,
+      </if>
+      <if test="special != null" >
+        special,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="openTime != null" >
+        open_time,
+      </if>
+      <if test="avgPrice != null" >
+        avg_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId},
+      </if>
+      <if test="poiId != null" >
+        #{poiId},
+      </if>
+      <if test="businessName != null" >
+        #{businessName},
+      </if>
+      <if test="branchName != null" >
+        #{branchName},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="district != null" >
+        #{district},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+      <if test="telephone != null" >
+        #{telephone},
+      </if>
+      <if test="categories != null" >
+        #{categories},
+      </if>
+      <if test="offsetType != null" >
+        #{offsetType},
+      </if>
+      <if test="longitude != null" >
+        #{longitude},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+      <if test="photoList != null" >
+        #{photoList},
+      </if>
+      <if test="recommend != null" >
+        #{recommend},
+      </if>
+      <if test="special != null" >
+        #{special},
+      </if>
+      <if test="introduction != null" >
+        #{introduction},
+      </if>
+      <if test="openTime != null" >
+        #{openTime},
+      </if>
+      <if test="avgPrice != null" >
+        #{avgPrice},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from shop
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update shop
+    <set >
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId},
+      </if>
+      <if test="record.poiId != null" >
+        poi_id = #{record.poiId},
+      </if>
+      <if test="record.businessName != null" >
+        business_name = #{record.businessName},
+      </if>
+      <if test="record.branchName != null" >
+        branch_name = #{record.branchName},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city},
+      </if>
+      <if test="record.district != null" >
+        district = #{record.district},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address},
+      </if>
+      <if test="record.telephone != null" >
+        telephone = #{record.telephone},
+      </if>
+      <if test="record.categories != null" >
+        categories = #{record.categories},
+      </if>
+      <if test="record.offsetType != null" >
+        offset_type = #{record.offsetType},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude},
+      </if>
+      <if test="record.photoList != null" >
+        photo_list = #{record.photoList},
+      </if>
+      <if test="record.recommend != null" >
+        recommend = #{record.recommend},
+      </if>
+      <if test="record.special != null" >
+        special = #{record.special},
+      </if>
+      <if test="record.introduction != null" >
+        introduction = #{record.introduction},
+      </if>
+      <if test="record.openTime != null" >
+        open_time = #{record.openTime},
+      </if>
+      <if test="record.avgPrice != null" >
+        avg_price = #{record.avgPrice},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update shop
+    set shop_id = #{record.shopId},
+      poi_id = #{record.poiId},
+      business_name = #{record.businessName},
+      branch_name = #{record.branchName},
+      province = #{record.province},
+      city = #{record.city},
+      district = #{record.district},
+      address = #{record.address},
+      telephone = #{record.telephone},
+      categories = #{record.categories},
+      offset_type = #{record.offsetType},
+      longitude = #{record.longitude},
+      latitude = #{record.latitude},
+      photo_list = #{record.photoList},
+      recommend = #{record.recommend},
+      special = #{record.special},
+      introduction = #{record.introduction},
+      open_time = #{record.openTime},
+      avg_price = #{record.avgPrice}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Shop" >
+    update shop
+    <set >
+      <if test="poiId != null" >
+        poi_id = #{poiId},
+      </if>
+      <if test="businessName != null" >
+        business_name = #{businessName},
+      </if>
+      <if test="branchName != null" >
+        branch_name = #{branchName},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="district != null" >
+        district = #{district},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone},
+      </if>
+      <if test="categories != null" >
+        categories = #{categories},
+      </if>
+      <if test="offsetType != null" >
+        offset_type = #{offsetType},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+      <if test="photoList != null" >
+        photo_list = #{photoList},
+      </if>
+      <if test="recommend != null" >
+        recommend = #{recommend},
+      </if>
+      <if test="special != null" >
+        special = #{special},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction},
+      </if>
+      <if test="openTime != null" >
+        open_time = #{openTime},
+      </if>
+      <if test="avgPrice != null" >
+        avg_price = #{avgPrice},
+      </if>
+    </set>
+    where shop_id = #{shopId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Shop" >
+    update shop
+    set poi_id = #{poiId},
+      business_name = #{businessName},
+      branch_name = #{branchName},
+      province = #{province},
+      city = #{city},
+      district = #{district},
+      address = #{address},
+      telephone = #{telephone},
+      categories = #{categories},
+      offset_type = #{offsetType},
+      longitude = #{longitude},
+      latitude = #{latitude},
+      photo_list = #{photoList},
+      recommend = #{recommend},
+      special = #{special},
+      introduction = #{introduction},
+      open_time = #{openTime},
+      avg_price = #{avgPrice}
+    where shop_id = #{shopId}
+  </update>
+</mapper>

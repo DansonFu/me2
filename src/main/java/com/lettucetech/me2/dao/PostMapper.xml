@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.PostMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Post" >
+    <id column="post_id" property="postId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="service_id" property="serviceId" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_favored" property="isFavored" jdbcType="BIT" />
+    <result column="is_forwarded" property="isForwarded" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.serviceId != null" >
+         and service_id = #{condition.serviceId}
+      </if>
+      <if test="condition.content != null" >
+         and content = #{condition.content}
+      </if>
+      <if test="condition.isFavored != null" >
+         and is_favored = #{condition.isFavored}
+      </if>
+      <if test="condition.isForwarded != null" >
+         and is_forwarded = #{condition.isForwarded}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    post_id, customer_id, service_id, content, is_favored, is_forwarded, create_time
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from post
+    where post_id = #{postId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from post
+    where post_id = #{postId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Post" >
+    insert into post (post_id, customer_id, service_id, content, is_favored, is_forwarded, 
+      create_time)
+    values (#{postId}, #{customerId}, #{serviceId}, #{content}, #{isFavored}, #{isForwarded}, 
+      #{createTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Post" >
+    insert into post
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        post_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="serviceId != null" >
+        service_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="isFavored != null" >
+        is_favored,
+      </if>
+      <if test="isForwarded != null" >
+        is_forwarded,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        #{postId},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="isFavored != null" >
+        #{isFavored},
+      </if>
+      <if test="isForwarded != null" >
+        #{isForwarded},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update post
+    <set >
+      <if test="record.postId != null" >
+        post_id = #{record.postId},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.serviceId != null" >
+        service_id = #{record.serviceId},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content},
+      </if>
+      <if test="record.isFavored != null" >
+        is_favored = #{record.isFavored},
+      </if>
+      <if test="record.isForwarded != null" >
+        is_forwarded = #{record.isForwarded},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update post
+    set post_id = #{record.postId},
+      customer_id = #{record.customerId},
+      service_id = #{record.serviceId},
+      content = #{record.content},
+      is_favored = #{record.isFavored},
+      is_forwarded = #{record.isForwarded},
+      create_time = #{record.createTime}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Post" >
+    update post
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+      <if test="serviceId != null" >
+        service_id = #{serviceId},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="isFavored != null" >
+        is_favored = #{isFavored},
+      </if>
+      <if test="isForwarded != null" >
+        is_forwarded = #{isForwarded},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+    </set>
+    where post_id = #{postId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Post" >
+    update post
+    set customer_id = #{customerId},
+      service_id = #{serviceId},
+      content = #{content},
+      is_favored = #{isFavored},
+      is_forwarded = #{isForwarded},
+      create_time = #{createTime}
+    where post_id = #{postId}
+  </update>
+</mapper>

@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.ServerMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Server" >
+    <id column="server_id" property="serverId" jdbcType="INTEGER" />
+    <result column="unionid" property="unionid" jdbcType="CHAR" />
+    <result column="openid" property="openid" jdbcType="CHAR" />
+    <result column="subscribe" property="subscribe" jdbcType="BIT" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="language" property="language" jdbcType="VARCHAR" />
+    <result column="headimgurl" property="headimgurl" jdbcType="VARCHAR" />
+    <result column="subscribe_time" property="subscribeTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="groupid" property="groupid" jdbcType="INTEGER" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="current_shop" property="currentShop" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.unionid != null" >
+         and unionid = #{condition.unionid}
+      </if>
+      <if test="condition.openid != null" >
+         and openid = #{condition.openid}
+      </if>
+      <if test="condition.subscribe != null" >
+         and subscribe = #{condition.subscribe}
+      </if>
+      <if test="condition.nickname != null" >
+         and nickname = #{condition.nickname}
+      </if>
+      <if test="condition.sex != null" >
+         and sex = #{condition.sex}
+      </if>
+      <if test="condition.city != null" >
+         and city = #{condition.city}
+      </if>
+      <if test="condition.country != null" >
+         and country = #{condition.country}
+      </if>
+      <if test="condition.province != null" >
+         and province = #{condition.province}
+      </if>
+      <if test="condition.language != null" >
+         and language = #{condition.language}
+      </if>
+      <if test="condition.headimgurl != null" >
+         and headimgurl = #{condition.headimgurl}
+      </if>
+      <if test="condition.subscribeTime != null" >
+         and subscribe_time = #{condition.subscribeTime}
+      </if>
+      <if test="condition.remark != null" >
+         and remark = #{condition.remark}
+      </if>
+      <if test="condition.groupid != null" >
+         and groupid = #{condition.groupid}
+      </if>
+      <if test="condition.realname != null" >
+         and realname = #{condition.realname}
+      </if>
+      <if test="condition.password != null" >
+         and password = #{condition.password}
+      </if>
+      <if test="condition.currentShop != null" >
+         and current_shop = #{condition.currentShop}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    server_id, unionid, openid, subscribe, nickname, sex, city, country, province, language, 
+    headimgurl, subscribe_time, remark, groupid, realname, password, current_shop
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from server
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from server
+    where server_id = #{serverId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from server
+    where server_id = #{serverId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from server
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Server" >
+    insert into server (server_id, unionid, openid, subscribe, nickname, sex, city, 
+      country, province, language, headimgurl, subscribe_time, remark, 
+      groupid, realname, password, current_shop)
+    values (#{serverId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, #{city}, 
+      #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, #{remark}, 
+      #{groupid}, #{realname}, #{password}, #{currentShop})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Server" >
+    insert into server
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serverId != null" >
+        server_id,
+      </if>
+      <if test="unionid != null" >
+        unionid,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="subscribe != null" >
+        subscribe,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="language != null" >
+        language,
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl,
+      </if>
+      <if test="subscribeTime != null" >
+        subscribe_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="groupid != null" >
+        groupid,
+      </if>
+      <if test="realname != null" >
+        realname,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="currentShop != null" >
+        current_shop,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serverId != null" >
+        #{serverId},
+      </if>
+      <if test="unionid != null" >
+        #{unionid},
+      </if>
+      <if test="openid != null" >
+        #{openid},
+      </if>
+      <if test="subscribe != null" >
+        #{subscribe},
+      </if>
+      <if test="nickname != null" >
+        #{nickname},
+      </if>
+      <if test="sex != null" >
+        #{sex},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="country != null" >
+        #{country},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="language != null" >
+        #{language},
+      </if>
+      <if test="headimgurl != null" >
+        #{headimgurl},
+      </if>
+      <if test="subscribeTime != null" >
+        #{subscribeTime},
+      </if>
+      <if test="remark != null" >
+        #{remark},
+      </if>
+      <if test="groupid != null" >
+        #{groupid},
+      </if>
+      <if test="realname != null" >
+        #{realname},
+      </if>
+      <if test="password != null" >
+        #{password},
+      </if>
+      <if test="currentShop != null" >
+        #{currentShop},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from server
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update server
+    <set >
+      <if test="record.serverId != null" >
+        server_id = #{record.serverId},
+      </if>
+      <if test="record.unionid != null" >
+        unionid = #{record.unionid},
+      </if>
+      <if test="record.openid != null" >
+        openid = #{record.openid},
+      </if>
+      <if test="record.subscribe != null" >
+        subscribe = #{record.subscribe},
+      </if>
+      <if test="record.nickname != null" >
+        nickname = #{record.nickname},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city},
+      </if>
+      <if test="record.country != null" >
+        country = #{record.country},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province},
+      </if>
+      <if test="record.language != null" >
+        language = #{record.language},
+      </if>
+      <if test="record.headimgurl != null" >
+        headimgurl = #{record.headimgurl},
+      </if>
+      <if test="record.subscribeTime != null" >
+        subscribe_time = #{record.subscribeTime},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark},
+      </if>
+      <if test="record.groupid != null" >
+        groupid = #{record.groupid},
+      </if>
+      <if test="record.realname != null" >
+        realname = #{record.realname},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password},
+      </if>
+      <if test="record.currentShop != null" >
+        current_shop = #{record.currentShop},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update server
+    set server_id = #{record.serverId},
+      unionid = #{record.unionid},
+      openid = #{record.openid},
+      subscribe = #{record.subscribe},
+      nickname = #{record.nickname},
+      sex = #{record.sex},
+      city = #{record.city},
+      country = #{record.country},
+      province = #{record.province},
+      language = #{record.language},
+      headimgurl = #{record.headimgurl},
+      subscribe_time = #{record.subscribeTime},
+      remark = #{record.remark},
+      groupid = #{record.groupid},
+      realname = #{record.realname},
+      password = #{record.password},
+      current_shop = #{record.currentShop}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Server" >
+    update server
+    <set >
+      <if test="unionid != null" >
+        unionid = #{unionid},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid},
+      </if>
+      <if test="subscribe != null" >
+        subscribe = #{subscribe},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="country != null" >
+        country = #{country},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="language != null" >
+        language = #{language},
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl = #{headimgurl},
+      </if>
+      <if test="subscribeTime != null" >
+        subscribe_time = #{subscribeTime},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark},
+      </if>
+      <if test="groupid != null" >
+        groupid = #{groupid},
+      </if>
+      <if test="realname != null" >
+        realname = #{realname},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="currentShop != null" >
+        current_shop = #{currentShop},
+      </if>
+    </set>
+    where server_id = #{serverId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Server" >
+    update server
+    set unionid = #{unionid},
+      openid = #{openid},
+      subscribe = #{subscribe},
+      nickname = #{nickname},
+      sex = #{sex},
+      city = #{city},
+      country = #{country},
+      province = #{province},
+      language = #{language},
+      headimgurl = #{headimgurl},
+      subscribe_time = #{subscribeTime},
+      remark = #{remark},
+      groupid = #{groupid},
+      realname = #{realname},
+      password = #{password},
+      current_shop = #{currentShop}
+    where server_id = #{serverId}
+  </update>
+</mapper>

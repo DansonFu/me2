@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+		<!-- 
+	<plugins>
+		指定数据库分页方言Dialect, 其它方言:OracleDialect,SQLServerDialect,SybaseDialect,DB2Dialect,
+		PostgreSQLDialect,MySQLDialect,DerbyDialect,HSQLDialect
+		<plugin interceptor="cn.gov.hnjt.gs.common.mybatis.OffsetLimitInterceptor">
+			<property name="dialectClass" value="cn.gov.hnjt.gs.common.mybatis.dialect.OracleDialect"/>
+		</plugin>
+	</plugins>
+		-->
+	<mappers>
+		<mapper resource="config/ibatis/common_SqlMap.xml" />
+	</mappers>
+</configuration>
