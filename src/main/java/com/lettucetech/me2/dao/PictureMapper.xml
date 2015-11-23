@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.PictureMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Picture" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="mood" property="mood" jdbcType="VARCHAR" />
+    <result column="front" property="front" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="agree" property="agree" jdbcType="INTEGER" />
+    <result column="disagree" property="disagree" jdbcType="INTEGER" />
+    <result column="location_title" property="locationTitle" jdbcType="VARCHAR" />
+    <result column="location_content" property="locationContent" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="anonymity" property="anonymity" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.key != null" >
+         and key = #{condition.key}
+      </if>
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.creatTime != null" >
+         and creat_time = #{condition.creatTime}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      <if test="condition.mood != null" >
+         and mood = #{condition.mood}
+      </if>
+      <if test="condition.front != null" >
+         and front = #{condition.front}
+      </if>
+      <if test="condition.type != null" >
+         and type = #{condition.type}
+      </if>
+      <if test="condition.parentId != null" >
+         and parent_id = #{condition.parentId}
+      </if>
+      <if test="condition.agree != null" >
+         and agree = #{condition.agree}
+      </if>
+      <if test="condition.disagree != null" >
+         and disagree = #{condition.disagree}
+      </if>
+      <if test="condition.locationTitle != null" >
+         and location_title = #{condition.locationTitle}
+      </if>
+      <if test="condition.locationContent != null" >
+         and location_content = #{condition.locationContent}
+      </if>
+      <if test="condition.longitude != null" >
+         and longitude = #{condition.longitude}
+      </if>
+      <if test="condition.latitude != null" >
+         and latitude = #{condition.latitude}
+      </if>
+      <if test="condition.tags != null" >
+         and tags = #{condition.tags}
+      </if>
+      <if test="condition.anonymity != null" >
+         and anonymity = #{condition.anonymity}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    pid, key, customer_id, creat_time, hits, mood, front, type, parent_id, agree, disagree, 
+    location_title, location_content, longitude, latitude, tags, anonymity
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from picture
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from picture
+    where pid = #{pid}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from picture
+    where pid = #{pid}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from picture
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Picture" >
+    insert into picture (pid, key, customer_id, creat_time, hits, mood, front, 
+      type, parent_id, agree, disagree, location_title, location_content, 
+      longitude, latitude, tags, anonymity)
+    values (#{pid}, #{key}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
+      #{type}, #{parentId}, #{agree}, #{disagree}, #{locationTitle}, #{locationContent}, 
+      #{longitude}, #{latitude}, #{tags}, #{anonymity})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
+    insert into picture
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="key != null" >
+        key,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="creatTime != null" >
+        creat_time,
+      </if>
+      <if test="hits != null" >
+        hits,
+      </if>
+      <if test="mood != null" >
+        mood,
+      </if>
+      <if test="front != null" >
+        front,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="agree != null" >
+        agree,
+      </if>
+      <if test="disagree != null" >
+        disagree,
+      </if>
+      <if test="locationTitle != null" >
+        location_title,
+      </if>
+      <if test="locationContent != null" >
+        location_content,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="tags != null" >
+        tags,
+      </if>
+      <if test="anonymity != null" >
+        anonymity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid},
+      </if>
+      <if test="key != null" >
+        #{key},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="creatTime != null" >
+        #{creatTime},
+      </if>
+      <if test="hits != null" >
+        #{hits},
+      </if>
+      <if test="mood != null" >
+        #{mood},
+      </if>
+      <if test="front != null" >
+        #{front},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="parentId != null" >
+        #{parentId},
+      </if>
+      <if test="agree != null" >
+        #{agree},
+      </if>
+      <if test="disagree != null" >
+        #{disagree},
+      </if>
+      <if test="locationTitle != null" >
+        #{locationTitle},
+      </if>
+      <if test="locationContent != null" >
+        #{locationContent},
+      </if>
+      <if test="longitude != null" >
+        #{longitude},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+      <if test="tags != null" >
+        #{tags},
+      </if>
+      <if test="anonymity != null" >
+        #{anonymity},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from picture
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update picture
+    <set >
+      <if test="record.pid != null" >
+        pid = #{record.pid},
+      </if>
+      <if test="record.key != null" >
+        key = #{record.key},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.creatTime != null" >
+        creat_time = #{record.creatTime},
+      </if>
+      <if test="record.hits != null" >
+        hits = #{record.hits},
+      </if>
+      <if test="record.mood != null" >
+        mood = #{record.mood},
+      </if>
+      <if test="record.front != null" >
+        front = #{record.front},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId},
+      </if>
+      <if test="record.agree != null" >
+        agree = #{record.agree},
+      </if>
+      <if test="record.disagree != null" >
+        disagree = #{record.disagree},
+      </if>
+      <if test="record.locationTitle != null" >
+        location_title = #{record.locationTitle},
+      </if>
+      <if test="record.locationContent != null" >
+        location_content = #{record.locationContent},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude},
+      </if>
+      <if test="record.tags != null" >
+        tags = #{record.tags},
+      </if>
+      <if test="record.anonymity != null" >
+        anonymity = #{record.anonymity},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update picture
+    set pid = #{record.pid},
+      key = #{record.key},
+      customer_id = #{record.customerId},
+      creat_time = #{record.creatTime},
+      hits = #{record.hits},
+      mood = #{record.mood},
+      front = #{record.front},
+      type = #{record.type},
+      parent_id = #{record.parentId},
+      agree = #{record.agree},
+      disagree = #{record.disagree},
+      location_title = #{record.locationTitle},
+      location_content = #{record.locationContent},
+      longitude = #{record.longitude},
+      latitude = #{record.latitude},
+      tags = #{record.tags},
+      anonymity = #{record.anonymity}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Picture" >
+    update picture
+    <set >
+      <if test="key != null" >
+        key = #{key},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+      <if test="creatTime != null" >
+        creat_time = #{creatTime},
+      </if>
+      <if test="hits != null" >
+        hits = #{hits},
+      </if>
+      <if test="mood != null" >
+        mood = #{mood},
+      </if>
+      <if test="front != null" >
+        front = #{front},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId},
+      </if>
+      <if test="agree != null" >
+        agree = #{agree},
+      </if>
+      <if test="disagree != null" >
+        disagree = #{disagree},
+      </if>
+      <if test="locationTitle != null" >
+        location_title = #{locationTitle},
+      </if>
+      <if test="locationContent != null" >
+        location_content = #{locationContent},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+      <if test="tags != null" >
+        tags = #{tags},
+      </if>
+      <if test="anonymity != null" >
+        anonymity = #{anonymity},
+      </if>
+    </set>
+    where pid = #{pid}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Picture" >
+    update picture
+    set key = #{key},
+      customer_id = #{customerId},
+      creat_time = #{creatTime},
+      hits = #{hits},
+      mood = #{mood},
+      front = #{front},
+      type = #{type},
+      parent_id = #{parentId},
+      agree = #{agree},
+      disagree = #{disagree},
+      location_title = #{locationTitle},
+      location_content = #{locationContent},
+      longitude = #{longitude},
+      latitude = #{latitude},
+      tags = #{tags},
+      anonymity = #{anonymity}
+    where pid = #{pid}
+  </update>
+</mapper>

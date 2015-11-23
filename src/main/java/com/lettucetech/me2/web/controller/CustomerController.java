@@ -2,6 +2,7 @@ package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
+import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.service.CustomerService;
 
@@ -67,6 +69,22 @@ public class CustomerController {
 			result.setSuccess(false);
 			result.setMessage("该用户已被封");
 		}
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		
+		return mav;
+		
+	}
+	
+	@RequestMapping(value="/customers",method=RequestMethod.GET)
+	public ModelAndView getCustomers() {
+		Criteria example = new Criteria();
+		List<Customer> customers = customerService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(customers);
+
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		

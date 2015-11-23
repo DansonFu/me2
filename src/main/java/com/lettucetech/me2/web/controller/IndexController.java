@@ -189,7 +189,7 @@ public class IndexController {
 	public ModelAndView index(HttpSession session) {
 		logger.debug("IndexController - index");
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/test");
+		mav.setViewName("/index");
 		return mav;
 	}
 	

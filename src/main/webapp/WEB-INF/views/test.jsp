@@ -12,13 +12,20 @@
 </head>
 <body>
 ${name }
-
+<!--  
  <form action="<%=basePath%>products/info" method="post" enctype="multipart/form-data">
          <input type="text" name="pid"/> 
          <input type="text" name="pname"/> 
          <input type="file" name="file"/>
          <input type="submit"/>
-    </form>
+    </form>-->
     
+   <form action="<%=basePath %>hello/getMap" method="post">  
+    <input name="mapVo['a'].name">  
+    <input name="mapVo['a'].password" type="password">  
+    <input name="mapVo['b'].name">  
+    <input name="mapVo['b'].password" type="password">  
+    <input type="submit" value="submit">  
+</form> 
 </body>
 </html>
