@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
+import com.lettucetech.me2.common.utils.MD5;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.service.CustomerService;
@@ -83,6 +84,8 @@ public class IndexController {
 			result.setMessage("该呢称已存在");
 		}else{
 			customer.setCreatTime(new Date());
+			//MD5加密
+			customer.setPassword(MD5.getMD5(customer.getPassword()));
 			if(customerService.insertSelective(customer)>0){
 				result.setSuccess(true);
 				result.setMessage("注册成功");
@@ -93,7 +96,7 @@ public class IndexController {
 		
 		try {
 			response.setHeader("Cache-Control", "no-cache");
-			response.setContentType("aplication/json;charset=UTF-8");
+			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().print(jsonArray);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -120,7 +123,7 @@ public class IndexController {
 			result.setSuccess(false);
 			result.setMessage("该用户已被封");
 		}else{
-			if(password.equals(list.get(0).getPassword())){
+			if(MD5.getMD5(password).equals(list.get(0).getPassword())){
 				result.setSuccess(true);
 				result.setMessage("登录成功");
 				result.setObj(list.get(0));
@@ -136,13 +139,13 @@ public class IndexController {
 		
 		return mav;
 	}
-	/**
-	 * 第三方平台用户登录
-	 * @param session
-	 * @param id
-	 * @param password
-	 * @return
-	 */
+/**
+ * 第三方平台用户登录
+ * @param session
+ * @param uid
+ * @param source
+ * @return
+ */
 	@RequestMapping(value="/thirdPartyLogin/{uid}/{source}",method=RequestMethod.GET)
 	public ModelAndView thirdPartyLogin(HttpSession session,@PathVariable String uid,@PathVariable String source) {
 		Criteria example = new Criteria();

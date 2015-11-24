@@ -4,11 +4,11 @@ public class Me2Constants {
 	/**
 	 * 7牛私有资源
 	 */
-	public static final String METOOPRIVATE = "metoo-private";
+	public static final String METOOPRIVATE = "me2-private";
 	/**
 	 * 7牛公有资源
 	 */
-	public static final String METOOPULIC = "metoo-public";
+	public static final String METOOPULIC = "me2-public";
 	/**
 	 * 7牛accessKey
 	 */

@@ -172,7 +172,7 @@
 
 					</div>
 					<div class="page-content">
-						<iframe scrolling="no" frameborder="0" src="<%=basePath %>metoo" id="main_target" name="main_target" width="99%"></iframe>
+						<iframe scrolling="no" frameborder="0" src="<%=basePath %>admin/metoo" id="main_target" name="main_target" width="99%"></iframe>
 					</div>
 				</div><!-- /.main-content -->
 

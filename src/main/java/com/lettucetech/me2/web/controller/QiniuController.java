@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
+import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.qiniu.util.Auth;
 
 @Controller
@@ -18,7 +19,7 @@ import com.qiniu.util.Auth;
 public class QiniuController {
 	private static final Logger logger = Logger.getLogger(QiniuController.class);
 	
-	Auth auth = Auth.create(Me2Constants.ACCESSKEY, Me2Constants.SECRETKEY);
+	
 
 	
 	/**
@@ -31,9 +32,9 @@ public class QiniuController {
 	public ModelAndView getSimpleToken(HttpSession session,@PathVariable String type) {
 		String token=null;
 		if("b".equals(type)){
-			token = auth.uploadToken(Me2Constants.METOOPRIVATE);
+			token = QiniuUtil.uploadToken(Me2Constants.METOOPRIVATE);
 		}else{
-			token = auth.uploadToken(Me2Constants.METOOPULIC);
+			token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
 		}
 		
 		RestfulResult result = new RestfulResult();
@@ -54,9 +55,9 @@ public class QiniuController {
 	public ModelAndView getUpdateToken(HttpSession session,@PathVariable String type,@PathVariable String key) {
 		String token=null;
 		if("b".equals(type)){
-			token = auth.uploadToken(Me2Constants.METOOPRIVATE,key);
+			token = QiniuUtil.uploadToken(Me2Constants.METOOPRIVATE,key);
 		}else{
-			token = auth.uploadToken(Me2Constants.METOOPULIC,key);
+			token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC,key);
 		}
 		
 		RestfulResult result = new RestfulResult();

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.GameMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Game" >
+    <id column="game_id" property="gameId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="del" property="del" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.name != null" >
+         and name = #{condition.name}
+      </if>
+      <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    game_id, name, del
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from game
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from game
+    where game_id = #{gameId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from game
+    where game_id = #{gameId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from game
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Game" >
+    insert into game (game_id, name, del)
+    values (#{gameId}, #{name}, #{del})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Game" >
+    insert into game
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="gameId != null" >
+        game_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="del != null" >
+        del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="gameId != null" >
+        #{gameId},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="del != null" >
+        #{del},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from game
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update game
+    <set >
+      <if test="record.gameId != null" >
+        game_id = #{record.gameId},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name},
+      </if>
+      <if test="record.del != null" >
+        del = #{record.del},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update game
+    set game_id = #{record.gameId},
+      name = #{record.name},
+      del = #{record.del}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Game" >
+    update game
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="del != null" >
+        del = #{del},
+      </if>
+    </set>
+    where game_id = #{gameId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Game" >
+    update game
+    set name = #{name},
+      del = #{del}
+    where game_id = #{gameId}
+  </update>
+</mapper>

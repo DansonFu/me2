@@ -31,15 +31,15 @@ public class PictureController {
 	 */
 	@RequestMapping(value = "/pictures", method ={RequestMethod.POST})
 	public ModelAndView addPicture(HttpSession session,@RequestBody List<Picture> pictures){
-		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
+//		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
 		Picture A = pictures.get(0);
-		Picture B = pictures.get(1);
 		
-		A.setCustomerId(customer.getCustomerId());
+//		A.setCustomerId(customer.getCustomerId());
 		A.setCreatTime(new Date());
 		pictureService.insertSelective(A);
-		if(B!=null){
-			B.setCustomerId(customer.getCustomerId());
+		if(pictures.size()>1){
+			Picture B = pictures.get(1);
+//			B.setCustomerId(customer.getCustomerId());
 			B.setCreatTime(new Date());
 			B.setParentId(A.getPid());
 		}

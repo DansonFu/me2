@@ -148,6 +148,11 @@ public class Customer implements Serializable {
      */
     private String del;
 
+    /**
+     * 是否内部用户 0 否，1 是
+     */
+    private String inneruser;
+
     public Integer getCustomerId() {
         return customerId;
     }
@@ -574,5 +579,20 @@ public class Customer implements Serializable {
      */
     public void setDel(String del) {
         this.del = del;
+    }
+
+    /**
+     * @return 是否内部用户 0 否，1 是
+     */
+    public String getInneruser() {
+        return inneruser;
+    }
+
+    /**
+     * @param inneruser 
+	 *            是否内部用户 0 否，1 是
+     */
+    public void setInneruser(String inneruser) {
+        this.inneruser = inneruser;
     }
 }

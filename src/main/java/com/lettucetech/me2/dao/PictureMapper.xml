@@ -3,7 +3,7 @@
 <mapper namespace="com.lettucetech.me2.dao.PictureMapper" >
   <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Picture" >
     <id column="pid" property="pid" jdbcType="INTEGER" />
-    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
     <result column="hits" property="hits" jdbcType="INTEGER" />
@@ -19,11 +19,12 @@
     <result column="latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="anonymity" property="anonymity" jdbcType="CHAR" />
+    <result column="game_id" property="gameId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
-      <if test="condition.key != null" >
-         and key = #{condition.key}
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
       </if>
       <if test="condition.customerId != null" >
          and customer_id = #{condition.customerId}
@@ -70,11 +71,15 @@
       <if test="condition.anonymity != null" >
          and anonymity = #{condition.anonymity}
       </if>
+      <if test="condition.gameId != null" >
+         and game_id = #{condition.gameId}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    pid, key, customer_id, creat_time, hits, mood, front, type, parent_id, agree, disagree, 
-    location_title, location_content, longitude, latitude, tags, anonymity
+    pid, qiniukey, customer_id, creat_time, hits, mood, front, type, parent_id, agree, 
+    disagree, location_title, location_content, longitude, latitude, tags, anonymity, 
+    game_id
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -108,12 +113,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Picture" >
-    insert into picture (pid, key, customer_id, creat_time, hits, mood, front, 
+    insert into picture (pid, qiniukey, customer_id, creat_time, hits, mood, front, 
       type, parent_id, agree, disagree, location_title, location_content, 
-      longitude, latitude, tags, anonymity)
-    values (#{pid}, #{key}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
+      longitude, latitude, tags, anonymity, game_id)
+    values (#{pid}, #{qiniukey}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
       #{type}, #{parentId}, #{agree}, #{disagree}, #{locationTitle}, #{locationContent}, 
-      #{longitude}, #{latitude}, #{tags}, #{anonymity})
+      #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
     insert into picture
@@ -121,8 +126,8 @@
       <if test="pid != null" >
         pid,
       </if>
-      <if test="key != null" >
-        key,
+      <if test="qiniukey != null" >
+        qiniukey,
       </if>
       <if test="customerId != null" >
         customer_id,
@@ -169,13 +174,16 @@
       <if test="anonymity != null" >
         anonymity,
       </if>
+      <if test="gameId != null" >
+        game_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pid != null" >
         #{pid},
       </if>
-      <if test="key != null" >
-        #{key},
+      <if test="qiniukey != null" >
+        #{qiniukey},
       </if>
       <if test="customerId != null" >
         #{customerId},
@@ -222,6 +230,9 @@
       <if test="anonymity != null" >
         #{anonymity},
       </if>
+      <if test="gameId != null" >
+        #{gameId},
+      </if>
     </trim>
   </insert>
   <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
@@ -236,8 +247,8 @@
       <if test="record.pid != null" >
         pid = #{record.pid},
       </if>
-      <if test="record.key != null" >
-        key = #{record.key},
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
       </if>
       <if test="record.customerId != null" >
         customer_id = #{record.customerId},
@@ -284,6 +295,9 @@
       <if test="record.anonymity != null" >
         anonymity = #{record.anonymity},
       </if>
+      <if test="record.gameId != null" >
+        game_id = #{record.gameId},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -292,7 +306,7 @@
   <update id="updateByParams" parameterType="map" >
     update picture
     set pid = #{record.pid},
-      key = #{record.key},
+      qiniukey = #{record.qiniukey},
       customer_id = #{record.customerId},
       creat_time = #{record.creatTime},
       hits = #{record.hits},
@@ -307,7 +321,8 @@
       longitude = #{record.longitude},
       latitude = #{record.latitude},
       tags = #{record.tags},
-      anonymity = #{record.anonymity}
+      anonymity = #{record.anonymity},
+      game_id = #{record.gameId}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -315,8 +330,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Picture" >
     update picture
     <set >
-      <if test="key != null" >
-        key = #{key},
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
       </if>
       <if test="customerId != null" >
         customer_id = #{customerId},
@@ -363,12 +378,15 @@
       <if test="anonymity != null" >
         anonymity = #{anonymity},
       </if>
+      <if test="gameId != null" >
+        game_id = #{gameId},
+      </if>
     </set>
     where pid = #{pid}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Picture" >
     update picture
-    set key = #{key},
+    set qiniukey = #{qiniukey},
       customer_id = #{customerId},
       creat_time = #{creatTime},
       hits = #{hits},
@@ -383,7 +401,8 @@
       longitude = #{longitude},
       latitude = #{latitude},
       tags = #{tags},
-      anonymity = #{anonymity}
+      anonymity = #{anonymity},
+      game_id = #{gameId}
     where pid = #{pid}
   </update>
 </mapper>

@@ -50,22 +50,226 @@
 
 	<body>
 		<div class="page-content">
-			<form class="form-horizontal" role="form">
-				<div class="form-group">
-					<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 选择发布用户</label>
-					<div class="col-sm-3">
-						<select id="form-field-select-3" >
-							<c:forEach items="${customers}" var="customer" varStatus="">
-								<option value="${customer.customerId }">${customer.username }</option>
-							</c:forEach>
-						</select>
-					</div>
-					<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> A面</label>
-					<div class="col-sm-3">
-						<input type="file" />
-					</div>
-				</div>
+			<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/savemetoo" method="post" enctype="multipart/form-data">
 
+				<div class="table-responsive">
+					<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th width="10%">用户</th>
+								<th width="10%">A面</th>
+								<th width="20%" class="hidden-480">标签(英文逗号分隔)</th>
+								<th width="30%">心情</th>
+								<th width="10%">B面</th>
+								<th width="10%" class="hidden-480">解蜜</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+													<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+														<tr>
+								<td>
+									<select name="username" >
+										<c:forEach items="${customers}" var="customer" varStatus="">
+											<option value="${customer.customerId }">${customer.username }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="file" name="afile"/></td>
+								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
+								<td><input type="text" name="feel" size="60"/></td>
+								<td><input type="file" name="bfile"/></td>
+								<td class="hidden-480">
+									<select name="gameid" >
+										<c:forEach items="${games}" var="game" varStatus="">
+											<option value="${game.gameId }">${game.name }</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div><!-- /.table-responsive -->
+										
 				<div class="space-4"></div>
 
 
@@ -89,6 +293,7 @@
 		</div>
 		
 		<script src="<%=basePath %>resources/assets/js/jquery.min.js"></script>
+		<script src="<%=basePath %>resources/assets/js/jquery.form.js"></script>
 		<script src="<%=basePath %>resources/assets/js/bootstrap.min.js"></script>
 		<script src="<%=basePath %>resources/assets/js/typeahead-bs2.min.js"></script>
 		<script src="<%=basePath %>resources/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -107,7 +312,7 @@
 		
 <script type="text/javascript">
 	function submitform(){
-		alert(getToken());
+		$("#me2form").submit();
 	}
 	function getToken(){
 		var token;
@@ -123,9 +328,7 @@
 		});
 		return token;
 	}
-	function uploadPicture2qiniu(){
-		
-	}
+
 </script>		
 	</body>
 </html>

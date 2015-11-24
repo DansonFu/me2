@@ -48,7 +48,7 @@ public class CustomerController {
 		
 		try {
 			response.setHeader("Cache-Control", "no-cache");
-			response.setContentType("aplication/json;charset=UTF-8");
+			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().print(jsonArray);
 		} catch (IOException e) {
 			e.printStackTrace();

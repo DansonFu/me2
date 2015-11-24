@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
@@ -132,10 +133,3 @@ public class TestController{
 		this.pname = pname;
 	}
 }
-  class MyRet {
-	    public long fsize;
-	    public String key;
-	    public String hash;
-	    public int width;
-	    public int height;
-	}

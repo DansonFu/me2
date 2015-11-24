@@ -12,9 +12,9 @@ public class Picture implements Serializable {
     private Integer pid;
 
     /**
-     * 7牛的图片KEY
+     * 7牛的图片KEY 
      */
-    private String key;
+    private String qiniukey;
 
     /**
      * 发布人
@@ -37,12 +37,12 @@ public class Picture implements Serializable {
     private String mood;
 
     /**
-     * A面B面
+     * a:a面   b:b面
      */
     private String front;
 
     /**
-     * 蜜图类型:
+     * B面类型:
 1、图片
 2、文字
 3、视频
@@ -96,6 +96,11 @@ public class Picture implements Serializable {
     private String anonymity;
 
     /**
+     * 解蜜游戏ID
+     */
+    private Integer gameId;
+
+    /**
      * @return 蜜图id
      */
     public Integer getPid() {
@@ -111,18 +116,18 @@ public class Picture implements Serializable {
     }
 
     /**
-     * @return 7牛的图片KEY
+     * @return 7牛的图片KEY 
      */
-    public String getKey() {
-        return key;
+    public String getQiniukey() {
+        return qiniukey;
     }
 
     /**
-     * @param key 
-	 *            7牛的图片KEY
+     * @param qiniukey 
+	 *            7牛的图片KEY 
      */
-    public void setKey(String key) {
-        this.key = key;
+    public void setQiniukey(String qiniukey) {
+        this.qiniukey = qiniukey;
     }
 
     /**
@@ -186,7 +191,7 @@ public class Picture implements Serializable {
     }
 
     /**
-     * @return A面B面
+     * @return a:a面   b:b面
      */
     public String getFront() {
         return front;
@@ -194,14 +199,14 @@ public class Picture implements Serializable {
 
     /**
      * @param front 
-	 *            A面B面
+	 *            a:a面   b:b面
      */
     public void setFront(String front) {
         this.front = front;
     }
 
     /**
-     * @return 蜜图类型:
+     * @return B面类型:
 1、图片
 2、文字
 3、视频
@@ -213,7 +218,7 @@ public class Picture implements Serializable {
 
     /**
      * @param type 
-	 *            蜜图类型:
+	 *            B面类型:
 1、图片
 2、文字
 3、视频
@@ -356,5 +361,20 @@ public class Picture implements Serializable {
      */
     public void setAnonymity(String anonymity) {
         this.anonymity = anonymity;
+    }
+
+    /**
+     * @return 解蜜游戏ID
+     */
+    public Integer getGameId() {
+        return gameId;
+    }
+
+    /**
+     * @param gameId 
+	 *            解蜜游戏ID
+     */
+    public void setGameId(Integer gameId) {
+        this.gameId = gameId;
     }
 }

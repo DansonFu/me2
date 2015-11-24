@@ -31,6 +31,7 @@
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
     <result column="sourceid" property="sourceid" jdbcType="VARCHAR" />
     <result column="del" property="del" jdbcType="CHAR" />
+    <result column="inneruser" property="inneruser" jdbcType="CHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -118,13 +119,16 @@
       <if test="condition.del != null" >
          and del = #{condition.del}
       </if>
+      <if test="condition.inneruser != null" >
+         and inneruser = #{condition.inneruser}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
     customer_id, unionid, openid, subscribe, nickname, sex, city, country, province, 
     language, headimgurl, subscribe_time, remark, groupid, realname, password, total_credit, 
     current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
-    source, creat_time, update_time, login_time, sourceid, del
+    source, creat_time, update_time, login_time, sourceid, del, inneruser
   </sql>
     
   <select id="selectByPhoneOrUsername" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
@@ -170,12 +174,14 @@
       city, country, province, language, headimgurl, subscribe_time, 
       remark, groupid, realname, password, total_credit, current_shop, 
       current_latitude, current_longtitude, current_precision, phone, username, 
-      source, creat_time, update_time, login_time, sourceid, del)
+      source, creat_time, update_time, login_time, sourceid, del, inneruser
+      )
     values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
       #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
       #{remark}, #{groupid}, #{realname}, #{password}, #{totalCredit}, #{currentShop}, 
       #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
-      #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del})
+      #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
    	<selectKey keyProperty="customerId" order="AFTER" resultType="java.lang.Integer">
@@ -270,6 +276,9 @@
       <if test="del != null" >
         del,
       </if>
+      <if test="inneruser != null" >
+        inneruser,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -358,6 +367,9 @@
       </if>
       <if test="del != null" >
         #{del},
+      </if>
+      <if test="inneruser != null" >
+        #{inneruser},
       </if>
     </trim>
   </insert>
@@ -457,6 +469,9 @@
       <if test="record.del != null" >
         del = #{record.del},
       </if>
+      <if test="record.inneruser != null" >
+        inneruser = #{record.inneruser},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -492,7 +507,8 @@
       update_time = #{record.updateTime},
       login_time = #{record.loginTime},
       sourceid = #{record.sourceid},
-      del = #{record.del}
+      del = #{record.del},
+      inneruser = #{record.inneruser}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -584,6 +600,9 @@
       <if test="del != null" >
         del = #{del},
       </if>
+      <if test="inneruser != null" >
+        inneruser = #{inneruser},
+      </if>
     </set>
     where customer_id = #{customerId}
   </update>
@@ -616,7 +635,8 @@
       update_time = #{updateTime},
       login_time = #{loginTime},
       sourceid = #{sourceid},
-      del = #{del}
+      del = #{del},
+      inneruser = #{inneruser}
     where customer_id = #{customerId}
   </update>
 </mapper>
