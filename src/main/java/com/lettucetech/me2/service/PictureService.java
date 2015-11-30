@@ -26,4 +26,6 @@ public interface PictureService {
     int insert(Picture record);
 
     int insertSelective(Picture record);
+
+	List<Picture> selectByParams4Business(Criteria example);
 }

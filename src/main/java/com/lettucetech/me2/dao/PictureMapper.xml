@@ -21,6 +21,48 @@
     <result column="anonymity" property="anonymity" jdbcType="CHAR" />
     <result column="game_id" property="gameId" jdbcType="INTEGER" />
   </resultMap>
+  
+  <resultMap id="BusinessResultMap" type="com.lettucetech.me2.pojo.Picture" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="mood" property="mood" jdbcType="VARCHAR" />
+    <result column="front" property="front" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="agree" property="agree" jdbcType="INTEGER" />
+    <result column="disagree" property="disagree" jdbcType="INTEGER" />
+    <result column="location_title" property="locationTitle" jdbcType="VARCHAR" />
+    <result column="location_content" property="locationContent" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="anonymity" property="anonymity" jdbcType="CHAR" />
+    <result column="game_id" property="gameId" jdbcType="INTEGER" />
+    
+    <association property="bpicture" javaType="com.lettucetech.me2.pojo.Picture">
+    	    <id column="pid" property="pid" jdbcType="INTEGER" />
+		    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+		    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+		    <result column="hits" property="hits" jdbcType="INTEGER" />
+		    <result column="mood" property="mood" jdbcType="VARCHAR" />
+		    <result column="front" property="front" jdbcType="CHAR" />
+		    <result column="type" property="type" jdbcType="CHAR" />
+		    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		    <result column="agree" property="agree" jdbcType="INTEGER" />
+		    <result column="disagree" property="disagree" jdbcType="INTEGER" />
+		    <result column="location_title" property="locationTitle" jdbcType="VARCHAR" />
+		    <result column="location_content" property="locationContent" jdbcType="VARCHAR" />
+		    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+		    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+		    <result column="tags" property="tags" jdbcType="VARCHAR" />
+		    <result column="anonymity" property="anonymity" jdbcType="CHAR" />
+		    <result column="game_id" property="gameId" jdbcType="INTEGER" />
+    </association>
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.qiniukey != null" >
@@ -96,6 +138,38 @@
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
+  
+  <select id="selectByParams4Business" resultMap="BusinessResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    SELECT a.*,b.* FROM picture a left join picture b on a.pid=b.parent_id
+    <where>
+         a.front = 'a'
+         
+    	<if test="condition.qiniukey != null" >
+         and a.qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.customerId != null" >
+         and a.customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.tags != null" >
+         and a.tags = #{condition.tags}
+      </if>
+      <if test="condition.anonymity != null" >
+         and a.anonymity = #{condition.anonymity}
+      </if>
+      <if test="condition.gameId != null" >
+         and a.game_id = #{condition.gameId}
+      </if>
+      <!-- 是否只查包括B面的列表 -->
+      <if test="condition.includeb == 'yes'" >
+         and b.parent_id is not null
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -121,6 +195,9 @@
       #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
+   <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
     insert into picture
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="pid != null" >

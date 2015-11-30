@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.PasterMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Paster" >
+    <id column="paster_id" property="pasterId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="del" property="del" jdbcType="CHAR" />
+ <!--     <collection property="children" column="paster_id" select="getChildren"></collection>-->
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.title != null" >
+         and title = #{condition.title}
+      </if>
+      <if test="condition.account != null" >
+         and account = #{condition.account}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.cover != null" >
+         and cover = #{condition.cover}
+      </if>
+      <if test="condition.num != null" >
+         and num = #{condition.num}
+      </if>
+      <if test="condition.parentId != null" >
+         and parent_id = #{condition.parentId}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+      <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    paster_id, title, account, qiniukey, cover, num, parent_id, create_time, del
+  </sql>
+  
+  <select id="getChildren" resultMap="BaseResultMap" parameterType="int" >
+    select * from paster where parent_id=#{paster_id}
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from paster
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from paster
+    where paster_id = #{pasterId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from paster
+    where paster_id = #{pasterId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from paster
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Paster" >
+    insert into paster (paster_id, title, account, qiniukey, cover, num, parent_id, 
+      create_time, del)
+    values (#{pasterId}, #{title}, #{account}, #{qiniukey}, #{cover}, #{num}, #{parentId}, 
+      #{createTime}, #{del})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Paster" >
+    insert into paster
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pasterId != null" >
+        paster_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="del != null" >
+        del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pasterId != null" >
+        #{pasterId},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="account != null" >
+        #{account},
+      </if>
+      <if test="qiniukey != null" >
+        #{qiniukey},
+      </if>
+      <if test="cover != null" >
+        #{cover},
+      </if>
+      <if test="num != null" >
+        #{num},
+      </if>
+      <if test="parentId != null" >
+        #{parentId},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="del != null" >
+        #{del},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from paster
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update paster
+    <set >
+      <if test="record.pasterId != null" >
+        paster_id = #{record.pasterId},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title},
+      </if>
+      <if test="record.account != null" >
+        account = #{record.account},
+      </if>
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
+      </if>
+      <if test="record.cover != null" >
+        cover = #{record.cover},
+      </if>
+      <if test="record.num != null" >
+        num = #{record.num},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+      <if test="record.del != null" >
+        del = #{record.del},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update paster
+    set paster_id = #{record.pasterId},
+      title = #{record.title},
+      account = #{record.account},
+      qiniukey = #{record.qiniukey},
+      cover = #{record.cover},
+      num = #{record.num},
+      parent_id = #{record.parentId},
+      create_time = #{record.createTime},
+      del = #{record.del}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Paster" >
+    update paster
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="account != null" >
+        account = #{account},
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover},
+      </if>
+      <if test="num != null" >
+        num = #{num},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="del != null" >
+        del = #{del},
+      </if>
+    </set>
+    where paster_id = #{pasterId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Paster" >
+    update paster
+    set title = #{title},
+      account = #{account},
+      qiniukey = #{qiniukey},
+      cover = #{cover},
+      num = #{num},
+      parent_id = #{parentId},
+      create_time = #{createTime},
+      del = #{del}
+    where paster_id = #{pasterId}
+  </update>
+</mapper>

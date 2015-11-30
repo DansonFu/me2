@@ -140,9 +140,15 @@
 
 					<ul class="nav nav-list">
 						<li class="active">
-							<a href="javascript:toServices('metoo','metoo');" id="metoo">
+							<a href="javascript:toServices('admin/metoo','metoo');" id="metoo">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 批量发布蜜图 </span>
+							</a>
+						</li>
+						<li >
+							<a href="javascript:toServices('admin/comment','comment');" id="comment">
+								<i class="icon-dashboard"></i>
+								<span class="menu-text"> 评论蜜图 </span>
 							</a>
 						</li>
 					</ul><!-- /.nav-list -->

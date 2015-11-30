@@ -101,6 +101,11 @@ public class Picture implements Serializable {
     private Integer gameId;
 
     /**
+     * B面
+     */
+    private Picture bpicture;
+    
+    /**
      * @return 蜜图id
      */
     public Integer getPid() {
@@ -377,4 +382,13 @@ public class Picture implements Serializable {
     public void setGameId(Integer gameId) {
         this.gameId = gameId;
     }
+
+	public Picture getBpicture() {
+		return bpicture;
+	}
+
+	public void setBpicture(Picture bpicture) {
+		this.bpicture = bpicture;
+	}
+    
 }

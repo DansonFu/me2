@@ -1,12 +1,12 @@
 package com.lettucetech.me2.dao;
 
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Paster;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
-public interface PictureMapper {
+public interface PasterMapper {
     /**
      * 根据条件查询记录总数
      */
@@ -20,52 +20,47 @@ public interface PictureMapper {
     /**
      * 根据主键删除记录
      */
-    int deleteByPrimaryKey(Integer pid);
+    int deleteByPrimaryKey(Integer pasterId);
 
     /**
      * 保存记录,不管记录里面的属性是否为空
      */
-    int insert(Picture record);
+    int insert(Paster record);
 
     /**
      * 保存属性不为空的记录
      */
-    int insertSelective(Picture record);
+    int insertSelective(Paster record);
 
     /**
      * 根据条件查询记录集
      */
-    List<Picture> selectByParams(Criteria example);
+    List<Paster> selectByParams(Criteria example);
 
     /**
      * 根据主键查询记录
      */
-    Picture selectByPrimaryKey(Integer pid);
+    Paster selectByPrimaryKey(Integer pasterId);
 
     /**
      * 根据条件更新属性不为空的记录
      */
-    int updateByParamsSelective(@Param("record") Picture record, @Param("condition") Map<String, Object> condition);
+    int updateByParamsSelective(@Param("record") Paster record, @Param("condition") Map<String, Object> condition);
 
     /**
      * 根据条件更新记录
      */
-    int updateByParams(@Param("record") Picture record, @Param("condition") Map<String, Object> condition);
+    int updateByParams(@Param("record") Paster record, @Param("condition") Map<String, Object> condition);
 
     /**
      * 根据主键更新属性不为空的记录
      */
-    int updateByPrimaryKeySelective(Picture record);
+    int updateByPrimaryKeySelective(Paster record);
 
     /**
      * 根据主键更新记录
      */
-    int updateByPrimaryKey(Picture record);
+    int updateByPrimaryKey(Paster record);
 
-    /**
-     * 查询包括B面的Picture集合
-     * @param example
-     * @return
-     */
-	List<Picture> selectByParams4Business(Criteria example);
+	List<Paster> selectByParams4Business(Criteria example);
 }

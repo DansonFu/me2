@@ -113,8 +113,10 @@ public class IndexController {
 	@RequestMapping(value="/login/{id}/{password}",method=RequestMethod.GET)
 	public ModelAndView login(HttpSession session,@PathVariable String id,@PathVariable String password) {
 		Criteria example = new Criteria();
-		example.put("id", id);
-		List<Customer> list = customerService.selectByPhoneOrUsername(example);
+//		example.put("id", id);
+//		List<Customer> list = customerService.selectByPhoneOrUsername(example);
+		example.put("phone", id);
+		List<Customer> list = customerService.selectByParams(example);
 		RestfulResult result = new RestfulResult();
 		if(list.size()==0){
 			result.setSuccess(false);
