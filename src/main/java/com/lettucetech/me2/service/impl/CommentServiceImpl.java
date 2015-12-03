@@ -62,8 +62,4 @@ public class CommentServiceImpl implements CommentService {
     public int insertSelective(Comment record) {
         return this.commentMapper.insertSelective(record);
     }
-
-	public List<Comment> selectByParams4Business(Criteria example) {
-		return this.commentMapper.selectByParams4Business(example);
-	}
 }

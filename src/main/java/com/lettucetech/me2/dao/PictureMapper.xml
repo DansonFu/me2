@@ -20,49 +20,9 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="anonymity" property="anonymity" jdbcType="CHAR" />
     <result column="game_id" property="gameId" jdbcType="INTEGER" />
+     <collection property="bpicture" column="pid" select="getChild"></collection>
   </resultMap>
   
-  <resultMap id="BusinessResultMap" type="com.lettucetech.me2.pojo.Picture" >
-    <id column="pid" property="pid" jdbcType="INTEGER" />
-    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
-    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
-    <result column="hits" property="hits" jdbcType="INTEGER" />
-    <result column="mood" property="mood" jdbcType="VARCHAR" />
-    <result column="front" property="front" jdbcType="CHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
-    <result column="agree" property="agree" jdbcType="INTEGER" />
-    <result column="disagree" property="disagree" jdbcType="INTEGER" />
-    <result column="location_title" property="locationTitle" jdbcType="VARCHAR" />
-    <result column="location_content" property="locationContent" jdbcType="VARCHAR" />
-    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
-    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
-    <result column="tags" property="tags" jdbcType="VARCHAR" />
-    <result column="anonymity" property="anonymity" jdbcType="CHAR" />
-    <result column="game_id" property="gameId" jdbcType="INTEGER" />
-    
-    <association property="bpicture" javaType="com.lettucetech.me2.pojo.Picture">
-    	    <id column="pid" property="pid" jdbcType="INTEGER" />
-		    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
-		    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-		    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
-		    <result column="hits" property="hits" jdbcType="INTEGER" />
-		    <result column="mood" property="mood" jdbcType="VARCHAR" />
-		    <result column="front" property="front" jdbcType="CHAR" />
-		    <result column="type" property="type" jdbcType="CHAR" />
-		    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
-		    <result column="agree" property="agree" jdbcType="INTEGER" />
-		    <result column="disagree" property="disagree" jdbcType="INTEGER" />
-		    <result column="location_title" property="locationTitle" jdbcType="VARCHAR" />
-		    <result column="location_content" property="locationContent" jdbcType="VARCHAR" />
-		    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
-		    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
-		    <result column="tags" property="tags" jdbcType="VARCHAR" />
-		    <result column="anonymity" property="anonymity" jdbcType="CHAR" />
-		    <result column="game_id" property="gameId" jdbcType="INTEGER" />
-    </association>
-  </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.qiniukey != null" >
@@ -123,6 +83,7 @@
     disagree, location_title, location_content, longitude, latitude, tags, anonymity, 
     game_id
   </sql>
+
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >
@@ -139,12 +100,17 @@
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
   
-  <select id="selectByParams4Business" resultMap="BusinessResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    SELECT a.*,b.* FROM picture a left join picture b on a.pid=b.parent_id
+  <select id="getChild" resultMap="BaseResultMap" parameterType="int" >
+    select * from picture where parent_id=#{pid}
+  </select>
+  <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    SELECT a.* FROM picture a left join picture b on a.pid=b.parent_id
     <where>
-         a.front = 'a'
-         
-    	<if test="condition.qiniukey != null" >
+    	a.pid>=(SELECT floor( RAND() * ((SELECT MAX(pid) FROM picture)-(SELECT MIN(pid) FROM picture)) + (SELECT MIN(pid) FROM picture)))
+       <if test="condition.front != null" >
+         and a.front = #{condition.front}
+      </if>
+      <if test="condition.qiniukey != null" >
          and a.qiniukey = #{condition.qiniukey}
       </if>
       <if test="condition.customerId != null" >
@@ -164,10 +130,7 @@
          and b.parent_id is not null
       </if>
     </where>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-    <include refid="common.Mysql_Pagination_Limit" />
+	LIMIT 10
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >

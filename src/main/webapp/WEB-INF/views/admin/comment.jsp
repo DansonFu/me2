@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -29,6 +30,8 @@
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-rtl.min.css" />
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/chosen.css" />
+		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/global.css">
+		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/common.css">
 		<!--[if lte IE 8]>
 		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 		<![endif]-->
@@ -51,64 +54,172 @@
 	<body>
 
 		<div class="page-content">
-			<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/savemetoo" method="post" enctype="multipart/form-data">
-				
-				<div class="table-responsive">
-					<table id="sample-table-1" class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th width="10%">用户</th>
-								<th width="10%">A面</th>
-								<th width="20%" class="hidden-480">标签(英文逗号分隔)</th>
-								<th width="30%">心情</th>
-								<th width="10%">B面</th>
-								<th width="10%" class="hidden-480">解蜜</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<c:forEach var="x" begin="0" end="10">
-							<tr>
-								<td>
-									随机用户
-								</td>
-								<td><input type="file" name="afile"/></td>
-								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
-								<td><input type="text" name="feel" size="60"/></td>
-								<td><input type="file" name="bfile"/></td>
-								<td class="hidden-480">
-									<select name="gameid" >
-										<c:forEach items="${games}" var="game" varStatus="">
-											<option value="${game.gameId }">${game.name }</option>
-										</c:forEach>
-									</select>
-								</td>
-							</tr>
-							</c:forEach>						
-						</tbody>
-					</table>
-				</div><!-- /.table-responsive -->
-										
-				<div class="space-4"></div>
-
-
-
-				<div class="clearfix form-actions">
-					<div class="col-md-offset-3 col-md-9">
-						<button class="btn btn-info" type="button" onclick="submitform()">
-							<i class="icon-ok bigger-110"></i>
-							提交
-						</button>
-
-						&nbsp; &nbsp; &nbsp;
-						<button class="btn" type="reset">
-							<i class="icon-undo bigger-110"></i>
-							取消
-						</button>
+			<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="expand-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <h4>蜜图</h4>
+                    </div>
+                    <div class="panel-body">
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column" style="height:220px ">
+                                        	A面：
+                                    </div>
+                                    <div class="col-lg-9">
+                                       <a href="${domain}/${picture.qiniukey}" target="_blank" id="afront">
+                                        <img  src="${domain}/${picture.qiniukey}" width="200px" height="200px" id="imgfront"/>
+                                       </a>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column" style="height:220px ">
+                                        B面：
+                                    </div>
+                                    <div class="col-lg-9">
+                                       <a href="${BURL}" target="_blank" id="abpicture">
+                                        <img  src="${BURL}" width="200px" height="200px" id="imgbpicture"/>
+                                       </a>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            <!-- row -->
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                        	标签：
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <label id="tags">${picture.tags }</label>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                        	心情：
+                                    </div>
+                                    <div class="col-lg-9">
+										<label id="mood">${picture.mood }</label>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                        
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                        	位置：
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <label id="location">${picture.locationTitle }:${picture.locationContent }</label>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                        	创建时间：
+                                    </div>
+                                    <div class="col-lg-9">
+										<label id="creatTime">
+											<fmt:formatDate value="${picture.creatTime }" pattern="yyyy/MM/dd  HH:mm:ss"/>
+										</label>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            
+			                 <div class="row form-group">
+								<div style="text-align: center">
+									<button class="btn btn-info" type="button" onclick="randmetoo()">
+										<i class="icon-ok bigger-110"></i>
+										随机
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset" onclick="nextmetoo()">
+										<i class="icon-undo bigger-110"></i>
+										下一个
+									</button>
+								</div>
+							</div>
+                    </div>
+                    <!-- panel-body -->
+                </div>
+                
+             <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="expand-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <h4>评论</h4>
+                    </div>
+                 <form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/savecomment" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="pid" name="pid" value="${picture.pid}">
+                    <div class="row form-group">
+                        <div class="col-lg-12">
+                            <div class="col-lg-1 input-column">
+                                	随机用户评论：
+                            </div>
+                            <div class="col-lg-8">
+                                <textarea class="form-control" rows="5" placeholder="评论内容" name="content"
+                                	style="margin-top: 0px; margin-bottom: 0px; height: 60px;"></textarea>
+                            </div>
+                            <div class="col-lg-3">
+                                <input type="file"  name="file"/>
+                            </div>
+                        </div>
+                        <!-- col-lg- -->
+                    </div>
+                    <!-- row -->
+                    <div class="row form-group">
+                        <div class="col-lg-12">
+                            <div class="col-lg-1 input-column">
+                                	随机用户评论：
+                            </div>
+                            <div class="col-lg-8">
+                                <textarea class="form-control" rows="5" placeholder="评论内容" name="content"
+                                	style="margin-top: 0px; margin-bottom: 0px; height: 60px;"></textarea>
+                            </div>
+                            <div class="col-lg-3">
+                                <input type="file"  name="file"/>
+                            </div>
+                        </div>
+                        <!-- col-lg- -->
+                    </div>
+                    <!-- row -->
+                    <div class="row form-group">
+						<div style="text-align: center">
+							<button class="btn btn-info" type="button" onclick="submitform()">
+								<i class="icon-ok bigger-110"></i>
+								提交
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset" onclick="reset()">
+								<i class="icon-undo bigger-110"></i>
+								取消
+							</button>
+						</div>
 					</div>
-				</div>
-
-			</form>
+                 </form>
+             </div>
 		</div>
 		
 		<script src="<%=basePath %>resources/assets/js/jquery.min.js"></script>
@@ -130,23 +241,73 @@
 		<script src="<%=basePath %>resources/assets/js/ace.min.js"></script>		
 		
 <script type="text/javascript">
+	//7牛公共资源域名
+	var domain = '${domain}';
 	function submitform(){
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
-	function getToken(){
-		var token;
+	function reset(){
+		$("#me2form").reset();
+	}
+	function randmetoo(){
+		var bkey;
 		$.ajax({
-			async:false,
-			url:"qiniutoken/simple/a.json",
+			url:"<%=basePath%>admin/randmetoo",
 			type:"get",
-			contentType:"application/json",
 			datatype:"json",
 			success:function(data){
-				token = data.obj;
+				$("#afront").attr("href",domain+"/"+data.qiniukey);
+				$("#imgfront").attr("src",domain+"/"+data.qiniukey);
+				$("#tags").text(data.tags);
+				$("#mood").text(data.mood);
+				$("#location").text(data.locationTitle+":"+data.locationContent);
+				$("#creatTime").text(data.creatTime);
+				$("#pid").val(data.pid);
+				bkey = data.bpicture.qiniukey;
+				$.ajax({
+					url:"<%=basePath%>qiniutoken/download/"+bkey+".json",
+					type:"get",
+					async: false,
+					datatype:"json",
+					success:function(data){
+						$("#abpicture").attr("href",data.obj);
+						$("#imgbpicture").attr("src",data.obj);
+					}
+				});
 			}
 		});
-		return token;
+
+	}
+	function nextmetoo(){
+		var bkey;
+		var pid = $("#pid").val();
+		$.ajax({
+			url:"<%=basePath%>admin/nextmetoo/"+pid,
+			type:"get",
+			datatype:"json",
+			success:function(data){
+				$("#afront").attr("href",domain+"/"+data.qiniukey);
+				$("#imgfront").attr("src",domain+"/"+data.qiniukey);
+				$("#tags").text(data.tags);
+				$("#mood").text(data.mood);
+				$("#location").text(data.locationTitle+":"+data.locationContent);
+				$("#creatTime").text(data.creatTime);
+				$("#pid").val(data.pid);
+				bkey = data.bpicture.qiniukey;
+				$.ajax({
+					url:"<%=basePath%>qiniutoken/download/"+bkey+".json",
+					type:"get",
+					async: false,
+					datatype:"json",
+					success:function(data){
+						$("#abpicture").attr("href",data.obj);
+						$("#imgbpicture").attr("src",data.obj);
+					}
+				});
+			}
+		});
+
 	}
 
 </script>		

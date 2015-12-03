@@ -19,9 +19,6 @@ import com.qiniu.util.Auth;
 public class QiniuController {
 	private static final Logger logger = Logger.getLogger(QiniuController.class);
 	
-	
-
-	
 	/**
 	 * 7牛简单上传token
 	 * @param session
@@ -68,4 +65,23 @@ public class QiniuController {
 		mav.addObject(result);
 		return mav;
 	}
+	
+	/**
+	 * 取得7牛的图片下载地址
+	 * @param session
+	 * @param key
+	 * @return
+	 */
+	@RequestMapping(value="/download/{key}",method=RequestMethod.GET)
+	public ModelAndView getDownloadUrl(HttpSession session,@PathVariable String key) {
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(QiniuUtil.getDownUrl(key));
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+
 }

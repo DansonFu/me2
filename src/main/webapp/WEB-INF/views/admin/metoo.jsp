@@ -101,7 +101,7 @@
 						</button>
 
 						&nbsp; &nbsp; &nbsp;
-						<button class="btn" type="reset">
+						<button class="btn" type="reset" onclick="reset()">
 							<i class="icon-undo bigger-110"></i>
 							取消
 						</button>
@@ -133,6 +133,9 @@
 	function submitform(){
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
+	}
+	function reset(){
+		$("#me2form").reset();
 	}
 	function getToken(){
 		var token;

@@ -292,7 +292,7 @@
 
 		<script type="text/javascript">
 		function toServices(url,id){
-			$("#leftmenu li").removeClass("active");
+			$(".nav-list li").removeClass("active");
 			$("#"+id).parent().addClass('active');
 
 			$("#main_target").attr("src", url);

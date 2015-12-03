@@ -8,7 +8,6 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
-    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -27,13 +26,10 @@
       <if test="condition.qiniukey != null" >
          and qiniukey = #{condition.qiniukey}
       </if>
-      <if test="condition.parentId != null" >
-         and parent_id = #{condition.parentId}
-      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    comment_id, pid, customer_id, content, creat_time, qiniukey, parent_id
+    comment_id, pid, customer_id, content, creat_time, qiniukey
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -67,10 +63,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Comment" >
-    insert into comment (comment_id, pid, customer_id, content, creat_time, qiniukey, 
-      parent_id)
-    values (#{commentId}, #{pid}, #{customerId}, #{content}, #{creatTime}, #{qiniukey}, 
-      #{parentId})
+    insert into comment (comment_id, pid, customer_id, content, creat_time, qiniukey
+      )
+    values (#{commentId}, #{pid}, #{customerId}, #{content}, #{creatTime}, #{qiniukey}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Comment" >
     insert into comment
@@ -93,9 +89,6 @@
       <if test="qiniukey != null" >
         qiniukey,
       </if>
-      <if test="parentId != null" >
-        parent_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="commentId != null" >
@@ -115,9 +108,6 @@
       </if>
       <if test="qiniukey != null" >
         #{qiniukey},
-      </if>
-      <if test="parentId != null" >
-        #{parentId},
       </if>
     </trim>
   </insert>
@@ -148,9 +138,6 @@
       <if test="record.qiniukey != null" >
         qiniukey = #{record.qiniukey},
       </if>
-      <if test="record.parentId != null" >
-        parent_id = #{record.parentId},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -163,8 +150,7 @@
       customer_id = #{record.customerId},
       content = #{record.content},
       creat_time = #{record.creatTime},
-      qiniukey = #{record.qiniukey},
-      parent_id = #{record.parentId}
+      qiniukey = #{record.qiniukey}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -187,9 +173,6 @@
       <if test="qiniukey != null" >
         qiniukey = #{qiniukey},
       </if>
-      <if test="parentId != null" >
-        parent_id = #{parentId},
-      </if>
     </set>
     where comment_id = #{commentId}
   </update>
@@ -199,8 +182,7 @@
       customer_id = #{customerId},
       content = #{content},
       creat_time = #{creatTime},
-      qiniukey = #{qiniukey},
-      parent_id = #{parentId}
+      qiniukey = #{qiniukey}
     where comment_id = #{commentId}
   </update>
 </mapper>

@@ -1,13 +1,17 @@
 package com.lettucetech.me2.web.controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +19,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
+import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Comment;
@@ -31,6 +36,7 @@ import com.qiniu.http.Response;
 
 @Controller
 public class AdminController {
+	private static final Logger logger = Logger.getLogger(AdminController.class);
 	@Autowired
 	private PictureService pictureService;
 	@Autowired
@@ -39,7 +45,7 @@ public class AdminController {
 	private GameService gameService;
 	@Autowired
 	private CommentService commentService;
-	
+
 	private List<Picture> pictures;
 	/**
 	 * 保存蜜图AB面
@@ -133,22 +139,125 @@ public class AdminController {
 		return mav;
 
 	}
-	
+	/**
+	 * 评论
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value = "/admin/comment", method ={RequestMethod.GET})
 	public ModelAndView comment(HttpSession session){
-		Criteria example = new Criteria();
-		example.put("includeb", "yes");
-		if(pictures==null){
-			pictures = pictureService.selectByParams4Business(example);
+		if(pictures==null || pictures.size()==0){
+			Criteria example = new Criteria();
+			example.put("front", "a");
+			example.put("includeb", "yes");
+			while(true){
+				pictures = pictureService.selectByParams4Rand(example);
+				if( pictures.size()>0) break;
+			}
 		}
-		//随机取一个
-		Random rand = new Random();
-		Picture picture = pictures.get(rand.nextInt(pictures.size()));
+
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/admin/comment");
-//		mav.addObject("customers", customers);
-		mav.addObject("picture", picture);
+		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
+		mav.addObject("picture", pictures.get(0));
+		mav.addObject("BURL",QiniuUtil.getDownUrl(pictures.get(0).getBpicture().getQiniukey()));
 		return mav;
+	}
+	/**
+	 * 随机取一个
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "/admin/randmetoo", method ={RequestMethod.GET})
+	public void randmetoo(HttpSession session,HttpServletResponse response){
+		Criteria example = new Criteria();
+		example.put("front", "a");
+		example.put("includeb", "yes");
+		while(true){
+			pictures = pictureService.selectByParams4Rand(example);
+			if( pictures.size()>0) break;
+		}
+		String jsonArray = JsonUtil.Encode(pictures.get(0));
+		try {
+			response.setHeader("Cache-Control", "no-cache");
+			response.setContentType("application/json;charset=UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 取下一个
+	 * @param session
+	 * @param response
+	 * @param id
+	 */
+	@RequestMapping(value = "/admin/nextmetoo/{id}", method ={RequestMethod.GET})
+	public void nextmetoo(HttpSession session,HttpServletResponse response,@PathVariable String id){
+		Picture picture=null;
+		for(int i=0;i<pictures.size();i++){
+			if(pictures.get(i).getPid().equals(id)&&(i+1)!=pictures.size()){
+				picture = pictures.get(i+1);
+			}
+		}
+		if(picture==null){
+			Criteria example = new Criteria();
+			example.put("front", "a");
+			example.put("includeb", "yes");
+			while(true){
+				pictures = pictureService.selectByParams4Rand(example);
+				if( pictures.size()>0) break;
+			}
+			picture = pictures.get(0);
+		}
 
+		String jsonArray = JsonUtil.Encode(picture);
+		try {
+			response.setHeader("Cache-Control", "no-cache");
+			response.setContentType("application/json;charset=UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/admin/savecomment", method ={RequestMethod.POST})
+	public ModelAndView savecomment(HttpSession session,String pid,String[] content,@RequestParam("file") CommonsMultipartFile[] file){
+		//内部用户
+		Criteria example = new Criteria();
+		example.put("inneruser", "1");
+		List<Customer> customers = customerService.selectByParams(example);
+		
+		//随机
+		Random rand = new Random();
+		for(int i=0;i<content.length;i++){
+			if(content[i]==null && file[i].getFileItem().getName()==null){continue;}
+			
+		    int listIndex = rand.nextInt(customers.size()); 
+			int customerid = customers.get(listIndex).getCustomerId();
+			String key=null;
+			if(file[i].getFileItem().getName()!=null){
+				try {
+					String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+			        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
+					MyRet ret = res.jsonToObject(MyRet.class); 
+					key = ret.getKey();
+				} catch (QiniuException e) {
+					e.printStackTrace();
+				}
+			}
+			Comment record = new Comment();
+			record.setContent(content[i]);
+			record.setCreatTime(new Date());
+			record.setCustomerId(customerid);
+			record.setPid(Integer.parseInt(pid));
+			record.setQiniukey(key);
+			
+			commentService.insertSelective(record);
+		}
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/comment");
+		return mav;
 	}
 }

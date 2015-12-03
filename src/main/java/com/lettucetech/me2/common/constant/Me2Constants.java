@@ -21,4 +21,12 @@ public class Me2Constants {
 	 * session存储用户参数
 	 */
 	public static final String METOOUSER = "me2user";
+	/**
+	 * 7牛公共域名
+	 */ 
+	public static final String QINIUPUBLICDOMAIN = "http://7xoaf5.com2.z0.glb.qiniucdn.com";
+	/**
+	 * 7牛私有域名
+	 */ 
+	public static final String QINIUPRIVATEDOMAIN = "http://7xoaf7.com2.z0.glb.qiniucdn.com";
 }

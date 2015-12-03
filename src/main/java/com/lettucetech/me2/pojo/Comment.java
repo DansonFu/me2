@@ -12,7 +12,7 @@ public class Comment implements Serializable {
     private Integer commentId;
 
     /**
-     * 评论图片id
+     * 密图id
      */
     private Integer pid;
 
@@ -37,11 +37,6 @@ public class Comment implements Serializable {
     private String qiniukey;
 
     /**
-     * 回复评论ID
-     */
-    private Integer parentId;
-
-    /**
      * @return 评论id
      */
     public Integer getCommentId() {
@@ -57,7 +52,7 @@ public class Comment implements Serializable {
     }
 
     /**
-     * @return 评论图片id
+     * @return 密图id
      */
     public Integer getPid() {
         return pid;
@@ -65,7 +60,7 @@ public class Comment implements Serializable {
 
     /**
      * @param pid 
-	 *            评论图片id
+	 *            密图id
      */
     public void setPid(Integer pid) {
         this.pid = pid;
@@ -129,20 +124,5 @@ public class Comment implements Serializable {
      */
     public void setQiniukey(String qiniukey) {
         this.qiniukey = qiniukey;
-    }
-
-    /**
-     * @return 回复评论ID
-     */
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    /**
-     * @param parentId 
-	 *            回复评论ID
-     */
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
     }
 }

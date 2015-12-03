@@ -63,7 +63,7 @@ public class PictureServiceImpl implements PictureService {
         return this.pictureMapper.insertSelective(record);
     }
 
-	public List<Picture> selectByParams4Business(Criteria example) {
-		 return this.pictureMapper.selectByParams4Business(example);
+	public List<Picture> selectByParams4Rand(Criteria example) {
+		 return this.pictureMapper.selectByParams4Rand(example);
 	}
 }

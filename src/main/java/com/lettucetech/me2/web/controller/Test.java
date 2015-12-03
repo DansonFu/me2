@@ -49,8 +49,9 @@ public class Test {
 //	}
 	
 	public static void main(String[] args) {
-		System.out.println(3%2);
-
+		long e = System.currentTimeMillis()/1000+3600;
+		System.out.println(e);
+		System.out.println(""+new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date(e * 1000)));
 
 	}
 

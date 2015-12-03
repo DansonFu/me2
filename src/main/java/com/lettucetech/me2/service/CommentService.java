@@ -26,6 +26,4 @@ public interface CommentService {
     int insert(Comment record);
 
     int insertSelective(Comment record);
-
-	List<Comment> selectByParams4Business(Criteria example);
 }

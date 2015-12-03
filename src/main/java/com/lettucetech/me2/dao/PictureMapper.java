@@ -67,5 +67,5 @@ public interface PictureMapper {
      * @param example
      * @return
      */
-	List<Picture> selectByParams4Business(Criteria example);
+	List<Picture> selectByParams4Rand(Criteria example);
 }
