@@ -142,7 +142,7 @@
 						<c:forEach var="menu" items="${menu}" varStatus="h">
 							<c:if test="${menu.level eq 0}">
 								<c:if test="${menu.isLeaf}">
-									<li class="dropdown-toggle active">
+									<li class="dropdown-toggle ">
 										<a href="javascript:toServices('${menu.code }','${menu.code }');" id="${menu.code }">
 											<i class="${menu.icons }"></i>
 											<span class="menu-text"> ${menu.name } </span>

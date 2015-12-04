@@ -29,6 +29,8 @@
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-rtl.min.css" />
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/chosen.css" />
+		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/global.css">
+		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/common.css">
 		<!--[if lte IE 8]>
 		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 		<![endif]-->
@@ -51,64 +53,196 @@
 	<body>
 
 		<div class="page-content">
-			<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/savemetoo" method="post" enctype="multipart/form-data">
-				
-				<div class="table-responsive">
-					<table id="sample-table-1" class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th width="10%">用户</th>
-								<th width="10%">A面</th>
-								<th width="20%" class="hidden-480">标签(英文逗号分隔)</th>
-								<th width="30%">心情</th>
-								<th width="10%">B面</th>
-								<th width="10%" class="hidden-480">解蜜</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<c:forEach var="x" begin="0" end="10">
-							<tr>
-								<td>
-									随机用户
-								</td>
-								<td><input type="file" name="afile"/></td>
-								<td class="hidden-480"><input type="text" name="tags" size="50"/></td>
-								<td><input type="text" name="feel" size="60"/></td>
-								<td><input type="file" name="bfile"/></td>
-								<td class="hidden-480">
-									<select name="gameid" >
+			 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="expand-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <h4>随机用户信息</h4>
+                    </div>
+                    <div class="panel-body">
+                            <div class="row form-group">
+                            	<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	 头像：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<img  src="${domain}/${customer.headimgurl}" width="70px" height="70px"/>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	ID：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<label>${customer.customerId }</label>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                
+                            </div>
+                            <!-- row -->
+                          <div class="row form-group">
+                          		<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	呢称：
+                                    </div>
+                                    <div class="col-lg-9">
+                                        ${customer.username }
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	性别：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<c:if test="${customer.sex=='0' }">未知</c:if>
+                                        <c:if test="${customer.sex=='1' }">男</c:if>
+                                        <c:if test="${customer.sex=='2' }">女</c:if>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            <!-- row -->
+                    </div>
+                    <!-- panel-body -->
+                </div>
+			 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="expand-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <h4>发布蜜图</h4>
+                    </div>
+                    <div class="panel-body">
+                    	<form class="form-bordered"  id="me2form" action="<%=basePath %>admin/savemetoo" method="post" enctype="multipart/form-data">
+                            <input type="hidden" value="${customer.customerId }" name="customerId" id="customerId" />
+                            <div class="row form-group">
+                            	<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	<span class="dangger" style="color: red">*</span> A面：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<input type="file" name="afile"/>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	B面：
+                                    </div>
+                                    <div class="col-lg-2">
+                                    	<select name="type" onchange="changetype()">
+											<option value="1">图片</option>
+											<option value="5">URL</option>
+										</select>
+                                    </div>
+                                    <div class="col-lg-7" id="fileDiv" >
+                                    	<input type="file" name="bfile"/>
+                                    </div>
+                                    <div class="col-lg-7" id="textDiv" style="display: none;">
+                                    	<input type="text" name="url" style="width:80%;" />
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            <!-- row -->
+                            <div class="row form-group">
+                            	<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	位置：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<input type="text" name="locationTitle"  style="width:80%;"/>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	地址：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<input type="text" name="locationContent" style="width:80%;"/>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            <!-- row -->
+                            <div class="row form-group">
+                            	<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔)：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<input type="text" name="tags" style="width:80%;"/>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	心情：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<input type="text" name="feel" style="width:80%;"/>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            <!-- row -->
+                            <div class="row form-group">
+                            	<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	解蜜游戏：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<select name="gameid" >
 										<c:forEach items="${games}" var="game" varStatus="">
 											<option value="${game.gameId }">${game.name }</option>
 										</c:forEach>
-									</select>
-								</td>
-							</tr>
-							</c:forEach>						
-						</tbody>
-					</table>
-				</div><!-- /.table-responsive -->
-										
-				<div class="space-4"></div>
-
-
-
-				<div class="clearfix form-actions">
-					<div class="col-md-offset-3 col-md-9">
-						<button class="btn btn-info" type="button" onclick="submitform()">
-							<i class="icon-ok bigger-110"></i>
-							提交
-						</button>
-
-						&nbsp; &nbsp; &nbsp;
-						<button class="btn" type="reset" onclick="reset()">
-							<i class="icon-undo bigger-110"></i>
-							取消
-						</button>
-					</div>
-				</div>
-
-			</form>
+										</select>
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                            </div>
+                            <!-- row -->
+                            <br>
+			                <div  style="text-align: center">
+								<div >
+									<button class="btn btn-primary" type="button" onclick="submitform()">
+										<i class="icon-ok bigger-110"></i>
+										提交
+									</button>
+			
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset">
+										<i class="icon-undo bigger-110"></i>
+										取消
+									</button>
+								</div>
+							</div>
+                            
+                        </form>
+                    </div>
+                    <!-- panel-body -->
+                </div>
+			
 		</div>
 		
 		<script src="<%=basePath %>resources/assets/js/jquery.min.js"></script>
@@ -130,26 +264,28 @@
 		<script src="<%=basePath %>resources/assets/js/ace.min.js"></script>		
 		
 <script type="text/javascript">
+	function changetype(){
+		var type = $("select[name='type']").val();
+		if(type=='1'){
+			$("#fileDiv").css('display','block');
+			$("#textDiv").css('display','none');
+		}else if(type=='5'){
+			$("#fileDiv").css('display','none');
+			$("#textDiv").css('display','block');
+		}
+	}
 	function submitform(){
+		if($("input[name='afile']").val()==""){
+			$("input[name='afile']").focus();
+			return;
+		}
+		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
+			$("input[name='tags']").focus();
+			return;
+		}
+
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
-	}
-	function reset(){
-		$("#me2form").reset();
-	}
-	function getToken(){
-		var token;
-		$.ajax({
-			async:false,
-			url:"qiniutoken/simple/a.json",
-			type:"get",
-			contentType:"application/json",
-			datatype:"json",
-			success:function(data){
-				token = data.obj;
-			}
-		});
-		return token;
 	}
 
 </script>		

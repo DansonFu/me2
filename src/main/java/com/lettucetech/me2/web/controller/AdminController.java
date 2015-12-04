@@ -33,6 +33,7 @@ import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Game;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.TXtMenu;
+import com.lettucetech.me2.pojo.TXtMetoo;
 import com.lettucetech.me2.pojo.TXtRoleMenu;
 import com.lettucetech.me2.pojo.TXtRoleUser;
 import com.lettucetech.me2.pojo.TXtUser;
@@ -41,6 +42,7 @@ import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.GameService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.TXtMenuService;
+import com.lettucetech.me2.service.TXtMetooService;
 import com.lettucetech.me2.service.TXtRoleMenuService;
 import com.lettucetech.me2.service.TXtRoleUserService;
 import com.lettucetech.me2.service.TXtUserService;
@@ -67,9 +69,13 @@ public class AdminController {
 	private TXtMenuService menuService;
 	@Autowired
 	private TXtRoleMenuService roleMenuService;
-
-	private List<Picture> pictures;
+	@Autowired
+	private TXtMetooService metooService;
 	
+	//随机蜜图使用
+	private List<Picture> pictures;
+	//随机用户使用
+	private List<Customer> customers;
 	/**
 	 * 进入登录界面
 	 * @param session
@@ -188,15 +194,25 @@ public class AdminController {
 	@RequestMapping(value = "/admin/metoo", method ={RequestMethod.GET})
 	public ModelAndView metoo(HttpSession session){
 		Criteria example = new Criteria();
-//		example.put("inneruser", "1");
-//		List<Customer> customers = customerService.selectByParams(example);
-//		example.clear();
+		if(customers==null){
+			example.put("inneruser", "1");
+			example.put("del", "0");
+			customers = customerService.selectByParams(example);
+			
+		}
+		//随机
+		Random rand = new Random();
+		int listIndex = rand.nextInt(customers.size()); 
+		Customer customer = customers.get(listIndex);
+		
+		example.clear();
 		example.put("del", "0");
 		List<Game> games = gameService.selectByParams(example);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/admin/metoo");
-//		mav.addObject("customers", customers);
+		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
+		mav.addObject("customer", customer);
 		mav.addObject("games", games);
 		return mav;
 
@@ -208,64 +224,67 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping(value = "/admin/savemetoo", method ={RequestMethod.POST})
-	public ModelAndView savemetoo(HttpSession session,String[] username,String[] tags,String[] feel,String[] gameid
-			,@RequestParam("afile") CommonsMultipartFile[] afile,@RequestParam("bfile") CommonsMultipartFile[] bfile){
-		//内部用户
-		Criteria example = new Criteria();
-		example.put("inneruser", "1");
-		List<Customer> customers = customerService.selectByParams(example);
+	public ModelAndView savemetoo(HttpSession session,String tags,String feel,String gameid
+			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
+			,String url,String type,String locationTitle,String locationContent,String customerId){
+		String akey=null;
+		try {
+			String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+	        Response res = QiniuUtil.uploadManager.put(afile.getBytes(), null, token);
+			MyRet ret = res.jsonToObject(MyRet.class); 
+			akey = ret.getKey();
+		} catch (QiniuException e) {
+			e.printStackTrace();
+		}
+		//a面
+		Picture ap = new Picture();
+		ap.setQiniukey(akey);
+		//去除空格、制表符、换页符等空白字符,#号换成逗号
+		ap.setTags(tags.replaceAll("\\s*", "").replaceAll("#", ","));
+		ap.setMood(feel);
+		ap.setCustomerId(Integer.valueOf(customerId));
+		ap.setFront("a");
+		ap.setCreatTime(new Date());
+		pictureService.insertSelective(ap);
 		
-		//随机
-		Random rand = new Random();
-		for(int i=0;i<afile.length;i++){
-			//如果没上传A图，不做处理
-			if("".equals(afile[i].getFileItem().getName())){ break;}
-						    
-		    int listIndex = rand.nextInt(customers.size()); 
-			int customerid = customers.get(listIndex).getCustomerId();
-			String akey=null;
-			try {
-				String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
-		        Response res = QiniuUtil.uploadManager.put(afile[i].getBytes(), null, token);
-				MyRet ret = res.jsonToObject(MyRet.class); 
-				akey = ret.getKey();
-			} catch (QiniuException e) {
-				e.printStackTrace();
-			}
-			//a面
-			Picture ap = new Picture();
-			ap.setQiniukey(akey);
-			//去除空格、制表符、换页符等空白字符
-			ap.setTags(tags[i].replaceAll("\\s*", ""));
-			ap.setMood(feel[i]);
-			ap.setCustomerId(customerid);
-			ap.setFront("a");
-			ap.setCreatTime(new Date());
-			pictureService.insertSelective(ap);
-			
-			if(!"".equals(bfile[i].getFileItem().getName())){
-				String bkey=null;
+		//保存管理员操作记录
+		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+		TXtMetoo record = new TXtMetoo();
+		record.setCreatTime(new Date());
+		record.setMetoo(ap.getPid());
+		record.setState("0");
+		record.setUserId(au.getUserId());
+		metooService.insertSelective(record);
+		
+		//如果有B面
+		if(!"".equals(bfile.getFileItem().getName()) || (url!=null && url!="")){
+			String bkey=null;
+			//判断B面是什么内容
+			if("1".equals(type)){
 				try {
 					String token = QiniuUtil.uploadToken(Me2Constants.METOOPRIVATE);
-			        Response res = QiniuUtil.uploadManager.put(bfile[i].getBytes(), null, token);
+			        Response res = QiniuUtil.uploadManager.put(bfile.getBytes(), null, token);
 					MyRet ret = res.jsonToObject(MyRet.class); 
 					bkey = ret.getKey();
 				} catch (QiniuException e) {
 					e.printStackTrace();
 				}
-				//B面
-				Picture bp = new Picture();
-				bp.setCustomerId(customerid);
-				bp.setQiniukey(bkey);
-				bp.setFront("b");
-				bp.setType("1");
-				bp.setGameId(Integer.valueOf(gameid[i]));
-				bp.setCreatTime(new Date());
-				bp.setParentId(ap.getPid());
-				pictureService.insertSelective(bp);
+			}else if("5".equals(type)){
+				bkey = url;
 			}
+			
+			//B面
+			Picture bp = new Picture();
+			bp.setCustomerId(Integer.valueOf(customerId));
+			bp.setQiniukey(bkey);
+			bp.setFront("b");
+			bp.setType(type);
+			bp.setGameId(Integer.valueOf(gameid));
+			bp.setCreatTime(new Date());
+			bp.setParentId(ap.getPid());
+			pictureService.insertSelective(bp);
 		}
-
+		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/metoo");
 		return mav;
