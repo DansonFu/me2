@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TXtMetooMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.TXtMetoo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="metoo" property="metoo" jdbcType="INTEGER" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.userId != null" >
+         and user_id = #{condition.userId}
+      </if>
+      <if test="condition.metoo != null" >
+         and metoo = #{condition.metoo}
+      </if>
+      <if test="condition.creatTime != null" >
+         and creat_time = #{condition.creatTime}
+      </if>
+      <if test="condition.state != null" >
+         and state = #{condition.state}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, metoo, creat_time, state
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_metoo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xt_metoo
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_xt_metoo
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from t_xt_metoo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.TXtMetoo" >
+    insert into t_xt_metoo (id, user_id, metoo, creat_time, state)
+    values (#{id}, #{userId}, #{metoo}, #{creatTime}, #{state})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.TXtMetoo" >
+    insert into t_xt_metoo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="metoo != null" >
+        metoo,
+      </if>
+      <if test="creatTime != null" >
+        creat_time,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="userId != null" >
+        #{userId},
+      </if>
+      <if test="metoo != null" >
+        #{metoo},
+      </if>
+      <if test="creatTime != null" >
+        #{creatTime},
+      </if>
+      <if test="state != null" >
+        #{state},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_xt_metoo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update t_xt_metoo
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId},
+      </if>
+      <if test="record.metoo != null" >
+        metoo = #{record.metoo},
+      </if>
+      <if test="record.creatTime != null" >
+        creat_time = #{record.creatTime},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update t_xt_metoo
+    set id = #{record.id},
+      user_id = #{record.userId},
+      metoo = #{record.metoo},
+      creat_time = #{record.creatTime},
+      state = #{record.state}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.TXtMetoo" >
+    update t_xt_metoo
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId},
+      </if>
+      <if test="metoo != null" >
+        metoo = #{metoo},
+      </if>
+      <if test="creatTime != null" >
+        creat_time = #{creatTime},
+      </if>
+      <if test="state != null" >
+        state = #{state},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.TXtMetoo" >
+    update t_xt_metoo
+    set user_id = #{userId},
+      metoo = #{metoo},
+      creat_time = #{creatTime},
+      state = #{state}
+    where id = #{id}
+  </update>
+</mapper>

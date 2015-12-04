@@ -185,18 +185,7 @@ public class IndexController {
 		mav.addObject(result);
 		return mav;
 	}
-	/**
-	 * 进入首页
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/index")
-	public ModelAndView index(HttpSession session) {
-		logger.debug("IndexController - index");
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/index");
-		return mav;
-	}
+
 	
 
 }

@@ -21,6 +21,19 @@ public class Criteria {
      * 排序字段
      */
     protected String orderByClause;
+    
+    /**
+     * 排序方式，asc或desc
+     */
+    protected String sord;
+
+    public String getSord() {
+		return sord;
+	}
+
+	public void setSord(String sord) {
+		this.sord = sord;
+	}
 
     private Integer mysqlOffset;
 

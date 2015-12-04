@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TXtDepartmentMapper">
+	<resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.TXtDepartment">
+		<id column="dep_id" property="depId" jdbcType="INTEGER" />
+		<result column="dep_name" property="depName" jdbcType="VARCHAR" />
+		<association property="depManager" column="dep_manager"
+			select="com.lettucetech.me2.dao.TXtUserMapper.selectByPrimaryKey"/>
+	</resultMap>
+
+
+	<sql id="Example_Where_Clause">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="condition.depName != null">
+				and dep_name = #{condition.depName}
+			</if>
+			<if test="condition.depManager != null">
+				and dep_manager = #{condition.depManager.userId}
+			</if>
+		</trim>
+	</sql>
+	<sql id="Base_Column_List">
+		dep_id, dep_name, dep_manager
+	</sql>
+	<select id="selectByParams" resultMap="BaseResultMap"
+		parameterType="com.lettucetech.me2.pojo.Criteria">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_xt_department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<include refid="common.Mysql_Pagination_Limit" />
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_xt_department
+		where dep_id = #{depId}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_xt_department
+		where dep_id = #{depId}
+	</delete>
+	<delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria">
+		delete from t_xt_department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.lettucetech.me2.pojo.TXtDepartment">
+		insert into t_xt_department (dep_id, dep_name, dep_manager)
+		values (#{depId}, #{depName}, #{depManager.userId})
+	</insert>
+	<insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.TXtDepartment">
+		insert into t_xt_department
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="depId != null">
+				dep_id,
+			</if>
+			<if test="depName != null">
+				dep_name,
+			</if>
+			<if test="depManager != null">
+				dep_manager,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="depId != null">
+				#{depId},
+			</if>
+			<if test="depName != null">
+				#{depName},
+			</if>
+			<if test="depManager != null">
+				#{depManager.userId},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria"
+		resultType="java.lang.Integer">
+		select count(*) from t_xt_department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByParamsSelective" parameterType="map">
+		update t_xt_department
+		<set>
+			<if test="record.depId != null">
+				dep_id = #{record.depId},
+			</if>
+			<if test="record.depName != null">
+				dep_name = #{record.depName},
+			</if>
+			<if test="record.depManager != null">
+				dep_manager = #{record.depManager.userId},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByParams" parameterType="map">
+		update t_xt_department
+		set dep_id = #{record.depId},
+		dep_name = #{record.depName},
+		dep_manager = #{record.depManager.userId}
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.TXtDepartment">
+		update t_xt_department
+		<set>
+			<if test="depName != null">
+				dep_name = #{depName},
+			</if>
+			<if test="depManager != null">
+				dep_manager = #{depManager.userId},
+			</if>
+		</set>
+		where dep_id = #{depId}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.TXtDepartment">
+		update t_xt_department
+		set dep_name = #{depName},
+		dep_manager = #{depManager.userId}
+		where dep_id = #{depId}
+	</update>
+	
+	<select id="advancedSearching" parameterType="com.lettucetech.me2.pojo.Criteria" resultMap="BaseResultMap">
+  	select
+    <if test="distinct" >
+      distinct
+    </if>
+    d.*
+    from t_xt_department as d left join t_xt_user as u on d.dep_manager=u.user_id
+    <where>
+    	<if test="condition.jgfs != null" >
+    		<if test="condition.jgfs.rules!=null">
+      			<foreach collection="condition.jgfs.rules" item="rule" index="index">
+      				<if test="rule.classType=='class java.lang.String'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != '${rule.data}'
+      						</when>
+      						<when test="rule.op=='cn'">
+      							${condition.jgfs.groupOp} ${rule.field} like '%${rule.data}%'
+      						</when>
+      						<when test="rule.op=='nc'">
+      							${condition.jgfs.groupOp} ${rule.field} not like '%${rule.data}%'
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.lang.Integer' || rule.classType=='class java.math.BigDecimal'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = ${rule.data}
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != ${rule.data}
+      						</when>
+      						<when test="rule.op=='lt'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; ${rule.data}
+      						</when>
+      						<when test="rule.op=='le'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= ${rule.data}
+      						</when>
+      						<when test="rule.op=='gt'">
+      							${condition.jgfs.groupOp} ${rule.field} > ${rule.data}
+      						</when>
+      						<when test="rule.op=='ge'">
+      							${condition.jgfs.groupOp} ${rule.field} >= ${rule.data}
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.util.Date'">
+      					<choose>
+      						<when test="rule.op=='bw'">
+      							${condition.jgfs.groupOp} ${rule.field} >= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ew'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='bn'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; '${rule.data}'
+      						</when>
+      						<when test="rule.op=='en'">
+      							${condition.jgfs.groupOp} ${rule.field} > '${rule.data}'
+      						</when>
+      					</choose>
+      				</if>
+      			</foreach>
+      		</if>
+    	</if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause} ${sord} 
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
+  <select id="advancedSearchingCount" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer">
+  	select
+    <if test="distinct" >
+      distinct
+    </if>
+    count(d.dep_id)
+    from t_xt_department as d left join t_xt_user as u on d.dep_manager=u.user_id
+    <where>
+    	<if test="condition.jgfs != null" >
+    		<if test="condition.jgfs.rules!=null">
+      			<foreach collection="condition.jgfs.rules" item="rule" index="index">
+      				<if test="rule.classType=='class java.lang.String'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != '${rule.data}'
+      						</when>
+      						<when test="rule.op=='cn'">
+      							${condition.jgfs.groupOp} ${rule.field} like '%${rule.data}%'
+      						</when>
+      						<when test="rule.op=='nc'">
+      							${condition.jgfs.groupOp} ${rule.field} not like '%${rule.data}%'
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.lang.Integer' || rule.classType=='class java.math.BigDecimal'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = ${rule.data}
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != ${rule.data}
+      						</when>
+      						<when test="rule.op=='lt'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; ${rule.data}
+      						</when>
+      						<when test="rule.op=='le'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= ${rule.data}
+      						</when>
+      						<when test="rule.op=='gt'">
+      							${condition.jgfs.groupOp} ${rule.field} > ${rule.data}
+      						</when>
+      						<when test="rule.op=='ge'">
+      							${condition.jgfs.groupOp} ${rule.field} >= ${rule.data}
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.util.Date'">
+      					<choose>
+      						<when test="rule.op=='bw'">
+      							${condition.jgfs.groupOp} ${rule.field} >= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ew'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='bn'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; '${rule.data}'
+      						</when>
+      						<when test="rule.op=='en'">
+      							${condition.jgfs.groupOp} ${rule.field} > '${rule.data}'
+      						</when>
+      					</choose>
+      				</if>
+      			</foreach>
+      		</if>
+    	</if>
+    </where>
+  </select>
+</mapper>

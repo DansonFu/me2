@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TXtMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.TXtMenu" >
+    <id column="m_id" property="mId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="is_leaf" property="isLeaf" jdbcType="BIT" />
+    <result column="icon" property="icons" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.name != null" >
+         and name = #{condition.name}
+      </if>
+      <if test="condition.type != null" >
+         and type = #{condition.type}
+      </if>
+      <if test="condition.code != null" >
+         and code = #{condition.code}
+      </if>
+      <if test="condition.pId != null" >
+         and p_id = #{condition.pId}
+      </if>
+      <if test="condition.num != null" >
+         and num = #{condition.num}
+      </if>
+      <if test="condition.addTime != null" >
+         and add_time = #{condition.addTime}
+      </if>
+      <if test="condition.updateTime != null" >
+         and update_time = #{condition.updateTime}
+      </if>
+      <if test="condition.note != null" >
+         and note = #{condition.note}
+      </if>
+      <if test="condition.level != null" >
+         and level = #{condition.level}
+      </if>
+      <if test="condition.isLeaf != null" >
+         and is_leaf = #{condition.isLeaf}
+      </if>
+      <if test="condition.icons != null" >
+         and icon = #{condition.icons}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    m_id, name, type, code, p_id, num, add_time, update_time, note, level, is_leaf, icon
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xt_menu
+    where m_id = #{mId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_xt_menu
+    where m_id = #{mId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from t_xt_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.TXtMenu" >
+    insert into t_xt_menu (m_id, name, type, code, p_id, num, add_time, update_time, 
+      note, level, is_leaf, icon)
+    values (#{mId}, #{name}, #{type}, #{code}, #{pId}, #{num}, #{addTime}, #{updateTime}, 
+      #{note}, #{level}, #{isLeaf}, #{icons})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.TXtMenu" >
+    insert into t_xt_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mId != null" >
+        m_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="pId != null" >
+        p_id,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf,
+      </if>
+      <if test="icons != null" >
+        icon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mId != null" >
+        #{mId},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="code != null" >
+        #{code},
+      </if>
+      <if test="pId != null" >
+        #{pId},
+      </if>
+      <if test="num != null" >
+        #{num},
+      </if>
+      <if test="addTime != null" >
+        #{addTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="note != null" >
+        #{note},
+      </if>
+      <if test="level != null" >
+        #{level},
+      </if>
+      <if test="isLeaf != null" >
+        #{isLeaf},
+      </if>
+      <if test="icons != null" >
+        #{icon},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_xt_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update t_xt_menu
+    <set >
+      <if test="record.mId != null" >
+        m_id = #{record.mId},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type},
+      </if>
+      <if test="record.code != null" >
+        code = #{record.code},
+      </if>
+      <if test="record.pId != null" >
+        p_id = #{record.pId},
+      </if>
+      <if test="record.num != null" >
+        num = #{record.num},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime},
+      </if>
+      <if test="record.note != null" >
+        note = #{record.note},
+      </if>
+      <if test="record.level != null" >
+        level = #{record.level},
+      </if>
+      <if test="record.isLeaf != null" >
+        is_leaf = #{record.isLeaf},
+      </if>
+      <if test="record.icons != null" >
+        icon = #{record.icons},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update t_xt_menu
+    set m_id = #{record.mId},
+      name = #{record.name},
+      type = #{record.type},
+      code = #{record.code},
+      p_id = #{record.pId},
+      num = #{record.num},
+      add_time = #{record.addTime},
+      update_time = #{record.updateTime},
+      note = #{record.note},
+      level = #{record.level},
+      is_leaf = #{record.isLeaf},
+      icon = #{record.icons}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.TXtMenu" >
+    update t_xt_menu
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="code != null" >
+        code = #{code},
+      </if>
+      <if test="pId != null" >
+        p_id = #{pId},
+      </if>
+      <if test="num != null" >
+        num = #{num},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="note != null" >
+        note = #{note},
+      </if>
+      <if test="level != null" >
+        level = #{level},
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf = #{isLeaf},
+      </if>
+      <if test="icons != null" >
+        icon = #{icons},
+      </if>
+    </set>
+    where m_id = #{mId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.TXtMenu" >
+    update t_xt_menu
+    set name = #{name},
+      type = #{type},
+      code = #{code},
+      p_id = #{pId},
+      num = #{num},
+      add_time = #{addTime},
+      update_time = #{updateTime},
+      note = #{note},
+      level = #{level},
+      is_leaf = #{isLeaf},
+      icon = #{icons}
+    where m_id = #{mId}
+  </update>
+  
+  <select id="selectMenus" resultMap="BaseResultMap" parameterType="java.util.List">
+  	select distinct 
+  	<include refid="Base_Column_List" />
+    from t_xt_menu 
+    <where>
+    	<if test="roleMenuList!=null">
+    		<foreach collection="roleMenuList" item="roleMenu">
+    			or m_id = ${roleMenu.mId}
+    		</foreach>
+    	</if>
+    </where>
+  </select>
+</mapper>

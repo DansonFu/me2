@@ -138,7 +138,40 @@
 						</div>
 					</div><!-- #sidebar-shortcuts -->
 
-					<ul class="nav nav-list">
+					<ul class="nav nav-list" id="leftmenu" style="font-weight:bold;">
+						<c:forEach var="menu" items="${menu}" varStatus="h">
+							<c:if test="${menu.level eq 0}">
+								<c:if test="${menu.isLeaf}">
+									<li class="dropdown-toggle active">
+										<a href="javascript:toServices('${menu.code }','${menu.code }');" id="${menu.code }">
+											<i class="${menu.icons }"></i>
+											<span class="menu-text"> ${menu.name } </span>
+										</a>
+									</li>	
+								</c:if>
+								<c:if test="${!menu.isLeaf}">
+								<li>
+									<a href="#" class="dropdown-toggle" id="${menu.code }">
+										<i class="${menu.icons }"></i>
+										<span class="menu-text"> ${menu.name } </span>
+										<b class="arrow icon-angle-down"></b>
+									</a>
+									<ul class="submenu">
+										<c:forEach var="submenu" items="${menu2}" varStatus="h2">
+												<c:if test="${submenu.level eq 1 && menu.mId eq submenu.pId}">
+													<li>
+														<a href="javascript:toServices('${submenu.code }','${submenu.code }');" id="${submenu.code }">
+															<i class="icon-double-angle-right"></i><span class="${submenu.icons }"> ${submenu.name } </span>
+														</a>
+													</li>
+												</c:if>
+										</c:forEach>
+									</ul>
+								</li>
+								</c:if>
+							</c:if>
+						</c:forEach>
+						<!--
 						<li class="active">
 							<a href="javascript:toServices('admin/metoo','metoo');" id="metoo">
 								<i class="icon-dashboard"></i>
@@ -150,8 +183,8 @@
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 评论蜜图 </span>
 							</a>
-						</li>
-					</ul><!-- /.nav-list -->
+						</li>-->
+					</ul> 
 
 					<div class="sidebar-collapse" id="sidebar-collapse">
 						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
@@ -291,10 +324,10 @@
 		<!-- inline scripts related to this page -->
 
 		<script type="text/javascript">
-		function toServices(url,id){
-			$(".nav-list li").removeClass("active");
+		function toServices(url, id){
+			$("#leftmenu li").removeClass("active");
 			$("#"+id).parent().addClass('active');
-
+			url = "<%=basePath %>admin/"+url;
 			$("#main_target").attr("src", url);
 			setIframeHeight();
 		}

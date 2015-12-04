@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TXtUserMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.TXtUser" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <!-- <result column="dep_id" property="depId" jdbcType="INTEGER" /> -->
+    <result column="post_id" property="postId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <!-- <result column="leader" property="leader" jdbcType="VARCHAR" /> -->
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_state" property="deleteState" jdbcType="INTEGER" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    
+    <association property="department" column="dep_id"
+			select="com.lettucetech.me2.dao.TXtDepartmentMapper.selectByPrimaryKey"/>
+    <association property="leader" column="leader"
+			select="com.lettucetech.me2.dao.TXtUserMapper.selectByPrimaryKey"/>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.account != null" >
+         and account = #{condition.account}
+      </if>
+      <if test="condition.password != null" >
+         and password = #{condition.password}
+      </if>
+      <if test="condition.name != null" >
+         and name = #{condition.name}
+      </if>
+      <if test="condition.department != null and condition.department.depId !=null" >
+         and dep_id = #{condition.department.depId}
+      </if>
+      <if test="condition.postId != null" >
+         and post_id = #{condition.postId}
+      </if>
+      <if test="condition.phone != null" >
+         and phone = #{condition.phone}
+      </if>
+      <if test="condition.sex != null" >
+         and sex = #{condition.sex}
+      </if>
+      <if test="condition.idcard != null" >
+         and idcard = #{condition.idcard}
+      </if>
+      <if test="condition.leader != null and condition.leader.userId" >
+         and leader = #{condition.leader.userId}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+      <if test="condition.status != null" >
+         and status = #{condition.status}
+      </if>
+      <if test="condition.updateTime != null" >
+         and update_time = #{condition.updateTime}
+      </if>
+      <if test="condition.deleteState != null" >
+         and delete_state = #{condition.deleteState}
+      </if>
+      <if test="condition.qq != null" >
+         and qq = #{condition.qq}
+      </if>
+      <if test="condition.email != null" >
+         and email = #{condition.email}
+      </if>
+      <if test="condition.address != null" >
+         and address = #{condition.address}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    user_id, account, password, name, dep_id, post_id, phone, sex, idcard, leader, create_time, 
+    status, update_time, delete_state, qq, email, address
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xt_user
+    where user_id = #{userId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_xt_user
+    where user_id = #{userId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from t_xt_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.TXtUser" >
+    insert into t_xt_user (user_id, account, password, name, dep_id, post_id, phone, 
+      sex, idcard, leader, create_time, status, update_time, delete_state, 
+      qq, email, address)
+    values (#{userId}, #{account}, #{password}, #{name}, #{department.depId}, #{postId}, #{phone}, 
+      #{sex}, #{idcard}, #{leader.userId}, #{createTime}, #{status}, #{updateTime}, #{deleteState}, 
+      #{qq}, #{email}, #{address})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.TXtUser" >
+    insert into t_xt_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="department != null and department.depId !=null" >
+        dep_id,
+      </if>
+      <if test="postId != null" >
+        post_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="leader != null and leader.userId!=null" >
+        leader,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="deleteState != null" >
+        delete_state,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId},
+      </if>
+      <if test="account != null" >
+        #{account},
+      </if>
+      <if test="password != null" >
+        #{password},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="department!=null and department.depId != null" >
+        #{department.depId},
+      </if>
+      <if test="postId != null" >
+        #{postId},
+      </if>
+      <if test="phone != null" >
+        #{phone},
+      </if>
+      <if test="sex != null" >
+        #{sex},
+      </if>
+      <if test="idcard != null" >
+        #{idcard},
+      </if>
+      <if test="leader != null and leader.userId!=null" >
+        #{leader.userId},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="deleteState != null" >
+        #{deleteState},
+      </if>
+      <if test="qq != null" >
+        #{qq},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_xt_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update t_xt_user
+    <set >
+      <if test="record.userId != null" >
+        user_id = #{record.userId},
+      </if>
+      <if test="record.account != null" >
+        account = #{record.account},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name},
+      </if>
+      <if test="record.department!=null and record.department.depId != null" >
+        dep_id = #{record.department.depId},
+      </if>
+      <if test="record.postId != null" >
+        post_id = #{record.postId},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex},
+      </if>
+      <if test="record.idcard != null" >
+        idcard = #{record.idcard},
+      </if>
+      <if test="record.leader != null and record.leader.userId!=null" >
+        leader = #{record.leader.userId},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime},
+      </if>
+      <if test="record.deleteState != null" >
+        delete_state = #{record.deleteState},
+      </if>
+      <if test="record.qq != null" >
+        qq = #{record.qq},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update t_xt_user
+    set user_id = #{record.userId},
+      account = #{record.account},
+      password = #{record.password},
+      name = #{record.name},
+      dep_id = #{record.depId},
+      post_id = #{record.postId},
+      phone = #{record.phone},
+      sex = #{record.sex},
+      idcard = #{record.idcard},
+      leader = #{record.leader},
+      create_time = #{record.createTime},
+      status = #{record.status},
+      update_time = #{record.updateTime},
+      delete_state = #{record.deleteState},
+      qq = #{record.qq},
+      email = #{record.email},
+      address = #{record.address}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.TXtUser" >
+    update t_xt_user
+    <set >
+      <if test="account != null" >
+        account = #{account},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="department!=null and department.depId != null" >
+        dep_id = #{department.depId},
+      </if>
+      <if test="postId != null" >
+        post_id = #{postId},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard},
+      </if>
+      <if test="leader != null and leader.userId!=null" >
+        leader = #{leader.userId},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="deleteState != null" >
+        delete_state = #{deleteState},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+    </set>
+    where user_id = #{userId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.TXtUser" >
+    update t_xt_user
+    set account = #{account},
+      password = #{password},
+      name = #{name},
+      dep_id = #{depId},
+      post_id = #{postId},
+      phone = #{phone},
+      sex = #{sex},
+      idcard = #{idcard},
+      leader = #{leader},
+      create_time = #{createTime},
+      status = #{status},
+      update_time = #{updateTime},
+      delete_state = #{deleteState},
+      qq = #{qq},
+      email = #{email},
+      address = #{address}
+    where user_id = #{userId}
+  </update>
+  
+  <select id="advancedSearching" parameterType="com.lettucetech.me2.pojo.Criteria" resultMap="BaseResultMap">
+  	select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_user
+    <where>
+    	<if test="condition.jgfs != null" >
+    		<if test="condition.jgfs.rules!=null">
+      			<foreach collection="condition.jgfs.rules" item="rule" index="index">
+      				<if test="rule.classType=='class java.lang.String'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != '${rule.data}'
+      						</when>
+      						<when test="rule.op=='cn'">
+      							${condition.jgfs.groupOp} ${rule.field} like '%${rule.data}%'
+      						</when>
+      						<when test="rule.op=='nc'">
+      							${condition.jgfs.groupOp} ${rule.field} not like '%${rule.data}%'
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.lang.Integer' || rule.classType=='class java.math.BigDecimal'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = ${rule.data}
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != ${rule.data}
+      						</when>
+      						<when test="rule.op=='lt'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; ${rule.data}
+      						</when>
+      						<when test="rule.op=='le'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= ${rule.data}
+      						</when>
+      						<when test="rule.op=='gt'">
+      							${condition.jgfs.groupOp} ${rule.field} > ${rule.data}
+      						</when>
+      						<when test="rule.op=='ge'">
+      							${condition.jgfs.groupOp} ${rule.field} >= ${rule.data}
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.util.Date'">
+      					<choose>
+      						<when test="rule.op=='bw'">
+      							${condition.jgfs.groupOp} ${rule.field} >= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ew'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='bn'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; '${rule.data}'
+      						</when>
+      						<when test="rule.op=='en'">
+      							${condition.jgfs.groupOp} ${rule.field} > '${rule.data}'
+      						</when>
+      					</choose>
+      				</if>
+      			</foreach>
+      		</if>
+    	</if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause} ${sord} 
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
+  <select id="advancedSearchingCount" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer">
+  	select
+    <if test="distinct" >
+      distinct
+    </if>
+    count(user_id)
+    from t_xt_user
+    <where>
+    	<if test="condition.jgfs != null" >
+    		<if test="condition.jgfs.rules!=null">
+      			<foreach collection="condition.jgfs.rules" item="rule" index="index">
+      				<if test="rule.classType=='class java.lang.String'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != '${rule.data}'
+      						</when>
+      						<when test="rule.op=='cn'">
+      							${condition.jgfs.groupOp} ${rule.field} like '%${rule.data}%'
+      						</when>
+      						<when test="rule.op=='nc'">
+      							${condition.jgfs.groupOp} ${rule.field} not like '%${rule.data}%'
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.lang.Integer' || rule.classType=='class java.math.BigDecimal'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = ${rule.data}
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != ${rule.data}
+      						</when>
+      						<when test="rule.op=='lt'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; ${rule.data}
+      						</when>
+      						<when test="rule.op=='le'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= ${rule.data}
+      						</when>
+      						<when test="rule.op=='gt'">
+      							${condition.jgfs.groupOp} ${rule.field} > ${rule.data}
+      						</when>
+      						<when test="rule.op=='ge'">
+      							${condition.jgfs.groupOp} ${rule.field} >= ${rule.data}
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.util.Date'">
+      					<choose>
+      						<when test="rule.op=='bw'">
+      							${condition.jgfs.groupOp} ${rule.field} >= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ew'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='bn'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; '${rule.data}'
+      						</when>
+      						<when test="rule.op=='en'">
+      							${condition.jgfs.groupOp} ${rule.field} > '${rule.data}'
+      						</when>
+      					</choose>
+      				</if>
+      			</foreach>
+      		</if>
+    	</if>
+    </where>
+  </select>
+  
+  
+  <!-- add hwj -->
+  
+  <select id="selectByUserAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xt_user
+    where account = #{account}
+  </select>
+  
+  <select id="selectByRoleName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT u.* FROM t_xt_role_user AS ru 
+	LEFT JOIN t_xt_role r ON ru.role_id = r.role_id 
+	RIGHT JOIN t_xt_user u ON ru.user_id = u.user_id
+	WHERE r.name =#{name}
+  </select>
+  
+</mapper>

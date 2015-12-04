@@ -2,6 +2,12 @@ package com.lettucetech.me2.common.constant;
 
 public class Me2Constants {
 	/**
+	 * 系统管理台用户
+	 */
+	public static final String LOGIN_SESSION_DATANAME = "adminuser";
+	
+	public static final String LOGIN_USER_MENUS = "loginuser_menu";
+	/**
 	 * 7牛私有资源
 	 */
 	public static final String METOOPRIVATE = "me2-private";

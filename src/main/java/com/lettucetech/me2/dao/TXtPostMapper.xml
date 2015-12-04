@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TXtPostMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.TXtPost" >
+    <id column="post_id" property="postId" jdbcType="INTEGER" />
+    <result column="post_name" property="postName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.postName != null" >
+         and post_name = #{condition.postName}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    post_id, post_name
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xt_post
+    where post_id = #{postId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_xt_post
+    where post_id = #{postId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from t_xt_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.TXtPost" >
+    insert into t_xt_post (post_id, post_name)
+    values (#{postId}, #{postName})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.TXtPost" >
+    insert into t_xt_post
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        post_id,
+      </if>
+      <if test="postName != null" >
+        post_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        #{postId},
+      </if>
+      <if test="postName != null" >
+        #{postName},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_xt_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update t_xt_post
+    <set >
+      <if test="record.postId != null" >
+        post_id = #{record.postId},
+      </if>
+      <if test="record.postName != null" >
+        post_name = #{record.postName},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update t_xt_post
+    set post_id = #{record.postId},
+      post_name = #{record.postName}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.TXtPost" >
+    update t_xt_post
+    <set >
+      <if test="postName != null" >
+        post_name = #{postName},
+      </if>
+    </set>
+    where post_id = #{postId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.TXtPost" >
+    update t_xt_post
+    set post_name = #{postName}
+    where post_id = #{postId}
+  </update>
+</mapper>

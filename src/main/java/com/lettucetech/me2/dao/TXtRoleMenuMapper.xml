@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TXtRoleMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.TXtRoleMenu" >
+    <id column="role_menu_id" property="roleMenuId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="m_id" property="mId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.roleId != null" >
+         and role_id = #{condition.roleId}
+      </if>
+      <if test="condition.mId != null" >
+         and m_id = #{condition.mId}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+      <if test="condition.updateTime != null" >
+         and update_time = #{condition.updateTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    role_menu_id, role_id, m_id, create_time, update_time
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_role_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_xt_role_menu
+    where role_menu_id = #{roleMenuId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_xt_role_menu
+    where role_menu_id = #{roleMenuId}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from t_xt_role_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.TXtRoleMenu" >
+    insert into t_xt_role_menu (role_menu_id, role_id, m_id, create_time, update_time)
+    values (#{roleMenuId}, #{roleId}, #{mId}, #{createTime}, #{updateTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.TXtRoleMenu" >
+    insert into t_xt_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleMenuId != null" >
+        role_menu_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="mId != null" >
+        m_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleMenuId != null" >
+        #{roleMenuId},
+      </if>
+      <if test="roleId != null" >
+        #{roleId},
+      </if>
+      <if test="mId != null" >
+        #{mId},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_xt_role_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update t_xt_role_menu
+    <set >
+      <if test="record.roleMenuId != null" >
+        role_menu_id = #{record.roleMenuId},
+      </if>
+      <if test="record.roleId != null" >
+        role_id = #{record.roleId},
+      </if>
+      <if test="record.mId != null" >
+        m_id = #{record.mId},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update t_xt_role_menu
+    set role_menu_id = #{record.roleMenuId},
+      role_id = #{record.roleId},
+      m_id = #{record.mId},
+      create_time = #{record.createTime},
+      update_time = #{record.updateTime}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.TXtRoleMenu" >
+    update t_xt_role_menu
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId},
+      </if>
+      <if test="mId != null" >
+        m_id = #{mId},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where role_menu_id = #{roleMenuId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.TXtRoleMenu" >
+    update t_xt_role_menu
+    set role_id = #{roleId},
+      m_id = #{mId},
+      create_time = #{createTime},
+      update_time = #{updateTime}
+    where role_menu_id = #{roleMenuId}
+  </update>
+  
+  <select id="advancedSearching" parameterType="com.lettucetech.me2.pojo.Criteria" resultMap="BaseResultMap">
+  	select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_role_menu
+    <where>
+    	<if test="condition.jgfs != null" >
+    		<if test="condition.jgfs.rules!=null">
+      			<foreach collection="condition.jgfs.rules" item="rule" index="index">
+      				<if test="rule.classType=='class java.lang.String'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != '${rule.data}'
+      						</when>
+      						<when test="rule.op=='cn'">
+      							${condition.jgfs.groupOp} ${rule.field} like '%${rule.data}%'
+      						</when>
+      						<when test="rule.op=='nc'">
+      							${condition.jgfs.groupOp} ${rule.field} not like '%${rule.data}%'
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.lang.Integer' || rule.classType=='class java.math.BigDecimal'">
+      					<choose>
+      						<when test="rule.op=='eq'">
+      							${condition.jgfs.groupOp} ${rule.field} = ${rule.data}
+      						</when>
+      						<when test="rule.op=='ne'">
+      							${condition.jgfs.groupOp} ${rule.field} != ${rule.data}
+      						</when>
+      						<when test="rule.op=='lt'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; ${rule.data}
+      						</when>
+      						<when test="rule.op=='le'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= ${rule.data}
+      						</when>
+      						<when test="rule.op=='gt'">
+      							${condition.jgfs.groupOp} ${rule.field} > ${rule.data}
+      						</when>
+      						<when test="rule.op=='ge'">
+      							${condition.jgfs.groupOp} ${rule.field} >= ${rule.data}
+      						</when>
+      					</choose>
+      				</if>
+      				<if test="rule.classType=='class java.util.Date'">
+      					<choose>
+      						<when test="rule.op=='bw'">
+      							${condition.jgfs.groupOp} ${rule.field} >= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='ew'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt;= '${rule.data}'
+      						</when>
+      						<when test="rule.op=='bn'">
+      							${condition.jgfs.groupOp} ${rule.field} &lt; '${rule.data}'
+      						</when>
+      						<when test="rule.op=='en'">
+      							${condition.jgfs.groupOp} ${rule.field} > '${rule.data}'
+      						</when>
+      					</choose>
+      				</if>
+      			</foreach>
+      		</if>
+    	</if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause} ${sord} 
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
+  <select id="selectMId" resultMap="BaseResultMap" parameterType="java.util.List">
+  	select distinct 
+  	<include refid="Base_Column_List" />
+    from t_xt_role_menu 
+    <where>
+    	<if test="roleUserList!=null">
+    		<foreach collection="roleUserList" item="roleUser">
+    			or role_id = ${roleUser.roleId}
+    		</foreach>
+    	</if>
+    </where>
+  </select>
+</mapper>
