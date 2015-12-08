@@ -28,4 +28,6 @@ public interface CustomerService {
     int insertSelective(Customer record);
 
 	List<Customer> selectByPhoneOrUsername(Criteria example);
+
+	Customer selectByParams4Rand(Criteria example);
 }

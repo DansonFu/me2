@@ -20,7 +20,8 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="anonymity" property="anonymity" jdbcType="CHAR" />
     <result column="game_id" property="gameId" jdbcType="INTEGER" />
-     <collection property="bpicture" column="pid" select="getChild"></collection>
+    <association property="customer" column="customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
+    <collection property="bpicture" column="pid" select="getChild"></collection>
   </resultMap>
   
   <sql id="Example_Where_Clause" >

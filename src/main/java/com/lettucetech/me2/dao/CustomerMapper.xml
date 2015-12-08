@@ -130,6 +130,35 @@
     current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
     source, creat_time, update_time, login_time, sourceid, del, inneruser
   </sql>
+  
+  <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    SELECT b.r,a.* FROM customer a,(SELECT round( RAND() * ((SELECT MAX(customer_id) FROM customer)-(SELECT MIN(customer_id) FROM customer)) + (SELECT MIN(customer_id) FROM customer)) r) b
+    <where>
+    	a.customer_id>b.r
+      <if test="condition.sex != null" >
+         and sex = #{condition.sex}
+      </if>
+      <if test="condition.phone != null" >
+         and phone = #{condition.phone}
+      </if>
+      <if test="condition.username != null" >
+         and username = #{condition.username}
+      </if>
+      <if test="condition.source != null" >
+         and source = #{condition.source}
+      </if>
+      <if test="condition.sourceid != null" >
+         and sourceid = #{condition.sourceid}
+      </if>
+      <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
+      <if test="condition.inneruser != null" >
+         and inneruser = #{condition.inneruser}
+      </if>
+    </where>
+	LIMIT 1
+  </select>
     
   <select id="selectByPhoneOrUsername" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select

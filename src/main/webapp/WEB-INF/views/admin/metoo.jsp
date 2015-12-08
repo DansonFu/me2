@@ -116,6 +116,7 @@
                     </div>
                     <!-- panel-body -->
                 </div>
+			
 			 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-btns">
@@ -143,25 +144,16 @@
                                     	<input type="file" name="afile"/>
                                     </div>
                                 </div>
-                                <!-- col-lg-6 -->
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                       	B面：
+                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔)：
                                     </div>
-                                    <div class="col-lg-2">
-                                    	<select name="type" onchange="changetype()">
-											<option value="1">图片</option>
-											<option value="5">URL</option>
-										</select>
-                                    </div>
-                                    <div class="col-lg-7" id="fileDiv" >
-                                    	<input type="file" name="bfile"/>
-                                    </div>
-                                    <div class="col-lg-7" id="textDiv" style="display: none;">
-                                    	<input type="text" name="url" style="width:80%;" />
+                                    <div class="col-lg-9">
+                                    	<input type="text" name="tags" style="width:80%;" value="${customer.username } #"/>
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
+                                
                             </div>
                             <!-- row -->
                             <div class="row form-group">
@@ -186,15 +178,8 @@
                             </div>
                             <!-- row -->
                             <div class="row form-group">
-                            	<div class="col-lg-6">
-                                    <div class="col-lg-3 input-column">
-                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔)：
-                                    </div>
-                                    <div class="col-lg-9">
-                                    	<input type="text" name="tags" style="width:80%;"/>
-                                    </div>
-                                </div>
-                                <!-- col-lg-6 -->
+								<!-- col-lg-6 -->
+                                
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
                                        	心情：
@@ -204,10 +189,7 @@
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
-                            </div>
-                            <!-- row -->
-                            <div class="row form-group">
-                            	<div class="col-lg-6">
+                                <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
                                        	解蜜游戏：
                                     </div>
@@ -217,6 +199,36 @@
 											<option value="${game.gameId }">${game.name }</option>
 										</c:forEach>
 										</select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- row -->
+                            <div class="row form-group">
+                            	<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                       	B面：
+                                    </div>
+                                    <div class="col-lg-2">
+                                    	<select name="type" onchange="changetype()">
+											<option value="1">图片</option>
+											<option value="2">文字</option>
+											<option value="5">URL</option>
+										</select>
+                                    </div>
+                                    <div class="col-lg-7" id="fileDiv" >
+                                    	<input type="file" name="bfile"/>
+                                    </div>
+                                    <div class="col-lg-7" id="textDiv" style="display: none;">
+                                    	<input type="text" name="content" style="width:80%;" />
+                                    </div>
+                                </div>
+                                <!-- col-lg-6 -->
+                                <div class="col-lg-6" id="bfeelDiv">
+                                    <div class="col-lg-3 input-column">
+                                       	B面心情：
+                                    </div>
+                                    <div class="col-lg-9">
+										<input type="text" name="bfeel" style="width:80%;"/>
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -269,9 +281,11 @@
 		if(type=='1'){
 			$("#fileDiv").css('display','block');
 			$("#textDiv").css('display','none');
-		}else if(type=='5'){
+			$("#bfeelDiv").css('display','block');
+		}else if(type=='5'||type=='2'){
 			$("#fileDiv").css('display','none');
 			$("#textDiv").css('display','block');
+			$("#bfeelDiv").css('display','none');
 		}
 	}
 	function submitform(){

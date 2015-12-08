@@ -66,4 +66,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<Customer> selectByPhoneOrUsername(Criteria example) {
 		return this.customerMapper.selectByPhoneOrUsername(example);
 	}
+
+	public Customer selectByParams4Rand(Criteria example) {
+		return this.customerMapper.selectByParams4Rand(example);
+	}
 }

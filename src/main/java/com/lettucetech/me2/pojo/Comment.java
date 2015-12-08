@@ -20,6 +20,8 @@ public class Comment implements Serializable {
      * 评论者id
      */
     private Integer customerId;
+    
+    private Customer customer;
 
     /**
      * 评论内容
@@ -125,4 +127,13 @@ public class Comment implements Serializable {
     public void setQiniukey(String qiniukey) {
         this.qiniukey = qiniukey;
     }
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+    
 }

@@ -1,6 +1,7 @@
 package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -71,11 +72,9 @@ public class AdminController {
 	private TXtRoleMenuService roleMenuService;
 	@Autowired
 	private TXtMetooService metooService;
-	
 	//随机蜜图使用
 	private List<Picture> pictures;
-	//随机用户使用
-	private List<Customer> customers;
+
 	/**
 	 * 进入登录界面
 	 * @param session
@@ -194,16 +193,9 @@ public class AdminController {
 	@RequestMapping(value = "/admin/metoo", method ={RequestMethod.GET})
 	public ModelAndView metoo(HttpSession session){
 		Criteria example = new Criteria();
-		if(customers==null){
-			example.put("inneruser", "1");
-			example.put("del", "0");
-			customers = customerService.selectByParams(example);
-			
-		}
-		//随机
-		Random rand = new Random();
-		int listIndex = rand.nextInt(customers.size()); 
-		Customer customer = customers.get(listIndex);
+		example.put("inneruser", "1");
+		example.put("del", "0");
+		Customer customer = customerService.selectByParams4Rand(example);
 		
 		example.clear();
 		example.put("del", "0");
@@ -224,9 +216,9 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping(value = "/admin/savemetoo", method ={RequestMethod.POST})
-	public ModelAndView savemetoo(HttpSession session,String tags,String feel,String gameid
+	public ModelAndView savemetoo(HttpSession session,String tags,String feel,String bfeel,String gameid
 			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
-			,String url,String type,String locationTitle,String locationContent,String customerId){
+			,String content,String type,String locationTitle,String locationContent,String customerId){
 		String akey=null;
 		try {
 			String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
@@ -245,6 +237,8 @@ public class AdminController {
 		ap.setCustomerId(Integer.valueOf(customerId));
 		ap.setFront("a");
 		ap.setCreatTime(new Date());
+		ap.setLocationTitle(locationTitle);
+		ap.setLocationContent(locationContent);
 		pictureService.insertSelective(ap);
 		
 		//保存管理员操作记录
@@ -257,7 +251,7 @@ public class AdminController {
 		metooService.insertSelective(record);
 		
 		//如果有B面
-		if(!"".equals(bfile.getFileItem().getName()) || (url!=null && url!="")){
+		if(!"".equals(bfile.getFileItem().getName()) || (content!=null && content!="")){
 			String bkey=null;
 			//判断B面是什么内容
 			if("1".equals(type)){
@@ -269,8 +263,8 @@ public class AdminController {
 				} catch (QiniuException e) {
 					e.printStackTrace();
 				}
-			}else if("5".equals(type)){
-				bkey = url;
+			}else if("5".equals(type)||"2".equals(type)){
+				bkey = content;
 			}
 			
 			//B面
@@ -282,6 +276,7 @@ public class AdminController {
 			bp.setGameId(Integer.valueOf(gameid));
 			bp.setCreatTime(new Date());
 			bp.setParentId(ap.getPid());
+			bp.setMood(bfeel);
 			pictureService.insertSelective(bp);
 		}
 		
@@ -297,21 +292,21 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "/admin/comment", method ={RequestMethod.GET})
 	public ModelAndView comment(HttpSession session){
-		if(pictures==null || pictures.size()==0){
-			Criteria example = new Criteria();
-			example.put("front", "a");
-			example.put("includeb", "yes");
-			while(true){
-				pictures = pictureService.selectByParams4Rand(example);
-				if( pictures.size()>0) break;
-			}
+		Criteria example = new Criteria();
+		
+		//随机10个评论人
+		List<Customer> customers = new ArrayList<Customer>();
+		example.clear();
+		example.put("inneruser", "1");
+		example.put("del", "0");
+		for(int i=0;i<10;i++){
+			customers.add(customerService.selectByParams4Rand(example));
 		}
-
+		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/admin/comment");
 		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
-		mav.addObject("picture", pictures.get(0));
-		mav.addObject("BURL",QiniuUtil.getDownUrl(pictures.get(0).getBpicture().getQiniukey()));
+		mav.addObject("customers", customers);
 		return mav;
 	}
 	/**
@@ -328,7 +323,16 @@ public class AdminController {
 			pictures = pictureService.selectByParams4Rand(example);
 			if( pictures.size()>0) break;
 		}
-		String jsonArray = JsonUtil.Encode(pictures.get(0));
+		
+		//查询已有评论
+		example.clear();
+		example.put("pid", pictures.get(0).getPid());
+		List<Comment> comments = commentService.selectByParams(example);
+		
+		List merge = new ArrayList();
+		merge.add(pictures.get(0));
+		merge.add(comments);
+		String jsonArray = JsonUtil.Encode(merge);
 		try {
 			response.setHeader("Cache-Control", "no-cache");
 			response.setContentType("application/json;charset=UTF-8");
@@ -346,13 +350,15 @@ public class AdminController {
 	@RequestMapping(value = "/admin/nextmetoo/{id}", method ={RequestMethod.GET})
 	public void nextmetoo(HttpSession session,HttpServletResponse response,@PathVariable String id){
 		Picture picture=null;
+		Criteria example = new Criteria();
+		//如果是最后一条则重新取一个集合
 		for(int i=0;i<pictures.size();i++){
 			if(pictures.get(i).getPid().equals(id)&&(i+1)!=pictures.size()){
 				picture = pictures.get(i+1);
 			}
 		}
 		if(picture==null){
-			Criteria example = new Criteria();
+			
 			example.put("front", "a");
 			example.put("includeb", "yes");
 			while(true){
@@ -361,8 +367,15 @@ public class AdminController {
 			}
 			picture = pictures.get(0);
 		}
-
-		String jsonArray = JsonUtil.Encode(picture);
+		//查询已有评论
+		example.clear();
+		example.put("pid", picture.getPid());
+		List<Comment> comments = commentService.selectByParams(example);
+		
+		List merge = new ArrayList();
+		merge.add(picture);
+		merge.add(comments);
+		String jsonArray = JsonUtil.Encode(merge);
 		try {
 			response.setHeader("Cache-Control", "no-cache");
 			response.setContentType("application/json;charset=UTF-8");
@@ -373,21 +386,18 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/admin/savecomment", method ={RequestMethod.POST})
-	public ModelAndView savecomment(HttpSession session,String pid,String[] content,@RequestParam("file") CommonsMultipartFile[] file){
-		//内部用户
-		Criteria example = new Criteria();
-		example.put("inneruser", "1");
-		List<Customer> customers = customerService.selectByParams(example);
+	public ModelAndView savecomment(HttpSession session,String pid,String[] cid,String[] content,@RequestParam("file") CommonsMultipartFile[] file){
 		
-		//随机
-		Random rand = new Random();
+		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+		
 		for(int i=0;i<content.length;i++){
-			if(content[i]==null && file[i].getFileItem().getName()==null){continue;}
 			
-		    int listIndex = rand.nextInt(customers.size()); 
-			int customerid = customers.get(listIndex).getCustomerId();
+			if(StringUtil.isNullOrEmpty(content[i]) && StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
+				continue;
+			}
+
 			String key=null;
-			if(file[i].getFileItem().getName()!=null){
+			if(!StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
 				try {
 					String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
 			        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
@@ -400,11 +410,19 @@ public class AdminController {
 			Comment record = new Comment();
 			record.setContent(content[i]);
 			record.setCreatTime(new Date());
-			record.setCustomerId(customerid);
+			record.setCustomerId(Integer.parseInt(cid[i]));
 			record.setPid(Integer.parseInt(pid));
 			record.setQiniukey(key);
 			
 			commentService.insertSelective(record);
+			
+			//保存管理员操作记录
+			TXtMetoo metoo = new TXtMetoo();
+			metoo.setCreatTime(new Date());
+			metoo.setMetoo(record.getCommentId());
+			metoo.setState("1");
+			metoo.setUserId(au.getUserId());
+			metooService.insertSelective(metoo);
 		}
 
 		ModelAndView mav = new ModelAndView();

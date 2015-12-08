@@ -21,6 +21,7 @@ public class Picture implements Serializable {
      */
     private Integer customerId;
 
+    private Customer customer;
     /**
      * 发布时间
      */
@@ -389,6 +390,14 @@ public class Picture implements Serializable {
 
 	public void setBpicture(Picture bpicture) {
 		this.bpicture = bpicture;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
     
 }
