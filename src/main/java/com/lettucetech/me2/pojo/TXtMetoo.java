@@ -12,11 +12,16 @@ public class TXtMetoo implements Serializable {
      * 发布人
      */
     private Integer userId;
+    private TXtUser user;
 
     /**
      * 密图或评评论id
      */
     private Integer metoo;
+    
+    private Picture picture;
+    
+    private Comment comment;
 
     /**
      * 发布时间
@@ -95,4 +100,28 @@ public class TXtMetoo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+	public Picture getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Picture picture) {
+		this.picture = picture;
+	}
+	public Comment getComment() {
+		return comment;
+	}
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
+
+	public TXtUser getUser() {
+		return user;
+	}
+
+	public void setUser(TXtUser user) {
+		this.user = user;
+	}
+    
 }

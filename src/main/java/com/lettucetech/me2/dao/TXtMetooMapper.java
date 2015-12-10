@@ -61,4 +61,6 @@ public interface TXtMetooMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(TXtMetoo record);
+
+	List<TXtMetoo> selectByParams4MetooPicture(Criteria example);
 }

@@ -3,8 +3,8 @@ package com.lettucetech.me2.web.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +22,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
+import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.MD5;
 import com.lettucetech.me2.common.utils.QiniuUtil;
@@ -47,6 +48,7 @@ import com.lettucetech.me2.service.TXtMetooService;
 import com.lettucetech.me2.service.TXtRoleMenuService;
 import com.lettucetech.me2.service.TXtRoleUserService;
 import com.lettucetech.me2.service.TXtUserService;
+import com.lettucetech.me2.web.form.DataTablePaginationForm;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 
@@ -185,7 +187,7 @@ public class AdminController {
 		return mav;
 	}
 	/**
-	 * 保存蜜图AB面
+	 * 发布蜜图
 	 * @param session
 	 * @param pictures
 	 * @return
@@ -251,7 +253,7 @@ public class AdminController {
 		metooService.insertSelective(record);
 		
 		//如果有B面
-		if(!"".equals(bfile.getFileItem().getName()) || (content!=null && content!="")){
+		if(!StringUtil.isNullOrEmpty(bfile.getFileItem().getName()) || !StringUtil.isNullOrEmpty(content)){
 			String bkey=null;
 			//判断B面是什么内容
 			if("1".equals(type)){
@@ -429,4 +431,235 @@ public class AdminController {
 		mav.setViewName("redirect:/admin/comment");
 		return mav;
 	}
+	
+	@RequestMapping("/admin/viewmetoo")
+	public ModelAndView pcase(HttpSession session) {
+		
+		Criteria example = new Criteria();
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/admin/viewmetoo");
+		return mav;
+	}
+	@RequestMapping("/admin/getmetoo")
+	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData) {
+		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+		
+		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
+	    String sEcho = null;
+	    int iDisplayStart = 0; // 起始索引
+	    int iDisplayLength = 0; // 每页显示的行数
+	 
+	    for (int i = 0; i < jsonarray.size(); i++) {
+	    	HashMap obj = (HashMap) jsonarray.get(i);
+	    	 if (obj.get("name").equals("sEcho"))
+	             sEcho = obj.get("value").toString();
+	  
+	         if (obj.get("name").equals("iDisplayStart"))
+	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
+	  
+	         if (obj.get("name").equals("iDisplayLength"))
+	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	    }
+	    Criteria example = new Criteria();
+	    example.setMysqlOffset(iDisplayStart);
+	    example.setMysqlLength(iDisplayLength);
+	    example.put("state", "0");
+	    //是否有查看所有人权限
+		List<TXtMenu> menuList = (List<TXtMenu>) session.getAttribute(Me2Constants.LOGIN_USER_MENUS);
+		boolean flag = false;
+		if(menuList!=null && menuList.size()>0){
+			for (TXtMenu tXtMenu : menuList) {
+				if("viewall".equals(tXtMenu.getCode())){
+					flag = true;
+					break;
+				}
+			}
+		}
+		if(!flag){
+			example.put("userId", au.getUserId());
+		}
+	    
+	    int count = metooService.countByParams(example);
+	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
+	    
+	    //拼接翻页数据
+	    List list = new ArrayList();
+		for(TXtMetoo obj : metoo){
+			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
+			String burl="";
+			String type="";
+			//如果有B面
+			if(obj.getPicture().getBpicture()!=null){
+				if(obj.getPicture().getBpicture().getType().equals("1")){
+					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+				}else{
+					burl = obj.getPicture().getBpicture().getQiniukey();
+				}
+				type = obj.getPicture().getBpicture().getType();
+			}
+			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,burl,type,
+					obj.getPicture().getTags(),obj.getPicture().getMood(),obj.getUser().getName(),
+					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
+			list.add(d);
+		}
+		
+		DataTablePaginationForm dtpf = new DataTablePaginationForm();
+		dtpf.setsEcho(sEcho);
+		dtpf.setiTotalDisplayRecords(count);
+		dtpf.setiTotalRecords(count);
+		dtpf.setAaData(list);
+	    
+		String jsonArray = JsonUtil.Encode(dtpf);
+		
+		try {
+			response.setHeader("Cache-Control", "no-cache");
+			response.setContentType("aplication/json;charset=UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/admin/viewpicture")
+	public ModelAndView viewpicture(HttpSession session,String pid) {
+		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
+		picture.setTags(picture.getTags().replace(",", "#"));
+		if(picture.getBpicture()!=null && ("1".equals(picture.getBpicture().getType())||
+				"3".equals(picture.getBpicture().getType())||"4".equals(picture.getBpicture().getType())))
+		{
+			String key = QiniuUtil.getDownUrl(picture.getBpicture().getQiniukey());
+			picture.getBpicture().setQiniukey(key);
+		}
+		
+		Criteria example = new Criteria();
+		example.put("pid", pid);
+		List<Comment> comments = commentService.selectByParams(example);
+		
+		example.clear();
+		example.put("del", "0");
+		List<Game> games = gameService.selectByParams(example);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("picture", picture);
+		mav.addObject("comments", comments);
+		mav.addObject("games", games);
+		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
+		mav.setViewName("/admin/viewpicture");
+		return mav;
+	}
+	@RequestMapping("/admin/updatepicture")
+	public ModelAndView updatepicture(HttpSession session,String tags,String mood,String bmood,String gameId
+			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
+			,String content,String type,String locationTitle,String locationContent,String pid,String bpid,
+			String[] cid,String[] commentContent,@RequestParam("file") CommonsMultipartFile[] file){
+		String akey=null;
+		if(afile.getFileItem().getName()!=""){
+			try {
+				String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+		        Response res = QiniuUtil.uploadManager.put(afile.getBytes(), null, token);
+				MyRet ret = res.jsonToObject(MyRet.class); 
+				akey = ret.getKey();
+			} catch (QiniuException e) {
+				e.printStackTrace();
+			}
+		}
+		//a面
+		Picture ap = new Picture();
+		
+		ap.setPid(Integer.valueOf(pid));
+		ap.setQiniukey(akey);
+		//去除空格、制表符、换页符等空白字符,#号换成逗号
+		ap.setTags(tags.replaceAll("\\s*", "").replaceAll("#", ","));
+		ap.setMood(mood);
+		ap.setFront("a");
+		ap.setLocationTitle(locationTitle);
+		ap.setLocationContent(locationContent);
+		pictureService.updateByPrimaryKeySelective(ap);
+		
+		//如果有B面
+		if(!"".equals(bfile.getFileItem().getName()) || (content!=null && content!="")){
+			String bkey=null;
+			//判断B面是什么内容
+			if("1".equals(type)&&bfile.getFileItem().getName()!=""){
+				try {
+					String token = QiniuUtil.uploadToken(Me2Constants.METOOPRIVATE);
+			        Response res = QiniuUtil.uploadManager.put(bfile.getBytes(), null, token);
+					MyRet ret = res.jsonToObject(MyRet.class); 
+					bkey = ret.getKey();
+				} catch (QiniuException e) {
+					e.printStackTrace();
+				}
+			}else if("5".equals(type)||"2".equals(type)){
+				bkey = content;
+			}
+			
+			//B面
+			Picture bp = new Picture();
+			bp.setQiniukey(bkey);
+			bp.setFront("b");
+			bp.setType(type);
+			bp.setGameId(Integer.valueOf(gameId));
+			bp.setParentId(ap.getPid());
+			bp.setMood(bmood);
+			if(bpid==null || bpid==""){
+				bp.setCreatTime(new Date());
+				pictureService.insertSelective(bp);
+			}else{
+				bp.setPid(Integer.valueOf(bpid));
+				pictureService.updateByPrimaryKeySelective(bp);
+			}
+			
+		}
+		
+		//修改评论
+		for(int i=0;i<cid.length;i++){
+			String key=null;
+			if(!StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
+				try {
+					String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+			        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
+					MyRet ret = res.jsonToObject(MyRet.class); 
+					key = ret.getKey();
+				} catch (QiniuException e) {
+					e.printStackTrace();
+				}
+			}
+			Comment record = new Comment();
+			record.setCommentId(Integer.parseInt(cid[i]));
+			record.setContent(commentContent[i]);
+			record.setQiniukey(key);
+			
+			commentService.updateByPrimaryKeySelective(record);
+
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/viewmetoo");
+		return mav;
+	}
+	
+	@RequestMapping("/admin/delpicture")
+	public ModelAndView delpicture(HttpSession session,String pid){
+		Criteria example = new Criteria();
+		//删除评论表
+		example.put("pid", pid);
+		commentService.deleteByParams(example);
+		//删除B面
+		example.clear();
+		example.put("parentId", pid);
+		pictureService.deleteByParams(example);
+		//删除A面
+		pictureService.deleteByPrimaryKey(Integer.parseInt(pid));
+		//删除`t_xt_metoo`表
+		example.clear();
+		example.put("state", 0);
+		example.put("metoo", pid);
+		metooService.deleteByParams(example);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/viewmetoo");
+		return mav;
+	}
+			
 }

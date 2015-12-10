@@ -8,6 +8,24 @@
     <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
     <result column="state" property="state" jdbcType="CHAR" />
   </resultMap>
+  <resultMap id="BaseResultPictureMap" type="com.lettucetech.me2.pojo.TXtMetoo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="metoo" property="metoo" jdbcType="INTEGER" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <association property="picture" column="metoo"	select="com.lettucetech.me2.dao.PictureMapper.selectByPrimaryKey"></association>
+    <association property="user" column="user_id"	select="com.lettucetech.me2.dao.TXtUserMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <resultMap id="BaseResultCommentMap" type="com.lettucetech.me2.pojo.TXtMetoo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="metoo" property="metoo" jdbcType="INTEGER" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <association property="comment" column="metoo"	select="com.lettucetech.me2.dao.CommentMapper.selectByPrimaryKey"></association>
+    <association property="user" column="user_id"	select="com.lettucetech.me2.dao.TXtUserMapper.selectByPrimaryKey"></association>
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.userId != null" >
@@ -27,6 +45,23 @@
   <sql id="Base_Column_List" >
     id, user_id, metoo, creat_time, state
   </sql>
+  
+  <select id="selectByParams4MetooPicture" resultMap="BaseResultPictureMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_xt_metoo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >

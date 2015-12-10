@@ -26,4 +26,6 @@ public interface TXtMetooService {
     int insert(TXtMetoo record);
 
     int insertSelective(TXtMetoo record);
+
+	List<TXtMetoo> selectByParams4MetooPicture(Criteria example);
 }

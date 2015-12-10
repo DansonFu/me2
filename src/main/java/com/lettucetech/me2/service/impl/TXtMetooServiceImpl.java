@@ -62,4 +62,8 @@ public class TXtMetooServiceImpl implements TXtMetooService {
     public int insertSelective(TXtMetoo record) {
         return this.tXtMetooMapper.insertSelective(record);
     }
+
+	public List<TXtMetoo> selectByParams4MetooPicture(Criteria example) {
+		return this.tXtMetooMapper.selectByParams4MetooPicture(example);
+	}
 }

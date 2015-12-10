@@ -140,7 +140,7 @@
 
 					<ul class="nav nav-list" id="leftmenu" style="font-weight:bold;">
 						<c:forEach var="menu" items="${menu}" varStatus="h">
-							<c:if test="${menu.level eq 0}">
+							<c:if test="${menu.level eq 0 && menu.type eq 1}">
 								<c:if test="${menu.isLeaf}">
 									<li class="dropdown-toggle ">
 										<a href="javascript:toServices('${menu.code }','${menu.code }');" id="${menu.code }">
@@ -158,7 +158,7 @@
 									</a>
 									<ul class="submenu">
 										<c:forEach var="submenu" items="${menu2}" varStatus="h2">
-												<c:if test="${submenu.level eq 1 && menu.mId eq submenu.pId}">
+												<c:if test="${submenu.level eq 1 && menu.mId eq submenu.pId && menu.type eq 1}">
 													<li>
 														<a href="javascript:toServices('${submenu.code }','${submenu.code }');" id="${submenu.code }">
 															<i class="icon-double-angle-right"></i><span class="${submenu.icons }"> ${submenu.name } </span>
