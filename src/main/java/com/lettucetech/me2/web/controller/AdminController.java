@@ -434,15 +434,26 @@ public class AdminController {
 	
 	@RequestMapping("/admin/viewmetoo")
 	public ModelAndView pcase(HttpSession session) {
-		
-		Criteria example = new Criteria();
+		List<TXtUser> users = new ArrayList<TXtUser>();
+		if(checkPermission(session,"viewall")){
+			Criteria example = new Criteria();
+			users = usi.selectByParams(example);
+			//增加全部的选项
+			TXtUser u=new TXtUser();
+			u.setUserId(-1);
+			u.setName("全部");
+			users.add(0, u);
+		}else{
+			users.add((TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME));
+		}
 		
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("users", users);
 		mav.setViewName("/admin/viewmetoo");
 		return mav;
 	}
 	@RequestMapping("/admin/getmetoo")
-	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData) {
+	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String userId) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -466,18 +477,9 @@ public class AdminController {
 	    example.setMysqlLength(iDisplayLength);
 	    example.put("state", "0");
 	    //是否有查看所有人权限
-		List<TXtMenu> menuList = (List<TXtMenu>) session.getAttribute(Me2Constants.LOGIN_USER_MENUS);
-		boolean flag = false;
-		if(menuList!=null && menuList.size()>0){
-			for (TXtMenu tXtMenu : menuList) {
-				if("viewall".equals(tXtMenu.getCode())){
-					flag = true;
-					break;
-				}
-			}
-		}
-		if(!flag){
-			example.put("userId", au.getUserId());
+
+		if(!"-1".equals(userId)){
+			example.put("userId", userId);
 		}
 	    
 	    int count = metooService.countByParams(example);
@@ -552,7 +554,7 @@ public class AdminController {
 	public ModelAndView updatepicture(HttpSession session,String tags,String mood,String bmood,String gameId
 			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
 			,String content,String type,String locationTitle,String locationContent,String pid,String bpid,
-			String[] cid,String[] commentContent,@RequestParam("file") CommonsMultipartFile[] file){
+			String[] cid,String[] commentContent,@RequestParam(value ="file",required = false) CommonsMultipartFile[] file){
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
 			try {
@@ -612,28 +614,29 @@ public class AdminController {
 			
 		}
 		
-		//修改评论
-		for(int i=0;i<cid.length;i++){
-			String key=null;
-			if(!StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
-				try {
-					String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
-			        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
-					MyRet ret = res.jsonToObject(MyRet.class); 
-					key = ret.getKey();
-				} catch (QiniuException e) {
-					e.printStackTrace();
+		if(cid!=null){
+			//修改评论
+			for(int i=0;i<cid.length;i++){
+				String key=null;
+				if(!StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
+					try {
+						String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+				        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
+						MyRet ret = res.jsonToObject(MyRet.class); 
+						key = ret.getKey();
+					} catch (QiniuException e) {
+						e.printStackTrace();
+					}
 				}
+				Comment record = new Comment();
+				record.setCommentId(Integer.parseInt(cid[i]));
+				record.setContent(commentContent[i]);
+				record.setQiniukey(key);
+				
+				commentService.updateByPrimaryKeySelective(record);
+	
 			}
-			Comment record = new Comment();
-			record.setCommentId(Integer.parseInt(cid[i]));
-			record.setContent(commentContent[i]);
-			record.setQiniukey(key);
-			
-			commentService.updateByPrimaryKeySelective(record);
-
 		}
-		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewmetoo");
 		return mav;
@@ -661,5 +664,18 @@ public class AdminController {
 		mav.setViewName("redirect:/admin/viewmetoo");
 		return mav;
 	}
-			
+	
+	private boolean checkPermission(HttpSession session,String code){
+		List<TXtMenu> menuList = (List<TXtMenu>) session.getAttribute(Me2Constants.LOGIN_USER_MENUS);
+		boolean flag = false;
+		if(menuList!=null && menuList.size()>0){
+			for (TXtMenu tXtMenu : menuList) {
+				if(code.equals(tXtMenu.getCode())){
+					flag = true;
+					break;
+				}
+			}
+		}
+		return flag;
+	}
 }
