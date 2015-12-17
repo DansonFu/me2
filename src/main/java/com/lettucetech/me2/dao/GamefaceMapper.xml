@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.GamefaceMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Gameface" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="issuer" property="issuer" jdbcType="INTEGER" />
+    <result column="proposer" property="proposer" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.content != null" >
+         and content = #{condition.content}
+      </if>
+      <if test="condition.pid != null" >
+         and pid = #{condition.pid}
+      </if>
+      <if test="condition.issuer != null" >
+         and issuer = #{condition.issuer}
+      </if>
+      <if test="condition.proposer != null" >
+         and proposer = #{condition.proposer}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, qiniukey, content, pid, issuer, proposer
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gameface
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gameface
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gameface
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from gameface
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Gameface" >
+    insert into gameface (id, qiniukey, content, pid, issuer, proposer)
+    values (#{id}, #{qiniukey}, #{content}, #{pid}, #{issuer}, #{proposer})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Gameface" >
+    insert into gameface
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="issuer != null" >
+        issuer,
+      </if>
+      <if test="proposer != null" >
+        proposer,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="qiniukey != null" >
+        #{qiniukey},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="pid != null" >
+        #{pid},
+      </if>
+      <if test="issuer != null" >
+        #{issuer},
+      </if>
+      <if test="proposer != null" >
+        #{proposer},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from gameface
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update gameface
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content},
+      </if>
+      <if test="record.pid != null" >
+        pid = #{record.pid},
+      </if>
+      <if test="record.issuer != null" >
+        issuer = #{record.issuer},
+      </if>
+      <if test="record.proposer != null" >
+        proposer = #{record.proposer},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update gameface
+    set id = #{record.id},
+      qiniukey = #{record.qiniukey},
+      content = #{record.content},
+      pid = #{record.pid},
+      issuer = #{record.issuer},
+      proposer = #{record.proposer}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Gameface" >
+    update gameface
+    <set >
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid},
+      </if>
+      <if test="issuer != null" >
+        issuer = #{issuer},
+      </if>
+      <if test="proposer != null" >
+        proposer = #{proposer},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Gameface" >
+    update gameface
+    set qiniukey = #{qiniukey},
+      content = #{content},
+      pid = #{pid},
+      issuer = #{issuer},
+      proposer = #{proposer}
+    where id = #{id}
+  </update>
+</mapper>

@@ -72,7 +72,7 @@
 								<img class="nav-user-photo" src="<%=basePath %>resources/assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>欢迎光临,</small>
-									Jason
+									${adminuser.name }
 								</span>
 
 								<i class="icon-caret-down"></i>
@@ -81,7 +81,7 @@
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 
 								<li>
-									<a href="#">
+									<a href="<%=basePath %>admin/logout">
 										<i class="icon-off"></i>
 										退出
 									</a>

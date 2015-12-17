@@ -66,4 +66,8 @@ public class PictureServiceImpl implements PictureService {
 	public List<Picture> selectByParams4Rand(Criteria example) {
 		 return this.pictureMapper.selectByParams4Rand(example);
 	}
+
+	public List<Picture> selectByParamsTagSearch(Criteria example) {
+		return this.pictureMapper.selectByParamsTagSearch(example);
+	}
 }

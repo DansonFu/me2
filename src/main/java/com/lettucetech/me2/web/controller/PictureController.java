@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
+import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.PictureService;
@@ -42,6 +43,7 @@ public class PictureController {
 //			B.setCustomerId(customer.getCustomerId());
 			B.setCreatTime(new Date());
 			B.setParentId(A.getPid());
+			pictureService.insertSelective(B);
 		}
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
@@ -53,5 +55,34 @@ public class PictureController {
 		return mav;
 
 	}
-
+	/**
+	 * 查询蜜图
+	 * @param session
+	 * @param tags  标签
+	 * @param type 查询类型  0：并集 1：交集
+	 * @param sort 排序字段 hits:热度  creat_time:时间
+	 * @param offset 分页查询位置
+	 * @param length 分页条数
+	 * @return
+	 */
+	@RequestMapping(value = "/pictures", method ={RequestMethod.GET})
+	public ModelAndView getHotPictures(HttpSession session,String tags,String type,String sort,String offset,String length){
+		String[] taglist = tags==null?null:tags.split(",");
+		Criteria example = new Criteria();
+		example.setMysqlOffset(Integer.parseInt(offset));
+		example.setMysqlLength(Integer.parseInt(length));
+		example.setOrderByClause(sort);
+		example.put("taglist", taglist);
+		example.put("type", type);
+		
+		List<Picture> pictures = pictureService.selectByParamsTagSearch(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(pictures);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 }

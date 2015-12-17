@@ -28,4 +28,6 @@ public interface PictureService {
     int insertSelective(Picture record);
 
 	List<Picture> selectByParams4Rand(Criteria example);
+
+	List<Picture> selectByParamsTagSearch(Criteria example);
 }

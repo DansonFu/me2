@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.GamecustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Gamecustomer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.pid != null" >
+         and pid = #{condition.pid}
+      </if>
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, pid, customer_id
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gamecustomer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gamecustomer
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gamecustomer
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from gamecustomer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Gamecustomer" >
+    insert into gamecustomer (id, pid, customer_id)
+    values (#{id}, #{pid}, #{customerId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Gamecustomer" >
+    insert into gamecustomer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="pid != null" >
+        #{pid},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from gamecustomer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update gamecustomer
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.pid != null" >
+        pid = #{record.pid},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update gamecustomer
+    set id = #{record.id},
+      pid = #{record.pid},
+      customer_id = #{record.customerId}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Gamecustomer" >
+    update gamecustomer
+    <set >
+      <if test="pid != null" >
+        pid = #{pid},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Gamecustomer" >
+    update gamecustomer
+    set pid = #{pid},
+      customer_id = #{customerId}
+    where id = #{id}
+  </update>
+</mapper>

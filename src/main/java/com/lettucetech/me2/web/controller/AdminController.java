@@ -94,7 +94,17 @@ public class AdminController {
 		//否则跳转到登录界面
 		return "login";
 	}
-	
+	/**
+	 * 退出
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/admin/logout")
+	public String logout(HttpSession session){
+		session.removeAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+
+		return "login";
+	}
 	@RequestMapping("/toLogin/login")
 	public void login(String userName,String password,String verifyCodeClient,HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		String message;

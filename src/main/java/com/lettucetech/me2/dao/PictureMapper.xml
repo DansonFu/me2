@@ -101,6 +101,34 @@
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
   
+  <select id="selectByParamsTagSearch" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from picture
+    <where>
+    	front='a'
+      <if test="condition.taglist != null" >
+      	  <if test="condition.type == 0" >
+	         <foreach collection="condition.taglist" item="tag"  separator="or" open="and (" close=")">
+	         	 tags like '%${tag}%'
+	         </foreach>
+          </if>
+          <if test="condition.type == 1" >
+	         <foreach collection="condition.taglist" item="tag"  separator="and" open="and (" close=")">
+	         	 tags like '%${tag}%'
+	         </foreach>
+          </if>
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause} desc
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
   <select id="getChild" resultMap="BaseResultMap" parameterType="int" >
     select * from picture where parent_id=#{pid}
   </select>
