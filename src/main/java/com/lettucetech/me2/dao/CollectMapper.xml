@@ -6,6 +6,7 @@
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="pid" property="pid" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <association property="picture" column="pid"	select="com.lettucetech.me2.dao.PictureMapper.selectByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -34,7 +35,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
-      order by ${orderByClause}
+      order by ${orderByClause} ${sord}
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>

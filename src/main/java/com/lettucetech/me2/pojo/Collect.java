@@ -17,13 +17,23 @@ public class Collect implements Serializable {
      * 收藏蜜图
      */
     private Integer pid;
-
+    
+    private Picture picture;
+    
     /**
      * 收藏时间
      */
     private Date createTime;
 
-    public Integer getId() {
+    public Picture getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Picture picture) {
+		this.picture = picture;
+	}
+
+	public Integer getId() {
         return id;
     }
 
