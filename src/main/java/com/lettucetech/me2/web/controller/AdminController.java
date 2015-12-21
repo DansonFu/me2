@@ -105,6 +105,15 @@ public class AdminController {
 
 		return "login";
 	}
+	/**
+	 * 登录
+	 * @param userName
+	 * @param password
+	 * @param verifyCodeClient
+	 * @param request
+	 * @param response
+	 * @param session
+	 */
 	@RequestMapping("/toLogin/login")
 	public void login(String userName,String password,String verifyCodeClient,HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		String message;
@@ -396,7 +405,15 @@ public class AdminController {
 			e.printStackTrace();
 		}
 	}
-
+/**
+ * 保存评论
+ * @param session
+ * @param pid
+ * @param cid
+ * @param content
+ * @param file
+ * @return
+ */
 	@RequestMapping(value = "/admin/savecomment", method ={RequestMethod.POST})
 	public ModelAndView savecomment(HttpSession session,String pid,String[] cid,String[] content,@RequestParam("file") CommonsMultipartFile[] file){
 		
@@ -441,7 +458,11 @@ public class AdminController {
 		mav.setViewName("redirect:/admin/comment");
 		return mav;
 	}
-	
+	/**
+	 * 跳转查看蜜图页面
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping("/admin/viewmetoo")
 	public ModelAndView pcase(HttpSession session) {
 		List<TXtUser> users = new ArrayList<TXtUser>();
@@ -462,6 +483,13 @@ public class AdminController {
 		mav.setViewName("/admin/viewmetoo");
 		return mav;
 	}
+	/**
+	 * 查询蜜图列表
+	 * @param session
+	 * @param response
+	 * @param aoData
+	 * @param userId
+	 */
 	@RequestMapping("/admin/getmetoo")
 	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String userId) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
@@ -533,6 +561,12 @@ public class AdminController {
 		}
 	}
 	
+	/**
+	 * 查询蜜图信息
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
 	@RequestMapping("/admin/viewpicture")
 	public ModelAndView viewpicture(HttpSession session,String pid) {
 		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
@@ -560,6 +594,26 @@ public class AdminController {
 		mav.setViewName("/admin/viewpicture");
 		return mav;
 	}
+	/**
+	 * 修改密图
+	 * @param session
+	 * @param tags
+	 * @param mood
+	 * @param bmood
+	 * @param gameId
+	 * @param afile
+	 * @param bfile
+	 * @param content
+	 * @param type
+	 * @param locationTitle
+	 * @param locationContent
+	 * @param pid
+	 * @param bpid
+	 * @param cid
+	 * @param commentContent
+	 * @param file
+	 * @return
+	 */
 	@RequestMapping("/admin/updatepicture")
 	public ModelAndView updatepicture(HttpSession session,String tags,String mood,String bmood,String gameId
 			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile

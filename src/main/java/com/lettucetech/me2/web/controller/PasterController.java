@@ -20,6 +20,9 @@ public class PasterController {
 	@Autowired
 	private PasterService pasterService;
 	
+	/**
+	 * 查询贴纸主题
+	 */
 	@RequestMapping(value = "/pasters", method ={RequestMethod.GET})
 	public ModelAndView pasters(HttpSession session){
 		Criteria example = new Criteria();
@@ -34,6 +37,12 @@ public class PasterController {
 
 	}
 	
+	/**
+	 * 查询贴纸列表
+	 * @param session
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/pasters/{id}/children", method ={RequestMethod.GET})
 	public ModelAndView getChildren(HttpSession session,@PathVariable String id){
 		Criteria example = new Criteria();
