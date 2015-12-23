@@ -63,13 +63,13 @@
 	<mvc:resources mapping="/footer.html" location="/footer.html" />
 	<mvc:annotation-driven />
 	
-		<!-- 权限验证 
+		<!-- 权限验证 -->
 	<mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean id="loginInterceptor" class="com.lettucetech.me2.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
-    </mvc:interceptors>-->
+    </mvc:interceptors>
     
     <!-- ContentNegotiatingViewResolver视图解析器,利用他就可以配置多种返回值 -->
 	 <bean  class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">   

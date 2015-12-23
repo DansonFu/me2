@@ -40,9 +40,11 @@
     <include refid="Base_Column_List" />
     from picturehot
     <where>
-    	<foreach collection="condition.plist" item="p" open="pid not in(" close=")" separator=",">
-    		#{p}
-    	</foreach>
+    	<if test="condition.plist.size()>0">
+	    	<foreach collection="condition.plist" item="p" open="pid not in(" close=")" separator=",">
+	    		#{p}
+	    	</foreach>
+    	</if>
     </where>
     order by rand() LIMIT #{condition.size}
     <include refid="common.Mysql_Pagination_Limit" />

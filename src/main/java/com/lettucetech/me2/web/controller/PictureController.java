@@ -32,13 +32,7 @@ public class PictureController {
 	private PicturehotService picturehotService;
 	@Autowired
 	private PicturerecommendService picturerecommendService;
-	
-	//客户端已查询的蜜图列表，用于热门蜜图的显示防止重复
-	List<Integer> plist = new ArrayList<Integer>();
-	//已取推荐蜜图数量，每次热门蜜图翻页使用
-	int count = 0;
-	
-	
+
 	/**
 	 * 保存蜜图AB面
 	 * @param session
@@ -110,6 +104,17 @@ public class PictureController {
 	 */
 	@RequestMapping(value = "/pictures/hot", method ={RequestMethod.GET})
 	public ModelAndView getHotPictures(HttpSession session,String offset,String length){
+		//客户端已查询的蜜图列表，用于热门蜜图的显示防止重复
+		List<Integer> plist = (List<Integer>)session.getAttribute("plist");
+		if(plist==null){
+			plist = new ArrayList<Integer>();
+		}
+		//已取推荐蜜图数量，每次热门蜜图翻页使用
+		Integer count = (Integer) session.getAttribute("count");
+		if(count==null){
+			count = 0;
+		}
+		
 		List<Picture> pictures = new ArrayList<Picture>();
 		Criteria example = new Criteria();
 		//热门数量
@@ -136,7 +141,8 @@ public class PictureController {
 			plist.add(ph.getPid());
 			pictures.add(ph.getPicture());
 		}
-		
+		session.setAttribute("plist", plist);
+		session.setAttribute("count", count);
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
 		result.setObj(pictures);
