@@ -1,0 +1,18 @@
+/*
+	@Name：jQuery fDialog v1.0.1
+	@Date: 2015-06-12
+	@Author：FonHen
+	@Site：http://jquery.xixicms.com/fui/fdialog/
+	@License：LGPL
+*/
+
+官方文档
+
+http://jquery.xixicms.com/fui/fdialog/
+
+v1.0.1 更新说明
+
+1、宽高支持 width或w,height或h 两种方式调用
+2、ajax模块,增加ajaxData参数
+3、默认插件中增加拖拽功能(drag参数为true代码允许拖拽)
+4、默认模块中去掉footer高度限制,防止在CSS3 box-sizing: border-box 模式下按钮超出的问题

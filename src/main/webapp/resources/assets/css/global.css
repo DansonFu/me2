@@ -1,0 +1,75 @@
+﻿body,html, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, legend, input, textarea, p, th, td, table, img, span, dl, dt, dd {
+	margin:0;
+	padding:0;
+}
+img {
+	border:medium none;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight:normal;
+	font-size:16px;
+}
+dl, dt, dd, li, ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+body {
+    background-color: #eeeeee;
+    font: 14px/22px '微软雅黑', Helvetica, sans-serif;
+    color: #636e7b;
+}
+input,select,textarea {
+	font-family: '微软雅黑', Helvetica, sans-serif;
+    color: #636e7b;
+}
+a:focus, a:active ,a:hover {
+	outline: none;
+	text-decoration: none;
+}
+h1,h2,h3,h4,h5,h6{
+    font-family: '微软雅黑', Helvetica, sans-serif;
+}
+button:focus,li:focus,th:focus{
+	outline: none !important;
+}
+.mb30{
+	margin-bottom: 30px;
+}
+.mb15{
+	margin-bottom: 15px;
+}
+.pd8{
+	padding:5px 8px;
+}
+.mr5{
+	margin-right: 5px;
+}
+.mb5{
+	margin-bottom: 5px;
+}
+.subtitle.mb5{
+	margin-bottom: 5px;
+}
+.mb20 {
+    margin-bottom: 20px;
+}
+.ml20{
+	margin-left: 20px;
+}
+.mt20{
+	margin-top: 20px;
+}
+.mb10 {
+    margin-bottom: 10px;
+}
+.mt10{
+	margin-top: 10px;
+}
+.pd20{
+	padding: 20px;
+}
+input, select, textarea {
+    color: #636e7b;
+    font-family: "微软雅黑",Helvetica,sans-serif !important;
+}
