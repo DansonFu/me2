@@ -107,6 +107,20 @@ public class Picture implements Serializable {
     private Picture bpicture;
     
     /**
+     * 评论数
+     */
+    private int commentCount;
+    
+    
+    public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
+	/**
      * @return 蜜图id
      */
     public Integer getPid() {

@@ -52,7 +52,7 @@ public class CommentController {
 	 * @param pid
 	 * @return
 	 */
-	@RequestMapping(value = "/comments/{pid}", method ={RequestMethod.GET})
+	@RequestMapping(value = "/pictures/{pid}/comments", method ={RequestMethod.GET})
 	public ModelAndView getComment(HttpSession session,@PathVariable String pid){
 		Criteria example = new Criteria();
 		example.put("pid", pid);

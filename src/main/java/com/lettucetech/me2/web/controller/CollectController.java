@@ -33,10 +33,17 @@ public class CollectController {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
 		
-		collect.setCreateTime(new Date());
-		int num = collectService.insertSelective(collect);
-		if(num ==1){
+		Criteria example = new Criteria();
+		example.put("customerId", collect.getCustomerId());
+		example.put("pid", collect.getPid());
+		if(collectService.countByParams(example)>0){
 			result.setSuccess(true);
+		} else{
+			collect.setCreateTime(new Date());
+			int num = collectService.insertSelective(collect);
+			if(num ==1){
+				result.setSuccess(true);
+			}
 		}
 		
 		ModelAndView mav = new ModelAndView();
@@ -50,7 +57,7 @@ public class CollectController {
 	 * @param customerId 用户id
 	 * @return
 	 */
-	@RequestMapping(value = "/collects/{customerId}", method ={RequestMethod.GET})
+	@RequestMapping(value = "/customers/{customerId}/collects", method ={RequestMethod.GET})
 	public ModelAndView getCollect(HttpSession session,@PathVariable String customerId){	
 		Criteria example = new Criteria();
 		example.put("customerId", customerId);

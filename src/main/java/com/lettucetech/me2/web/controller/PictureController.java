@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -146,6 +147,27 @@ public class PictureController {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
 		result.setObj(pictures);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/customers/{customerId}/pictures", method ={RequestMethod.GET})
+	public ModelAndView getPicturesByCustomer(HttpSession session,@PathVariable String customerId,String offset,String length){
+		Criteria example = new Criteria();
+//		example.setMysqlOffset(Integer.parseInt(offset));
+//		example.setMysqlLength(Integer.parseInt(length));
+		example.setOrderByClause("creat_time");
+		example.setSord("desc");
+		example.put("customerId", customerId);
+		example.put("front", "a");
+		
+		List<Picture> pictures = pictureService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(pictures);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;

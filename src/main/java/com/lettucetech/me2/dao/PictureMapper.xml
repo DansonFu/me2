@@ -21,6 +21,7 @@
     <result column="anonymity" property="anonymity" jdbcType="CHAR" />
     <result column="game_id" property="gameId" jdbcType="INTEGER" />
     <association property="customer" column="customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
+    <association property="commentCount" column="{condition.pid=pid}"	select="com.lettucetech.me2.dao.CommentMapper.countByParams"></association>
     <collection property="bpicture" column="pid" select="getChild"></collection>
   </resultMap>
   
@@ -96,7 +97,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
-      order by ${orderByClause}
+      order by ${orderByClause} ${sord}
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
