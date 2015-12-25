@@ -87,7 +87,7 @@ public class GameController {
 	 * @param gameface
 	 * @return
 	 */
-	@RequestMapping(value="/games/face",method=RequestMethod.POST)
+	@RequestMapping(value="/gameface",method=RequestMethod.POST)
 	public ModelAndView saveGamesFace(HttpSession session,Gameface gameface) {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
@@ -96,6 +96,22 @@ public class GameController {
 		if(i==1){
 			result.setSuccess(true);
 		}
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	@RequestMapping(value="/pictures/{pid}/decoding2all",method=RequestMethod.POST)
+	public ModelAndView decoding2all(HttpSession session,@PathVariable String pid) {
+		Gamecustomer gamecustomer = new Gamecustomer();
+		gamecustomer.setPid(Integer.parseInt(pid));
+		gamecustomer.setCustomerId(-1);
+		
+		gamecustomerService.insertSelective(gamecustomer);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;

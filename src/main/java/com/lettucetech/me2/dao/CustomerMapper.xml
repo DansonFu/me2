@@ -132,9 +132,8 @@
   </sql>
   
   <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    SELECT b.r,a.* FROM customer a,(SELECT round( RAND() * ((SELECT MAX(customer_id) FROM customer)-(SELECT MIN(customer_id) FROM customer)) + (SELECT MIN(customer_id) FROM customer)) r) b
+    SELECT * FROM customer 
     <where>
-    	a.customer_id>b.r
       <if test="condition.sex != null" >
          and sex = #{condition.sex}
       </if>
@@ -157,7 +156,7 @@
          and inneruser = #{condition.inneruser}
       </if>
     </where>
-	LIMIT 1
+	ORDER BY RAND() LIMIT 1
   </select>
     
   <select id="selectByPhoneOrUsername" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >

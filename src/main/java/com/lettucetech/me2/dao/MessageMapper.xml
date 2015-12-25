@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lettucetech.me2.dao.GamefaceMapper" >
-  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Gameface" >
+<mapper namespace="com.lettucetech.me2.dao.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Message" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="pid" property="pid" jdbcType="INTEGER" />
-    <result column="issuer" property="issuer" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="proposer" property="proposer" jdbcType="INTEGER" />
     <result column="processed" property="processed" jdbcType="CHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
     <association property="customer" column="proposer"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
+    <association property="picture" column="pid"	select="com.lettucetech.me2.dao.PictureMapper.selectByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
-      <if test="condition.qiniukey != null" >
-         and qiniukey = #{condition.qiniukey}
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
       </if>
-      <if test="condition.content != null" >
-         and content = #{condition.content}
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
       </if>
       <if test="condition.pid != null" >
          and pid = #{condition.pid}
       </if>
-      <if test="condition.issuer != null" >
-         and issuer = #{condition.issuer}
+      <if test="condition.type != null" >
+         and type = #{condition.type}
       </if>
       <if test="condition.proposer != null" >
          and proposer = #{condition.proposer}
@@ -32,13 +33,13 @@
       <if test="condition.processed != null" >
          and processed = #{condition.processed}
       </if>
-      <if test="condition.createTime != null" >
-         and create_time = #{condition.createTime}
+      <if test="condition.content != null" >
+         and content = #{condition.content}
       </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, qiniukey, content, pid, issuer, proposer, processed, create_time
+    id, customer_id, create_time, pid, type, proposer, processed, content
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -46,54 +47,54 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from gameface
+    from message
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
-      order by ${orderByClause} ${sord}
+      order by ${orderByClause}
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from gameface
+    from message
     where id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from gameface
+    delete from message
     where id = #{id}
   </delete>
   <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    delete from gameface
+    delete from message
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Gameface" >
-    insert into gameface (id, qiniukey, content, pid, issuer, proposer, processed, 
-      create_time)
-    values (#{id}, #{qiniukey}, #{content}, #{pid}, #{issuer}, #{proposer}, #{processed}, 
-      #{createTime})
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Message" >
+    insert into message (id, customer_id, create_time, pid, type, proposer, processed, 
+      content)
+    values (#{id}, #{customerId}, #{createTime}, #{pid}, #{type}, #{proposer}, #{processed}, 
+      #{content})
   </insert>
-  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Gameface" >
-    insert into gameface
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Message" >
+    insert into message
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="qiniukey != null" >
-        qiniukey,
+      <if test="customerId != null" >
+        customer_id,
       </if>
-      <if test="content != null" >
-        content,
+      <if test="createTime != null" >
+        create_time,
       </if>
       <if test="pid != null" >
         pid,
       </if>
-      <if test="issuer != null" >
-        issuer,
+      <if test="type != null" >
+        type,
       </if>
       <if test="proposer != null" >
         proposer,
@@ -101,25 +102,25 @@
       <if test="processed != null" >
         processed,
       </if>
-      <if test="createTime != null" >
-        create_time,
+      <if test="content != null" >
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id},
       </if>
-      <if test="qiniukey != null" >
-        #{qiniukey},
+      <if test="customerId != null" >
+        #{customerId},
       </if>
-      <if test="content != null" >
-        #{content},
+      <if test="createTime != null" >
+        #{createTime},
       </if>
       <if test="pid != null" >
         #{pid},
       </if>
-      <if test="issuer != null" >
-        #{issuer},
+      <if test="type != null" >
+        #{type},
       </if>
       <if test="proposer != null" >
         #{proposer},
@@ -127,34 +128,34 @@
       <if test="processed != null" >
         #{processed},
       </if>
-      <if test="createTime != null" >
-        #{createTime},
+      <if test="content != null" >
+        #{content},
       </if>
     </trim>
   </insert>
   <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
-    select count(*) from gameface
+    select count(*) from message
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByParamsSelective" parameterType="map" >
-    update gameface
+    update message
     <set >
       <if test="record.id != null" >
         id = #{record.id},
       </if>
-      <if test="record.qiniukey != null" >
-        qiniukey = #{record.qiniukey},
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
       </if>
-      <if test="record.content != null" >
-        content = #{record.content},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
       </if>
       <if test="record.pid != null" >
         pid = #{record.pid},
       </if>
-      <if test="record.issuer != null" >
-        issuer = #{record.issuer},
+      <if test="record.type != null" >
+        type = #{record.type},
       </if>
       <if test="record.proposer != null" >
         proposer = #{record.proposer},
@@ -162,8 +163,8 @@
       <if test="record.processed != null" >
         processed = #{record.processed},
       </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime},
+      <if test="record.content != null" >
+        content = #{record.content},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -171,33 +172,33 @@
     </if>
   </update>
   <update id="updateByParams" parameterType="map" >
-    update gameface
+    update message
     set id = #{record.id},
-      qiniukey = #{record.qiniukey},
-      content = #{record.content},
+      customer_id = #{record.customerId},
+      create_time = #{record.createTime},
       pid = #{record.pid},
-      issuer = #{record.issuer},
+      type = #{record.type},
       proposer = #{record.proposer},
       processed = #{record.processed},
-      create_time = #{record.createTime}
+      content = #{record.content}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Gameface" >
-    update gameface
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Message" >
+    update message
     <set >
-      <if test="qiniukey != null" >
-        qiniukey = #{qiniukey},
+      <if test="customerId != null" >
+        customer_id = #{customerId},
       </if>
-      <if test="content != null" >
-        content = #{content},
+      <if test="createTime != null" >
+        create_time = #{createTime},
       </if>
       <if test="pid != null" >
         pid = #{pid},
       </if>
-      <if test="issuer != null" >
-        issuer = #{issuer},
+      <if test="type != null" >
+        type = #{type},
       </if>
       <if test="proposer != null" >
         proposer = #{proposer},
@@ -205,21 +206,21 @@
       <if test="processed != null" >
         processed = #{processed},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime},
+      <if test="content != null" >
+        content = #{content},
       </if>
     </set>
     where id = #{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Gameface" >
-    update gameface
-    set qiniukey = #{qiniukey},
-      content = #{content},
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Message" >
+    update message
+    set customer_id = #{customerId},
+      create_time = #{createTime},
       pid = #{pid},
-      issuer = #{issuer},
+      type = #{type},
       proposer = #{proposer},
       processed = #{processed},
-      create_time = #{createTime}
+      content = #{content}
     where id = #{id}
   </update>
 </mapper>
