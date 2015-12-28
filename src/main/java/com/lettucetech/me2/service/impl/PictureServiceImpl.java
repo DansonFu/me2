@@ -4,7 +4,9 @@ import com.lettucetech.me2.dao.PictureMapper;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.PictureService;
+
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +72,5 @@ public class PictureServiceImpl implements PictureService {
 	public List<Picture> selectByParamsTagSearch(Criteria example) {
 		return this.pictureMapper.selectByParamsTagSearch(example);
 	}
+
 }

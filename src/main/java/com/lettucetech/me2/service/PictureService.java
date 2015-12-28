@@ -2,6 +2,7 @@ package com.lettucetech.me2.service;
 
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picture;
+
 import java.util.List;
 
 public interface PictureService {
@@ -30,4 +31,5 @@ public interface PictureService {
 	List<Picture> selectByParams4Rand(Criteria example);
 
 	List<Picture> selectByParamsTagSearch(Criteria example);
+
 }
