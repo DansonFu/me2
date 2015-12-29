@@ -36,5 +36,5 @@ public class Me2Constants {
 	 */ 
 	public static final String QINIUPRIVATEDOMAIN = "http://7xoaf7.com2.z0.glb.qiniucdn.com";
 	
-	public static final Integer AGRESSANDDISAGRESSVALUE = 1;
+	public static final Integer METOOHOTVALUE = 1;
 }

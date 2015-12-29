@@ -69,6 +69,27 @@ public class PictureController {
 
 	}
 	/**
+	 * 增加蜜图热度
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/pictures/{pid}/increasehot", method ={RequestMethod.PUT})
+	public ModelAndView addPicture(HttpSession session,@PathVariable Integer pid){
+		Picture picture = pictureService.selectByPrimaryKey(pid);
+		picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
+		pictureService.updateByPrimaryKeySelective(picture);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		
+		return mav;
+
+	}
+	/**
 	 * 按标签查询蜜图分页数据
 	 * @param session
 	 * @param tags  标签
@@ -206,7 +227,7 @@ public class PictureController {
 		}else if("0".equals(pictureagree.getType())){
 			picture.setDisagree(picture.getDisagree()+1);
 		}
-		picture.setHits(picture.getHits()+Me2Constants.AGRESSANDDISAGRESSVALUE);
+		picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
 		
 		pictureService.updateByPrimaryKeySelective(picture);
 		
@@ -242,7 +263,7 @@ public class PictureController {
 		}else if("0".equals(type)){
 			picture.setDisagree(picture.getDisagree()-1);
 		}
-		picture.setHits(picture.getHits()-Me2Constants.AGRESSANDDISAGRESSVALUE);
+		picture.setHits(picture.getHits()-Me2Constants.METOOHOTVALUE);
 		
 		pictureService.updateByPrimaryKeySelective(picture);
 		

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javapns.communication.exceptions.CommunicationException;
+import javapns.communication.exceptions.KeystoreException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.pojo.RestfulResult;
+import com.lettucetech.me2.common.utils.IosPushUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Gamecustomer;
 import com.lettucetech.me2.pojo.Gameface;
 import com.lettucetech.me2.pojo.Message;
+import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.GamecustomerService;
 import com.lettucetech.me2.service.GamefaceService;
 import com.lettucetech.me2.service.MessageService;
@@ -32,6 +37,8 @@ public class MessageController {
 	private GamefaceService gamefaceService;
 	@Autowired
 	private GamecustomerService gamecustomerService;
+	@Autowired
+	private CustomerService customerService;
 	/**
 	 * 取得用户的解蜜消息集合
 	 * @param session
@@ -156,11 +163,30 @@ public class MessageController {
 		example.put("type", 1);
 		example.put("proposer", gameface.getProposer());
 		List<Message> messages = messageService.selectByParams(example);
+		String mes = "";
+		
 		for(Message message : messages){
 			message.setProcessed("1");
+			Customer customer = customerService.selectByPrimaryKey(message.getCustomerId());
+			if("agree".equals(dispose)){
+				message.setContent("为你解蜜了图片");
+				mes =customer.getUsername() + "为你解蜜了图片";
+			}else {
+				message.setContent("拒绝了你的解蜜申请");
+				mes =customer.getUsername() + "拒绝了你的解蜜申请";
+			}
 			messageService.updateByPrimaryKey(message);
 		}
-		
+		//发送系统推送消息
+		try {
+			if("agree".equals(dispose)){
+				IosPushUtil.pushMsgNotification(mes,gameface.getCustomer().getApppushtoken());
+			}
+		} catch (CommunicationException e) {
+			e.printStackTrace();
+		} catch (KeystoreException e) {
+			e.printStackTrace();
+		}
 		//如果同意则加入gamecustomer表
 		if("agree".equals(dispose)){
 			Gamecustomer gamecustomer = new Gamecustomer();

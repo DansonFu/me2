@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Game;
 import com.lettucetech.me2.pojo.Gamecustomer;
 import com.lettucetech.me2.pojo.Gameface;
+import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.GamecustomerService;
 import com.lettucetech.me2.service.GamefaceService;
+import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.impl.GameServiceImpl;
 
 
@@ -30,6 +33,8 @@ public class GameController {
 	private GamecustomerService gamecustomerService;
 	@Autowired
 	private GamefaceService gamefaceService;
+	@Autowired
+	private PictureService pictureService;
 	/**
 	 * 查询解密游戏
 	 * @param session
@@ -95,6 +100,10 @@ public class GameController {
 		int i = gamefaceService.insertSelective(gameface);
 		if(i==1){
 			result.setSuccess(true);
+			//增加热度
+			Picture picture = pictureService.selectByPrimaryKey(gameface.getPid());
+			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
+			pictureService.updateByPrimaryKeySelective(picture);
 		}
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);

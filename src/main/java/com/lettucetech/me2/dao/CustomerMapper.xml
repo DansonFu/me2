@@ -32,6 +32,7 @@
     <result column="sourceid" property="sourceid" jdbcType="VARCHAR" />
     <result column="del" property="del" jdbcType="CHAR" />
     <result column="inneruser" property="inneruser" jdbcType="CHAR" />
+    <result column="apppushtoken" property="apppushtoken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -122,13 +123,16 @@
       <if test="condition.inneruser != null" >
          and inneruser = #{condition.inneruser}
       </if>
+      <if test="condition.apppushtoken != null" >
+         and apppushtoken = #{condition.apppushtoken}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
     customer_id, unionid, openid, subscribe, nickname, sex, city, country, province, 
     language, headimgurl, subscribe_time, remark, groupid, realname, password, total_credit, 
     current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
-    source, creat_time, update_time, login_time, sourceid, del, inneruser
+    source, creat_time, update_time, login_time, sourceid, del, inneruser, apppushtoken
   </sql>
   
   <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
@@ -202,14 +206,14 @@
       city, country, province, language, headimgurl, subscribe_time, 
       remark, groupid, realname, password, total_credit, current_shop, 
       current_latitude, current_longtitude, current_precision, phone, username, 
-      source, creat_time, update_time, login_time, sourceid, del, inneruser
-      )
+      source, creat_time, update_time, login_time, sourceid, del, inneruser, 
+      apppushtoken)
     values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
       #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
       #{remark}, #{groupid}, #{realname}, #{password}, #{totalCredit}, #{currentShop}, 
       #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
-      #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}
-      )
+      #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}, 
+      #{apppushtoken})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
    	<selectKey keyProperty="customerId" order="AFTER" resultType="java.lang.Integer">
@@ -307,6 +311,9 @@
       <if test="inneruser != null" >
         inneruser,
       </if>
+      <if test="apppushtoken != null" >
+        apppushtoken,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -398,6 +405,9 @@
       </if>
       <if test="inneruser != null" >
         #{inneruser},
+      </if>
+      <if test="apppushtoken != null" >
+        #{apppushtoken},
       </if>
     </trim>
   </insert>
@@ -500,6 +510,9 @@
       <if test="record.inneruser != null" >
         inneruser = #{record.inneruser},
       </if>
+      <if test="record.apppushtoken != null" >
+        apppushtoken = #{record.apppushtoken},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -536,7 +549,8 @@
       login_time = #{record.loginTime},
       sourceid = #{record.sourceid},
       del = #{record.del},
-      inneruser = #{record.inneruser}
+      inneruser = #{record.inneruser},
+      apppushtoken = #{record.apppushtoken}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -631,6 +645,9 @@
       <if test="inneruser != null" >
         inneruser = #{inneruser},
       </if>
+      <if test="apppushtoken != null" >
+        apppushtoken = #{apppushtoken},
+      </if>
     </set>
     where customer_id = #{customerId}
   </update>
@@ -664,7 +681,8 @@
       login_time = #{loginTime},
       sourceid = #{sourceid},
       del = #{del},
-      inneruser = #{inneruser}
+      inneruser = #{inneruser},
+      apppushtoken = #{apppushtoken}
     where customer_id = #{customerId}
   </update>
 </mapper>
