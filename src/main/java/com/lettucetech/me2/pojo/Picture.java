@@ -110,9 +110,33 @@ public class Picture implements Serializable {
      * 评论数
      */
     private int commentCount;
+    /**
+     * 逻辑删除0否 1 删除
+     */
+    private String del;
+
+    /**
+     * 是否推荐0 :否 1:是
+     */
+    private String recommend;
     
-    
-    public int getCommentCount() {
+    public String getDel() {
+		return del;
+	}
+
+	public void setDel(String del) {
+		this.del = del;
+	}
+
+	public String getRecommend() {
+		return recommend;
+	}
+
+	public void setRecommend(String recommend) {
+		this.recommend = recommend;
+	}
+
+	public int getCommentCount() {
 		return commentCount;
 	}
 

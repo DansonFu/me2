@@ -20,11 +20,12 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="anonymity" property="anonymity" jdbcType="CHAR" />
     <result column="game_id" property="gameId" jdbcType="INTEGER" />
+    <result column="del" property="del" jdbcType="CHAR" />
+    <result column="recommend" property="recommend" jdbcType="CHAR" />
     <association property="customer" column="customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
     <association property="commentCount" column="{condition.pid=pid}"	select="com.lettucetech.me2.dao.CommentMapper.countByParams"></association>
     <collection property="bpicture" column="pid" select="getChild"></collection>
   </resultMap>
-  
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.qiniukey != null" >
@@ -78,14 +79,19 @@
       <if test="condition.gameId != null" >
          and game_id = #{condition.gameId}
       </if>
+      <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
+      <if test="condition.recommend != null" >
+         and recommend = #{condition.recommend}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
     pid, qiniukey, customer_id, creat_time, hits, mood, front, type, parent_id, agree, 
     disagree, location_title, location_content, longitude, latitude, tags, anonymity, 
-    game_id
+    game_id, del, recommend
   </sql>
-
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >
@@ -182,10 +188,12 @@
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Picture" >
     insert into picture (pid, qiniukey, customer_id, creat_time, hits, mood, front, 
       type, parent_id, agree, disagree, location_title, location_content, 
-      longitude, latitude, tags, anonymity, game_id)
+      longitude, latitude, tags, anonymity, game_id, del, recommend
+      )
     values (#{pid}, #{qiniukey}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
       #{type}, #{parentId}, #{agree}, #{disagree}, #{locationTitle}, #{locationContent}, 
-      #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId})
+      #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId}, #{del}, #{recommend}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
    <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
@@ -247,6 +255,12 @@
       <if test="gameId != null" >
         game_id,
       </if>
+      <if test="del != null" >
+        del,
+      </if>
+      <if test="recommend != null" >
+        recommend,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pid != null" >
@@ -302,6 +316,12 @@
       </if>
       <if test="gameId != null" >
         #{gameId},
+      </if>
+      <if test="del != null" >
+        #{del},
+      </if>
+      <if test="recommend != null" >
+        #{recommend},
       </if>
     </trim>
   </insert>
@@ -368,6 +388,12 @@
       <if test="record.gameId != null" >
         game_id = #{record.gameId},
       </if>
+      <if test="record.del != null" >
+        del = #{record.del},
+      </if>
+      <if test="record.recommend != null" >
+        recommend = #{record.recommend},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -392,7 +418,9 @@
       latitude = #{record.latitude},
       tags = #{record.tags},
       anonymity = #{record.anonymity},
-      game_id = #{record.gameId}
+      game_id = #{record.gameId},
+      del = #{record.del},
+      recommend = #{record.recommend}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -451,6 +479,12 @@
       <if test="gameId != null" >
         game_id = #{gameId},
       </if>
+      <if test="del != null" >
+        del = #{del},
+      </if>
+      <if test="recommend != null" >
+        recommend = #{recommend},
+      </if>
     </set>
     where pid = #{pid}
   </update>
@@ -472,7 +506,9 @@
       latitude = #{latitude},
       tags = #{tags},
       anonymity = #{anonymity},
-      game_id = #{gameId}
+      game_id = #{gameId},
+      del = #{del},
+      recommend = #{recommend}
     where pid = #{pid}
   </update>
 </mapper>
