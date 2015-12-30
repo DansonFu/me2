@@ -54,6 +54,43 @@
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
+  
+    <select id="selectByParams4Matching" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tagshot
+    <where>
+          <if test="condition.tag != null" >
+         and tag like '%${condition.tag}%'
+      </if>
+      <if test="condition.acount != null" >
+         and acount = #{condition.acount}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.mefriends != null" >
+         and mefriends = #{condition.mefriends}
+      </if>
+      <if test="condition.lastTime != null" >
+         and last_time = #{condition.lastTime}
+      </if>
+      <if test="condition.pid != null" >
+         and pid = #{condition.pid}
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

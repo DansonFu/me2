@@ -214,8 +214,7 @@ public class MessageController {
 		Customer customer = customerService.selectByPrimaryKey(gameface.getIssuer());
 		String mes = "";
 		
-		
-		//存到对方用户的消息表中
+		//存到对方用户的消息表中(注意用户身份的转换)
 		Message record = new Message();
 		if("agree".equals(dispose)){
 			record.setContent("为你解蜜了图片");
@@ -226,11 +225,10 @@ public class MessageController {
 		}
 
 		record.setCreateTime(new Date());
-		//注意是谁的消息
 		record.setCustomerId(gameface.getProposer());
 		record.setPid(gameface.getPid());
 		record.setType("2");
-		record.setProposer(gameface.getProposer());
+		record.setProposer(customer.getCustomerId());
 		messageService.insertSelective(record);
 		
 		//发送系统推送消息

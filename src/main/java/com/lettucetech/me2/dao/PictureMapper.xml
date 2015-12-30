@@ -117,6 +117,9 @@
     from picture
     <where>
     	front='a'
+    <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
       <if test="condition.taglist != null" >
       	  <if test="condition.type == 0" >
 	         <foreach collection="condition.taglist" item="tag"  separator="or" open="and (" close=")">

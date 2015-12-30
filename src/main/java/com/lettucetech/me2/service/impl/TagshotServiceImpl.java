@@ -62,4 +62,8 @@ public class TagshotServiceImpl implements TagshotService {
     public int insertSelective(Tagshot record) {
         return this.tagshotMapper.insertSelective(record);
     }
+
+	public List<Tagshot> selectByParams4Matching(Criteria example) {
+		return this.tagshotMapper.selectByParams4Matching(example);
+	}
 }

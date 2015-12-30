@@ -61,4 +61,6 @@ public interface TagshotMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(Tagshot record);
+
+	List<Tagshot> selectByParams4Matching(Criteria example);
 }

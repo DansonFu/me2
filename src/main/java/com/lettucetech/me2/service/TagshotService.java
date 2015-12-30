@@ -26,4 +26,6 @@ public interface TagshotService {
     int insert(Tagshot record);
 
     int insertSelective(Tagshot record);
+
+	List<Tagshot> selectByParams4Matching(Criteria example);
 }

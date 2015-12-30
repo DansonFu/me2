@@ -4,17 +4,21 @@
   <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Picturehot" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="pid" property="pid" jdbcType="INTEGER" />
-    <association property="picture" column="pid"	select="com.lettucetech.me2.dao.PictureMapper.selectByPrimaryKey"></association>
+    <result column="tagslist_id" property="tagslistId" jdbcType="INTEGER" />
+    <association property="picture" column="pid" select="com.lettucetech.me2.dao.PictureMapper.selectByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.pid != null" >
          and pid = #{condition.pid}
       </if>
+      <if test="condition.tagslistId != null" >
+         and tagslist_id = #{condition.tagslistId}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, pid
+    id, pid, tagslist_id
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -40,8 +44,11 @@
     <include refid="Base_Column_List" />
     from picturehot
     <where>
+	    <if test="condition.tagslistId != null" >
+	         and tagslist_id = #{condition.tagslistId}
+	      </if>
     	<if test="condition.plist.size()>0">
-	    	<foreach collection="condition.plist" item="p" open="pid not in(" close=")" separator=",">
+	    	<foreach collection="condition.plist" item="p" open="and pid not in(" close=")" separator=",">
 	    		#{p}
 	    	</foreach>
     	</if>
@@ -67,8 +74,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Picturehot" >
-    insert into picturehot (id, pid)
-    values (#{id}, #{pid})
+    insert into picturehot (id, pid, tagslist_id)
+    values (#{id}, #{pid}, #{tagslistId})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picturehot" >
     insert into picturehot
@@ -79,6 +86,9 @@
       <if test="pid != null" >
         pid,
       </if>
+      <if test="tagslistId != null" >
+        tagslist_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -86,6 +96,9 @@
       </if>
       <if test="pid != null" >
         #{pid},
+      </if>
+      <if test="tagslistId != null" >
+        #{tagslistId},
       </if>
     </trim>
   </insert>
@@ -104,6 +117,9 @@
       <if test="record.pid != null" >
         pid = #{record.pid},
       </if>
+      <if test="record.tagslistId != null" >
+        tagslist_id = #{record.tagslistId},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -112,7 +128,8 @@
   <update id="updateByParams" parameterType="map" >
     update picturehot
     set id = #{record.id},
-      pid = #{record.pid}
+      pid = #{record.pid},
+      tagslist_id = #{record.tagslistId}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -123,12 +140,16 @@
       <if test="pid != null" >
         pid = #{pid},
       </if>
+      <if test="tagslistId != null" >
+        tagslist_id = #{tagslistId},
+      </if>
     </set>
     where id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Picturehot" >
     update picturehot
-    set pid = #{pid}
+    set pid = #{pid},
+      tagslist_id = #{tagslistId}
     where id = #{id}
   </update>
 </mapper>

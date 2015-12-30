@@ -18,14 +18,18 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
+import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Pictureagree;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.Picturerecommend;
+import com.lettucetech.me2.pojo.Tagshot;
+import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PictureagreeService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
+import com.lettucetech.me2.service.TagshotService;
 
 @Controller
 public class PictureController {
@@ -37,6 +41,11 @@ public class PictureController {
 	private PicturerecommendService picturerecommendService;
 	@Autowired
 	private PictureagreeService pictureagreeService;
+	@Autowired
+	private MessageService messageService;
+	@Autowired
+	private TagshotService tagshotService;
+	
 	/**
 	 * 保存蜜图AB面
 	 * @param session
@@ -108,6 +117,7 @@ public class PictureController {
 		example.setOrderByClause(sort);
 		example.put("taglist", taglist);
 		example.put("type", type);
+		example.put("del", 0);
 		
 		List<Picture> pictures = pictureService.selectByParamsTagSearch(example);
 		
@@ -160,6 +170,8 @@ public class PictureController {
 		example.clear();
 		example.put("size", size);
 		example.put("plist", plist);
+		//热门标签集合的ID为1
+		example.put("tagslistId", 1);
 		List<Picturehot> phs = picturehotService.selectByParams4Rand(example);
 		
 		for(Picturehot ph : phs){
@@ -175,6 +187,66 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
+	/**
+	 * 取标签集的蜜图
+	 * @param session
+	 * @param id
+	 * @param offset
+	 * @param length
+	 * @return
+	 */
+	@RequestMapping(value = "/pictures/tagslist", method ={RequestMethod.GET})
+	public ModelAndView getTagslistPictures(HttpSession session,String id,String offset,String length){
+		//客户端已查询的蜜图列表防止重复
+		String attributename = "plist"+id;
+		List<Integer> plist = (List<Integer>)session.getAttribute(attributename);
+		if(plist==null||"0".equals(offset)){
+			plist = new ArrayList<Integer>();
+		}
+		//已取推荐蜜图数量
+		Integer count = (Integer) session.getAttribute("count");
+		if(count==null){
+			count = 0;
+		}
+		
+		List<Picture> pictures = new ArrayList<Picture>();
+		Criteria example = new Criteria();
+		
+		//热门数量
+		int size = Integer.parseInt(length);
+		//取一个推荐蜜图
+		example.setMysqlLength(1);
+		example.setMysqlOffset(count++);
+		example.setOrderByClause("sort");
+		List<Picturerecommend> pr = picturerecommendService.selectByParams4Hot(example);
+		if(pr.size()>0){
+			plist.add(pr.get(0).getPid());
+			pictures.add(pr.get(0).getPicture());
+			size-=1;
+		}
+		
+		//随机取length-1 个标签集的蜜图
+		example.clear();
+		example.put("size", size);
+		example.put("plist", plist);
+		//热门标签集合的ID为1
+		example.put("tagslistId", id);
+		List<Picturehot> phs = picturehotService.selectByParams4Rand(example);
+		
+		for(Picturehot ph : phs){
+			plist.add(ph.getPid());
+			pictures.add(ph.getPicture());
+		}
+		session.setAttribute(attributename, plist);
+		session.setAttribute("count", count);
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(pictures);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
 	/**
 	 * 我的足迹
 	 * @param session
@@ -218,18 +290,35 @@ public class PictureController {
 		
 		pictureagreeService.insertSelective(pictureagree);
 		
+		String content = "";
+		String messagetype =null;
+		
 		//增加点赞踩和热度值
 		Picture picture =pictureService.selectByPrimaryKey(pictureagree.getPid());
 		//0:踩  1 :赞
 		if("1".equals(pictureagree.getType())){
 			//赞 数量+1
 			picture.setAgree(picture.getAgree()+1);
+			content="觉得有料";
+			messagetype ="3";
 		}else if("0".equals(pictureagree.getType())){
 			picture.setDisagree(picture.getDisagree()+1);
+			content="觉得无料";
+			messagetype ="4";
 		}
 		picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
 		
 		pictureService.updateByPrimaryKeySelective(picture);
+		
+		//存到用户消息表中
+		Message record = new Message();
+		record.setContent(content);
+		record.setCreateTime(new Date());
+		record.setCustomerId(picture.getCustomerId());
+		record.setPid(pid);
+		record.setType(messagetype);
+		record.setProposer(customerId);
+		messageService.insertSelective(record);
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
@@ -322,6 +411,25 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
-	
+	/**
+	 * 标签匹配
+	 * @param tag
+	 * @return
+	 */
+	@RequestMapping(value = "/tagshot/{tag}", method ={RequestMethod.GET})
+	public ModelAndView tagsMatching(@PathVariable String tag){
+		Criteria example = new Criteria();
+		example.put("tag", tag);
+		example.setMysqlOffset(0);
+		example.setMysqlLength(20);
+		List<Tagshot> tags = tagshotService.selectByParams4Matching(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(false);
+		result.setObj(tags);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 	
 }
