@@ -1,6 +1,7 @@
 package com.lettucetech.me2.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Gameface implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -31,8 +32,26 @@ public class Gameface implements Serializable {
      * 请求解蜜者
      */
     private Integer proposer;
+    private Customer customer;
+    /**
+     * 是否已处理:0、未处理  1、已处理
+     */
+    private String processed;
 
-    public Integer getId() {
+    /**
+     * 申请时间
+     */
+    private Date createTime;
+
+    public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -113,5 +132,35 @@ public class Gameface implements Serializable {
      */
     public void setProposer(Integer proposer) {
         this.proposer = proposer;
+    }
+
+    /**
+     * @return 是否已处理:0、未处理  1、已处理
+     */
+    public String getProcessed() {
+        return processed;
+    }
+
+    /**
+     * @param processed 
+	 *            是否已处理:0、未处理  1、已处理
+     */
+    public void setProcessed(String processed) {
+        this.processed = processed;
+    }
+
+    /**
+     * @return 申请时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime 
+	 *            申请时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.PictureagreeMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Pictureagree" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.pid != null" >
+         and pid = #{condition.pid}
+      </if>
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.type != null" >
+         and type = #{condition.type}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, pid, customer_id, type
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pictureagree
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pictureagree
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pictureagree
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from pictureagree
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Pictureagree" >
+    insert into pictureagree (id, pid, customer_id, type)
+    values (#{id}, #{pid}, #{customerId}, #{type})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Pictureagree" >
+    insert into pictureagree
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="pid != null" >
+        #{pid},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from pictureagree
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update pictureagree
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.pid != null" >
+        pid = #{record.pid},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update pictureagree
+    set id = #{record.id},
+      pid = #{record.pid},
+      customer_id = #{record.customerId},
+      type = #{record.type}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Pictureagree" >
+    update pictureagree
+    <set >
+      <if test="pid != null" >
+        pid = #{pid},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Pictureagree" >
+    update pictureagree
+    set pid = #{pid},
+      customer_id = #{customerId},
+      type = #{type}
+    where id = #{id}
+  </update>
+</mapper>

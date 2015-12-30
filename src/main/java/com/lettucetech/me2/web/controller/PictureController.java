@@ -19,9 +19,11 @@ import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Pictureagree;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.PictureagreeService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
 
@@ -33,7 +35,8 @@ public class PictureController {
 	private PicturehotService picturehotService;
 	@Autowired
 	private PicturerecommendService picturerecommendService;
-
+	@Autowired
+	private PictureagreeService pictureagreeService;
 	/**
 	 * 保存蜜图AB面
 	 * @param session
@@ -58,6 +61,27 @@ public class PictureController {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
 		result.setObj(pictures);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		
+		return mav;
+
+	}
+	/**
+	 * 增加蜜图热度
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/pictures/{pid}/increasehot", method ={RequestMethod.PUT})
+	public ModelAndView addPicture(HttpSession session,@PathVariable Integer pid){
+		Picture picture = pictureService.selectByPrimaryKey(pid);
+		picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
+		pictureService.updateByPrimaryKeySelective(picture);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
@@ -151,7 +175,14 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
-	
+	/**
+	 * 我的足迹
+	 * @param session
+	 * @param customerId
+	 * @param offset
+	 * @param length
+	 * @return
+	 */
 	@RequestMapping(value = "/customers/{customerId}/pictures", method ={RequestMethod.GET})
 	public ModelAndView getPicturesByCustomer(HttpSession session,@PathVariable String customerId,String offset,String length){
 		Criteria example = new Criteria();
@@ -172,4 +203,125 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
+	
+	/**
+	 * 点赞或踩贴
+	 * @param pictureagree
+	 * @return
+	 */
+	@RequestMapping(value = "/pictureagrees", method ={RequestMethod.POST})
+	public ModelAndView addPictureagree(Integer pid,Integer customerId,String type){
+		Pictureagree pictureagree = new Pictureagree();
+		pictureagree.setPid(pid);
+		pictureagree.setCustomerId(customerId);
+		pictureagree.setType(type);
+		
+		pictureagreeService.insertSelective(pictureagree);
+		
+		//增加点赞踩和热度值
+		Picture picture =pictureService.selectByPrimaryKey(pictureagree.getPid());
+		//0:踩  1 :赞
+		if("1".equals(pictureagree.getType())){
+			//赞 数量+1
+			picture.setAgree(picture.getAgree()+1);
+		}else if("0".equals(pictureagree.getType())){
+			picture.setDisagree(picture.getDisagree()+1);
+		}
+		picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
+		
+		pictureService.updateByPrimaryKeySelective(picture);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	/**
+	 * 取消点赞或踩贴
+	 * @param pid
+	 * @param customerId
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping(value = "/pictureagrees", method ={RequestMethod.DELETE})
+	public ModelAndView cancelPictureagree(Integer pid,Integer customerId,String type){
+		Criteria example = new Criteria();
+		example.put("pid", pid);
+		example.put("customerId", customerId);
+		example.put("type", type);
+		
+		pictureagreeService.deleteByParams(example);
+		
+		//减少点赞踩和热度值
+		Picture picture =pictureService.selectByPrimaryKey(pid);
+		//0:踩  1 :赞
+		if("1".equals(type)){
+			//赞 数量+1
+			picture.setAgree(picture.getAgree()-1);
+		}else if("0".equals(type)){
+			picture.setDisagree(picture.getDisagree()-1);
+		}
+		picture.setHits(picture.getHits()-Me2Constants.METOOHOTVALUE);
+		
+		pictureService.updateByPrimaryKeySelective(picture);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	/**
+	 * 判断是否已赞
+	 * @param pid
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "/pictureagrees/{customerId}/{pid}/checkagree", method ={RequestMethod.GET})
+	public ModelAndView checkagree(@PathVariable Integer pid,@PathVariable Integer customerId){
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(false);
+		
+		Criteria example = new Criteria();
+		example.put("pid", pid);
+		example.put("customerId", customerId);
+		example.put("type", 1);
+		
+		if(pictureagreeService.selectByParams(example).size()>0){
+			result.setSuccess(true);
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	/**
+	 * 判断是否已踩
+	 * @param pid
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "/pictureagrees/{customerId}/{pid}/checkdisagree", method ={RequestMethod.GET})
+	public ModelAndView checkdisagree(@PathVariable Integer pid,@PathVariable Integer customerId){
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(false);
+		
+		Criteria example = new Criteria();
+		example.put("pid", pid);
+		example.put("customerId", customerId);
+		example.put("type", 0);
+		
+		if(pictureagreeService.selectByParams(example).size()>0){
+			result.setSuccess(true);
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	
 }

@@ -59,7 +59,29 @@ public class IndexController {
 		mav.addObject(result);
 		return mav;
 	}
-	
+	/**
+	 * 验证昵称唯一性验证
+	 * @param session
+	 * @param username
+	 * @return
+	 */
+	@RequestMapping(value="/register/username/{username}",method=RequestMethod.GET)
+	public ModelAndView verifyUsername(HttpSession session,@PathVariable String username) {
+		Criteria example = new Criteria();
+		example.put("username", username);
+		List<Customer> list1 = customerService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		if(list1.size()>0){
+			result.setSuccess(false);
+		}else{
+			result.setSuccess(true);
+		}
+
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 	/**
 	 * 用户注册
 	 * @param session
@@ -89,6 +111,7 @@ public class IndexController {
 			if(customerService.insertSelective(customer)>0){
 				result.setSuccess(true);
 				result.setMessage("注册成功");
+				result.setObj(customer);
 				session.setAttribute(Me2Constants.METOOUSER, customer);
 			}
 		}

@@ -12,16 +12,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
+import com.lettucetech.me2.common.utils.StringUtil;
 import com.lettucetech.me2.pojo.Collect;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.CollectService;
+import com.lettucetech.me2.service.PictureService;
 
 @Controller
 public class CollectController {
 	@Autowired
 	private CollectService collectService;
-	
+	@Autowired
+	private PictureService pictureService;
 	/**
 	 * 收藏蜜图
 	 * @param session
@@ -43,6 +48,10 @@ public class CollectController {
 			int num = collectService.insertSelective(collect);
 			if(num ==1){
 				result.setSuccess(true);
+				//增加热度
+				Picture picture = pictureService.selectByPrimaryKey(collect.getPid());
+				picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
+				pictureService.updateByPrimaryKeySelective(picture);
 			}
 		}
 		
@@ -51,6 +60,33 @@ public class CollectController {
 		
 		return mav;
 	}
+	/**
+	 * 检查是否已收藏
+	 * @param session
+	 * @param customerId
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/collects/{customerId}/{pid}/checkcollect", method ={RequestMethod.GET})
+	public ModelAndView checkCollect(HttpSession session,@PathVariable String customerId,@PathVariable String pid){	
+		Criteria example = new Criteria();
+		example.put("customerId", customerId);
+		example.put("pid", pid);
+		List<Collect> collects = collectService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		if(collects.size()>0){
+			result.setSuccess(true);
+		}else{
+			result.setSuccess(false);
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		
+		return mav;
+	}
+	
 	/**
 	 * 查询收藏列表
 	 * @param session
@@ -80,17 +116,22 @@ public class CollectController {
 	 * @param id 
 	 * @return
 	 */
-	@RequestMapping(value = "/collects/{id}", method ={RequestMethod.DELETE})
-	public ModelAndView delCollect(HttpSession session,@PathVariable String id){	
-		int num = collectService.deleteByPrimaryKey(Integer.parseInt(id));
-		
+	@RequestMapping(value = "/collects/{customerId}/{pid}", method ={RequestMethod.DELETE})
+	public ModelAndView delCollect(HttpSession session,@PathVariable String customerId,@PathVariable String pid){
 		RestfulResult result = new RestfulResult();
-		if(num ==1){
-			result.setSuccess(true);
-		}else{
-			result.setSuccess(false);
-		}
+		result.setSuccess(false);
 		
+		if(!StringUtil.isNullOrEmpty(customerId) && !StringUtil.isNullOrEmpty(pid)){
+			Criteria example = new Criteria();
+			example.put("customerId", customerId);
+			example.put("pid", pid);
+			
+			int num = collectService.deleteByParams(example);
+			
+			if(num >0){
+				result.setSuccess(true);
+			}
+		}
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		

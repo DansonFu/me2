@@ -35,4 +35,6 @@ public class Me2Constants {
 	 * 7牛私有域名
 	 */ 
 	public static final String QINIUPRIVATEDOMAIN = "http://7xoaf7.com2.z0.glb.qiniucdn.com";
+	
+	public static final Integer METOOHOTVALUE = 1;
 }

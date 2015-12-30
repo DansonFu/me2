@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -514,6 +515,8 @@ public class AdminController {
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    example.put("state", "0");
+	    example.setOrderByClause("creat_time");
+	    example.setSord("desc");
 	    //是否有查看所有人权限
 
 		if(!"-1".equals(userId)){
@@ -708,6 +711,13 @@ public class AdminController {
 	
 	@RequestMapping("/admin/delpicture")
 	public ModelAndView delpicture(HttpSession session,String pid){
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/viewmetoo");
+		
+		if(StringUtil.isNullOrEmpty(pid)){
+			return mav;
+		}
+		
 		Criteria example = new Criteria();
 		//删除评论表
 		example.put("pid", pid);
@@ -724,8 +734,6 @@ public class AdminController {
 		example.put("metoo", pid);
 		metooService.deleteByParams(example);
 		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewmetoo");
 		return mav;
 	}
 	

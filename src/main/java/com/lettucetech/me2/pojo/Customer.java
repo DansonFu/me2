@@ -152,8 +152,20 @@ public class Customer implements Serializable {
      * 是否内部用户 0 否，1 是
      */
     private String inneruser;
+    /**
+     * 手机唯一标识，APP消息推送
+     */
+    private String apppushtoken;
+    
+    public String getApppushtoken() {
+		return apppushtoken;
+	}
 
-    public Integer getCustomerId() {
+	public void setApppushtoken(String apppushtoken) {
+		this.apppushtoken = apppushtoken;
+	}
+
+	public Integer getCustomerId() {
         return customerId;
     }
 

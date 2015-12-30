@@ -1,22 +1,21 @@
 package com.lettucetech.me2.common.utils;
-import java.io.FileNotFoundException;  
-import java.io.IOException;  
-import java.io.InputStream;  
-import java.util.ArrayList;  
-import java.util.List;  
-import java.util.Map;  
-import java.util.Properties;  
-  
-import javapns.Push;  
-import javapns.communication.exceptions.CommunicationException;  
-import javapns.communication.exceptions.KeystoreException;  
-import javapns.devices.Device;  
-import javapns.devices.Devices;  
-import javapns.notification.PayloadPerDevice;  
-import javapns.notification.PushNotificationPayload;  
-import javapns.notification.transmission.PushQueue;  
-  
-import org.apache.commons.lang.StringUtils;  
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javapns.Push;
+import javapns.communication.exceptions.CommunicationException;
+import javapns.communication.exceptions.KeystoreException;
+import javapns.devices.Device;
+import javapns.notification.PayloadPerDevice;
+import javapns.notification.PushNotificationPayload;
+import javapns.notification.transmission.PushQueue;
+
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
 public class IosPushUtil {
@@ -33,7 +32,7 @@ public class IosPushUtil {
             inputStream = IosPushUtil.class.getClassLoader()  
                     .getResourceAsStream("config/others/push.properties");  
             propertie.load(inputStream);  
-            keystore = propertie.getProperty("certificatePath");  
+            keystore = IosPushUtil.class.getResource("/").getPath()  + propertie.getProperty("certificatePath");  
             password = propertie.getProperty("certificatePassword","123456");  
             host = propertie.getProperty("host","gateway.push.apple.com");  
             production = Boolean.valueOf(propertie.getProperty("production", "true"));  
@@ -44,19 +43,19 @@ public class IosPushUtil {
             ex.printStackTrace();  
         }  
     }  
-    public static void main(String[] args) throws Exception {  
-        //pushMsgNotification("hello!!!2", true, "iostoken");  
-    //  pushBadgeNotification(1,  "iostoken");  
-        String[] devs= new String[10000];  
-        for (int i = 0; i < devs.length; i++) {  
-        devs[i] = "iostoken";  
-        }  
-        List<Device> devices=Devices.asDevices(devs);  
-        System.out.println(devices.size());  
+    public static void main(String[] args ) throws Exception{  
+        pushMsgNotification("你好",  "070c07a2c2d69a43fe1736d930a8df856ad8ccf7ed1a2c12dcab879e8c7cadb4");
+        pushBadgeNotification(1,  "070c07a2c2d69a43fe1736d930a8df856ad8ccf7ed1a2c12dcab879e8c7cadb4");  
+//        String[] devs= new String[3];  
+//        for (int i = 0; i < devs.length; i++) {  
+//        devs[i] = "070c07a2c2d69a43fe1736d930a8df856ad8ccf7ed1a2c12dcab879e8c7cadb4"; 
+//        }  
+//        List<Device> devices=Devices.asDevices(devs);  
+//        System.out.println(devices.size());  
         //pushPayLoadByThread(devices, "Hello 2222222", 1, null, null);  
         //pushPayloadDevicePairs(devices, "Hello 111111111", 1, null, null);  
         //pushPayloadDevicePairs(devices, "Hello +++", 1, null, null);  
-        queue(devices,"Hello 2222222", 1, null, null);  
+//        queue(devices,"Hello 2222222", 1, null, null);  
     }  
     /** 
      * 推送一个简单消息 
