@@ -1,5 +1,6 @@
 package com.lettucetech.me2.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +19,11 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Game;
 import com.lettucetech.me2.pojo.Gamecustomer;
 import com.lettucetech.me2.pojo.Gameface;
+import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.GamecustomerService;
 import com.lettucetech.me2.service.GamefaceService;
+import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.impl.GameServiceImpl;
 
@@ -35,6 +38,8 @@ public class GameController {
 	private GamefaceService gamefaceService;
 	@Autowired
 	private PictureService pictureService;
+	@Autowired
+	private MessageService messageService;
 	/**
 	 * 查询解密游戏
 	 * @param session
@@ -104,6 +109,16 @@ public class GameController {
 			Picture picture = pictureService.selectByPrimaryKey(gameface.getPid());
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
+			
+			//存到用户消息表中
+			Message record = new Message();
+			record.setContent("请求你为他解蜜图片");
+			record.setCreateTime(new Date());
+			record.setCustomerId(picture.getCustomerId());
+			record.setPid(gameface.getPid());
+			record.setType("1");
+			record.setProposer(gameface.getProposer());
+			messageService.insertSelective(record);
 		}
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);

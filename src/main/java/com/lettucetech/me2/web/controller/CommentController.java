@@ -17,8 +17,10 @@ import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Collect;
 import com.lettucetech.me2.pojo.Comment;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.CommentService;
+import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 
 @Controller
@@ -27,6 +29,8 @@ public class CommentController {
 	private CommentService commentService;
 	@Autowired
 	private PictureService pictureService;
+	@Autowired
+	private MessageService messageService;
 	/**
 	 * 评论蜜图
 	 * @param session
@@ -47,6 +51,16 @@ public class CommentController {
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
 		}
+		//存到用户消息表中
+		Picture picture = pictureService.selectByPrimaryKey(comment.getPid());
+		Message record = new Message();
+		record.setContent(comment.getContent());
+		record.setCreateTime(new Date());
+		record.setCustomerId(picture.getCustomerId());
+		record.setPid(comment.getPid());
+		record.setType("5");
+		record.setProposer(comment.getCustomerId());
+		messageService.insertSelective(record);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);

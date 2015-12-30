@@ -9,7 +9,7 @@ public class Message implements Serializable {
     private Integer id;
 
     /**
-     * 帖子所有者
+     * 消息所有者
      */
     private Integer customerId;
 
@@ -29,7 +29,7 @@ public class Message implements Serializable {
     private String type;
 
     /**
-     * 帖子查看者
+     * 发送消息人者
      */
     private Integer proposer;
     private Customer customer;

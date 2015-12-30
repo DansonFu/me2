@@ -1,6 +1,7 @@
 package com.lettucetech.me2.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -114,7 +115,6 @@ public class MessageController {
 		mav.addObject(result);
 		return mav;
 	}
-	
 	/**
 	 * 查询其它消息--嗡嗡
 	 * @param session
@@ -189,26 +189,50 @@ public class MessageController {
 		gameface.setProcessed("1");
 		gamefaceService.updateByPrimaryKey(gameface);
 		
+		//如果同意则加入gamecustomer表
+		if("agree".equals(dispose)){
+			Gamecustomer gamecustomer = new Gamecustomer();
+			gamecustomer.setPid(gameface.getPid());
+			gamecustomer.setCustomerId(gameface.getProposer());
+			
+			gamecustomerService.insertSelective(gamecustomer);
+		}
+		
 		//设置消息为已处理
 		Criteria example = new Criteria();
 		example.put("pid", gameface.getPid());
 		example.put("type", 1);
 		example.put("proposer", gameface.getProposer());
 		List<Message> messages = messageService.selectByParams(example);
-		String mes = "";
-		
 		for(Message message : messages){
 			message.setProcessed("1");
-			Customer customer = customerService.selectByPrimaryKey(message.getCustomerId());
-			if("agree".equals(dispose)){
-				message.setContent("为你解蜜了图片");
-				mes =customer.getUsername() + "为你解蜜了图片";
-			}else {
-				message.setContent("拒绝了你的解蜜申请");
-				mes =customer.getUsername() + "拒绝了你的解蜜申请";
-			}
 			messageService.updateByPrimaryKey(message);
 		}
+
+		
+		
+		Customer customer = customerService.selectByPrimaryKey(gameface.getIssuer());
+		String mes = "";
+		
+		
+		//存到对方用户的消息表中
+		Message record = new Message();
+		if("agree".equals(dispose)){
+			record.setContent("为你解蜜了图片");
+			mes =customer.getUsername() + "为你解蜜了图片";
+		}else {
+			record.setContent("拒绝了你的解蜜申请");
+			mes =customer.getUsername() + "拒绝了你的解蜜申请";
+		}
+
+		record.setCreateTime(new Date());
+		//注意是谁的消息
+		record.setCustomerId(gameface.getProposer());
+		record.setPid(gameface.getPid());
+		record.setType("2");
+		record.setProposer(gameface.getProposer());
+		messageService.insertSelective(record);
+		
 		//发送系统推送消息
 		try {
 			if("agree".equals(dispose)){
@@ -219,14 +243,8 @@ public class MessageController {
 		} catch (KeystoreException e) {
 			e.printStackTrace();
 		}
-		//如果同意则加入gamecustomer表
-		if("agree".equals(dispose)){
-			Gamecustomer gamecustomer = new Gamecustomer();
-			gamecustomer.setPid(gameface.getPid());
-			gamecustomer.setCustomerId(gameface.getProposer());
-			
-			gamecustomerService.insertSelective(gamecustomer);
-		}
+		
+
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
