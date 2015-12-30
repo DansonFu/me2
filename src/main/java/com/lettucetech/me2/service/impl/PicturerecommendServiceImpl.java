@@ -4,7 +4,9 @@ import com.lettucetech.me2.dao.PicturerecommendMapper;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.service.PicturerecommendService;
+
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,4 +68,5 @@ public class PicturerecommendServiceImpl implements PicturerecommendService {
 	public List<Picturerecommend> selectByParams4Hot(Criteria example) {
 		return this.picturerecommendMapper.selectByParams4Hot(example);
 	}
+
 }
