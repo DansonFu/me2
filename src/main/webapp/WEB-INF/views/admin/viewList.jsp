@@ -56,8 +56,9 @@
 						<th class="center">操作</th>
 					</tr>
 				</thead>
-	
+		
 				<tbody>
+				
 				</tbody>
 			</table>
 		</div>
@@ -66,31 +67,25 @@
 </div>
 <script type="text/javascript">
 	function update(Title){
-		window.location="<%=basePath %>admin/viewpicture?Title="+Title;
+		window.location="<%=basePath %>admin/updateList?Title="+Title;
 	}
-	function del(Title){
-		if(confirm('确实删除该蜜图吗?')){
-			window.location="<%=basePath %>admin/delpicture?Title="+Title;
+	function del(id){
+		if(confirm('确实删除该集合吗?')){
+			window.location="<%=basePath %>admin/delList?id="+id;
 		}
 	}
 	function addTags(Title){
-		window.location="<%=basePath %>admin/addpicture?Title="+Title;
+		window.location="<%=basePath %>admin/addList?Title="+Title;
 	}
-
+	function add(id){
+		window.location="<%=basePath %>admin/viewTags?id="+id;
+	}
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
-   	           {
-   	        	   "aTargets": [1],
-   	        	   "fnRender":function(data,type){
-   	        		   return  '<img src="'+data.aData[2]+'" width="100px" height="100px">';
-   	        	   }
-   	           },
-   	        	
-   	        
-   	           
+   	          
    	        	{
    	        	   "aTargets": [3],
    	        	   "fnRender":function(data,type){
@@ -101,19 +96,22 @@
    	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-pencil bigger-130"></i>';
    	        			str += '</a>';
-   	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-trash bigger-130"></i>';
    	        			str += '</a>';
    	        			str += '<a class="red" href="javascript:void(0);" onclick="addTags('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-trash bigger-130"></i>';
+   	        			str += '<i class="icon-alt bigger-130"></i>';
    	        			str += '</a>';
+   	        			str += '<a  href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
+	        			str += '<i><input type="button" value="添加"/></i>';
+	        			str += '</a>';
    	        			str += '</div>';
    	        		   return  str;
    	        	   }
    	           }
    	         ],
 		     "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetooBytags/connect", //这个是请求的地址
+		     "sAjaxSource": "<%=basePath %>admin/getmetoo/connect", //这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行

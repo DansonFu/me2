@@ -55,7 +55,7 @@
 						<th class="center">出现次数</th>
 						<th class="center">密友</th>
 						<th class="center">更新时间</th>
-						
+						<th class="center">操作</th>
 						</th>
 						
 					</tr>
@@ -74,20 +74,32 @@
 </div>
 <script type="text/javascript">
 
-function checkTags(){
-	$("checkbtn").checked();
-}
 
-function addTags(pid){
+function add(pid){
 	window.location="<%=basePath %>admin/viewList?pid="+pid;
 }
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
-			
+			"aoColumnDefs": [
+      	          
+    	        	{
+    	        	   "aTargets": [6],
+    	        	   "fnRender":function(data,type){
+    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+
+    	        			str += '<a class="green" href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
+    	        			str += '<i><input type="button" value="添加"/></i>';
+    	        			str += '</a>';
+    	        			
+    	        			str += '</div>';
+    	        		   return  str;
+    	        	   }
+			    	           }
+			    	         ],
 			  "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetooByTags", 	//这个是请求的地址
+		     "sAjaxSource": "<%=basePath %>admin/getmetooByTags",  	//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
