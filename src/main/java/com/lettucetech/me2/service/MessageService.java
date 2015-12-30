@@ -26,4 +26,6 @@ public interface MessageService {
     int insert(Message record);
 
     int insertSelective(Message record);
+
+	List<Message> selectByParams4Classify(Criteria example);
 }

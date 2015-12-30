@@ -91,6 +91,31 @@ public class MessageController {
 		return mav;
 	}
 	/**
+	 * 解蜜达成或拒绝消息
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/customers/{customerId}/message/gamedispose", method ={RequestMethod.GET})
+	public ModelAndView getGamDisposeMessage(HttpSession session,@PathVariable String customerId){
+		Criteria example = new Criteria();
+		example.put("customerId", customerId);
+		example.put("type", 2);
+		example.setOrderByClause("create_time");
+		example.setSord("desc");
+//		example.put("processed", 0);
+		List<Message> messages = messageService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(messages);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	/**
 	 * 查询其它消息--嗡嗡
 	 * @param session
 	 * @param pid
@@ -98,17 +123,23 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "/customers/{customerId}/message", method ={RequestMethod.GET})
 	public ModelAndView getMessage(HttpSession session,@PathVariable String customerId){
+		List<Integer> typelist = new ArrayList<Integer>();
+		typelist.add(1);
+		typelist.add(2);
 		Criteria example = new Criteria();
 		example.put("customerId", customerId);
-		example.put("processed", 0);
-		List<Message> messages = messageService.selectByParams(example);
-		//去除解蜜申请的消息
-		for(Iterator<Message> it=messages.iterator();it.hasNext();){
-			Message message = it.next();
-			if("1".equals(message.getType())){
-				it.remove();
-			}
-		}
+		example.put("typelist", typelist);
+		example.setOrderByClause("create_time");
+		example.setSord("desc");
+//		example.put("processed", 0);
+		List<Message> messages = messageService.selectByParams4Classify(example);
+//		//去除解蜜申请的消息
+//		for(Iterator<Message> it=messages.iterator();it.hasNext();){
+//			Message message = it.next();
+//			if("1".equals(message.getType())){
+//				it.remove();
+//			}
+//		}
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
@@ -129,6 +160,7 @@ public class MessageController {
 	public ModelAndView getGameface(HttpSession session,@PathVariable String pid){
 		Criteria example = new Criteria();
 		example.put("pid", pid);
+		example.put("type", 1);
 		example.put("processed", 0);
 		example.setOrderByClause("create_time");
 		example.setSord("desc");

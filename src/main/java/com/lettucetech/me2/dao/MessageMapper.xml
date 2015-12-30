@@ -52,10 +52,35 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
-      order by ${orderByClause}
+      order by ${orderByClause} ${sord}
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
+  
+  <select id="selectByParams4Classify" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <include refid="Base_Column_List" />
+    from message
+    <where>
+    	<if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.typelist != null and condition.typelist.size>0" >
+      	<foreach collection="condition.typelist" item="type" open="and type not in (" close=")" separator=",">
+	      	${type}
+         </foreach>
+      </if>
+      <if test="condition.processed != null" >
+         and processed = #{condition.processed}
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause} ${sord}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

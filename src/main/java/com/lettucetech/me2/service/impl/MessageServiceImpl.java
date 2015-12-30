@@ -62,4 +62,8 @@ public class MessageServiceImpl implements MessageService {
     public int insertSelective(Message record) {
         return this.messageMapper.insertSelective(record);
     }
+
+	public List<Message> selectByParams4Classify(Criteria example) {
+		return this.messageMapper.selectByParams4Classify(example);
+	}
 }

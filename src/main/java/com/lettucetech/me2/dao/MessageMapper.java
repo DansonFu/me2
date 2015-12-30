@@ -61,4 +61,6 @@ public interface MessageMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(Message record);
+
+	List<Message> selectByParams4Classify(Criteria example);
 }
