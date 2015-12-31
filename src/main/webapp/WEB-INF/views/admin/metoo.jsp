@@ -96,9 +96,7 @@
                                     <div class="col-lg-3 input-column">
                                        	呢称：
                                     </div>
-                                    <div class="col-lg-9">
-                                        ${customer.username }
-                                    </div>
+                                    <div class="col-lg-9" id="username">${customer.username }</div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
@@ -146,7 +144,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔)：
+                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔，最多五个标签，每标签最多7个字)：
                                     </div>
                                     <div class="col-lg-9">
                                     	<input type="text" name="tags" style="width:80%;" value="${customer.username } #"/>
@@ -297,7 +295,21 @@
 			$("input[name='tags']").focus();
 			return;
 		}
-
+		
+		var arr = $("input[name='tags']").val().split("#"); 
+		var username=$("#username").text().trim();
+		if(arr.length>5){
+			$("input[name='tags']").focus();
+			alert("最多添加5个标签");
+			return;
+		}
+		for(var i=0;i<arr.length;i++){
+			if(arr[i].length>7 && arr[i].trim()!=username){
+				$("input[name='tags']").focus();
+				alert("除昵称外每个标签最多7个字");
+				return;
+			}
+		}
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
