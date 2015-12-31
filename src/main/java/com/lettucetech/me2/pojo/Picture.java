@@ -120,7 +120,41 @@ public class Picture implements Serializable {
      */
     private String recommend;
     
-    public String getDel() {
+    /**
+     * 被@的用户
+     */
+    private Integer atCustomerId;
+    private Customer atCustomer;
+    /**
+     * 是否已查看过 0:否 1:是
+     */
+    private String atSeen;
+    
+    public Integer getAtCustomerId() {
+		return atCustomerId;
+	}
+
+	public Customer getAtCustomer() {
+		return atCustomer;
+	}
+
+	public void setAtCustomer(Customer atCustomer) {
+		this.atCustomer = atCustomer;
+	}
+
+	public void setAtCustomerId(Integer atCustomerId) {
+		this.atCustomerId = atCustomerId;
+	}
+
+	public String getAtSeen() {
+		return atSeen;
+	}
+
+	public void setAtSeen(String atSeen) {
+		this.atSeen = atSeen;
+	}
+
+	public String getDel() {
 		return del;
 	}
 

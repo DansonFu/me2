@@ -170,6 +170,24 @@
      where t.phone = #{condition.id} or t.username=#{condition.id}
   </select>
  
+   <select id="selectByParams4at" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from customer
+    <where>
+	<if test="condition.username != null" >
+          username like '%${condition.username}%'
+      </if>
+      </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >

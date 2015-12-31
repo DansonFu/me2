@@ -70,4 +70,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public Customer selectByParams4Rand(Criteria example) {
 		return this.customerMapper.selectByParams4Rand(example);
 	}
+
+	public List<Customer> selectByParams4at(Criteria example) {
+		return this.customerMapper.selectByParams4at(example);
+	}
 }

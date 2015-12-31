@@ -45,6 +45,8 @@ public class Criteria {
         this.distinct = example.distinct;
         this.mysqlLength = example.mysqlLength;
         this.mysqlOffset = example.mysqlOffset;
+        this.orderByClause = example.orderByClause;
+        this.sord=example.sord;
     }
 
     public Criteria() {
@@ -57,6 +59,8 @@ public class Criteria {
         distinct = false;
         this.mysqlOffset = null;
         this.mysqlLength = null;
+        this.orderByClause = null;
+        this.sord=null;
     }
 
     /**

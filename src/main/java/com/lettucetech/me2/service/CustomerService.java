@@ -30,4 +30,6 @@ public interface CustomerService {
 	List<Customer> selectByPhoneOrUsername(Criteria example);
 
 	Customer selectByParams4Rand(Criteria example);
+
+	List<Customer> selectByParams4at(Criteria example);
 }

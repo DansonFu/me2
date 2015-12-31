@@ -117,9 +117,27 @@ public class PictureController {
 		example.setOrderByClause(sort);
 		example.put("taglist", taglist);
 		example.put("type", type);
+//		example.put("front", "a");
 		example.put("del", 0);
 		
 		List<Picture> pictures = pictureService.selectByParamsTagSearch(example);
+		
+		//查询@过自己的蜜图
+		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
+		example.clear();
+		example.setMysqlOffset(0);
+		example.setMysqlLength(1);
+		example.put("del", 0);
+		example.put("front", "a");
+		example.put("atSeen", 0);
+		example.put("atCustomerId", customer!=null?customer.getCustomerId():null);
+		List<Picture> atPicture = pictureService.selectByParams(example);
+		for(Picture picture : atPicture){
+			pictures.add(0, picture);
+			//设置为已读
+			picture.setAtSeen("1");
+			pictureService.updateByPrimaryKeySelective(picture);
+		}
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
@@ -178,6 +196,25 @@ public class PictureController {
 			plist.add(ph.getPid());
 			pictures.add(ph.getPicture());
 		}
+		
+		//查询@过自己的蜜图
+		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
+		example.clear();
+		example.setMysqlOffset(0);
+		example.setMysqlLength(1);
+		example.put("del", 0);
+		example.put("front", "a");
+		example.put("atSeen", 0);
+		example.put("atCustomerId", customer!=null?customer.getCustomerId():null);
+		List<Picture> atPicture = pictureService.selectByParams(example);
+		for(Picture picture : atPicture){
+			plist.add(picture.getPid());
+			pictures.add(0, picture);
+			//设置为已读
+			picture.setAtSeen("1");
+			pictureService.updateByPrimaryKeySelective(picture);
+		}
+		
 		session.setAttribute("plist", plist);
 		session.setAttribute("count", count);
 		RestfulResult result = new RestfulResult();
@@ -237,6 +274,25 @@ public class PictureController {
 			plist.add(ph.getPid());
 			pictures.add(ph.getPicture());
 		}
+		
+		//查询@过自己的蜜图
+		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
+		example.clear();
+		example.setMysqlOffset(0);
+		example.setMysqlLength(1);
+		example.put("del", 0);
+		example.put("front", "a");
+		example.put("atSeen", 0);
+		example.put("atCustomerId", customer!=null?customer.getCustomerId():null);
+		List<Picture> atPicture = pictureService.selectByParams(example);
+		for(Picture picture : atPicture){
+			plist.add(picture.getPid());
+			pictures.add(0, picture);
+			//设置为已读
+			picture.setAtSeen("1");
+			pictureService.updateByPrimaryKeySelective(picture);
+		}
+		
 		session.setAttribute(attributename, plist);
 		session.setAttribute("count", count);
 		RestfulResult result = new RestfulResult();
