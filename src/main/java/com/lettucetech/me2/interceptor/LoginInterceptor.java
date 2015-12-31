@@ -27,8 +27,9 @@ public class LoginInterceptor implements HandlerInterceptor{
 	            	return true;
 	            }
 	        }
-	        Object user = request.getSession().getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
-	        if (user != null){
+	        Object adminuser = request.getSession().getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+	        Object customer = request.getSession().getAttribute(Me2Constants.METOOUSER);
+	        if (adminuser != null || customer!=null){
 	        	return true;
             }else{
             	request.getRequestDispatcher("/toLogin").forward(request, response); 

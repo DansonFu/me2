@@ -23,12 +23,14 @@ import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Pictureagree;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.Picturerecommend;
+import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PictureagreeService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
+import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
 
 @Controller
@@ -45,7 +47,8 @@ public class PictureController {
 	private MessageService messageService;
 	@Autowired
 	private TagshotService tagshotService;
-	
+	@Autowired
+	private TaglistService taglistService;
 	/**
 	 * 保存蜜图AB面
 	 * @param session
@@ -487,5 +490,22 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
-	
+	/**
+	 * 查询标签集
+	 * @return
+	 */
+	@RequestMapping(value = "/tagslist", method ={RequestMethod.GET})
+	public ModelAndView getTagslist(){
+		Criteria example = new Criteria();
+		example.setOrderByClause("num");
+
+		List<Taglist> tags = taglistService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(false);
+		result.setObj(tags);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 }
