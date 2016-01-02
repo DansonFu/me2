@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TagsconnectionMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Tagsconnection" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tags_id" property="tagsId" jdbcType="INTEGER" />
+    <result column="tagslist_id" property="tagslistId" jdbcType="VARCHAR" />
+    <association property="tagshot" column="tags_id"	select="com.lettucetech.me2.dao.TagshotMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.tagsId != null" >
+         and tags_id = #{condition.tagsId}
+      </if>
+      <if test="condition.tagslistId != null" >
+         and tagslist_id = #{condition.tagslistId}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, tags_id, tagslist_id
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tagsconnection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tagsconnection
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tagsconnection
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from tagsconnection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Tagsconnection" >
+    insert into tagsconnection (id, tags_id, tagslist_id)
+    values (#{id}, #{tagsId}, #{tagslistId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Tagsconnection" >
+    insert into tagsconnection
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tagsId != null" >
+        tags_id,
+      </if>
+      <if test="tagslistId != null" >
+        tagslist_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="tagsId != null" >
+        #{tagsId},
+      </if>
+      <if test="tagslistId != null" >
+        #{tagslistId},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from tagsconnection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update tagsconnection
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.tagsId != null" >
+        tags_id = #{record.tagsId},
+      </if>
+      <if test="record.tagslistId != null" >
+        tagslist_id = #{record.tagslistId},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update tagsconnection
+    set id = #{record.id},
+      tags_id = #{record.tagsId},
+      tagslist_id = #{record.tagslistId}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Tagsconnection" >
+    update tagsconnection
+    <set >
+      <if test="tagsId != null" >
+        tags_id = #{tagsId},
+      </if>
+      <if test="tagslistId != null" >
+        tagslist_id = #{tagslistId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Tagsconnection" >
+    update tagsconnection
+    set tags_id = #{tagsId},
+      tagslist_id = #{tagslistId}
+    where id = #{id}
+  </update>
+</mapper>

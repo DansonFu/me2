@@ -32,99 +32,101 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">标签集合</h3>
+		<h3 class="header smaller lighter blue">已选标签</h3>
+		<form class="form-bordered"  id="sub" action="<%=basePath %>admin/submit" method="post" enctype="multipart/form-data">
 		<div style="float: right;">
-			<input type="button" value="添加集合" name="btn"/>
-		</div>
+			
+			<button class="btn btn-primary" type="button" onclick="submit()">
+					<i class="icon-ok bigger-80"></i>
+					提交
+				</button>
+				</div>
+			</form>	
+			<form class="form-bordered"  id="addTag" action="<%=basePath %>admin/addTag" method="post" enctype="multipart/form-data">
+				<div style="float: right;">
+				&nbsp; &nbsp; &nbsp;
+				<button class="btn" type="button" onclick="add()">
+					<i class="icon-undo bigger-80"></i>
+					添加标签
+				</button>
+				</div>
+		
+		</form>
 		<br>
 		<br>
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
+						
 						<th class="center" >
-							集合ID
+							标签ID
 						</th>
-						
-						<th class="center">集合名称</th>
-						<th class="center">排序</th>
-						
-						<th class="center">修改集合名称</th>
-						<th class="center">删除集合名称</th>
-						<th class="center">管理集合</th>
+						<th class="center">标签名称</th>
+						<th class="center">热度</th>
+						<th class="center">出现次数</th>
+						<th class="center">密友</th>
+						<th class="center">更新时间</th>
+						<th class="center">修改</th>
+						<th class="center">删除</th>
 						
 					</tr>
 				</thead>
-		
+					
 				<tbody>
 				
+				
+				
 				</tbody>
+				
 			</table>
 		</div>
 	</div>
 	</div>
 </div>
 <script type="text/javascript">
-	function update(id){
-		window.location="<%=basePath %>admin/updateList?id="+id;
-	}
-	function del(id){
-		if(confirm('确实删除该集合吗?')){
-			window.location="<%=basePath %>admin/delList?id="+id;
-		}
-	}
-	function add(id){
-		window.location="<%=basePath %>admin/viewselective?id="+id;
-	}
+function update(id){
+	window.location="<%=basePath %>admin/viewselective?id="+id;
+}
+function del(id){
+	window.location="<%=basePath %>admin/viewselective?id="+id;
+}
+
+
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
-   	          
-   	        	{
-   	        	   "aTargets": [3],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
-//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
-//   	        			str += '</a>';
-   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-pencil bigger-130"></i>';
-   	        			
-   	        			str += '</div>';
-   	        		   return  str;
-   	        	   }
-   	           },
-   	        {
-   	        	   "aTargets": [4],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-   	        			
-   	        			
-   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-trash bigger-130"></i>';
-   	        			str += '</a>';
-   	        			
-   	        			
-   	        			str += '</div>';
-   	        		   return  str;
-   	        	   }
-   	           },
-   	        {
-   	        	   "aTargets": [5],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-   	        			str += '<a  href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
-	        			str += '<i class="icon-cog bigger-130"></i>';
-	        			str += '</a>';
-   	        			str += '</div>';
-   	        		   return  str;
-   	        	   }
-   	           }
-   	         ],
-		     "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo/connect", //这个是请求的地址
+      	          
+    	        	{
+    	        	   "aTargets": [6],
+    	        	   "fnRender":function(data,type){
+    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+    	        		   str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
+      	        			str += '<i class="icon-pencil bigger-130"></i>';
+      	        			str += '</a>';
+    	        		    
+    	        			str += '</div>';
+    	        		   return  str;
+    	        	   }
+			    	           },
+			    	           {
+			    	        	   "aTargets": [7],
+			    	        	   "fnRender":function(data,type){
+			    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+			    	        		   
+			    	        		    str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+			      	        			str += '<i class="icon-trash bigger-130"></i>';
+			      	        			str += '</a>';
+			      	        			
+			    	        			str += '</div>';
+			    	        		   return  str;
+			    	        	   }
+						    	           }         
+			    	         ],
+			  "bServerSide": true,//这个用来指明是通过服务端来取数据
+		     "sAjaxSource": "<%=basePath %>admin/getmetoo/selective",  	//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
@@ -152,7 +154,26 @@
 		  });
 
 	});
-	 
+	function submit(){
+		if($("input[name='afile']").val()==""){
+			$("input[name='afile']").focus();
+			return;
+		}
+		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
+			$("input[name='tags']").focus();
+			return;
+		}
+
+		$("#sub").submit();
+		$(":button").attr("disabled", true);  
+	}
+
+	function addTag(){
+		
+
+		$("#addTag").submit();
+		$(":button").attr("disabled", true);  
+	}
 </script>
 
 </body>

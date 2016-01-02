@@ -34,11 +34,7 @@
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">热门标签</h3>
 		<div style="float: right;">
-			发贴人：<select id="userId">
-				<c:forEach items="${users }" var="user">
-					<option value="${user.userId}" >${user.name}</option>
-				</c:forEach>
-			</select>
+			
 		</div>
 		<br>
 		<br>
@@ -55,7 +51,7 @@
 						<th class="center">出现次数</th>
 						<th class="center">密友</th>
 						<th class="center">更新时间</th>
-						<th class="center">操作</th>
+						<th class="center">添加到集合</th>
 						</th>
 						
 					</tr>
@@ -75,8 +71,8 @@
 <script type="text/javascript">
 
 
-function add(pid){
-	window.location="<%=basePath %>admin/viewList?pid="+pid;
+function add(id){
+	window.location="<%=basePath %>admin/viewselective?id="+id;
 }
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
@@ -90,7 +86,7 @@ function add(pid){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
     	        			str += '<a class="green" href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
-    	        			str += '<i><input type="button" value="添加"/></i>';
+    	        			str += '<i class="icon-edit bigger-130"></i>';
     	        			str += '</a>';
     	        			
     	        			str += '</div>';
