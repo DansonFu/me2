@@ -35,7 +35,7 @@
 		<h3 class="header smaller lighter blue">标签集合</h3>
 		
 		<div style="float: right;">
-			<a href="/javascript:" onClick="window.open('./addList.html','','height=500,width=611,scrollbars=yes,status =yes')">添加集合</a>
+			<input type="button" value="新建集合" onclick="addList()"/>
 		</div>
 		
 		<br>
@@ -68,7 +68,9 @@
 </div>
 <script type="text/javascript">
 
-	
+	function addList(){
+		window.open('addList.html','','height=100,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no, status=no');
+	}
 	
 	function update(id){
 		window.location="<%=basePath %>admin/updateList?id="+id;
