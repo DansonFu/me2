@@ -77,7 +77,7 @@ public class TagsHotController {
 	}
 	
 	/**
-	 * 查询蜜图列表
+	 * 查询标签列表
 	 * @param session
 	 * @param response
 	 * @param aoData
@@ -106,7 +106,7 @@ public class TagsHotController {
 	    Criteria example = new Criteria();
 	    example.setOrderByClause("acount");
 	    example.setSord("desc");
-	    example.put("front", "a");
+	   
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    //是否有查看所有人权限
@@ -158,7 +158,7 @@ public class TagsHotController {
 		}
 	}
 	/**
-	 *   修改集合
+	 *   修改标签
 	 * @param session
 	 * @param tag
 	 * @param count
@@ -171,16 +171,16 @@ public class TagsHotController {
 	
 	
 	@RequestMapping("/admin/updateTags")
-	public ModelAndView updateList(HttpSession session,String id,String tag,int count,int hits,int mefriends
+	public ModelAndView updateList(HttpSession session,String tag,String acount,String hits,String mefriends
 			,String key,Timestamp lastTime  ){
 		
 		
 		Tagshot list=new Tagshot();
-		list.setId(Integer.valueOf(id));
+		
 		list.setTag(tag);
-		list.setAcount(count);
-		list.setHits(hits);
-		list.setMefriends(mefriends);
+		list.setAcount(Integer.valueOf(acount));
+		list.setHits(Integer.valueOf(hits));
+		list.setMefriends(Integer.valueOf(mefriends));
 		list.setQiniukey(key);
 		list.setLastTime(lastTime);
 		
@@ -199,9 +199,8 @@ public class TagsHotController {
 	 */
 	@RequestMapping("/admin/delTags")
 	public ModelAndView delList(HttpSession session,String id){
-		Criteria example = new Criteria();
-		example.put("id", id);
-		tagshotService.deleteByParams(example);
+	
+		tagshotService.deleteByPrimaryKey(Integer.valueOf(id));
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewTags");
@@ -211,7 +210,7 @@ public class TagsHotController {
 	 *  添加标签
 	 * @param session
 	 * @param tag
-	 * @param count
+	 * @param acount
 	 * @param hits
 	 * @param mefriends
 	 * @param key
@@ -220,15 +219,15 @@ public class TagsHotController {
 	 */
 	
 	
-	@RequestMapping("/admin/addTags")
-	public ModelAndView addList(HttpSession session,String id,String tag,int count,int hits,int mefriends,String key,Timestamp lastTime){
+	@RequestMapping("/admin/add")
+	public ModelAndView addList(HttpSession session,String tag,String acount,String hits,String mefriends,String key,Timestamp lastTime){
 		Tagshot list = new Tagshot();
-		list.setId(Integer.valueOf(id));
+		
 		list.setTag(tag);
-		list.setAcount(count);
-		list.setHits(hits);
+		list.setAcount(Integer.valueOf(acount));
+		list.setHits(Integer.valueOf(hits));
 		list.setQiniukey(key);
-		list.setMefriends(mefriends);
+		list.setMefriends(Integer.valueOf(mefriends));
 		list.setLastTime(lastTime);
 		
 		tagshotService.insertSelective(list);

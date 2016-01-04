@@ -128,9 +128,15 @@ public class TagsSelectiveController {
 	
 	
 	@RequestMapping("/admin/submit")
-	public ModelAndView submit(HttpSession session,String id,String tag,String acount,String hits,
-			String mefriends,String key,String lastTime){
-		
+	public ModelAndView submit(HttpSession session,String pid,String taglist_id
+			){
+		 Criteria example = new Criteria();
+		 example.put("pid", pid);
+		 picturehotService.selectByParams4Rand(example);
+		 
+		 example.clear();
+		 example.put("taglist_id",taglist_id);
+		 picturehotService.selectByParams(example);
 		
 
 		ModelAndView mav = new ModelAndView();
@@ -173,9 +179,8 @@ public class TagsSelectiveController {
 	 */
 	@RequestMapping("/admin/delselective")
 	public ModelAndView delList(HttpSession session,String id){
-		Criteria example = new Criteria();
-		example.put("id", id);
-		tagshotService.selectByParams(example);
+		
+		tagshotService.deleteByPrimaryKey(Integer.valueOf(id));
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewselective");
@@ -207,4 +212,6 @@ public class TagsSelectiveController {
 		return mav;
 		
 	}
+	
+	
 }

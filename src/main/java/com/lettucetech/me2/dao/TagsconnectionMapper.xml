@@ -6,6 +6,7 @@
     <result column="tags_id" property="tagsId" jdbcType="INTEGER" />
     <result column="tagslist_id" property="tagslistId" jdbcType="VARCHAR" />
     <association property="tagshot" column="tags_id"	select="com.lettucetech.me2.dao.TagshotMapper.selectByPrimaryKey"></association>
+    <association property="taglist" column="taglist_id"	select="com.lettucetech.me2.dao.TaglistMapper.selectByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >

@@ -33,9 +33,11 @@
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">标签集合</h3>
+		
 		<div style="float: right;">
-			<input type="button" value="添加集合" name="btn"/>
+			<input type="button" value="添加集合" onclick="addlist()" />
 		</div>
+		
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -65,6 +67,11 @@
 	</div>
 </div>
 <script type="text/javascript">
+
+	function addlist(id){
+		window.location="<%=basePath %>admin/addList?id="+id;
+	}
+	
 	function update(id){
 		window.location="<%=basePath %>admin/updateList?id="+id;
 	}
@@ -73,7 +80,7 @@
 			window.location="<%=basePath %>admin/delList?id="+id;
 		}
 	}
-	function add(id){
+	function manage(id){
 		window.location="<%=basePath %>admin/viewselective?id="+id;
 	}
 	$(document).ready(function(){
@@ -82,49 +89,59 @@
 			"bFilter": false,
 			"aoColumnDefs": [
    	          
-   	        	{
-   	        	   "aTargets": [3],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
-//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
-//   	        			str += '</a>';
-   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-pencil bigger-130"></i>';
-   	        			
-   	        			str += '</div>';
-   	        		   return  str;
-   	        	   }
-   	           },
-   	        {
-   	        	   "aTargets": [4],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-   	        			
-   	        			
-   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-trash bigger-130"></i>';
-   	        			str += '</a>';
-   	        			
-   	        			
-   	        			str += '</div>';
-   	        		   return  str;
-   	        	   }
-   	           },
-   	        {
-   	        	   "aTargets": [5],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-   	        			str += '<a  href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
-	        			str += '<i class="icon-cog bigger-130"></i>';
-	        			str += '</a>';
-   	        			str += '</div>';
-   	        		   return  str;
-   	        	   }
-   	           }
-   	         ],
-		     "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo/connect", //这个是请求的地址
+
+						 {
+						  	        	   "aTargets": [3],
+						 	        	   "fnRender":function(data,type){
+						       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+						  	        			str += '<a class="blue" href="javascript:;"onclick="update('
+													+ "'"
+													+ data.aData[0]
+													+ "'"
+													+ ')" >';;
+						  	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+						   	        			str += '</a>';
+						      
+												str += '</div>';
+							   					return  str;
+						 }
+						 }, 
+						{
+							"aTargets" : [ 4 ],
+							"fnRender" : function(
+									data, type) {
+								var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+
+								str += '<a class="blue" href="javascript:void(0);" onclick="del('
+										+ "'"
+										+ data.aData[0]
+										+ "'"
+										+ ')" >';
+								str += '<i class="icon-trash bigger-130"></i>';
+								str += '</a>';
+
+								str += '</div>';
+								return str;
+							}
+						},
+						{
+							"aTargets" : [ 5 ],
+							"fnRender" : function(
+									data, type) {
+								var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+								str += '<a  href="javascript:void(0);" onclick="manage('
+										+ "'"
+										+ data.aData[0]
+										+ "'"
+										+ ')" >';
+								str += '<i class="icon-cog bigger-130"></i>';
+								str += '</a>';
+								str += '</div>';
+								return str;
+							}
+						} ],
+				"bServerSide" : true,//这个用来指明是通过服务端来取数据
+				"sAjaxSource" : "<%=basePath %>admin/getmetoo/connect", //这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行

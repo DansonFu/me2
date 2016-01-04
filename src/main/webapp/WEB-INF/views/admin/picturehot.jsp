@@ -32,26 +32,10 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">已选标签</h3>
-		<form class="form-bordered"  id="sub" action="<%=basePath %>admin/submit" method="post" enctype="multipart/form-data">
+		<h3 class="header smaller lighter blue">热门标签帖</h3>
 		<div style="float: right;">
 			
-			<button class="btn btn-primary" type="button" onclick="submit()">
-					<i class="icon-ok bigger-80"></i>
-					提交
-				</button>
-				</div>
-			</form>	
-			
-				<div style="float: right;">
-				&nbsp; &nbsp; &nbsp;
-				<button class="btn" type="button" onclick="addTags()">
-					<i class="icon-undo bigger-80"></i>
-					添加标签
-				</button>
-				</div>
-		
-		
+		</div>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -63,12 +47,14 @@
 							标签ID
 						</th>
 						<th class="center">标签名称</th>
-						<th class="center">热度</th>
+						<th class="center">A面</th>
 						<th class="center">出现次数</th>
+						<th class="center">热度</th>
 						<th class="center">密友</th>
+						<th class="center">七牛key</th>
 						<th class="center">更新时间</th>
 						
-						<th class="center">删除</th>
+					
 						
 					</tr>
 				</thead>
@@ -85,13 +71,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-function addTags(id){
-	window.location="<%=basePath %>admin/viewTags?id="+id;  
-}
 
-function del(id){
-	window.location="<%=basePath %>admin/delselective?id="+id;
-}
 
 
 	$(document).ready(function(){
@@ -99,24 +79,16 @@ function del(id){
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
+	                 {
+	     	        	   "aTargets": [2],
+	     	        	   "fnRender":function(data,type){
+	     	        		   return  '<img src="'+data.aData[2]+'" width="100px" height="100px">';
+	     	        	   }
+	     	           },         
       	          
-    	        
-			    	           {
-			    	        	   "aTargets": [6],
-			    	        	   "fnRender":function(data,type){
-			    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-			    	        		   
-			    	        		    str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-			      	        			str += '<i class="icon-trash bigger-130"></i>';
-			      	        			str += '</a>';
-			      	        			
-			    	        			str += '</div>';
-			    	        		   return  str;
-			    	        	   }
-						    	           }         
 			    	         ],
 			  "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo/selective",  	//这个是请求的地址
+		     "sAjaxSource": "<%=basePath %>admin/getmetoo/picturehot",  	//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
@@ -144,20 +116,6 @@ function del(id){
 		  });
 
 	});
-	function submit(){
-		if($("input[name='afile']").val()==""){
-			$("input[name='afile']").focus();
-			return;
-		}
-		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
-			$("input[name='tags']").focus();
-			return;
-		}
-
-		$("#sub").submit();
-		$(":button").attr("disabled", true);  
-	}
-
 	
 </script>
 

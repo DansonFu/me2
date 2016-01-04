@@ -19,6 +19,7 @@ import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.pojo.Comment;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Game;
+import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.service.PictureService;
@@ -128,13 +129,13 @@ public class TagsListController {
 	 * @param key
 	 * @return
 	 */
-	
+
 	@RequestMapping("/admin/updateList")
-	public ModelAndView updateList(HttpSession session,int id,String title,String key,String num){
+	public ModelAndView updateList(HttpSession sessio,String id,String title,String key,String num){
 		
-		
+	
 		Taglist list=new Taglist();
-		list.setId(id);
+		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(key);
 		list.setNum(num);
@@ -169,9 +170,11 @@ public class TagsListController {
 	 * @return
 	 */
 	@RequestMapping("/admin/addList")
-	public ModelAndView addList(HttpSession session,int id,String title,String key,String num){
+	public ModelAndView addList(HttpSession session,String id,String title,String key,String num){
+		
+		
 		Taglist list = new Taglist();
-		list.setId(id);
+		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(key);
 		list.setNum(num);

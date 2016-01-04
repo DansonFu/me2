@@ -52,6 +52,8 @@
 						<th class="center">密友</th>
 						<th class="center">更新时间</th>
 						<th class="center">添加到集合</th>
+						<th class="center">修改标签</th>
+						<th class="center">删除标签</th>
 						</th>
 						
 					</tr>
@@ -70,9 +72,14 @@
 </div>
 <script type="text/javascript">
 
-
+function update(id){
+	window.location="<%=basePath %>admin/updateTags?id="+id;
+}
+function del(id){
+	window.location="<%=basePath %>admin/delTags?id="+id;
+}
 function add(id){
-	window.location="<%=basePath %>admin/viewselective?id="+id;
+	window.location="<%=basePath %>admin/add?id="+id;
 }
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
@@ -92,7 +99,41 @@ function add(id){
     	        			str += '</div>';
     	        		   return  str;
     	        	   }
-			    	           }
+			    	           },
+			    	           {
+				  	        	   "aTargets": [7],
+				 	        	   "fnRender":function(data,type){
+				       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+				  	        			str += '<a class="blue" href="javascript:;"onclick="update('
+											+ "'"
+											+ data.aData[0]
+											+ "'"
+											+ ')" >';;
+				  	        			str += '<i class="icon-pencil bigger-130"></i>';
+				   	        			str += '</a>';
+				      
+										str += '</div>';
+					   					return  str;
+				 }
+				 }, 
+				{
+					"aTargets" : [ 8 ],
+					"fnRender" : function(
+							data, type) {
+						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+
+						str += '<a class="blue" href="javascript:void(0);" onclick="del('
+								+ "'"
+								+ data.aData[0]
+								+ "'"
+								+ ')" >';
+						str += '<i class="icon-trash bigger-130"></i>';
+						str += '</a>';
+
+						str += '</div>';
+						return str;
+					}
+				},
 			    	         ],
 			  "bServerSide": true,//这个用来指明是通过服务端来取数据
 		     "sAjaxSource": "<%=basePath %>admin/getmetooByTags",  	//这个是请求的地址
@@ -123,16 +164,7 @@ function add(id){
 		  });
 
 	});
-	function submitform(){
-
-		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
-			$("input[name='tags']").focus();
-			return;
-		}
-
-		$("#me2form").submit();
-		$(":button").attr("disabled", true);  
-	}
+	
 </script>
 
 </body>
