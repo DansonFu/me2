@@ -140,7 +140,7 @@ public class TagsListController {
 		list.setQiniukey(key);
 		list.setNum(num);
 		
-		tagListService.updateByPrimaryKeySelective(list);
+		tagListService.updateByPrimaryKey(list);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewList");
@@ -169,20 +169,20 @@ public class TagsListController {
 	 * @param num
 	 * @return
 	 */
-	@RequestMapping("/admin/addList")
-	public ModelAndView addList(HttpSession session,String id,String title,String key,String num){
-		
-		
-		Taglist list = new Taglist();
-		list.setId(Integer.valueOf(id));
-		list.setTitle(title);
-		list.setQiniukey(key);
-		list.setNum(num);
-		tagListService.insertSelective(list);
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewList");
-		return mav;
-		
-	}
+//	@RequestMapping("/admin/addList")
+//	public ModelAndView addList(HttpSession session,String id,String title,String key,String num){
+//		
+//		
+//		Taglist list = new Taglist();
+//		list.setId(Integer.valueOf(id));
+//		list.setTitle(title);
+//		list.setQiniukey(key);
+//		list.setNum(num);
+//		tagListService.insert(list);
+//		
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("redirect:/admin/viewList");
+//		return mav;
+//		
+//	}
 }
