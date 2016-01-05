@@ -36,7 +36,7 @@
 		<form class="form-bordered"  id="sub" action="<%=basePath %>admin/submit" method="post" enctype="multipart/form-data">
 		<div style="float: right;">
 			
-			<button class="btn btn-primary" type="button" onclick="submit()">
+			<button class="btn btn-primary" type="submit" onclick="submit()">
 					<i class="icon-ok bigger-80"></i>
 					提交
 				</button>
@@ -145,14 +145,7 @@ function del(id){
 
 	});
 	function submit(){
-		if($("input[name='afile']").val()==""){
-			$("input[name='afile']").focus();
-			return;
-		}
-		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
-			$("input[name='tags']").focus();
-			return;
-		}
+		
 
 		$("#sub").submit();
 		$(":button").attr("disabled", true);  

@@ -35,7 +35,7 @@
 		<h3 class="header smaller lighter blue">标签集合</h3>
 		
 		<div style="float: right;">
-			<input type="button" value="新建集合" onclick="addList()"/>
+			<input type="button" value="新建集合"  onclick="add()"/>
 		</div>
 		
 		<br>
@@ -59,7 +59,7 @@
 				</thead>
 		
 				<tbody>
-				
+					
 				</tbody>
 			</table>
 		</div>
@@ -68,9 +68,9 @@
 </div>
 <script type="text/javascript">
 
-	function addList(){
-		window.open('addList.html','','height=100,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no, status=no');
-	}
+function add(id){
+	window.location="<%=basePath %>admin/addList?id="+id;
+}
 	
 	function update(id){
 		window.location="<%=basePath %>admin/updateList?id="+id;
@@ -169,7 +169,7 @@
 		  });
 
 	});
-	 
+ 
 </script>
 
 </body>
