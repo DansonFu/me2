@@ -59,12 +59,6 @@
     from picturerecommend
     where id = #{id}
   </select>
-  <select id="selectByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from picturerecommend
-    where pid = #{pid}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from picturerecommend
     where id = #{id}

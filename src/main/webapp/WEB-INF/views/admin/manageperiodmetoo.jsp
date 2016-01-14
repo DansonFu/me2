@@ -56,7 +56,7 @@
 			
 			 <div class="panel panel-default">
                     <div class="panel-body">
-                    	<form class="form-bordered"  id="me2form" action="<%=basePath %>admin/updatecommendmetoo" method="post" enctype="multipart/form-data">
+                    	<form class="form-bordered"  id="me2form" action="<%=basePath %>/admin/saveperiodmetoo/commend" method="post" enctype="multipart/form-data">
                                 <div class="col-lg-6" id="bfeelDiv">
                                     <div class="col-lg-3 input-column" >
                                        	<span class="dangger" style="color: red">*</span> 蜜图A面：
@@ -65,16 +65,13 @@
                                         <img  src="${domain}/${pct.picture.qiniukey}" width="100px" height="100px"/>
                                     </div>
                                     <div class="col-lg-3 input-column">
-                                       	排序：
-                                    </div>
-                                    <div class="col-lg-9">
-										<input type="text" name="bmood" style="width:80%;" value="${pct.sort}"/>
-                                    </div>
-                                    <div class="col-lg-3 input-column">
                                        	有效期：
                                     </div>
                                     <div class="col-lg-9">
-										<input type="text" name="bmood" style="width:80%;" value="${pct.period}"/>
+                                        <input type="hidden" id="id" name="id" value="${pct.id}">
+                                        <input type="hidden" id="pid" name="pid" value="${pct.pid}">
+                                        <input type="hidden" id="sort" name="sort" value="${pct.sort}">
+										<input type="text" name="period" style="width:80%;" value="${pct.period}"/>
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -127,8 +124,13 @@
 
 	function submitform(){
 
-		if($("input[name='bmood']").val()==null||$("input[name='bmood']").val()==""){
-			$("input[name='bmood']").focus();
+		if($("input[name='period']").val()==""){
+			$("input[name='period']").focus();
+			return;
+		}
+		
+		if($("input[name='period']").val()==null||$("input[name='period']").val()==""){
+			$("input[name='period']").focus();
 			return;
 		}
 

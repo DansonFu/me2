@@ -42,7 +42,7 @@
 						<th class="center" >
 							密图ID
 						</th>
-						<th class="center">用户</th>
+						<th class="center">内部用户</th>
 						<th class="center">A面</th>
 						<th class="hidden-480 center">B面</th>
 						<th class="center">B面类型</th>
@@ -52,6 +52,7 @@
 						<th class="center">发贴者</th>
 						 -->
 						<th class="center">创建时间</th>
+						<th class="center">是否推荐</th>
 						<th class="center">操作</th>
 					</tr>
 				</thead>
@@ -68,15 +69,35 @@
 	function update(pid){
 		window.location="<%=basePath %>admin/viewpicture?pid="+pid;
 	}
+	function del(pid){
+		if(confirm('确定要逻辑删除该蜜图吗?')){
+		     window.location="<%=basePath %>/admin/delcheckmetoo/commend?pid="+pid;
+		}
+	}
 	function add(pid){
 		window.location="<%=basePath %>admin/save/commend?pid="+pid;
 	}
-
+	function comment(pid){
+		window.location="<%=basePath %>admin/checkview/comment?pid="+pid;
+	}
+    
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
+			    {
+   	        	   "aTargets": [1],
+   	        	   "fnRender":function(data,type){
+   	        		   var str = "";
+   	        		   if(data.aData[1]=="1"){
+   	        				str = "是";
+   	        		   }else if(data.aData[1]=="0"){
+   	        				str = "否";
+   	        		   }
+   	        		   return  str;
+   	        	   }
+   	           },
    	           {
    	        	   "aTargets": [2],
    	        	   "fnRender":function(data,type){
@@ -102,8 +123,6 @@
    	        		   if(data.aData[4]=="1"){
    	        				str = "图片";
    	        		   }else if(data.aData[4]=="2"){
-   	        				str = "文字";
-   	        		   }else if(data.aData[4]=="5"){
    	        				str = "URL";
    	        		   }else if(data.aData[4]==""){
    	        				str = "";
@@ -111,8 +130,20 @@
    	        		   return  str;
    	        	   }
    	           },
-   	        	{
+   	             {
    	        	   "aTargets": [8],
+   	        	   "fnRender":function(data,type){
+   	        		   var str = "";
+   	        		   if(data.aData[8]=="1"){
+   	        				str = "是";
+   	        		   }else if(data.aData[8]=="0"){
+   	        				str = "否";
+   	        		   }
+   	        		   return  str;
+   	        	   }
+   	           },
+   	        	{
+   	        	   "aTargets": [9],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
@@ -120,9 +151,10 @@
 //   	        			str += '</a>';
    	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-pencil bigger-130"></i>';
-   	        			str += '</a>';
-   	        			
-   	        			str += '<input type="button"  value="add"  onclick="add('+"'"+data.aData[0]+"'"+')"/>';
+   	        			str += '</a><br>';
+   	        			str += '<input type="button"  value="del"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        			str += '<input type="button"  value="add"  onclick="add('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        			str += '<input type="button"  value="comment"  onclick="comment('+"'"+data.aData[0]+"'"+')"/>';
    	        			str += '</div>';
    	        			
    	        		   return  str;

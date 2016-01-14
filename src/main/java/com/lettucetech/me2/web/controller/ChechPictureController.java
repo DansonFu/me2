@@ -32,6 +32,7 @@ import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtMetoo;
 import com.lettucetech.me2.pojo.TXtUser;
+import com.lettucetech.me2.service.CommentService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TXtMetooService;
@@ -46,6 +47,8 @@ public class ChechPictureController {
 	private TXtMetooService metooService;
 	@Autowired
 	private PicturerecommendService picurerecommendService;
+	@Autowired
+	private CommentService commentService;
 	/**
 	 * 跳转审核蜜图页面,为了给推荐表确定那个蜜图需要添加到推荐表当中。
 	 * @return
@@ -95,6 +98,7 @@ public class ChechPictureController {
 	    example.setOrderByClause("creat_time");
 	    example.setSord("desc");
 	    example.put("front", "a");
+	    example.put("del", "0");
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 
@@ -115,7 +119,7 @@ public class ChechPictureController {
 			String type="";
 			//如果有B面
 			if(obj.getBpicture()!=null){
-				if(obj.getBpicture().getType().equals("1")){
+				if("1".equals(obj.getBpicture().getType())){
 					burl = QiniuUtil.getDownUrl(obj.getBpicture().getQiniukey());
 				}else{
 					burl = obj.getBpicture().getQiniukey();
@@ -125,9 +129,9 @@ public class ChechPictureController {
 //			String[] d = {obj.getPid().toString(),obj.getBpicture().getCustomer().getUsername(),aurl,burl,type,
 //					obj.getTags(),obj.getMood(),
 //					DateUtil.dateFormatToString(obj.getBpicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			String[] d = {obj.getPid().toString(),obj.getCustomerId().toString(),aurl,burl,type,
+			String[] d = {obj.getPid().toString(),obj.getCustomer().getInneruser(),aurl,burl,type,
 					obj.getTags(),obj.getMood(),
-					DateUtil.dateFormatToString(obj.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
+					DateUtil.dateFormatToString(obj.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),obj.getRecommend(),""};
 			list.add(d);
 		}
 		
@@ -163,7 +167,7 @@ public class ChechPictureController {
 		
 		ModelAndView mav = new ModelAndView();
 		//mav.addObject(ps);
-		mav.setViewName("/admin/addCommendMetoo");
+		mav.setViewName("/admin/manageCommendMetoo");
 		return mav;
 		
 	}
@@ -206,11 +210,11 @@ public class ChechPictureController {
 		for(Picturerecommend pcs : pc){
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pcs.getPicture().getQiniukey();
 			if(pcs.getPeriod()!=null){
-				aa = pcs.getPeriod().toString();
+				aa = DateUtil.dateFormatToString(pcs.getPeriod(),"yyyy-MM-dd HH:mm:ss");
 			}else{
 				aa="";
 			}
-			String[] d = {pcs.getPid().toString(),aurl,pcs.getSort().toString(),
+			String[] d = {pcs.getId().toString(),pcs.getPid().toString(),aurl,pcs.getSort().toString(),
 					aa,""};
 			list.add(d);
 		}
@@ -239,97 +243,81 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/viewcommendmetoo")
-	public ModelAndView viewpicture(HttpSession session,Integer id) {
+	public ModelAndView viewpicture(HttpSession session,String id) {
 		
-		Criteria example = new Criteria();
-		example.put("id", id);
-		Picturerecommend pct = picurerecommendService.selectByPrimaryKey(id);
-//		List<Picturerecommend> pic = picurerecommendService.selectByParams(example);
-//
-//        List list = new ArrayList();
-//        String aa;
-//		for(Picturerecommend pc : pic){
-//			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pc.getPicture().getQiniukey();
-//			if(pc.getPeriod()!=null){
-//				aa = pc.getPeriod().toString();
-//			}else{
-//				aa="";
-//			}
-//			String[] d = {pc.getPid().toString(),aurl,pc.getSort().toString(),
-//					aa,""};
-//			list.add(d);
-//		}
+//		Criteria example = new Criteria();
+//		example.put("id", id);
+		Picturerecommend pct = picurerecommendService.selectByPrimaryKey(Integer.valueOf(id));
+		
+		
 		ModelAndView mav = new ModelAndView();
 //		mav.addObject("list", list);
 		mav.addObject("pct",pct);
 		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
-		mav.setViewName("/admin/menumetoo");
+		mav.setViewName("/admin/manageperiodmetoo");
 		return mav;
 	}
 	
 	/**
-	 * 修改推荐蜜图
-	 * @param session
-	 * @param sort
-	 * @param period
-	 * @return
+	 * 将推荐蜜图列表的有效期修改保存到picturecommend表中
+	 * 
 	 */
-		@RequestMapping("/admin/updatecommendmetoo")
-		public ModelAndView updateCommendMetoo(HttpSession session,String sort,
-				String period){
-			
-			Picturerecommend pc = new Picturerecommend();
-			Date date = DateUtil.formatDateFromString(period);
-		    pc.setPeriod(date);
-		    
-			pc.setSort(Integer.valueOf(sort));
-			picurerecommendService.updateByPrimaryKey(pc);
-			
-			
-//			if(cid!=null){
-//				//修改评论
-//				for(int i=0;i<cid.length;i++){
-//					String key=null;
-//					if(!StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
-//						try {
-//							String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
-//					        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
-//							MyRet ret = res.jsonToObject(MyRet.class); 
-//							key = ret.getKey();
-//						} catch (QiniuException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//					Comment record = new Comment();
-//					record.setCommentId(Integer.parseInt(cid[i]));
-//					record.setContent(commentContent[i]);
-//					record.setQiniukey(key);
-//					
-//					commentService.updateByPrimaryKeySelective(record);
+	@RequestMapping(value = "/admin/saveperiodmetoo/commend", method ={RequestMethod.POST})
+	public ModelAndView saveperiodcommendmetoo(HttpSession session,String period,String id,String pid,String sort){
+	    
 		
-//				}
-//			}
+		Picturerecommend pc = new Picturerecommend();
+		Date date = DateUtil.formatDateFromString(period,"yyyy-MM-dd HH:mm:ss");
+	    pc.setPeriod(date);
+	    pc.setPid(Integer.valueOf(pid));
+	    pc.setSort(Integer.valueOf(sort));
+	    pc.setId(Integer.valueOf(id));
+		picurerecommendService.updateByPrimaryKey(pc);
 			ModelAndView mav = new ModelAndView();
 			mav.setViewName("redirect:/admin/showcommendcheck");
 			return mav;
-		}
-	
-	
+
+	}
 	
 	/**
-	 * 将蜜图pid保存到picturecommend表中
+	 * 将蜜图pid保存到picturecommend表中,如果图片已经添加过则不用添加
 	 * 
 	 */
 	@RequestMapping("/admin/save/commend")
-	public ModelAndView savecommendmetoo(HttpSession session,Integer pid){
-	    Criteria  example  = new Criteria();
-		 Integer sort = picurerecommendService.countByParams(example);
-		Picturerecommend pc = new Picturerecommend();
-		pc.setPid(pid);
+	public ModelAndView savecommendmetoo(HttpSession session,String pid){
+	    
+		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		String a = p.getRecommend();
 		
-		pc.setSort(sort+1);
-		picurerecommendService.insert(pc);
-		
+		if("0".equals(a)){
+			Criteria  example  = new Criteria();
+			List<Picturerecommend> list = picurerecommendService.selectByParams(example);
+			List<Integer> list1 = new ArrayList<Integer>(); 
+			for(Picturerecommend pcs : list){
+				Integer b = pcs.getSort();
+				list1.add(b);
+			}
+			Integer sort = 0;
+			for(int i=0;i<list1.size();i++){
+				if(list1.get(i)>sort){
+					sort = list1.get(i);
+				}
+			}
+			Picturerecommend pc = new Picturerecommend();
+			pc.setPid(Integer.valueOf(pid));
+			
+			pc.setSort(sort+1);
+			picurerecommendService.insertSelective(pc);
+			p.setRecommend("1");
+			pictureService.updateByPrimaryKeySelective(p);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("redirect:/admin/commendcheckmetoo");
+			return mav;
+		}else{
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("/admin/error");
+			return mav;
+		}
 		//保存管理员操作记录
 //		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 //		TXtMetoo record = new TXtMetoo();
@@ -339,10 +327,33 @@ public class ChechPictureController {
 //		record.setUserId(au.getUserId());
 //		metooService.insertSelective(record);
 		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/showcommendcheck");
-		return mav;
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("redirect:/admin/commendcheckmetoo");
+//		return mav;
 
+	}
+	
+	
+	/**
+	 * 审核蜜图图片当中逻辑删除的方法
+	 * 
+	 */
+	@RequestMapping("/admin/delcheckmetoo/commend")
+	public  ModelAndView delcheckdmetoo(HttpSession session,String pid){
+		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		if("0".equals(p.getDel())){
+			p.setDel("1");
+			  pictureService.updateByPrimaryKeySelective(p);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("redirect:/admin/commendcheckmetoo");
+			return mav;
+		}else{
+//			p.setDel("1");
+//			  pictureService.updateByPrimaryKeySelective(p);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("redirect:/admin/commendcheckmetoo");
+			return mav;
+		}
 	}
 	
 	/**
@@ -350,10 +361,31 @@ public class ChechPictureController {
 	 * 
 	 */
 	@RequestMapping("/admin/del/commend")
-	public  ModelAndView delcommendmetoo(HttpSession session,Integer pid){
-	    Criteria  example  = new Criteria();
-	    example.put("pid", pid);
-		picurerecommendService.deleteByParams(example);
+	public  ModelAndView delcommendmetoo(HttpSession session,String id){
+		
+		
+	    Picturerecommend pc = picurerecommendService.selectByPrimaryKey(Integer.valueOf(id));
+	    Integer  s  = pc.getSort();
+	    Criteria example = new Criteria();
+	    List<Picturerecommend> pclist = picurerecommendService.selectByParams(example);
+	    for(Picturerecommend p:pclist){
+	    	if(p.getSort()>s){
+	    		if(p.getPeriod()==null){
+	    			p.setPeriod(null);
+	    		}else{
+	    			p.setPeriod(p.getPeriod());
+	    		}
+	    		Integer b = p.getSort();
+	    		p.setSort(b-1);
+	    		
+	    		p.setPid(p.getPid());
+	    		p.setId(p.getId());
+	    		picurerecommendService.updateByPrimaryKey(p);
+	    	}
+	    }
+	    
+	    picurerecommendService.deleteByPrimaryKey(Integer.valueOf(id));
+	    
 //		Picturerecommend pc = new Picturerecommend();
 //		
 //		pc.setPid(pid);
@@ -363,6 +395,192 @@ public class ChechPictureController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/showcommendcheck");
 		return mav;
+	}
+	/**
+	 * 推荐图片当中顺序上调的方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/upcommendmetoo")
+	public  ModelAndView upcommendmetoo(HttpSession session,String id){
+		Picturerecommend prec = picurerecommendService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = prec.getSort();
+		Integer b = null;
+		
+		Criteria example = new Criteria();
+		example.put("sort", a-1);
+		List<Picturerecommend> lpc = picurerecommendService.selectByParams(example);
+		for(Picturerecommend pc:lpc){
+			if(pc.getSort().equals(a-1)){
+				b = pc.getId();
+				break;
+			}
+		}
+		Picturerecommend prec1 = picurerecommendService.selectByPrimaryKey(b);
+		prec1.setSort(a);
+		picurerecommendService.updateByPrimaryKeySelective(prec1);
+		prec.setSort(a-1);
+		picurerecommendService.updateByPrimaryKeySelective(prec);
+		
+		//Integer a = prec.getSort();
+		
+//		Picturerecommend pc = new Picturerecommend();
+//		
+//		pc.setPid(pid);
+//		
+//		pc.setSort(sort+1);
+//		picurerecommendService.insert(pc);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/showcommendcheck");
+		return mav;
+	}
+	
+	/**
+	 * 推荐图片当中顺序下调的方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/downcommendmetoo")
+	public  ModelAndView downcommendmetoo(HttpSession session,String id){
+		Picturerecommend prec = picurerecommendService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = prec.getSort();
+		Integer b = null;
+		
+		Criteria example = new Criteria();
+		example.put("sort", a+1);
+		List<Picturerecommend> lpc = picurerecommendService.selectByParams(example);
+		for(Picturerecommend pc:lpc){
+			if(pc.getSort().equals(a+1)){
+				b = pc.getId();
+				break;
+			}
+		}
+		Picturerecommend prec1 = picurerecommendService.selectByPrimaryKey(b);
+		prec1.setSort(a);
+		picurerecommendService.updateByPrimaryKeySelective(prec1);
+		prec.setSort(a+1);
+		picurerecommendService.updateByPrimaryKeySelective(prec);
+//		Picturerecommend pc = new Picturerecommend();
+//		
+//		pc.setPid(pid);
+//		
+//		pc.setSort(sort+1);
+//		picurerecommendService.insert(pc);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/showcommendcheck");
+		return mav;
+	}
+	
+	/**
+	 * 转入评论内容页面
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("/admin/checkview/comment")
+	public ModelAndView commontcontentPicture(String pid){
+		Criteria example = new Criteria();
+//		example.setOrderByClause("creat_time");
+	    example.put("pid", pid);
+		List<Comment> cs = commentService.selectByParams(example);
+		
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(cs);
+		mav.setViewName("/admin/commentmetoodel");
+		return mav;
+		
+	}
+	
+	/**
+	 * 评论内容页面的显示
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("/admin/check/comment")
+public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData){
+		
+		
+		
+		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
+	    String sEcho = null;
+	    int iDisplayStart = 0; // 起始索引
+	    int iDisplayLength = 0; // 每页显示的行数
+	 
+	    for (int i = 0; i < jsonarray.size(); i++) {
+	    	HashMap obj = (HashMap) jsonarray.get(i);
+	    	 if (obj.get("name").equals("sEcho"))
+	             sEcho = obj.get("value").toString();
+	  
+	         if (obj.get("name").equals("iDisplayStart"))
+	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
+	  
+	         if (obj.get("name").equals("iDisplayLength"))
+	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	    }
+		
+	    Criteria example = new Criteria();
+//		example.put("id", id);
+	    example.setOrderByClause("pid");
+	    example.put("del", "0");
+		int count = commentService.countByParams(example);
+		List<Comment> clist = commentService.selectByParams(example);
+		
+		
+		List list = new ArrayList();
+		String aa ;
+		for(Comment cs : clist){
+			if(cs.getCreatTime()!=null){
+				aa = DateUtil.dateFormatToString(cs.getCreatTime(),"yyyy-MM-dd HH:mm:ss");
+			}else{
+				aa="";
+			}
+			String[] d = {cs.getCommentId().toString(),cs.getPid().toString(),cs.getCustomer().getInneruser(),cs.getContent(),
+					aa,""};
+			list.add(d);
+		}
+		
+		DataTablePaginationForm dtpf = new DataTablePaginationForm();
+		dtpf.setsEcho(sEcho);
+		dtpf.setiTotalDisplayRecords(count);
+		dtpf.setiTotalRecords(count);
+		dtpf.setAaData(list);
+	    
+		String jsonArray = JsonUtil.Encode(dtpf);
+		
+		try {
+			response.setHeader("Cache-Control", "no-cache");
+			response.setContentType("aplication/json;charset=UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	/**
+	 * 蜜图评论内容当中逻辑删除的方法
+	 * 
+	 */
+	@RequestMapping("/admin/delcontent/comment")
+	public  ModelAndView delcontentcheckdmetoo(HttpSession session,String commentId){
+		Comment c = commentService.selectByPrimaryKey(Integer.valueOf(commentId));
+		if("0".equals(c.getDel())){
+			c.setDel("1");
+			  commentService.updateByPrimaryKeySelective(c);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("redirect:/admin/checkview/comment");
+			return mav;
+		}else{
+//			p.setDel("1");
+//			  pictureService.updateByPrimaryKeySelective(p);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("redirect:/admin/checkview/comment");
+			return mav;
+		}
 	}
 
 }

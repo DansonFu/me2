@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Criteria;
@@ -44,23 +45,39 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pictures", method ={RequestMethod.POST})
-	public ModelAndView addPicture(HttpSession session,@RequestBody List<Picture> pictures){
+	public ModelAndView addPicture(HttpSession session,String pa,String pb){
 //		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
-		Picture A = pictures.get(0);
+//		Picture A = pictures.get(0);  @RequestBody List<Picture> pictures
+//		
+////		A.setCustomerId(customer.getCustomerId());
+//		A.setCreatTime(new Date());
+//		pictureService.insertSelective(A);
+//		if(pictures.size()>1){
+//			Picture B = pictures.get(1);
+////			B.setCustomerId(customer.getCustomerId());
+//			B.setCreatTime(new Date());
+//			B.setParentId(A.getPid());
+//			pictureService.insertSelective(B);
+//		}
+//		RestfulResult result = new RestfulResult();
+//		result.setSuccess(true);
+//		result.setObj(pictures);
 		
-//		A.setCustomerId(customer.getCustomerId());
-		A.setCreatTime(new Date());
-		pictureService.insertSelective(A);
-		if(pictures.size()>1){
-			Picture B = pictures.get(1);
-//			B.setCustomerId(customer.getCustomerId());
-			B.setCreatTime(new Date());
-			B.setParentId(A.getPid());
-			pictureService.insertSelective(B);
-		}
-		RestfulResult result = new RestfulResult();
-		result.setSuccess(true);
-		result.setObj(pictures);
+		Gson gson=new Gson();
+		Picture A=gson.fromJson(pa,Picture.class);
+			
+	    A.setCreatTime(new Date());
+	    pictureService.insertSelective(A);
+			
+		Picture B=gson.fromJson(pb,Picture.class);
+		B.setCreatTime(new Date());
+		B.setParentId(A.getPid());
+		pictureService.insertSelective(B);
+		
+        RestfulResult result = new RestfulResult();
+        result.setSuccess(true);
+        result.setObj(gson.toJson(A));
+        result.setObj(gson.toJson(B));
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);

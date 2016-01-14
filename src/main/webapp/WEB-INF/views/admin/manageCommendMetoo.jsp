@@ -40,6 +40,7 @@
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
+					   <th class="center">主键ID</th>
 						<th class="center" >
 							密图ID
 						</th>
@@ -61,27 +62,52 @@
 
 <script type="text/javascript">
 	
-function update(pid){
-	window.location="<%=basePath %>admin/viewcommendmetoo?pid="+pid;
+function update(id){
+	window.location="<%=basePath %>admin/viewcommendmetoo?id="+id;
 }
 	
-function del(pid){
-	window.location="<%=basePath %>admin/del/commend?pid="+pid;
+function del(id){
+	if(confirm('确实删除该蜜图吗?')){
+		window.location="<%=basePath %>admin/del/commend?id="+id;
+	}
 }
-	
+
+function up(id){
+	window.location="<%=basePath %>admin/upcommendmetoo?id="+id;
+}
+
+function down(id){
+	window.location="<%=basePath %>admin/downcommendmetoo?id="+id;
+}
+
 $(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
    	           {
-   	        	   "aTargets": [1],
+   	        	   "aTargets": [2],
    	        	   "fnRender":function(data,type){
-   	        		   return  '<img src="'+data.aData[1]+'" width="100px" height="100px">';
+   	        		   return  '<img src="'+data.aData[2]+'" width="100px" height="100px">';
    	        	   }
    	           },
+   	           {
+   	        	 "aTargets": [3],
+ 	        	   "fnRender":function(data,type){
+ 	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+// 	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
+// 	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+// 	        			str += '</a>';
+ 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
+   	        			str += '</div>';
+   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
+   	        			str += '</div>';
+ 	        			
+ 	        		   return  str;
+ 	        	   }
+   	           },
    	        {
-   	        	   "aTargets": [4],
+   	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
@@ -91,8 +117,9 @@ $(document).ready(function(){
    	        			str += '<i class="icon-pencil bigger-130"></i>';
    	        			str += '</a>';
    	        			
-   	        			str += '<input type="button"  value="删除"  onclick="del('+"'"+data.aData[0]+"'"+')"/>';
-   	        			str += '</div>';
+   	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+   	        			str += '<i class="icon-trash bigger-130"></i>';
+   	        			str += '</a>';
    	        			
    	        		   return  str;
    	        	   }

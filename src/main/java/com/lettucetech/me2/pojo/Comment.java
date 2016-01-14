@@ -37,8 +37,28 @@ public class Comment implements Serializable {
      * 7牛key
      */
     private String qiniukey;
+    
+    /**
+     * 是否逻辑删除0否，1是
+     */
+    private String del;
 
     /**
+     * @return 0/1
+     */
+    public String getDel() {
+		return del;
+	}
+
+    /**
+     * @param del
+     * 逻辑删除
+     */
+	public void setDel(String del) {
+		this.del = del;
+	}
+
+	/**
      * @return 评论id
      */
     public Integer getCommentId() {

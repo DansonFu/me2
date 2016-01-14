@@ -75,7 +75,7 @@
                                        	 头像：
                                     </div>
                                     <div class="col-lg-9">
-                                    	<img  src="${domain}/${customer.headimgurl}" width="70px" height="70px"/>
+                                    	<img  src=" ${domain}/${customer.headimgurl}" width="70px" height="70px"/>
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -211,8 +211,10 @@
                                     <div class="col-lg-2">
                                     	<select name="type" onchange="changetype()">
 											<option value="1">图片</option>
+											<!-- 
 											<option value="2">文字</option>
-											<option value="5">URL</option>
+											 -->
+											<option value="2">URL</option>
 										</select>
                                     </div>
                                     <div class="col-lg-7" id="fileDiv" >
