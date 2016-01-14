@@ -76,7 +76,7 @@
 		}
 	}
 	function manage(id){
-		window.location="<%=basePath %>admin/getmetoo/selective?id="+id;
+		window.location="<%=basePath %>admin/viewselective?id="+id;
 	}
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {

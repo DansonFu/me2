@@ -2,7 +2,6 @@ package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,13 +11,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
@@ -54,8 +53,10 @@ public class TagsSelectiveController {
 	 */
 	 
 	@RequestMapping("/admin/viewselective")
-	public ModelAndView selectByTags(HttpSession session){		
+	public ModelAndView selectByTags(HttpSession session,String id){
+		Taglist taglist =tagListService.selectByPrimaryKey(Integer.valueOf(id));
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("taglist",taglist);
 		mav.setViewName("/admin/viewselective");;
 		return mav;
 	}
@@ -73,11 +74,12 @@ public class TagsSelectiveController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/selective")
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot,String id) {
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
+	    
 	    int iDisplayStart = 0; // 起始索引
 	    int iDisplayLength = 0; // 每页显示的行数
 	 
@@ -91,6 +93,7 @@ public class TagsSelectiveController {
 	  
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	         
 	    }
 	    Criteria example = new Criteria();
 	    example.put("tagshot", tagshot);
@@ -107,17 +110,17 @@ public class TagsSelectiveController {
 	    List<Tagsconnection> metoo = tagsconnectionService.selectByParams(example);
 	    
 	    //拼接翻页数据
-	   Taglist taglist =tagListService.selectByPrimaryKey(Integer.valueOf(id));
+	    
 	    List list = new ArrayList();
 		for(Tagsconnection obj : metoo){
 			
-				if(obj.getTagslistId().equals(taglist.getId().toString())){
+			//	if(obj.getTagslistId().equals(obj.)){
 				String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
 						obj.getTagshot().getAcount().toString()
 						,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
 						,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
 				list.add(d);	
-				}
+			//	}
 		
 		}
 	
@@ -149,13 +152,8 @@ public class TagsSelectiveController {
 	@RequestMapping("/admin/submit")
 	public ModelAndView submit(HttpSession session,String pid,String taglist_id
 			){
-		 Criteria example = new Criteria();
-		 example.put("pid", pid);
-		 picturehotService.selectByParams(example);
-		 
-		 example.clear();
-		 example.put("taglist_id",taglist_id);
-		 picturehotService.selectByParams(example);
+		Picturehot hot=new Picturehot();
+		
 		
 
 		ModelAndView mav = new ModelAndView();
