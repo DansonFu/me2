@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
@@ -25,6 +26,7 @@ import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
+import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
@@ -41,6 +43,8 @@ public class TagsSelectiveController {
 	private TagsconnectionService tagsconnectionService;
 	@Autowired
 	private TagshotService tagshotService;
+	@Autowired
+	private TaglistService tagListService;
 	/**
 	 * 跳转到标签集合页面
 	 *
@@ -55,7 +59,12 @@ public class TagsSelectiveController {
 		mav.setViewName("/admin/viewselective");;
 		return mav;
 	}
-	
+	@RequestMapping("/admin/viewTag")
+	public ModelAndView viewByTags(HttpSession session){		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/admin/viewTags");;
+		return mav;
+	}
 	/**
 	 * 查询集合列表
 	 * @param session
@@ -64,7 +73,7 @@ public class TagsSelectiveController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/selective")
-	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot) {
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot,String id) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -85,7 +94,7 @@ public class TagsSelectiveController {
 	    }
 	    Criteria example = new Criteria();
 	    example.put("tagshot", tagshot);
-	   
+	 
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    //是否有查看所有人权限
@@ -98,16 +107,20 @@ public class TagsSelectiveController {
 	    List<Tagsconnection> metoo = tagsconnectionService.selectByParams(example);
 	    
 	    //拼接翻页数据
+	   Taglist taglist =tagListService.selectByPrimaryKey(Integer.valueOf(id));
 	    List list = new ArrayList();
 		for(Tagsconnection obj : metoo){
 			
-			
-			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),obj.getTagshot().getAcount().toString()
-					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
-					,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			
-			list.add(d);
+				if(obj.getTagslistId().equals(taglist.getId().toString())){
+				String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
+						obj.getTagshot().getAcount().toString()
+						,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
+						,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+				list.add(d);	
+				}
+		
 		}
+	
 		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
@@ -126,13 +139,19 @@ public class TagsSelectiveController {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param session
+	 * @param pid
+	 * @param taglist_id
+	 * @return
+	 */
 	@RequestMapping("/admin/submit")
 	public ModelAndView submit(HttpSession session,String pid,String taglist_id
 			){
 		 Criteria example = new Criteria();
 		 example.put("pid", pid);
-		 picturehotService.selectByParams4Rand(example);
+		 picturehotService.selectByParams(example);
 		 
 		 example.clear();
 		 example.put("taglist_id",taglist_id);
@@ -143,34 +162,60 @@ public class TagsSelectiveController {
 		mav.setViewName("redirect:/admin/picturehot");
 		return mav;
 	}
-	
 	/**
-	 *  修改标签
+	 * 保存已选标签
 	 * @param session
-	 * @param title
+	 * @param id
+	 * @param tag
+	 * @param acount
+	 * @param hits
+	 * @param mefriends
 	 * @param key
+	 * @param lastTime
 	 * @return
 	 */
-	
-	@RequestMapping("/admin/updateselective")
-	public ModelAndView updateList(HttpSession session,String id,String tag,String acount,String hits,
-			String mefriends,String key,String lastTime){
+	@RequestMapping(value="/admin/saveselective")
+	public ModelAndView saveselective(HttpSession session,String id,Tagsconnection conn){
 		
-		Tagshot tags=new Tagshot();
-		tags.setTag(tag.replaceAll("\\s*", "").replaceAll("#", ","));
-		tags.setAcount(Integer.valueOf(acount));
-		tags.setHits(Integer.valueOf(hits));
-		tags.setId(Integer.valueOf(id));
-		tags.setMefriends(Integer.valueOf(mefriends));
-		tags.setQiniukey(key);
-		tags.setLastTime(new Date());
+		Tagsconnection c=new Tagsconnection();
 		
-		tagshotService.updateByPrimaryKeySelective(tags);
+		c.setTagslistId(conn.getTagslistId());
+		c.setTagsId(conn.getTagsId());
+		tagsconnectionService.insert(conn);
 		
 		ModelAndView mav = new ModelAndView();
+	
 		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 	}
+//	/**
+//	 *  修改标签
+//	 * @param session
+//	 * @param title
+//	 * @param key
+//	 * @return
+//	 */
+//	
+//	@RequestMapping("/admin/updateselective")
+//	public ModelAndView updateList(HttpSession session,String id,String tag,String acount,String hits,
+//			String mefriends,String key,String lastTime){
+//		
+//		Tagshot tags=new Tagshot();
+//		tags.setTag(tag.replaceAll("\\s*", "").replaceAll("#", ","));
+//		tags.setAcount(Integer.valueOf(acount));
+//		tags.setHits(Integer.valueOf(hits));
+//		tags.setId(Integer.valueOf(id));
+//		tags.setMefriends(Integer.valueOf(mefriends));
+//		tags.setQiniukey(key);
+//		tags.setLastTime(new Date());
+//		
+//		tagshotService.updateByPrimaryKeySelective(tags);
+//		
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("redirect:/admin/viewselective");
+//		return mav;
+//	}
+	
 	/**
 	 * 删除标签
 	 * @param session
@@ -181,37 +226,39 @@ public class TagsSelectiveController {
 	public ModelAndView delList(HttpSession session,String id){
 		
 		tagshotService.deleteByPrimaryKey(Integer.valueOf(id));
-		
+//		 Criteria example = new Criteria();
+//		 example.put("id", id);
+//		 tagsconnectionService.deleteByParams(example);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 	}
-	/**
-	 * 添加标签
-	 * @param session
-	 * @param title
-	 * @param key
-	 * @param num
-	 * @return
-	 */
-	@RequestMapping("/admin/addselective")
-	public ModelAndView addList(HttpSession session,String id,String tag,String acount,String hits,
-			String mefriends,String key,String lastTime){
-		Tagshot tags=new Tagshot();
-		tags.setTag(tag.replaceAll("\\s*", "").replaceAll("#", ","));
-		tags.setAcount(Integer.valueOf(acount));
-		tags.setHits(Integer.valueOf(hits));
-		tags.setId(Integer.valueOf(id));
-		tags.setMefriends(Integer.valueOf(mefriends));
-		tags.setQiniukey(key);
-		tags.setLastTime(new Date());
-		tagshotService.insertSelective(tags);
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewselective");
-		return mav;
-		
-	}
+//	/**
+//	 * 添加标签
+//	 * @param session
+//	 * @param title
+//	 * @param key
+//	 * @param num
+//	 * @return
+//	 */
+//	@RequestMapping(value="/admin/addselective",method={RequestMethod.POST})
+//	public ModelAndView addList(HttpSession session,String id){
+////		Tagshot tags=new Tagshot();
+////		tags.setTag(tag.replaceAll("\\s*", "").replaceAll("#", ","));
+////		tags.setAcount(Integer.valueOf(acount));
+////		tags.setHits(Integer.valueOf(hits));
+////		tags.setId(Integer.valueOf(id));
+////		tags.setMefriends(Integer.valueOf(mefriends));
+////		tags.setQiniukey(key);
+////		tags.setLastTime(new Date());
+//		Criteria example=new Criteria();
+//		example.put("id", id);
+//		
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("redirect:/admin/viewselective");
+//		return mav;
+//		
+//	}
 	
 	
 }

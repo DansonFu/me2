@@ -18,14 +18,13 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtMenu;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Tagsconnection;
-import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.TXtUserService;
 import com.lettucetech.me2.service.TagsconnectionService;
-import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 
 
@@ -141,5 +140,27 @@ public class PicturehotController {
 		}
 		return flag;
 	}
+	/**
+	 *  将pid,taglist_id添加到Picturehot表中
+	 * @param session
+	 * @param id
+	 * @param pid
+	 * @param taglist_id
+	 * @return
+	 */
 	
+	@RequestMapping("/admin/insertpicturehot")
+	public ModelAndView addList(HttpSession session,String id,String pid,String taglist_id){
+		
+//		 Criteria example = new Criteria();
+//		example.put("taglist", taglist);
+		Picturehot hot=new Picturehot();
+		hot.setId(Integer.valueOf(id));
+		hot.setPid(Integer.valueOf(pid));
+		hot.setTagslistId(Integer.valueOf(taglist_id));
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/admin/picturehot");
+		return mav;
+		
+	}
 }

@@ -107,9 +107,8 @@
    	        		   var str = "";
    	        		   if(data.aData[4]=="1"){
    	        				str = "图片";
+   	        		   
    	        		   }else if(data.aData[4]=="2"){
-   	        				str = "文字";
-   	        		   }else if(data.aData[4]=="5"){
    	        				str = "URL";
    	        		   }else if(data.aData[4]==""){
    	        				str = "";

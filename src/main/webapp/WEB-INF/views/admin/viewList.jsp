@@ -32,12 +32,12 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">标签集合</h3>
+		<h3 class="header smaller lighter blue">精选集合</h3>
 		
 		<div style="float: right;">
-			<input type="button" value="新建集合"  onclick="add()"/>
+			<input type="button" id="add" value="新建集合"  onclick="add()"/>
 		</div>
-		
+	
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -47,14 +47,9 @@
 						<th class="center" >
 							集合ID
 						</th>
-						
 						<th class="center">集合名称</th>
 						<th class="center">排序</th>
-						
-						<th class="center">修改集合名称</th>
-						<th class="center">删除集合名称</th>
-						<th class="center">管理集合</th>
-						
+						<th class="center">操作</th>
 					</tr>
 				</thead>
 		
@@ -66,14 +61,14 @@
 	</div>
 	</div>
 </div>
+
+
 <script type="text/javascript">
 
-function add(id){
-	window.location="<%=basePath %>admin/addList?id="+id;
-}
+
 	
 	function update(id){
-		window.location="<%=basePath %>admin/updateList?id="+id;
+		window.location="<%=basePath %>admin/viewupdateList?id="+id;
 	}
 	function del(id){
 		if(confirm('确实删除该集合吗?')){
@@ -81,7 +76,7 @@ function add(id){
 		}
 	}
 	function manage(id){
-		window.location="<%=basePath %>admin/viewselective?id="+id;
+		window.location="<%=basePath %>admin/getmetoo/selective?id="+id;
 	}
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
@@ -94,64 +89,30 @@ function add(id){
 						  	        	   "aTargets": [3],
 						 	        	   "fnRender":function(data,type){
 						       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-						  	        			str += '<a class="blue" href="javascript:;"onclick="update('
-													+ "'"
-													+ data.aData[0]
-													+ "'"
-													+ ')" >';;
-						  	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+						  	        			str += '<a class="blue" href="javascript:void(0);"onclick="update('+"'"+data.aData[0]+"'"+')" >';;
+						  	        			str += '<i class="icon-pencil bigger-130"></i>';
 						   	        			str += '</a>';
-						      
+						   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+											str += '<i class="icon-trash bigger-130"></i>';
+											str += '</a>';
+											str += '<a  href="javascript:void(0);" onclick="manage('+"'"+data.aData[0]+"'"+')" >';
+										str += '<i class="icon-cog bigger-130"></i>';
+										str += '</a>';
 												str += '</div>';
 							   					return  str;
 						 }
 						 }, 
-						{
-							"aTargets" : [ 4 ],
-							"fnRender" : function(
-									data, type) {
-								var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-
-								str += '<a class="blue" href="javascript:void(0);" onclick="del('
-										+ "'"
-										+ data.aData[0]
-										+ "'"
-										+ ')" >';
-								str += '<i class="icon-trash bigger-130"></i>';
-								str += '</a>';
-
-								str += '</div>';
-								return str;
-							}
-						},
-						{
-							"aTargets" : [ 5 ],
-							"fnRender" : function(
-									data, type) {
-								var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-								str += '<a  href="javascript:void(0);" onclick="manage('
-										+ "'"
-										+ data.aData[0]
-										+ "'"
-										+ ')" >';
-								str += '<i class="icon-cog bigger-130"></i>';
-								str += '</a>';
-								str += '</div>';
-								return str;
-							}
-						} ],
+						
+						 ],
 				"bServerSide" : true,//这个用来指明是通过服务端来取数据
-				"sAjaxSource" : "<%=basePath %>admin/getmetoo/connect", //这个是请求的地址
+				"sAjaxSource" : "<%=basePath %>admin/getmetoo/connect",  //这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
-		  function retrieveData( sSource111,aoData111, fnCallback111) {
-			  var userId = $('#userId').val();
-
+		  function retrieveData( sSource111,aoData111, fnCallback111) {	
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -164,12 +125,10 @@ function add(id){
 		      });
 		  }
 		
-		  $("#userId").bind("change", function(){
-			  oTable1.fnPageChange('first');
-		  });
-
 	});
- 
+	 $("#add").on("click", function(){
+		  window.location="<%=basePath %>admin/viewaddList"; 
+	});
 </script>
 
 </body>

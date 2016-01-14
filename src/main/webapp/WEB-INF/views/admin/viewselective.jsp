@@ -29,104 +29,99 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
-<div class="page-content">
-	<div class="row">
-	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">已选标签</h3>
-		<form class="form-bordered"  id="sub" action="<%=basePath %>admin/submit" method="post" enctype="multipart/form-data">
+<h3 class="header smaller lighter blue">已选标签</h3>
 		<div style="float: right;">
-			
 			<button class="btn btn-primary" type="submit" onclick="submit()">
 					<i class="icon-ok bigger-80"></i>
 					提交
 				</button>
 				</div>
-			</form>	
+				
 			
 				<div style="float: right;">
 				&nbsp; &nbsp; &nbsp;
-				<button class="btn" type="button" onclick="addTags()">
+				<button class="btn" type="button" id="addid" >
 					<i class="icon-undo bigger-80"></i>
 					添加标签
 				</button>
 				</div>
-		
-		
+<form class="form-bordered"  id="sub" action="<%=basePath %>admin/submit" method="post" enctype="multipart/form-data">
+			
+		<div>
+	
 		<br>
-		<br>
+		
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
-						
 						<th class="center" >
 							标签ID
 						</th>
 						<th class="center">标签名称</th>
-						<th class="center">热度</th>
 						<th class="center">出现次数</th>
+						<th class="center">热度</th>
 						<th class="center">密友</th>
 						<th class="center">更新时间</th>
-						
-						<th class="center">删除</th>
-						
-					</tr>
-				</thead>
-					
-				<tbody>
-				
-				
-				
-				</tbody>
-				
-			</table>
-		</div>
-	</div>
-	</div>
-</div>
+						<th class="center">操作</th>
+						</tr>
+					</thead>
+	
+					<tbody>
+					</tbody>
+				</table>
+				</div>
+			</div>
+	</form>
+
 <script type="text/javascript">
-function addTags(id){
-	window.location="<%=basePath %>admin/viewTags?id="+id;  
-}
+$("#addid").on("click", function(tagslist_id){
+	  window.location="<%=basePath %>admin/viewTag?tagslist_id="+tagslist_id; 
+});
 
-function del(id){
-	window.location="<%=basePath %>admin/delselective?id="+id;
-}
-
+	function del(id){
+		if(confirm('确实删除该蜜图吗?')){
+			window.location="<%=basePath %>admin/delselective?id="+id;
+		}
+	}
 
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
-      	          
-    	        
-			    	           {
-			    	        	   "aTargets": [6],
-			    	        	   "fnRender":function(data,type){
-			    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-			    	        		   
-			    	        		    str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-			      	        			str += '<i class="icon-trash bigger-130"></i>';
-			      	        			str += '</a>';
-			      	        			
-			    	        			str += '</div>';
-			    	        		   return  str;
-			    	        	   }
-						    	           }         
-			    	         ],
-			  "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo/selective",  	//这个是请求的地址
+   	          
+   	        	
+   	        	{
+   	        	   "aTargets": [6],
+   	        	   "fnRender":function(data,type){
+   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
+//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+//   	        			str += '</a>';
+//   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
+//   	        			str += '<i class="icon-pencil bigger-130"></i>';
+//   	        			str += '</a>';
+   	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+   	        			str += '<i class="icon-trash bigger-130"></i>';
+   	        			str += '</a>';
+   	        			str += '</div>';
+   	        		   return  str;
+   	        	   }
+   	           }
+   	         ],
+		     "bServerSide": true,//这个用来指明是通过服务端来取数据
+		     "sAjaxSource": "<%=basePath %>admin/getmetoo/selective",//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
-			  var userId = $('#userId').val();
+			 // var addid = document.getElementById("addid").value;
 
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
+		        	//  "addid":addid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -139,10 +134,7 @@ function del(id){
 		      });
 		  }
 		
-		  $("#userId").bind("change", function(){
-			  oTable1.fnPageChange('first');
-		  });
-
+		 
 	});
 	function submit(){
 		
@@ -151,7 +143,6 @@ function del(id){
 		$(":button").attr("disabled", true);  
 	}
 
-	
 </script>
 
 </body>

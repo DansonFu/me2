@@ -285,7 +285,7 @@ public class AdminController {
 				} catch (QiniuException e) {
 					e.printStackTrace();
 				}
-			}else if("5".equals(type)||"2".equals(type)){
+			}else if("2".equals(type)){
 				bkey = content;
 			}
 			

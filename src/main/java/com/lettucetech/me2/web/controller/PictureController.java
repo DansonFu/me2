@@ -1,5 +1,9 @@
 package com.lettucetech.me2.web.controller;
 
+
+
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,11 +13,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Criteria;
@@ -32,6 +36,7 @@ import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
+import com.mysql.jdbc.log.Log;
 
 @Controller
 public class PictureController {
@@ -56,29 +61,44 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pictures", method ={RequestMethod.POST})
-	public ModelAndView addPicture(HttpSession session,@RequestBody List<Picture> pictures){
+	public ModelAndView addPicture(HttpSession session,String pa,String pb){
 //		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
-		Picture A = pictures.get(0);
 		
-//		A.setCustomerId(customer.getCustomerId());
-		A.setCreatTime(new Date());
-		pictureService.insertSelective(A);
-		if(pictures.size()>1){
-			Picture B = pictures.get(1);
-//			B.setCustomerId(customer.getCustomerId());
-			B.setCreatTime(new Date());
-			B.setParentId(A.getPid());
-			pictureService.insertSelective(B);
-		}
+//		JSONObject jsonObject = JSONObject.fromObject(pa);
+//		Picture A =(Picture)JSONObject.toBean(jsonObject);
+//		A.setCreatTime(new Date());
+//		pictureService.insertSelective(A);
+//		
+//		JSONObject json = JSONObject.fromObject(pb);
+//		Picture B=(Picture)JSONObject.toBean(json);
+//		B.setCreatTime(new Date());
+//		B.setParentId(A.getPid());
+//		pictureService.insertSelective(B);
+		
+		
+				Gson gson=new Gson();
+				Picture A=gson.fromJson(pa,Picture.class);
+					
+				//	A.setCreatTime(new Date());
+					pictureService.insertSelective(A);
+					
+					Picture B=gson.fromJson(pb,Picture.class);
+				//	B.setCreatTime(new Date());
+				//	B.setParentId(A.getPid());
+					pictureService.insertSelective(B);
+				
+			
+		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
-		result.setObj(pictures);
+		result.setObj(gson.toJson(A));
+		result.setObj(gson.toJson(B));
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		
 		return mav;
-
+	
 	}
 	/**
 	 * 增加蜜图热度
@@ -508,4 +528,5 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
+	
 }
