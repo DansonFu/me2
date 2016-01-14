@@ -79,12 +79,12 @@ public class PictureController {
 				Gson gson=new Gson();
 				Picture A=gson.fromJson(pa,Picture.class);
 					
-				//	A.setCreatTime(new Date());
+					A.setCreatTime(new Date());
 					pictureService.insertSelective(A);
 					
 					Picture B=gson.fromJson(pb,Picture.class);
-				//	B.setCreatTime(new Date());
-				//	B.setParentId(A.getPid());
+					B.setCreatTime(new Date());
+					B.setParentId(A.getPid());
 					pictureService.insertSelective(B);
 				
 			
