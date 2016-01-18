@@ -113,25 +113,27 @@ public class ChechPictureController {
 	    
 	    //拼接翻页数据
 	    List list = new ArrayList();
-		for(Picture obj : ps){
-			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
+		for(Picture pp : ps){
+			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pp.getQiniukey();
 			String burl="";
 			String type="";
 			//如果有B面
-			if(obj.getBpicture()!=null){
-				if("1".equals(obj.getBpicture().getType())){
-					burl = QiniuUtil.getDownUrl(obj.getBpicture().getQiniukey());
+			if(pp.getBpicture()!=null){
+				if("1".equals(pp.getBpicture().getType())){
+					burl = QiniuUtil.getDownUrl(pp.getBpicture().getQiniukey());
 				}else{
-					burl = obj.getBpicture().getQiniukey();
+					burl = pp.getBpicture().getQiniukey();
 				}
-				type = obj.getBpicture().getType();
+				type = pp.getBpicture().getType();
 			}
-//			String[] d = {obj.getPid().toString(),obj.getBpicture().getCustomer().getUsername(),aurl,burl,type,
-//					obj.getTags(),obj.getMood(),
-//					DateUtil.dateFormatToString(obj.getBpicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			String[] d = {obj.getPid().toString(),obj.getCustomer().getInneruser(),aurl,burl,type,
-					obj.getTags(),obj.getMood(),
-					DateUtil.dateFormatToString(obj.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),obj.getRecommend(),""};
+			String mood = "";
+			if(pp.getMood()!=null){
+				 mood = pp.getMood();
+			}else if(pp.getMood()==null){
+				mood = "";
+			}
+			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,burl,type,pp.getTags(),mood,
+					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),""};
 			list.add(d);
 		}
 		

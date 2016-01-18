@@ -32,7 +32,7 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">审核</h3>
+		<h3 class="header smaller lighter blue">审核蜜图</h3>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -48,6 +48,7 @@
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
 						<th class="center">心情</th>
+						
 						<!-- 
 						<th class="center">发贴者</th>
 						 -->
@@ -89,7 +90,7 @@
 			    {
    	        	   "aTargets": [1],
    	        	   "fnRender":function(data,type){
-   	        		   var str = "";
+   	        		   var str = " ";
    	        		   if(data.aData[1]=="1"){
    	        				str = "是";
    	        		   }else if(data.aData[1]=="0"){
@@ -166,19 +167,19 @@
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
-		  function retrieveData( sSource1112,aoData1112, fnCallback1112) {
+		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			 // var ps = $('#ps').val();
 
 		      $.ajax({
-		          url : sSource1112,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData1112)
+		          url : sSource111,//这个就是请求地址对应sAjaxSource
+		          data : {"aoData":JSON.stringify(aoData111)
 		        	 // "ps":ps
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
 		          async : false,
 		          success : function(result) {
-		              fnCallback1112(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
+		              fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
 		          },
 		          error : function(msg) {
 		          }
