@@ -39,7 +39,7 @@
 				
 			<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 				<div style="float: right;">
-				<input type="hidden" name="taglist" value="${tid }"/>
+				
 				&nbsp; &nbsp; &nbsp;
 				<button class="btn" type="submit" onclick="add()">
 					<i class="icon-undo bigger-80"></i>

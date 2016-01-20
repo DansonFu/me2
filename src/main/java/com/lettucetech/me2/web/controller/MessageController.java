@@ -185,7 +185,7 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "/gameface/{id}/{dispose}", method ={RequestMethod.GET})
 	public ModelAndView updateGameface(HttpSession session,@PathVariable String id, @PathVariable String dispose){
-		Gson gson = new Gson();
+		
 		Gameface gameface= gamefaceService.selectByPrimaryKey(Integer.parseInt(id));
 		//设置解蜜申请为已处理
 		gameface.setProcessed("1");
@@ -197,7 +197,7 @@ public class MessageController {
 			gamecustomer.setPid(gameface.getPid());
 			gamecustomer.setCustomerId(gameface.getProposer());
 			
-			gamecustomerService.insert(gamecustomer);
+			gamecustomerService.insertSelective(gamecustomer);
 		}
 		
 		//设置消息为已处理
