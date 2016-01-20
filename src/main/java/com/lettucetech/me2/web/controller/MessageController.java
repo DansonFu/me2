@@ -184,7 +184,7 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping(value = "/gameface/{id}/{dispose}", method ={RequestMethod.GET})
-	public ModelAndView updateGameface(HttpSession session,@PathVariable String id, @PathVariable String dispose){
+	public ModelAndView updateGameface(HttpSession session,@PathVariable String id,@PathVariable String dispose){
 		
 		Gameface gameface= gamefaceService.selectByPrimaryKey(Integer.parseInt(id));
 		//设置解蜜申请为已处理
@@ -244,11 +244,12 @@ public class MessageController {
 			e.printStackTrace();
 		}
 		
-
+Gson gson=new Gson();
 		
 		RestfulResult result = new RestfulResult();
-		result.setSuccess(true);
-		
+		result.setSuccess(false);
+		result.setObj(gson.toJson(record));
+		result.setObj(gson.toJson(gameface));
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;
