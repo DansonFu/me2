@@ -33,7 +33,7 @@
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">精选集合</h3>
-		
+
 		<div style="float: right;">
 			<input type="button" id="add" value="新建集合"  onclick="add()"/>
 		</div>

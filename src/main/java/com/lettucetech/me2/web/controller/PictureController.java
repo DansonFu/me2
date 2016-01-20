@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
+import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Message;
@@ -504,8 +505,8 @@ public class PictureController {
 		List<Tagshot> tags = tagshotService.selectByParams4Matching(example);
 		
 		RestfulResult result = new RestfulResult();
-		result.setSuccess(false);
-		result.setObj(tags);
+		result.setSuccess(true);
+		result.setObj(JsonUtil.Encode(tags));
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;
@@ -522,8 +523,8 @@ public class PictureController {
 		List<Taglist> tags = taglistService.selectByParams(example);
 		
 		RestfulResult result = new RestfulResult();
-		result.setSuccess(false);
-		result.setObj(tags);
+		result.setSuccess(true);
+		result.setObj(JsonUtil.Encode(tags));
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;

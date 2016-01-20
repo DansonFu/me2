@@ -1,17 +1,17 @@
 package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,6 +27,7 @@ import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TXtUserService;
+import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
@@ -46,7 +47,8 @@ public class TagsHotController {
 	private TagshotService tagshotService;
 	@Autowired
 	private TXtUserService usi;
-	
+	@Autowired
+	private TaglistService tagsListService;
 //	/**
 //	 * 根据热度查询标签
 //	 * @param session
@@ -77,6 +79,7 @@ public class TagsHotController {
 	public ModelAndView selectByTags(HttpSession session){	
 		
 		ModelAndView mav = new ModelAndView();
+		
 		mav.setViewName("/admin/viewTags");;
 		return mav;
 	}
@@ -223,18 +226,17 @@ public class TagsHotController {
 	
 	
 	@RequestMapping("/admin/add")
-	public ModelAndView add(HttpSession session,String id){
-	//Tagshot tag=tagshotService.selectByPrimaryKey(Integer.valueOf(id));
-		
+	public ModelAndView add(HttpSession session,String id,HttpServletRequest request){
+		String str=request.getParameter("taglist");
 		
 		Tagsconnection conn=new Tagsconnection();
 		conn.setTagsId(Integer.valueOf(id));
-
+		conn.setTagslistId(str);
 	
-//		tagsconnectionService.insert(conn);
+		tagsconnectionService.insert(conn);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("conn",conn);
-		mav.setViewName("redirect:/admin/saveselective");
+		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 		
 	}

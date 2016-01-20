@@ -41,7 +41,8 @@ public class TagsListController {
 	 */
 	 
 	@RequestMapping("/admin/viewList")
-	public ModelAndView selectByTags(HttpSession session){		
+	public ModelAndView selectByTags(HttpSession session){	
+		session.setAttribute("taglist","taglist");
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/admin/viewList");;
 		return mav;
@@ -83,7 +84,7 @@ public class TagsListController {
 	@RequestMapping("/admin/getmetoo/connect")
 	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,Taglist taglist) {
 	TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
-
+	 
 	ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
     String sEcho = null;
     int iDisplayStart = 0; // 起始索引

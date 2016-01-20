@@ -34,7 +34,7 @@
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">热门标签</h3>
 		
-			
+		
 		</div>
 		<br>
 		<br>
@@ -63,7 +63,7 @@
 		</div>
 	</div>
 	</div>
-</div>
+	
 <script type="text/javascript">
 
 function update(id){
@@ -73,6 +73,7 @@ function del(id){
 	window.location="<%=basePath %>admin/delTags?id="+id;
 }
 function add(id){
+	
 	window.location="<%=basePath %>admin/add?id="+id;
 }
 	$(document).ready(function(){
@@ -133,6 +134,7 @@ function add(id){
 		  }
 		
 	});
+	
 	
 </script>
 

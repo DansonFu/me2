@@ -140,27 +140,27 @@ public class PicturehotController {
 		}
 		return flag;
 	}
-	/**
-	 *  将pid,taglist_id添加到Picturehot表中
-	 * @param session
-	 * @param id
-	 * @param pid
-	 * @param taglist_id
-	 * @return
-	 */
-	
-	@RequestMapping("/admin/insertpicturehot")
-	public ModelAndView addList(HttpSession session,String id,String pid,String taglist_id){
-		
-//		 Criteria example = new Criteria();
-//		example.put("taglist", taglist);
-		Picturehot hot=new Picturehot();
-		hot.setId(Integer.valueOf(id));
-		hot.setPid(Integer.valueOf(pid));
-		hot.setTagslistId(Integer.valueOf(taglist_id));
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/admin/picturehot");
-		return mav;
-		
-	}
+//	/**
+//	 *  将pid,taglist_id添加到Picturehot表中
+//	 * @param session
+//	 * @param id
+//	 * @param pid
+//	 * @param taglist_id
+//	 * @return
+//	 */
+//	
+//	@RequestMapping("/admin/insertpicturehot")
+//	public ModelAndView addList(HttpSession session,String id,String pid,String taglist_id){
+//		
+////		 Criteria example = new Criteria();
+////		example.put("taglist", taglist);
+//		Picturehot hot=new Picturehot();
+//		hot.setId(Integer.valueOf(id));
+//		hot.setPid(Integer.valueOf(pid));
+//		hot.setTagslistId(Integer.valueOf(taglist_id));
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("/admin/picturehot");
+//		return mav;
+//		
+//	}
 }

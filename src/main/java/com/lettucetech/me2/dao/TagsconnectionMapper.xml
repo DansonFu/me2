@@ -132,4 +132,9 @@
       tagslist_id = #{tagslistId}
     where id = #{id}
   </update>
+  <select id="testpro" statementType="CALLABLE">
+  	{
+  		call pro()
+  	}
+  </select>
 </mapper>

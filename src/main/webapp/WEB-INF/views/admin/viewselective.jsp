@@ -37,16 +37,18 @@
 				</button>
 				</div>
 				
-			
+			<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 				<div style="float: right;">
+				<input type="hidden" name="taglist" value="${tid }"/>
 				&nbsp; &nbsp; &nbsp;
-				<button class="btn" type="button" id="addid" >
+				<button class="btn" type="submit" onclick="add()">
 					<i class="icon-undo bigger-80"></i>
 					添加标签
 				</button>
 				</div>
+				</form>
 <form class="form-bordered"  id="sub" action="<%=basePath %>admin/submit" method="post" enctype="multipart/form-data">
-			
+				
 		<div>
 	
 		<br>
@@ -75,9 +77,6 @@
 	</form>
 
 <script type="text/javascript">
-$("#addid").on("click", function(tagslist_id){
-	  window.location="<%=basePath %>admin/viewTag?tagslist_id="+tagslist_id; 
-});
 
 	function del(id){
 		if(confirm('确实删除该蜜图吗?')){
@@ -142,7 +141,10 @@ $("#addid").on("click", function(tagslist_id){
 		$("#sub").submit();
 		$(":button").attr("disabled", true);  
 	}
-
+	function add(){
+		$("#formid").submit();
+		$(":button").attr("disable",true);
+	}
 </script>
 
 </body>
