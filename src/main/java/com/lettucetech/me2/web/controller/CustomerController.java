@@ -102,7 +102,29 @@ public class CustomerController {
 		return mav;
 		
 	}
-	
+	/**
+	 * 查询所有用户
+	 * @return
+	 */
+	@RequestMapping(value="/at",method=RequestMethod.GET)
+	public ModelAndView getCustomers4at(String username,String offset,String length) {
+		Criteria example = new Criteria();
+		example.setMysqlLength(Integer.parseInt(length));
+		example.setMysqlOffset(Integer.parseInt(offset));
+		example.put("username", username);
+		
+		List<Customer> customers = customerService.selectByParams4at(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(customers);
+
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		
+		return mav;
+		
+	}
 	@RequestMapping(value="/customers/{id}/info",method=RequestMethod.GET)
 	public ModelAndView getCustomerInfo(@PathVariable String id) {
 		Criteria example = new Criteria();

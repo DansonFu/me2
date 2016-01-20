@@ -22,7 +22,10 @@
     <result column="game_id" property="gameId" jdbcType="INTEGER" />
     <result column="del" property="del" jdbcType="CHAR" />
     <result column="recommend" property="recommend" jdbcType="CHAR" />
+    <result column="at_customer_id" property="atCustomerId" jdbcType="INTEGER" />
+    <result column="at_seen" property="atSeen" jdbcType="CHAR" />
     <association property="customer" column="customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
+    <association property="atCustomer" column="at_customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
     <association property="commentCount" column="{condition.pid=pid}"	select="com.lettucetech.me2.dao.CommentMapper.countByParams"></association>
     <collection property="bpicture" column="pid" select="getChild"></collection>
   </resultMap>
@@ -85,12 +88,18 @@
       <if test="condition.recommend != null" >
          and recommend = #{condition.recommend}
       </if>
+      <if test="condition.atCustomerId != null" >
+         and at_customer_id = #{condition.atCustomerId}
+      </if>
+      <if test="condition.atSeen != null" >
+         and at_seen = #{condition.atSeen}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
     pid, qiniukey, customer_id, creat_time, hits, mood, front, type, parent_id, agree, 
     disagree, location_title, location_content, longitude, latitude, tags, anonymity, 
-    game_id, del, recommend
+    game_id, del, recommend, at_customer_id, at_seen
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -117,6 +126,9 @@
     from picture
     <where>
     	front='a'
+    <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
       <if test="condition.taglist != null" >
       	  <if test="condition.type == 0" >
 	         <foreach collection="condition.taglist" item="tag"  separator="or" open="and (" close=")">
@@ -188,12 +200,12 @@
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Picture" >
     insert into picture (pid, qiniukey, customer_id, creat_time, hits, mood, front, 
       type, parent_id, agree, disagree, location_title, location_content, 
-      longitude, latitude, tags, anonymity, game_id, del, recommend
-      )
+      longitude, latitude, tags, anonymity, game_id, del, recommend, 
+      at_customer_id, at_seen)
     values (#{pid}, #{qiniukey}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
       #{type}, #{parentId}, #{agree}, #{disagree}, #{locationTitle}, #{locationContent}, 
-      #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId}, #{del}, #{recommend}
-      )
+      #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId}, #{del}, #{recommend}, 
+      #{atCustomerId}, #{atSeen})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
    <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
@@ -261,6 +273,12 @@
       <if test="recommend != null" >
         recommend,
       </if>
+      <if test="atCustomerId != null" >
+        at_customer_id,
+      </if>
+      <if test="atSeen != null" >
+        at_seen,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pid != null" >
@@ -322,6 +340,12 @@
       </if>
       <if test="recommend != null" >
         #{recommend},
+      </if>
+      <if test="atCustomerId != null" >
+        #{atCustomerId},
+      </if>
+      <if test="atSeen != null" >
+        #{atSeen},
       </if>
     </trim>
   </insert>
@@ -394,6 +418,12 @@
       <if test="record.recommend != null" >
         recommend = #{record.recommend},
       </if>
+      <if test="record.atCustomerId != null" >
+        at_customer_id = #{record.atCustomerId},
+      </if>
+      <if test="record.atSeen != null" >
+        at_seen = #{record.atSeen},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -420,7 +450,9 @@
       anonymity = #{record.anonymity},
       game_id = #{record.gameId},
       del = #{record.del},
-      recommend = #{record.recommend}
+      recommend = #{record.recommend},
+      at_customer_id = #{record.atCustomerId},
+      at_seen = #{record.atSeen}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -485,6 +517,12 @@
       <if test="recommend != null" >
         recommend = #{recommend},
       </if>
+      <if test="atCustomerId != null" >
+        at_customer_id = #{atCustomerId},
+      </if>
+      <if test="atSeen != null" >
+        at_seen = #{atSeen},
+      </if>
     </set>
     where pid = #{pid}
   </update>
@@ -508,7 +546,9 @@
       anonymity = #{anonymity},
       game_id = #{gameId},
       del = #{del},
-      recommend = #{recommend}
+      recommend = #{recommend},
+      at_customer_id = #{atCustomerId},
+      at_seen = #{atSeen}
     where pid = #{pid}
   </update>
 </mapper>

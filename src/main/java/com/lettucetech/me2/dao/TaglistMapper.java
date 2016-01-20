@@ -1,12 +1,15 @@
 package com.lettucetech.me2.dao;
 
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Customer;
+import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Taglist;
+
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
-public interface CustomerMapper {
+public interface TaglistMapper {
     /**
      * 根据条件查询记录总数
      */
@@ -20,51 +23,47 @@ public interface CustomerMapper {
     /**
      * 根据主键删除记录
      */
-    int deleteByPrimaryKey(Integer customerId);
+    int deleteByPrimaryKey(Integer id);
 
     /**
      * 保存记录,不管记录里面的属性是否为空
      */
-    int insert(Customer record);
+    int insert(Taglist record);
 
     /**
      * 保存属性不为空的记录
      */
-    int insertSelective(Customer record);
+    int insertSelective(Taglist record);
 
     /**
      * 根据条件查询记录集
      */
-    List<Customer> selectByParams(Criteria example);
+    List<Taglist> selectByParams(Criteria example);
 
     /**
      * 根据主键查询记录
      */
-    Customer selectByPrimaryKey(Integer customerId);
+    Taglist selectByPrimaryKey(Integer id);
 
     /**
      * 根据条件更新属性不为空的记录
      */
-    int updateByParamsSelective(@Param("record") Customer record, @Param("condition") Map<String, Object> condition);
+    int updateByParamsSelective(@Param("record") Taglist record, @Param("condition") Map<String, Object> condition);
 
     /**
      * 根据条件更新记录
      */
-    int updateByParams(@Param("record") Customer record, @Param("condition") Map<String, Object> condition);
+    int updateByParams(@Param("record") Taglist record, @Param("condition") Map<String, Object> condition);
 
     /**
      * 根据主键更新属性不为空的记录
      */
-    int updateByPrimaryKeySelective(Customer record);
+    int updateByPrimaryKeySelective(Taglist record);
 
     /**
      * 根据主键更新记录
      */
-    int updateByPrimaryKey(Customer record);
+    int updateByPrimaryKey(Taglist record);
+    
 
-	List<Customer> selectByPhoneOrUsername(Criteria example);
-
-	Customer selectByParams4Rand(Criteria example);
-
-	List<Customer> selectByParams4at(Criteria example);
 }

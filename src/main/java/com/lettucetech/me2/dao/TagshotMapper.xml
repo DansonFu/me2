@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TagshotMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Tagshot" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+    <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
+    <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.tag != null" >
+         and tag = #{condition.tag}
+      </if>
+      <if test="condition.acount != null" >
+         and acount = #{condition.acount}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.mefriends != null" >
+         and mefriends = #{condition.mefriends}
+      </if>
+      <if test="condition.lastTime != null" >
+         and last_time = #{condition.lastTime}
+      </if>
+      <if test="condition.pid != null" >
+         and pid = #{condition.pid}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, tag, acount, hits, qiniukey, mefriends, last_time, pid
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tagshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
+    <select id="selectByParams4Matching" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tagshot
+    <where>
+          <if test="condition.tag != null" >
+         and tag like '%${condition.tag}%'
+      </if>
+      <if test="condition.acount != null" >
+         and acount = #{condition.acount}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.mefriends != null" >
+         and mefriends = #{condition.mefriends}
+      </if>
+      <if test="condition.lastTime != null" >
+         and last_time = #{condition.lastTime}
+      </if>
+      <if test="condition.pid != null" >
+         and pid = #{condition.pid}
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tagshot
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tagshot
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from tagshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Tagshot" >
+    insert into tagshot (id, tag, acount, hits, qiniukey, mefriends, last_time, 
+      pid)
+    values (#{id}, #{tag}, #{acount}, #{hits}, #{qiniukey}, #{mefriends}, #{lastTime}, 
+      #{pid})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Tagshot" >
+    insert into tagshot
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tag != null" >
+        tag,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+      <if test="hits != null" >
+        hits,
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey,
+      </if>
+      <if test="mefriends != null" >
+        mefriends,
+      </if>
+      <if test="lastTime != null" >
+        last_time,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="tag != null" >
+        #{tag},
+      </if>
+      <if test="acount != null" >
+        #{acount},
+      </if>
+      <if test="hits != null" >
+        #{hits},
+      </if>
+      <if test="qiniukey != null" >
+        #{qiniukey},
+      </if>
+      <if test="mefriends != null" >
+        #{mefriends},
+      </if>
+      <if test="lastTime != null" >
+        #{lastTime},
+      </if>
+      <if test="pid != null" >
+        #{pid},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from tagshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update tagshot
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.tag != null" >
+        tag = #{record.tag},
+      </if>
+      <if test="record.acount != null" >
+        acount = #{record.acount},
+      </if>
+      <if test="record.hits != null" >
+        hits = #{record.hits},
+      </if>
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
+      </if>
+      <if test="record.mefriends != null" >
+        mefriends = #{record.mefriends},
+      </if>
+      <if test="record.lastTime != null" >
+        last_time = #{record.lastTime},
+      </if>
+      <if test="record.pid != null" >
+        pid = #{record.pid},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update tagshot
+    set id = #{record.id},
+      tag = #{record.tag},
+      acount = #{record.acount},
+      hits = #{record.hits},
+      qiniukey = #{record.qiniukey},
+      mefriends = #{record.mefriends},
+      last_time = #{record.lastTime},
+      pid = #{record.pid}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Tagshot" >
+    update tagshot
+    <set >
+      <if test="tag != null" >
+        tag = #{tag},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount},
+      </if>
+      <if test="hits != null" >
+        hits = #{hits},
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
+      </if>
+      <if test="mefriends != null" >
+        mefriends = #{mefriends},
+      </if>
+      <if test="lastTime != null" >
+        last_time = #{lastTime},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Tagshot" >
+    update tagshot
+    set tag = #{tag},
+      acount = #{acount},
+      hits = #{hits},
+      qiniukey = #{qiniukey},
+      mefriends = #{mefriends},
+      last_time = #{lastTime},
+      pid = #{pid}
+    where id = #{id}
+  </update>
+</mapper>

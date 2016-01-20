@@ -10,8 +10,18 @@ public class Picturehot implements Serializable {
     private Integer pid;
     
     private Picture picture;
+    
+    private Integer tagslistId;
 
-    public Integer getId() {
+    public Integer getTagslistId() {
+		return tagslistId;
+	}
+
+	public void setTagslistId(Integer tagslistId) {
+		this.tagslistId = tagslistId;
+	}
+
+	public Integer getId() {
         return id;
     }
 

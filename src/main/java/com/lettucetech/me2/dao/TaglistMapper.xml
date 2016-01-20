@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.TaglistMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Taglist" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.title != null" >
+         and title = #{condition.title}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+      <if test="condition.num != null" >
+         and num = #{condition.num}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, title, qiniukey, num
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from taglist
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from taglist
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from taglist
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from taglist
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Taglist" >
+    insert into taglist (id, title, qiniukey, num)
+    values (#{id}, #{title}, #{qiniukey}, #{num})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Taglist" >
+    insert into taglist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="qiniukey != null" >
+        #{qiniukey},
+      </if>
+      <if test="num != null" >
+        #{num},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from taglist
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update taglist
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title},
+      </if>
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
+      </if>
+      <if test="record.num != null" >
+        num = #{record.num},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update taglist
+    set id = #{record.id},
+      title = #{record.title},
+      qiniukey = #{record.qiniukey},
+      num = #{record.num}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Taglist" >
+    update taglist
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
+      </if>
+      <if test="num != null" >
+        num = #{num},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Taglist" >
+    update taglist
+    set title = #{title},
+      qiniukey = #{qiniukey},
+      num = #{num}
+    where id = #{id}
+  </update>
+</mapper>

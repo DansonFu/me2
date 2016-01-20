@@ -525,7 +525,8 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 		
 	    Criteria example = new Criteria();
 //		example.put("id", id);
-	    example.setOrderByClause("pid");
+	    example.setOrderByClause("creat_time");
+	    example.setSord("desc");
 	    example.put("del", "0");
 		int count = commentService.countByParams(example);
 		List<Comment> clist = commentService.selectByParams(example);

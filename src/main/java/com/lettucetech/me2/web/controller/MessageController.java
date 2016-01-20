@@ -2,7 +2,6 @@ package com.lettucetech.me2.web.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javapns.communication.exceptions.CommunicationException;
@@ -17,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.IosPushUtil;
+import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Gamecustomer;
@@ -182,8 +183,9 @@ public class MessageController {
 	 * @param dispose
 	 * @return
 	 */
-	@RequestMapping(value = "/gameface/{id}/{dispose}", method ={RequestMethod.PUT})
-	public ModelAndView updateGameface(HttpSession session,@PathVariable String id,@PathVariable String dispose){
+	@RequestMapping(value = "/gameface/{id}/{dispose}", method ={RequestMethod.GET})
+	public ModelAndView updateGameface(HttpSession session,@PathVariable String id, @PathVariable String dispose){
+		Gson gson = new Gson();
 		Gameface gameface= gamefaceService.selectByPrimaryKey(Integer.parseInt(id));
 		//设置解蜜申请为已处理
 		gameface.setProcessed("1");
@@ -195,7 +197,7 @@ public class MessageController {
 			gamecustomer.setPid(gameface.getPid());
 			gamecustomer.setCustomerId(gameface.getProposer());
 			
-			gamecustomerService.insertSelective(gamecustomer);
+			gamecustomerService.insert(gamecustomer);
 		}
 		
 		//设置消息为已处理
@@ -214,8 +216,7 @@ public class MessageController {
 		Customer customer = customerService.selectByPrimaryKey(gameface.getIssuer());
 		String mes = "";
 		
-		
-		//存到对方用户的消息表中
+		//存到对方用户的消息表中(注意用户身份的转换)
 		Message record = new Message();
 		if("agree".equals(dispose)){
 			record.setContent("为你解蜜了图片");
@@ -226,12 +227,11 @@ public class MessageController {
 		}
 
 		record.setCreateTime(new Date());
-		//注意是谁的消息
 		record.setCustomerId(gameface.getProposer());
 		record.setPid(gameface.getPid());
 		record.setType("2");
-		record.setProposer(gameface.getProposer());
-		messageService.insertSelective(record);
+		record.setProposer(customer.getCustomerId());
+		messageService.insert(record);
 		
 		//发送系统推送消息
 		try {
