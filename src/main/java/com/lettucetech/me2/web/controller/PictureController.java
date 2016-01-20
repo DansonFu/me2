@@ -63,7 +63,6 @@ public class PictureController {
 	 */
 	@RequestMapping(value = "/pictures", method ={RequestMethod.POST})
 	public ModelAndView addPicture(HttpSession session,String pa,String pb){
-//		Customer customer = (Customer) session.getAttribute(Me2Constants.METOOUSER);
 		
 //		JSONObject jsonObject = JSONObject.fromObject(pa);
 //		Picture A =(Picture)JSONObject.toBean(jsonObject);

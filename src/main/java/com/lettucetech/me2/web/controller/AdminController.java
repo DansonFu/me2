@@ -215,7 +215,7 @@ public class AdminController {
 	@RequestMapping(value = "/admin/metoo", method ={RequestMethod.GET})
 	public ModelAndView metoo(HttpSession session){
 		Criteria example = new Criteria();
-		example.put("inneruser", "1");
+		//example.put("inneruser", "1");
 		example.put("del", "0");
 		Customer customer = customerService.selectByParams4Rand(example);
 		
@@ -659,7 +659,7 @@ public class AdminController {
 				} catch (QiniuException e) {
 					e.printStackTrace();
 				}
-			}else if("5".equals(type)||"2".equals(type)){
+			}else if("2".equals(type)){
 				bkey = content;
 			}
 			

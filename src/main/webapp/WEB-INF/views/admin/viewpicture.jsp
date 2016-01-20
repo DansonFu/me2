@@ -158,7 +158,9 @@
                                     	<select name="type" onchange="changetype()">
 											<option value="1" <c:if test="${picture.bpicture.type == '1'}">selected="selected"</c:if>>图片</option>
 											<option value="2" <c:if test="${picture.bpicture.type == '2'}">selected="selected"</c:if>>URL</option>
-											
+											<!-- 
+											<option value="5" <c:if test="${picture.bpicture.type == '5'}">selected="selected"</c:if>>URL</option>
+											 -->
 										</select>
                                     </div>
                                     <div class="col-lg-7" id="fileDiv" style="height: 120px">

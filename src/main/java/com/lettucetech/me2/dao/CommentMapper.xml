@@ -28,10 +28,13 @@
       <if test="condition.qiniukey != null" >
          and qiniukey = #{condition.qiniukey}
       </if>
+      <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    comment_id, pid, customer_id, content, creat_time, qiniukey
+    comment_id, pid, customer_id, content, creat_time, qiniukey,del
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -44,7 +47,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
-      order by ${orderByClause}
+      order by ${orderByClause} ${sord}
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
@@ -65,9 +68,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Comment" >
-    insert into comment (comment_id, pid, customer_id, content, creat_time, qiniukey
+    insert into comment (comment_id, pid, customer_id, content, creat_time, qiniukey,del
       )
-    values (#{commentId}, #{pid}, #{customerId}, #{content}, #{creatTime}, #{qiniukey}
+    values (#{commentId}, #{pid}, #{customerId}, #{content}, #{creatTime}, #{qiniukey},#{del}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Comment" >
@@ -94,6 +97,9 @@
       <if test="qiniukey != null" >
         qiniukey,
       </if>
+      <if test="del != null" >
+        del,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="commentId != null" >
@@ -113,6 +119,9 @@
       </if>
       <if test="qiniukey != null" >
         #{qiniukey},
+      </if>
+      <if test="del != null" >
+        #{del},
       </if>
     </trim>
   </insert>
@@ -143,6 +152,9 @@
       <if test="record.qiniukey != null" >
         qiniukey = #{record.qiniukey},
       </if>
+      <if test="record.del != null" >
+        del = #{record.del},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -155,7 +167,8 @@
       customer_id = #{record.customerId},
       content = #{record.content},
       creat_time = #{record.creatTime},
-      qiniukey = #{record.qiniukey}
+      qiniukey = #{record.qiniukey},
+      del = #{record.del}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -178,6 +191,9 @@
       <if test="qiniukey != null" >
         qiniukey = #{qiniukey},
       </if>
+      <if test="del != null" >
+        del = #{del},
+      </if>
     </set>
     where comment_id = #{commentId}
   </update>
@@ -187,7 +203,8 @@
       customer_id = #{customerId},
       content = #{content},
       creat_time = #{creatTime},
-      qiniukey = #{qiniukey}
+      qiniukey = #{qiniukey},
+      del = #{del}
     where comment_id = #{commentId}
   </update>
 </mapper>

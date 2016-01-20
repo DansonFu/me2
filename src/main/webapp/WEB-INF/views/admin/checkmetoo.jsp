@@ -32,14 +32,7 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">管理蜜图</h3>
-		<div style="float: right;">
-			发贴人：<select id="userId">
-				<c:forEach items="${users }" var="user">
-					<option value="${user.userId}" >${user.name}</option>
-				</c:forEach>
-			</select>
-		</div>
+		<h3 class="header smaller lighter blue">审核蜜图</h3>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -49,14 +42,18 @@
 						<th class="center" >
 							密图ID
 						</th>
-						<th class="center">用户</th>
+						<th class="center">内部用户</th>
 						<th class="center">A面</th>
 						<th class="hidden-480 center">B面</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
 						<th class="center">心情</th>
+						
+						<!-- 
 						<th class="center">发贴者</th>
+						 -->
 						<th class="center">创建时间</th>
+						<th class="center">是否推荐</th>
 						<th class="center">操作</th>
 					</tr>
 				</thead>
@@ -68,21 +65,40 @@
 	</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	function update(pid){
 		window.location="<%=basePath %>admin/viewpicture?pid="+pid;
 	}
 	function del(pid){
-		if(confirm('确实删除该蜜图吗?')){
-			window.location="<%=basePath %>admin/delpicture?pid="+pid;
+		if(confirm('确定要逻辑删除该蜜图吗?')){
+		     window.location="<%=basePath %>/admin/delcheckmetoo/commend?pid="+pid;
 		}
 	}
-
+	function add(pid){
+		window.location="<%=basePath %>admin/save/commend?pid="+pid;
+	}
+	function comment(pid){
+		window.location="<%=basePath %>admin/checkview/comment?pid="+pid;
+	}
+    
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
+			    {
+   	        	   "aTargets": [1],
+   	        	   "fnRender":function(data,type){
+   	        		   var str = " ";
+   	        		   if(data.aData[1]=="1"){
+   	        				str = "是";
+   	        		   }else if(data.aData[1]=="0"){
+   	        				str = "否";
+   	        		   }
+   	        		   return  str;
+   	        	   }
+   	           },
    	           {
    	        	   "aTargets": [2],
    	        	   "fnRender":function(data,type){
@@ -107,11 +123,22 @@
    	        		   var str = "";
    	        		   if(data.aData[4]=="1"){
    	        				str = "图片";
-   	        		   
    	        		   }else if(data.aData[4]=="2"){
    	        				str = "URL";
    	        		   }else if(data.aData[4]==""){
    	        				str = "";
+   	        		   }
+   	        		   return  str;
+   	        	   }
+   	           },
+   	             {
+   	        	   "aTargets": [8],
+   	        	   "fnRender":function(data,type){
+   	        		   var str = "";
+   	        		   if(data.aData[8]=="1"){
+   	        				str = "是";
+   	        		   }else if(data.aData[8]=="0"){
+   	        				str = "否";
    	        		   }
    	        		   return  str;
    	        	   }
@@ -125,27 +152,28 @@
 //   	        			str += '</a>';
    	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-pencil bigger-130"></i>';
-   	        			str += '</a>';
-   	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-trash bigger-130"></i>';
-   	        			str += '</a>';
+   	        			str += '</a><br>';
+   	        			str += '<input type="button"  value="del"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        			str += '<input type="button"  value="add"  onclick="add('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        			str += '<input type="button"  value="comment"  onclick="comment('+"'"+data.aData[0]+"'"+')"/>';
    	        			str += '</div>';
+   	        			
    	        		   return  str;
    	        	   }
    	           }
    	         ],
 		     "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo",//这个是请求的地址
+		     "sAjaxSource": "<%=basePath %>/amdin/check/metoo",//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
-			  var userId = $('#userId').val();
+			 // var ps = $('#ps').val();
 
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
+		          data : {"aoData":JSON.stringify(aoData111)
+		        	 // "ps":ps
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -158,9 +186,9 @@
 		      });
 		  }
 		
-		  $("#userId").bind("change", function(){
-			  oTable1.fnPageChange('first');
-		  });
+		  //$("#ps").bind("change", function(){
+			 // oTable1.fnPageChange('first');
+		 // });
 
 	});
 	 
