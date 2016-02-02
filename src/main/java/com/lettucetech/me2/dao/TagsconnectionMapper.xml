@@ -134,7 +134,7 @@
   </update>
   <select id="testpro" statementType="CALLABLE">
   	{
-  		call pro()
+  		call pro( #{beginlength,jdbcType=INTEGER,mode=IN})
   	}
   </select>
 </mapper>

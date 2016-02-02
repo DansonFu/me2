@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.tomcat.util.http.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
+import com.lettucetech.me2.dao.TagsconnectionMapper;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Tagsconnection;
@@ -29,6 +31,7 @@ import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
+import com.lettucetech.me2.service.impl.TagsconnectionServiceImpl;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 
 @Controller
@@ -82,26 +85,26 @@ public class TagsSelectiveController {
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
 	    
-	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 0; // 每页显示的行数
+//	    int iDisplayStart = 0; // 起始索引
+//	    int iDisplayLength = 0; // 每页显示的行数
 	 
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
 	    	 if (obj.get("name").equals("sEcho"))
 	             sEcho = obj.get("value").toString();
 	  
-	         if (obj.get("name").equals("iDisplayStart"))
-	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
-	  
-	         if (obj.get("name").equals("iDisplayLength"))
-	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+//	         if (obj.get("name").equals("iDisplayStart"))
+//	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
+//	  
+//	         if (obj.get("name").equals("iDisplayLength"))
+//	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	         
 	    }
 	    Criteria example = new Criteria();
 	    example.put("tagshot", tagshot);
 	 
-	    example.setMysqlOffset(iDisplayStart);
-	    example.setMysqlLength(iDisplayLength);
+//	    example.setMysqlOffset(iDisplayStart);
+//	    example.setMysqlLength(iDisplayLength);
 	    //是否有查看所有人权限
 
 //		if(!"-1".equals(userId)){
@@ -154,8 +157,11 @@ public class TagsSelectiveController {
 	@RequestMapping("/admin/submit")
 	public ModelAndView submit(HttpSession session){
 		
-		
+		  Map<String, Object> map = new HashMap<String, Object>();
+		  map.put("beginlength",0);
+		 
 		ModelAndView mav = new ModelAndView();
+		mav.addObject(map);
 		mav.setViewName("redirect:/admin/picturehot");
 		return mav;
 	}

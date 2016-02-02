@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
@@ -76,8 +77,9 @@ public class TagsHotController {
 	 */
 	 
 	@RequestMapping("/admin/viewTags")
-	public ModelAndView selectByTags(HttpSession session){	
-		
+	public ModelAndView selectByTags(HttpSession session,HttpServletRequest request){	
+		String str = request.getParameter("taglist");
+		session.setAttribute("str",str);
 		ModelAndView mav = new ModelAndView();
 		
 		mav.setViewName("/admin/viewTags");;
@@ -112,7 +114,7 @@ public class TagsHotController {
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
 	    Criteria example = new Criteria();
-	    example.setOrderByClause("acount");
+	    example.setOrderByClause("last_time");
 	    example.setSord("desc");
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
@@ -225,9 +227,9 @@ public class TagsHotController {
 	 */
 	
 	
-	@RequestMapping("/admin/add")
-	public ModelAndView add(HttpSession session,String id,HttpServletRequest request){
-		String str=request.getParameter("taglist");
+	@RequestMapping(value="/admin/add")
+	public ModelAndView add(HttpSession session,String id){
+		String str =(String)session.getAttribute("str");
 		
 		Tagsconnection conn=new Tagsconnection();
 		conn.setTagsId(Integer.valueOf(id));
