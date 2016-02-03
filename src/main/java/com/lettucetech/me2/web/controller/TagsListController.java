@@ -13,11 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
+import com.lettucetech.me2.common.utils.QiniuUtil;
+import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
@@ -25,6 +29,8 @@ import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
+import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
 
 @Controller
 public class TagsListController {
@@ -87,8 +93,8 @@ public class TagsListController {
 	 
 	ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
     String sEcho = null;
-    int iDisplayStart = 0; // 起始索引
-    int iDisplayLength = 0; // 每页显示的行数
+//    int iDisplayStart = 0; // 起始索引
+//    int iDisplayLength = 0; // 每页显示的行数
  
     for (int i = 0; i < jsonarray.size(); i++) {
     	HashMap obj = (HashMap) jsonarray.get(i);
@@ -149,9 +155,21 @@ public class TagsListController {
 	 */
 
 	@RequestMapping(value="/admin/saveList",method={RequestMethod.POST})
-	public ModelAndView updateList(HttpSession session,String id,String title,String qiniukey,String num){
+	public ModelAndView updateList(HttpSession session,String id,String title,String num,
+			@RequestParam("afile")  CommonsMultipartFile afile){
 		
-	
+		String akey=null;
+		if(afile.getFileItem().getName()!=""){
+			try {
+				String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+		        Response res = QiniuUtil.uploadManager.put(afile.getBytes(), null, token);
+				MyRet ret = res.jsonToObject(MyRet.class); 
+				akey = ret.getKey();
+			} catch (QiniuException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		Taglist list=new Taglist();
 		
 //		Date date=new Date();
@@ -159,7 +177,7 @@ public class TagsListController {
 //		String time=sdf.format(date);
 		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
-		list.setQiniukey(qiniukey);
+		list.setQiniukey(akey);
 		list.setNum(num);
 		
 		tagListService.updateByPrimaryKeySelective(list);
@@ -196,11 +214,25 @@ public class TagsListController {
 	 * @return
 	 */
 	@RequestMapping(value="/admin/insertList",method={RequestMethod.POST})
-	public ModelAndView addList(HttpSession session,String id,String title,String qiniukey,String num){
+	public ModelAndView addList(HttpSession session,String id,String title,String num
+			,@RequestParam("afile")  CommonsMultipartFile afile){
+		
+		String akey=null;
+		if(afile.getFileItem().getName()!=""){
+			try {
+				String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+		        Response res = QiniuUtil.uploadManager.put(afile.getBytes(), null, token);
+				MyRet ret = res.jsonToObject(MyRet.class); 
+				akey = ret.getKey();
+			} catch (QiniuException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		Taglist list =new Taglist();
 //		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
-		list.setQiniukey(qiniukey);
+		list.setQiniukey(akey);
 		list.setNum(num);
 		tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();

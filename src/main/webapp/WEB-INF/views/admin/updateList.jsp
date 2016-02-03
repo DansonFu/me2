@@ -42,13 +42,16 @@
 										 <br/>
                                        	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${taglist.num}">
 										 <br/>
-										 七牛:&nbsp;&nbsp;<input type="text" id="qiniukey" name="qiniukey" value="${taglist.qiniukey}">
-										<br/>
-										<div class="col-lg-9" onchange="changetype()">
-										 <div id="fileDiv">
-                                    	<input type="file" name="key"/>
-                                   		 </div>
-                                   		 </div>
+										<div class="row form-group">
+                            		<div class="col-lg-6">
+                                    <div class="col-lg-3 input-column" style="height: 120px">
+                                       	<span class="dangger" style="color: red">*</span> 七牛：
+                                    </div>
+                                    <div class="col-lg-3" style="height: 120px">
+                                    	<input type="file" name="afile"/>
+                                    </div>
+                                    
+                                </div>
 										 <br/>
 										集合名称:<input type="text" name="title"  value="${taglist.title}"/>
                         			</div>

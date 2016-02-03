@@ -70,21 +70,20 @@
 	function update(id){
 		window.location="<%=basePath %>admin/viewupdateList?id="+id;
 	}
+	
+	function manage(id){
+		window.location="<%=basePath %>admin/viewselective?id="+id;
+	}
 	function del(id){
 		if(confirm('确实删除该集合吗?')){
 			window.location="<%=basePath %>admin/delList?id="+id;
 		}
-	}
-	function manage(id){
-		window.location="<%=basePath %>admin/viewselective?id="+id;
 	}
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
-   	          
-
 						 {
 						  	        	   "aTargets": [3],
 						 	        	   "fnRender":function(data,type){
@@ -93,11 +92,11 @@
 						  	        			str += '<i class="icon-pencil bigger-130"></i>';
 						   	        			str += '</a>';
 						   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-											str += '<i class="icon-trash bigger-130"></i>';
-											str += '</a>';
-											str += '<a  href="javascript:void(0);" onclick="manage('+"'"+data.aData[0]+"'"+')" >';
-										str += '<i class="icon-cog bigger-130"></i>';
-										str += '</a>';
+												str += '<i class="icon-trash bigger-130"></i>';
+												str += '</a>';
+												str += '<a  href="javascript:void(0);" onclick="manage('+"'"+data.aData[0]+"'"+')" >';
+												str += '<i class="icon-cog bigger-130"></i>';
+												str += '</a>';
 												str += '</div>';
 							   					return  str;
 						 }
