@@ -79,7 +79,7 @@ public class TagsSelectiveController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/selective")
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot) {
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		String taglist=(String)session.getAttribute("taglist");
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -101,7 +101,7 @@ public class TagsSelectiveController {
 	         
 	    }
 	    Criteria example = new Criteria();
-	    example.put("tagshot", tagshot);
+	   
 	 
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -119,11 +119,13 @@ public class TagsSelectiveController {
 	    List list = new ArrayList();
 		for(Tagsconnection obj : metoo){
 			
-				if(obj.getTagslistId().equals(taglist)){
-				String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
-						obj.getTagshot().getAcount().toString()
-						,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
-						,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+			if(obj.getTagslistId().equals(taglist)){
+				
+			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
+					obj.getTagshot().getAcount().toString()
+					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
+					,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+					
 				list.add(d);	
 				}
 		

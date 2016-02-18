@@ -53,18 +53,10 @@
 						<th class="center">密友</th>
 						<th class="center">七牛key</th>
 						<th class="center">更新时间</th>
-						
-					
-						
 					</tr>
-				</thead>
-					
+				</thead>	
 				<tbody>
-				
-				
-				
 				</tbody>
-				
 			</table>
 		</div>
 	</div>

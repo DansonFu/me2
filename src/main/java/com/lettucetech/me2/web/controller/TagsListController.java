@@ -110,7 +110,7 @@ public class TagsListController {
     Criteria example = new Criteria();
     example.put("taglist", taglist);
     example.setOrderByClause("num");
-    example.setSord("desc");
+    example.setSord("asc");
 //    example.setMysqlOffset(iDisplayStart);
 //    example.setMysqlLength(iDisplayLength);
 
