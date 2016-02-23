@@ -72,7 +72,7 @@ public class PicturehotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/picturehot")
-	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData) {
+	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData,String userId) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -95,6 +95,12 @@ public class PicturehotController {
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    example.put("state", "0");
+	    
+	    //是否有查看所有人权限
+
+		if(!"-1".equals(userId)){
+			example.put("userId", userId);
+		}
 	    
 	    int count = pictureHotService.countByParams(example);
 	    List<Tagsconnection> metoo = tagsconnectionService.selectByParams(example);

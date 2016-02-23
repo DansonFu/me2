@@ -15,6 +15,7 @@ import org.apache.tomcat.util.http.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
@@ -78,8 +79,8 @@ public class TagsSelectiveController {
 	 * @param aoData
 	 * @param userId
 	 */
-	@RequestMapping("/admin/getmetoo/selective")
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
+	@RequestMapping(value="/admin/getmetoo/selective",method={RequestMethod.POST})
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		String taglist=(String)session.getAttribute("taglist");
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -101,7 +102,7 @@ public class TagsSelectiveController {
 	         
 	    }
 	    Criteria example = new Criteria();
-	   
+	   example.put("tagshot",tagshot);
 	 
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -121,11 +122,13 @@ public class TagsSelectiveController {
 			
 			if(obj.getTagslistId().equals(taglist)){
 				
-			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
-					obj.getTagshot().getAcount().toString()
-					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
-					,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-					
+//			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
+//					obj.getTagshot().getAcount().toString()
+//					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
+//					,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),obj.getTagshot().getAcount().toString()
+					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString(),
+					DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 				list.add(d);	
 				}
 		
@@ -194,33 +197,7 @@ public class TagsSelectiveController {
 //		mav.setViewName("redirect:/admin/viewselective");
 //		return mav;
 //	}
-//	/**
-//	 *  修改标签
-//	 * @param session
-//	 * @param title
-//	 * @param key
-//	 * @return
-//	 */
-//	
-//	@RequestMapping("/admin/updateselective")
-//	public ModelAndView updateList(HttpSession session,String id,String tag,String acount,String hits,
-//			String mefriends,String key,String lastTime){
-//		
-//		Tagshot tags=new Tagshot();
-//		tags.setTag(tag.replaceAll("\\s*", "").replaceAll("#", ","));
-//		tags.setAcount(Integer.valueOf(acount));
-//		tags.setHits(Integer.valueOf(hits));
-//		tags.setId(Integer.valueOf(id));
-//		tags.setMefriends(Integer.valueOf(mefriends));
-//		tags.setQiniukey(key);
-//		tags.setLastTime(new Date());
-//		
-//		tagshotService.updateByPrimaryKeySelective(tags);
-//		
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("redirect:/admin/viewselective");
-//		return mav;
-//	}
+
 	
 	/**
 	 * 删除标签
@@ -239,32 +216,7 @@ public class TagsSelectiveController {
 		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 	}
-//	/**
-//	 * 添加标签
-//	 * @param session
-//	 * @param title
-//	 * @param key
-//	 * @param num
-//	 * @return
-//	 */
-//	@RequestMapping(value="/admin/addselective",method={RequestMethod.POST})
-//	public ModelAndView addList(HttpSession session,String id){
-////		Tagshot tags=new Tagshot();
-////		tags.setTag(tag.replaceAll("\\s*", "").replaceAll("#", ","));
-////		tags.setAcount(Integer.valueOf(acount));
-////		tags.setHits(Integer.valueOf(hits));
-////		tags.setId(Integer.valueOf(id));
-////		tags.setMefriends(Integer.valueOf(mefriends));
-////		tags.setQiniukey(key);
-////		tags.setLastTime(new Date());
-//		Criteria example=new Criteria();
-//		example.put("id", id);
-//		
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("redirect:/admin/viewselective");
-//		return mav;
-//		
-//	}
+
 	
 	
 }

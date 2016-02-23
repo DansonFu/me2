@@ -32,12 +32,21 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">热门标签</h3>
+		<h3 class="header smaller lighter blue">所有标签</h3>
 		
 		
 		</div>
 		<br>
 		<br>
+		<form action="<%=basePath %>admin/search" id="formid" method="post">
+		<div style="float:left;">
+			<input type="text" name="search" />
+			&nbsp; &nbsp; &nbsp;
+				<button class="btn" type="submit" onclick="searching()">
+				检索
+				</button>
+		</div>
+		</form>
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
@@ -48,11 +57,12 @@
 						</th>
 						<th class="center">标签名称</th>
 						<th class="center">热度</th>
-						<th class="center">出现次数</th>
-						<th class="center">密友</th>
+						<th class="center">帖子数</th>
+						<th class="center">蜜友</th>
 						<th class="center">更新时间</th>
-						<th class="center">添加到集合</th>
+						<th class="center">添加热门标签</th>
 						<th class="center">删除标签</th>
+						<th class="center">添加推荐标签</th>
 					</tr>
 				</thead>
 					
@@ -88,7 +98,7 @@ function add(id){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
     	        			str += '<a class="green" href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
-    	        			str += '<i class="icon-edit bigger-130"></i>';
+    	        			str += '<i class="icon-check-empty bigger-130"></i>';
     	        			str += '</a>';
     	        			
     	        			str += '</div>';
@@ -104,6 +114,20 @@ function add(id){
 
 						str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
 						str += '<i class="icon-trash bigger-130"></i>';
+						str += '</a>';
+
+						str += '</div>';
+						return str;
+					}
+				},
+				{
+					"aTargets" : [ 8 ],
+					"fnRender" : function(
+							data, type) {
+						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+
+						str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+						str += '<i class="icon-check-empty bigger-130"></i>';
 						str += '</a>';
 
 						str += '</div>';
@@ -132,7 +156,10 @@ function add(id){
 		          }
 		      });
 		  }
-		
+		  function searching(){
+				$("#formid").submit();
+				$(":button").attr("disable",true);
+			}
 	});
 	
 	

@@ -30,6 +30,16 @@
 </head>
 <body>
 <h3 class="header smaller lighter blue">已选标签</h3>
+			<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
+				<div style="float: left;">
+				
+				&nbsp; &nbsp; &nbsp;
+				<button class="btn btn-primary" type="submit" onclick="reset()">
+					<i class="icon-undo bigger-80"></i>
+					恢复默认设置
+				</button>
+				</div>
+				</form>
 		<div style="float: right;">
 			<button class="btn btn-primary" type="submit" onclick="submit()">
 					<i class="icon-ok bigger-80"></i>
@@ -61,9 +71,9 @@
 							标签ID
 						</th>
 						<th class="center">标签名称</th>
-						<th class="center">出现次数</th>
+						<th class="center">帖子数</th>
 						<th class="center">热度</th>
-						<th class="center">密友</th>
+						<th class="center">蜜友</th>
 						<th class="center">更新时间</th>
 						<th class="center">操作</th>
 						</tr>
@@ -110,7 +120,7 @@
    	           }
    	         ],
 		     "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo/selective",//这个是请求的地址
+		     "sAjaxSource": "<%=basePath %>/admin/getmetoo/selective",//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
@@ -144,6 +154,12 @@
 	function add(){
 		$("#formid").submit();
 		$(":button").attr("disable",true);
+	}
+function reagain(){
+		
+
+		$("#reset").submit();
+		$(":button").attr("disabled", true);  
 	}
 </script>
 

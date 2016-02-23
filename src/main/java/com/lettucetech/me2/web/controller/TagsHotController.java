@@ -9,24 +9,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
+import com.lettucetech.me2.service.RecommendService;
 import com.lettucetech.me2.service.TXtUserService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
@@ -50,6 +49,8 @@ public class TagsHotController {
 	private TXtUserService usi;
 	@Autowired
 	private TaglistService tagsListService;
+	@Autowired
+	private RecommendService recommendService;
 //	/**
 //	 * 根据热度查询标签
 //	 * @param session
@@ -242,6 +243,22 @@ public class TagsHotController {
 		return mav;
 		
 	}
-	
-	
+	/**
+	 * 搜索标签
+	 * 
+	 */
+	@RequestMapping(value="/admin/search")
+	public ModelAndView search(HttpSession session,HttpServletRequest request){
+		//String str =(String)session.getAttribute("str");
+		
+		String str=request.getParameter("search");
+		Criteria example = new Criteria();
+		
+		example.put("str", str);
+		recommendService.selectByParams(example);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("str",str);
+		mav.setViewName("redirect:/admin/viewtags");
+		return mav;
+}
 }

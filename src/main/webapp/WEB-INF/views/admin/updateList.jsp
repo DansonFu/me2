@@ -42,15 +42,21 @@
 										 <br/>
                                        	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${taglist.num}">
 										 <br/>
+										 <div>
 										<div class="row form-group">
                             		<div class="col-lg-6">
                                     <div class="col-lg-3 input-column" style="height: 120px">
                                        	<span class="dangger" style="color: red">*</span> 七牛：
                                     </div>
+                                    </div>
+                                    <br/>
                                     <div class="col-lg-3" style="height: 120px">
                                     	<input type="file" name="afile"/>
                                     </div>
-                                    
+                                    <div class="col-lg-9">
+                                    	<input type="text" name="tags" style="width:80%;" value="${customer.username } #"/>
+                                    </div>
+                                </div>
                                 </div>
 										 <br/>
 										集合名称:<input type="text" name="title"  value="${taglist.title}"/>
@@ -106,6 +112,10 @@ function changetype(){
 		}
 		if($("input[name='num']").val()==null||$("input[name='num']").val()==""){
 			$("input[name='num']").focus();
+			return;
+		}
+		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
+			$("input[name='tags']").focus();
 			return;
 		}
 
