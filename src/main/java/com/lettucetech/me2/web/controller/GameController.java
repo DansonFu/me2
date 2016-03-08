@@ -124,12 +124,38 @@ public class GameController {
 		mav.addObject(result);
 		return mav;
 	}
-	
+	/**
+	 * 全部解密游戏
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
 	@RequestMapping(value="/pictures/{pid}/decoding2all",method=RequestMethod.POST)
 	public ModelAndView decoding2all(HttpSession session,@PathVariable String pid) {
 		Gamecustomer gamecustomer = new Gamecustomer();
 		gamecustomer.setPid(Integer.parseInt(pid));
 		gamecustomer.setCustomerId(-1);
+		
+		gamecustomerService.insertSelective(gamecustomer);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	/**
+	 * 全部拒绝解密游戏
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value="/pictures/{pid}/refuse2all",method=RequestMethod.POST)
+	public ModelAndView refuseall(HttpSession session,@PathVariable String pid) {
+		Gamecustomer gamecustomer = new Gamecustomer();
+		gamecustomer.setPid(Integer.parseInt(pid));
+		gamecustomer.setCustomerId(0);
 		
 		gamecustomerService.insertSelective(gamecustomer);
 		

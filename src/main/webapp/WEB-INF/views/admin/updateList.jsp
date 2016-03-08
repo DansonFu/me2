@@ -46,15 +46,15 @@
 										<div class="row form-group">
                             		<div class="col-lg-6">
                                     <div class="col-lg-3 input-column" style="height: 120px">
+                                    <br/>
                                        	<span class="dangger" style="color: red">*</span> 七牛：
                                     </div>
                                     </div>
-                                    <br/>
                                     <div class="col-lg-3" style="height: 120px">
                                     	<input type="file" name="afile"/>
                                     </div>
                                     <div class="col-lg-9">
-                                    	<input type="text" name="tags" style="width:80%;" value="${customer.username } #"/>
+                                    	<img  src=" ${domain}/${taglist.qiniukey}" width="70px" height="70px" name="key"/>
                                     </div>
                                 </div>
                                 </div>
@@ -118,7 +118,10 @@ function changetype(){
 			$("input[name='tags']").focus();
 			return;
 		}
-
+		if($("img[name='key']").val()==null||$("img[name='key']").val()==""){
+			$("img[name='key']").focus();
+			return;
+		}
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}

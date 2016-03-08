@@ -32,15 +32,16 @@
 <h3 class="header smaller lighter blue">已选标签</h3>
 			<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
 				<div style="float: left;">
+				<br/>
 				
-				&nbsp; &nbsp; &nbsp;
 				<button class="btn btn-primary" type="submit" onclick="reset()">
-					<i class="icon-undo bigger-80"></i>
+					<i class="icon-undo bigger-60"></i>
 					恢复默认设置
 				</button>
 				</div>
 				</form>
 		<div style="float: right;">
+		<br/>
 			<button class="btn btn-primary" type="submit" onclick="submit()">
 					<i class="icon-ok bigger-80"></i>
 					提交
@@ -51,6 +52,7 @@
 				<div style="float: right;">
 				<input type="hidden" name="taglist" value="${tid }"/>
 				&nbsp; &nbsp; &nbsp;
+				<br/>
 				<button class="btn" type="submit" onclick="add()">
 					<i class="icon-undo bigger-80"></i>
 					添加标签
@@ -89,7 +91,7 @@
 <script type="text/javascript">
 
 	function del(id){
-		if(confirm('确实删除该蜜图吗?')){
+		if(confirm('确实删除该标签吗?')){
 			window.location="<%=basePath %>admin/delselective?id="+id;
 		}
 	}

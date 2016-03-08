@@ -49,6 +49,7 @@ public class TagsSelectiveController {
 	private TagshotService tagshotService;
 	@Autowired
 	private TaglistService tagListService;
+	
 	/**
 	 * 跳转到标签集合页面
 	 *
@@ -80,14 +81,14 @@ public class TagsSelectiveController {
 	 * @param userId
 	 */
 	@RequestMapping(value="/admin/getmetoo/selective",method={RequestMethod.POST})
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,Tagshot tagshot) {
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		String taglist=(String)session.getAttribute("taglist");
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
 	    
 	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 0; // 每页显示的行数
+	    int iDisplayLength = 25; // 每页显示的行数
 	 
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
@@ -102,8 +103,7 @@ public class TagsSelectiveController {
 	         
 	    }
 	    Criteria example = new Criteria();
-	   example.put("tagshot",tagshot);
-	 
+	  
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    //是否有查看所有人权限
@@ -113,27 +113,29 @@ public class TagsSelectiveController {
 //		}
 //	    
 	    int count = tagsconnectionService.countByParams(example);
-	    List<Tagsconnection> metoo = tagsconnectionService.selectByParams(example);
-	    
+	    List<Tagshot> conn = tagshotService.selectByParams(example);
+	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
 	    //拼接翻页数据
-	    
 	    List list = new ArrayList();
-		for(Tagsconnection obj : metoo){
+	    	String g = null;
+	    	for(Tagsconnection tagsconn : metoo){
+	    		g =tagsconn.getTagslistId();
+	    		
+	    	}
+	    		for(Tagshot obj:conn){
+	    			
+	    		
+			//加一个条件,判断是在哪一个集合中?
+	    		if(taglist.equals(g)){
 			
-			if(obj.getTagslistId().equals(taglist)){
-				
-//			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),
-//					obj.getTagshot().getAcount().toString()
-//					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString()
-//					,DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			String[] d={obj.getTagshot().getId().toString(),obj.getTagshot().getTag(),obj.getTagshot().getAcount().toString()
-					,obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString(),
-					DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
-				list.add(d);	
+	    			String[] d={obj.getId().toString(),obj.getTag(),obj.getAcount().toString()
+						,obj.getHits().toString(),obj.getMefriends().toString(),
+						DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
+	    			list.add(d);	
 				}
-		
-		}
-	
+	    		}
+	    	
+	    
 		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
@@ -150,10 +152,12 @@ public class TagsSelectiveController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+		
+	    	}
+	
 	
 	/**
-	 * 
+	 * 提交
 	 * @param session
 	 * @param pid
 	 * @param taglist_id
@@ -216,7 +220,22 @@ public class TagsSelectiveController {
 		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 	}
+	/**
+	 * 恢复默认设置按钮
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/admin/reagain")
+	public ModelAndView saveselective(HttpSession session){
 
+		Tagsconnection c=new Tagsconnection();
+		
+		
+		ModelAndView mav = new ModelAndView();
+	
+		mav.setViewName("redirect:/admin/viewselective");
+		return mav;
+	}
 	
 	
 }

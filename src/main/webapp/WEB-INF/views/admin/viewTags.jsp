@@ -34,14 +34,38 @@
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">所有标签</h3>
 		
-		
 		</div>
+		 <div class="col-lg-6">
+		 	<div style="float:right;">
+                        <div class="col-lg-3 input-column">
+                                       	排序方式：
+                                    </div>
+                                    <div class="col-lg-9">
+                                    	<select name="wayid" >
+											<option value="0">id</option>
+											<option value="1">更新时间</option>
+											<option value="2">热度</option>
+											<option value="3">帖子数</option>
+										</select>
+										</div>
+                                    </div>
+                                </div>
 		<br>
 		<br>
-		<form action="<%=basePath %>admin/search" id="formid" method="post">
+		<form action="<%=basePath %>admin/viewflash" id="formid" method="post">
+		<div style="float:right;">
+			
+				<button class="btn" type="submit" onclick="flash()">
+				刷新数据
+				</button>
+		</div>
+		</form>
+		<br>
+		<br>
+		<form action="<%=basePath %>admin/viewsearch" id="formid" method="post">
 		<div style="float:left;">
-			<input type="text" name="search" />
-			&nbsp; &nbsp; &nbsp;
+			&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<input type="text" name="search"  />
+			
 				<button class="btn" type="submit" onclick="searching()">
 				检索
 				</button>
@@ -76,11 +100,13 @@
 	
 <script type="text/javascript">
 
-function update(id){
-	window.location="<%=basePath %>admin/updateTags?id="+id;
+function recommend(id){
+	window.location="<%=basePath %>admin/add/recommend?id="+id;
 }
 function del(id){
+	if(confirm('确实删除该标签吗?')){
 	window.location="<%=basePath %>admin/delTags?id="+id;
+}
 }
 function add(id){
 	
@@ -126,8 +152,8 @@ function add(id){
 							data, type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
-						str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-						str += '<i class="icon-check-empty bigger-130"></i>';
+						str += '<a class="blue" href="javascript:void(0);" onclick="recommend('+"'"+data.aData[0]+"'"+')" >';
+						str += '<i class="icon-check bigger-130"></i>';
 						str += '</a>';
 
 						str += '</div>';

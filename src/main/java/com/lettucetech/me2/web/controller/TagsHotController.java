@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -114,9 +115,26 @@ public class TagsHotController {
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
+	    int a=1;
 	    Criteria example = new Criteria();
-	    example.setOrderByClause("last_time");
-	    example.setSord("desc");
+	    switch(a){
+	    case 1:
+		    example.setOrderByClause("last_time");
+		    example.setSord("desc");
+		    break;
+	    case 2:
+	    	example.setOrderByClause("hits");
+	 	    example.setSord("desc");
+	 	    break;
+	    case 3:
+	    	 example.setOrderByClause("acount");
+	 	    example.setSord("desc");
+	 	    break;
+	    default :
+	    	 example.setOrderByClause("id");
+	 	    example.setSord("desc");
+	    }
+	    
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -133,26 +151,18 @@ public class TagsHotController {
 	    List list = new ArrayList();
 	    
 		for(Tagshot obj : metoo){
-			//String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
+		//判断如果图片的pid相同就去重
 			
-//			String burl="";
-//			String type="";
-			//如果有B面
-//			if(obj.getPicture().getBpicture()!=null){
-//				if(obj.getPicture().getBpicture().getType().equals("1")){
-//					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-//				}else{
-//					burl = obj.getPicture().getBpicture().getQiniukey();
-//				}
-//				type = obj.getPicture().getBpicture().getType();
-//			}
-//			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,burl,type,
-//					obj.getPicture().getTags(),obj.getUser().getName(),
-			String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			
-			list.add(d);
-		}
+				
+					
+					String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+							DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+					list.add(d);
+				
+			}
+		
+		
+		
 		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
@@ -247,18 +257,51 @@ public class TagsHotController {
 	 * 搜索标签
 	 * 
 	 */
-	@RequestMapping(value="/admin/search")
-	public ModelAndView search(HttpSession session,HttpServletRequest request){
+//	@RequestMapping(value="/admin/searchtag")
+//	public ModelAndView search(HttpSession session){
+//		//String str =(String)session.getAttribute("str");
+//		
+//		String str=request.getParameter("search");
+//		Criteria example = new Criteria();
+//		
+//		example.put("str", str);
+//		tagshotService.selectByParams(example);
+//		ModelAndView mav = new ModelAndView();
+//		mav.addObject("str",str);
+//		mav.setViewName("redirect:/admin/searchTag");
+//		return mav;
+//}
+	@RequestMapping(value="/admin/viewsearch")
+	public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
 		//String str =(String)session.getAttribute("str");
 		
 		String str=request.getParameter("search");
 		Criteria example = new Criteria();
 		
 		example.put("str", str);
-		recommendService.selectByParams(example);
+		tagshotService.selectByParams(example);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("str",str);
-		mav.setViewName("redirect:/admin/viewtags");
+		mav.setViewName("redirect:/admin/searchTag");
 		return mav;
 }
+	
+	/**
+	 * 刷新
+	 * @param session
+	 * @param pid
+	 * @param taglist_id
+	 * @return
+	 */
+	@RequestMapping("/admin/viewflash")
+	public ModelAndView submit(HttpSession session){
+		
+		  Map<String, Object> map = new HashMap<String, Object>();
+		  map.put("str3",",");
+		 
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(map);
+		mav.setViewName("redirect:/admin/viewTags");
+		return mav;
+	}
 }

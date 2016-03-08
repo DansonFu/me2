@@ -258,4 +258,9 @@
       pid = #{pid}
     where id = #{id}
   </update>
+   <select id="strsplit1" statementType="CALLABLE">
+  	{
+  		call pro( #{str3,jdbcType=INTEGER,mode=IN})
+  	}
+  </select>
 </mapper>

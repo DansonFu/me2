@@ -23,6 +23,7 @@ import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
+import com.lettucetech.me2.pojo.Gamecustomer;
 import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Pictureagree;
@@ -528,5 +529,21 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
-	
+	/**
+	 * 根据pid获取picture对象
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value="/pictures/{pid}/gain",method=RequestMethod.POST)
+	public ModelAndView gainpictures(HttpSession session,@PathVariable String pid) {
+		Picture picture =pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(picture);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 }

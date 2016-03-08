@@ -22,9 +22,11 @@ import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtMenu;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Tagsconnection;
+import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.TXtUserService;
 import com.lettucetech.me2.service.TagsconnectionService;
+import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 
 
@@ -38,7 +40,8 @@ public class PicturehotController {
 		private PicturehotService pictureHotService;
 	@Autowired
 	private TagsconnectionService tagsconnectionService;
-		
+	@Autowired
+	private TagshotService tagshotService;
 	/**
 	 * 跳转查看热门标签帖页面
 	 * @param session
@@ -92,6 +95,8 @@ public class PicturehotController {
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
 	    Criteria example = new Criteria();
+	    example.setOrderByClause("hits");
+	    example.setSord("asc");
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    example.put("state", "0");
@@ -103,15 +108,16 @@ public class PicturehotController {
 		}
 	    
 	    int count = pictureHotService.countByParams(example);
-	    List<Tagsconnection> metoo = tagsconnectionService.selectByParams(example);
+	    List<Tagshot> metoo = tagshotService.selectByParams(example);
 	    
 	    //拼接翻页数据
+	    //加一个条件判断图片是否重复,并去重?
 	    List list = new ArrayList();
-		for(Tagsconnection obj : metoo){
-			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getTagshot().getQiniukey();
-			String[] d = {obj.getTagsId().toString(),obj.getTagshot().getTag(),aurl,obj.getTagshot().getAcount().toString(),
-					obj.getTagshot().getHits().toString(),obj.getTagshot().getMefriends().toString(),obj.getTagshot().getQiniukey(),
-					DateUtil.dateFormatToString(obj.getTagshot().getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+		for(Tagshot obj : metoo){
+			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
+			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
+					obj.getHits().toString(),obj.getMefriends().toString(),
+					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
 			
 			
 			list.add(d);

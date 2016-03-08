@@ -13,7 +13,7 @@ public class Gamecustomer implements Serializable {
     private Integer pid;
 
     /**
-     * 用户id，如果customer_id等-1代表对所有用户解蜜
+     * 用户id，如果customer_id等-1代表对所有用户解蜜,等于0的时候拒绝所有用户解密
      */
     private Integer customerId;
 
@@ -41,7 +41,7 @@ public class Gamecustomer implements Serializable {
     }
 
     /**
-     * @return 用户id，如果customer_id等-1代表对所有用户解蜜
+     * @return 用户id，如果customer_id等-1代表对所有用户解蜜,等于0的时候拒绝所有用户解密
      */
     public Integer getCustomerId() {
         return customerId;
@@ -49,7 +49,7 @@ public class Gamecustomer implements Serializable {
 
     /**
      * @param customerId 
-	 *            用户id，如果customer_id等-1代表对所有用户解蜜
+	 *            用户id，如果customer_id等-1代表对所有用户解蜜,等于0的时候拒绝所有用户解密
      */
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;

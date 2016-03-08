@@ -9,7 +9,7 @@ public class Tagsconnection implements Serializable {
 
     private Integer tagsId;
     
-    private Tagshot tagshot;
+//    private Tagshot tagshot;
     
     private String tagslistId;
 
@@ -17,13 +17,13 @@ public class Tagsconnection implements Serializable {
         return id;
     }
 
-    public Tagshot getTagshot() {
-		return tagshot;
-	}
-
-	public void setTagshot(Tagshot tagshot) {
-		this.tagshot = tagshot;
-	}
+//    public Tagshot getTagshot() {
+//		return tagshot;
+//	}
+//
+//	public void setTagshot(Tagshot tagshot) {
+//		this.tagshot = tagshot;
+//	}
 
 	public void setId(Integer id) {
         this.id = id;
