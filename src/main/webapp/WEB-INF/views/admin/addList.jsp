@@ -38,21 +38,26 @@
                                     <div class="col-lg-3 input-column">
                                        	新建集合：
                                     </div>
+                                    <br/>
+                                    <br/>
                                     <div class="col-lg-9">
                                     	id:&nbsp;&nbsp;&nbsp;<input type="hidden" id="id" name="id" value="${list.id}">
 										 <br/>
+										 <br/>
+										 <br/>
                                        	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${list.num}">
 										 <br/>
-								<div class="row form-group">
-                            		<div class="col-lg-6">
-                                    <div class="col-lg-3 input-column" style="height: 120px">
+										<br/>
+										<br/>
+                            		
+                                    
                                        	<span class="dangger" style="color: red">*</span> 七牛：
-                                    </div>
+                                  
                                     <div class="col-lg-3" style="height: 120px">
                                     	<input type="file" name="afile"/>
-                                    </div>
-                                   
-                                </div>
+                                    
+                                   		<br/>
+                               			<br/>
 										 <br/>
 										集合名称:<input type="text" name="title"  value="${list.title}"/>
                                     </div>

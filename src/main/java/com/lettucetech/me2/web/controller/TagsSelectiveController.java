@@ -106,31 +106,22 @@ public class TagsSelectiveController {
 	  
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
-	    //是否有查看所有人权限
 
-//		if(!"-1".equals(userId)){
-//			example.put("userId", userId);
-//		}
-//	    
 	    int count = tagsconnectionService.countByParams(example);
 	    List<Tagshot> conn = tagshotService.selectByParams(example);
 	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
 	    //拼接翻页数据
 	    List list = new ArrayList();
-	    	String g = null;
-	    	for(Tagsconnection tagsconn : metoo){
-	    		g =tagsconn.getTagslistId();
-	    		
-	    	}
-	    		for(Tagshot obj:conn){
+	   
+	    		for(Tagsconnection obj:metoo){
 	    			
-	    		
+	    			Tagshot tagshot=tagshotService.selectByPrimaryKey(obj.getTagsId());
 			//加一个条件,判断是在哪一个集合中?
-	    		if(taglist.equals(g)){
+	    		if(taglist.equals(obj.getTagslistId())){
 			
-	    			String[] d={obj.getId().toString(),obj.getTag(),obj.getAcount().toString()
-						,obj.getHits().toString(),obj.getMefriends().toString(),
-						DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
+	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
+						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
+						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 	    			list.add(d);	
 				}
 	    		}
@@ -228,7 +219,6 @@ public class TagsSelectiveController {
 	@RequestMapping(value="/admin/reagain")
 	public ModelAndView saveselective(HttpSession session){
 
-		Tagsconnection c=new Tagsconnection();
 		
 		
 		ModelAndView mav = new ModelAndView();

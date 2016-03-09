@@ -35,38 +35,49 @@
 			 <div class="panel panel-default">
                     <div class="panel-body">
                     	<form class="form-bordered"  id="me2form" action="<%=basePath %>admin/saveList" method="post" enctype="multipart/form-data">
-                            <div class="col-lg-3 input-column">
+                            
                                        	修改集合：
                                     <div>
+                                    
+                                   		
                                    		id:&nbsp;&nbsp;&nbsp;<input type="hidden" id="id" name="id" value="${taglist.id}">
-										 <br/>
-                                       	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${taglist.num}">
-										 <br/>
-										 <div>
-										<div class="row form-group">
-                            		<div class="col-lg-6">
-                                    <div class="col-lg-3 input-column" style="height: 120px">
-                                    <br/>
-                                       	<span class="dangger" style="color: red">*</span> 七牛：
-                                    </div>
-                                    </div>
-                                    <div class="col-lg-3" style="height: 120px">
-                                    	<input type="file" name="afile"/>
-                                    </div>
-                                    <div class="col-lg-9">
-                                    	<img  src=" ${domain}/${taglist.qiniukey}" width="70px" height="70px" name="key"/>
-                                    </div>
-                                </div>
-                                </div>
-										 <br/>
+                                   		
+                        			<div>
 										集合名称:<input type="text" name="title"  value="${taglist.title}"/>
-                        			</div>
-							</div>
-          				</form>
-					</div>
-				</div>
-			</div>
+                        		</div>
+                                   	</div>
+										 <br/>
+										
+                                   		
+									 <div>
+                                       	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${taglist.num}">
+									 </div>
+										
+                                   		 
+                                    
+                                       	<span class="dangger" style="color: red">*</span> 七牛：
+                                  	 	
+                                   		
+                                   		  	&nbsp;&nbsp;&nbsp;
+                               			 &nbsp;&nbsp;&nbsp;
+                               			 &nbsp;&nbsp;&nbsp;
+                                		&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;
+                               			 &nbsp;&nbsp;&nbsp;
+                               			
+                                    	<img  src="${taglist.qiniukey}" width="70px" height="70px" name="key"/>
+                                   
+                                
+                                    	<input type="file" name="afile"/>
+                                    	
+                                   
+                              
+							</form>
+          				</div>
+          				</div>
+          				</div>
+				
 						 <br>
+						 
 				               <div  style="text-align: center">
 								<div >
 									<button class="btn btn-primary" type="button" onclick="submitform()">
@@ -75,7 +86,7 @@
 									</button>
 				
 									&nbsp; &nbsp; &nbsp;
-									<button class="btn" type="reset">
+									<button class="btn" type="reset" id="back">
 										<i class="icon-undo bigger-110"></i>
 										取消
 									</button>
