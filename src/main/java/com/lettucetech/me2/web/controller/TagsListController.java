@@ -23,6 +23,7 @@ import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
@@ -109,7 +110,7 @@ public class TagsListController {
     }
     Criteria example = new Criteria();
     example.put("taglist", taglist);
-    example.setOrderByClause("id");
+    example.setOrderByClause("num");
     example.setSord("asc");
 //    example.setMysqlOffset(iDisplayStart);
 //    example.setMysqlLength(iDisplayLength);
@@ -124,7 +125,7 @@ public class TagsListController {
 		for(Taglist obj : metoo){
 			
 			//String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum()};
-			String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum()};
+			String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum().toString()};
 			list.add(d);
 		}
 		
@@ -178,7 +179,7 @@ public class TagsListController {
 		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setNum(num);
+		list.setNum(Integer.valueOf(num));
 		
 		tagListService.updateByPrimaryKeySelective(list);
 		
@@ -233,7 +234,7 @@ public class TagsListController {
 //		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setNum(num);
+		list.setNum(Integer.valueOf(num));
 		tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();
 	
@@ -259,4 +260,80 @@ public class TagsListController {
 //	}
 
 }
+	/**
+	 * 推荐图片当中顺序上调的方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/upcommendmetoo")
+	public  ModelAndView upcommendmetoo(HttpSession session,String id){
+		Taglist prec = tagListService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = prec.getSort();
+		Integer b = null;
+		
+		Criteria example = new Criteria();
+		example.put("sort", a-1);
+		List<Taglist> lpc = tagListService.selectByParams(example);
+		for(Taglist pc:lpc){
+			if(pc.getSort().equals(a-1)){
+				b = pc.getId();
+				break;
+			}
+		}
+		Taglist prec1 = tagListService.selectByPrimaryKey(b);
+		prec1.setSort(a);
+		tagListService.updateByPrimaryKeySelective(prec1);
+		prec.setSort(a-1);
+		tagListService.updateByPrimaryKeySelective(prec);
+		
+		//Integer a = prec.getSort();
+		
+//		Picturerecommend pc = new Picturerecommend();
+//		
+//		pc.setPid(pid);
+//		
+//		pc.setSort(sort+1);
+//		picurerecommendService.insert(pc);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/showcommendcheck");
+		return mav;
+	}
+	
+	/**
+	 * 推荐图片当中顺序下调的方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/downcommendmetoo")
+	public  ModelAndView downcommendmetoo(HttpSession session,String id){
+		Taglist prec = tagListService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = prec.getSort();
+		Integer b = null;
+		
+		Criteria example = new Criteria();
+		example.put("sort", a+1);
+		List<Taglist> lpc = tagListService.selectByParams(example);
+		for(Taglist pc:lpc){
+			if(pc.getSort().equals(a+1)){
+				b = pc.getId();
+				break;
+			}
+		}
+		Taglist prec1 = tagListService.selectByPrimaryKey(b);
+		prec1.setSort(a);
+		tagListService.updateByPrimaryKeySelective(prec1);
+		prec.setSort(a+1);
+		tagListService.updateByPrimaryKeySelective(prec);
+//		Picturerecommend pc = new Picturerecommend();
+//		
+//		pc.setPid(pid);
+//		
+//		pc.setSort(sort+1);
+//		picurerecommendService.insert(pc);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/admin/showcommendcheck");
+		return mav;
+	}
 }

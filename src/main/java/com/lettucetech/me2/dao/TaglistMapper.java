@@ -1,12 +1,9 @@
 package com.lettucetech.me2.dao;
 
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Taglist;
-
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface TaglistMapper {
@@ -64,6 +61,4 @@ public interface TaglistMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(Taglist record);
-    
-
 }

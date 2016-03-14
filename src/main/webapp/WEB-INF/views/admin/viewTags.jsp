@@ -35,21 +35,24 @@
 		<h3 class="header smaller lighter blue">所有标签</h3>
 		
 		</div>
+		
 		 <div class="col-lg-6">
 		 	<div style="float:right;">
                         <div class="col-lg-3 input-column">
                                        	排序方式：
                                     </div>
                                     <div class="col-lg-9">
-                                    	<select name="wayid" >
-											<option value="0">id</option>
+                                    	<select id="wayid" onchange="way()"name="selectway">
+											<option value="0">标签ID</option>
 											<option value="1">更新时间</option>
 											<option value="2">热度</option>
 											<option value="3">帖子数</option>
 										</select>
+										
 										</div>
                                     </div>
                                 </div>
+                               
 		<br>
 		<br>
 		<form action="<%=basePath %>admin/viewflash" id="formid" method="post">
@@ -85,7 +88,7 @@
 						<th class="center">蜜友</th>
 						<th class="center">更新时间</th>
 						<th class="center">添加热门标签</th>
-						<th class="center">删除标签</th>
+						
 						<th class="center">添加推荐标签</th>
 					</tr>
 				</thead>
@@ -132,22 +135,9 @@ function add(id){
     	        	   }
 			    	           },
 			    	         
+				
 				{
 					"aTargets" : [ 7 ],
-					"fnRender" : function(
-							data, type) {
-						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-
-						str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-						str += '<i class="icon-trash bigger-130"></i>';
-						str += '</a>';
-
-						str += '</div>';
-						return str;
-					}
-				},
-				{
-					"aTargets" : [ 8 ],
 					"fnRender" : function(
 							data, type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
@@ -159,7 +149,7 @@ function add(id){
 						str += '</div>';
 						return str;
 					}
-				},
+				}
 			    	         ],
 			  "bServerSide": true,//这个用来指明是通过服务端来取数据
 		     "sAjaxSource": "<%=basePath %>admin/getmetooByTags",  	//这个是请求的地址
@@ -184,6 +174,10 @@ function add(id){
 		  }
 		  function searching(){
 				$("#formid").submit();
+				$(":button").attr("disable",true);
+			}
+		  function way(){
+				$("#wayid").submit();
 				$(":button").attr("disable",true);
 			}
 	});

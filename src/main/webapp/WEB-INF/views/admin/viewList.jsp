@@ -50,6 +50,7 @@
 						<th class="center">集合名称</th>
 						<th class="center">排序</th>
 						<th class="center">操作</th>
+						<th class="center">调整</th>
 					</tr>
 				</thead>
 		
@@ -65,7 +66,13 @@
 
 <script type="text/javascript">
 
+function up(id){
+	window.location="<%=basePath %>admin/upcommendmetoo?id="+id;
+}
 
+function down(id){
+	window.location="<%=basePath %>admin/downcommendmetoo?id="+id;
+}
 	
 	function update(id){
 		window.location="<%=basePath %>admin/viewupdateList?id="+id;
@@ -100,8 +107,22 @@
 												str += '</div>';
 							   					return  str;
 						 }
-						 }, 
-						
+						 } ,
+						  {
+				   	        	 "aTargets": [4],
+				 	        	   "fnRender":function(data,type){
+				 	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+//				 	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
+//				 	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+//				 	        			str += '</a>';
+				 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
+				   	        			str += '</div>';
+				   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
+				   	        			str += '</div>';
+				 	        			
+				 	        		   return  str;
+				 	        	   }
+				   	           },
 						 ],
 				"bServerSide" : true,//这个用来指明是通过服务端来取数据
 				"sAjaxSource" : "<%=basePath %>admin/getmetoo/connect",  //这个是请求的地址

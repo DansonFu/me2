@@ -17,10 +17,9 @@ public class Taglist implements Serializable {
      */
     private String qiniukey;
 
-    /**
-     * 顺序
-     */
-    private String num;
+    private Integer num;
+
+    private Integer sort;
 
     public Integer getId() {
         return id;
@@ -60,18 +59,19 @@ public class Taglist implements Serializable {
         this.qiniukey = qiniukey;
     }
 
-    /**
-     * @return 顺序
-     */
-    public String getNum() {
+    public Integer getNum() {
         return num;
     }
 
-    /**
-     * @param num 
-	 *            顺序
-     */
-    public void setNum(String num) {
+    public void setNum(Integer num) {
         this.num = num;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

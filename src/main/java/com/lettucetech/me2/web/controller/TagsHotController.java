@@ -103,7 +103,7 @@ public class TagsHotController {
 	    String sEcho = null;
 	    int iDisplayStart = 0; // 起始索引
 	    int iDisplayLength = 0; // 每页显示的行数
-	 
+	    
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
 	    	 if (obj.get("name").equals("sEcho"))
@@ -114,26 +114,27 @@ public class TagsHotController {
 	  
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	         
 	    }
-	    int a=1;
+	     
 	    Criteria example = new Criteria();
-	    switch(a){
-	    case 1:
-		    example.setOrderByClause("last_time");
-		    example.setSord("desc");
-		    break;
-	    case 2:
-	    	example.setOrderByClause("hits");
-	 	    example.setSord("desc");
-	 	    break;
-	    case 3:
-	    	 example.setOrderByClause("acount");
-	 	    example.setSord("desc");
-	 	    break;
-	    default :
-	    	 example.setOrderByClause("id");
-	 	    example.setSord("desc");
-	    }
+	    
+//    if( a != null && a>="1"){
+//		    example.setOrderByClause("last_time");
+//		    example.setSord("desc");
+//		    }
+//	    else if(a="2" && a!=null && a!=""){
+//	    	example.setOrderByClause("hits");
+//	 	    example.setSord("desc");
+//	 	 }
+//	    else if(a="3" && a!=null && a!=""){
+//	    	 example.setOrderByClause("acount");
+//	 	    example.setSord("desc");
+//	 	   }
+//	    else if(a="0" && a!=null && a!=""){
+//	    	 example.setOrderByClause("id");
+//	 	    example.setSord("desc");
+//	    }
 	    
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
