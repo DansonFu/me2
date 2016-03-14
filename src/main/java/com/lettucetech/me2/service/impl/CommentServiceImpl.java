@@ -4,7 +4,9 @@ import com.lettucetech.me2.dao.CommentMapper;
 import com.lettucetech.me2.pojo.Comment;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.service.CommentService;
+
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +64,8 @@ public class CommentServiceImpl implements CommentService {
     public int insertSelective(Comment record) {
         return this.commentMapper.insertSelective(record);
     }
+
+	public List<Comment> selectByPid(Integer pid) {
+		return this.commentMapper.selectByPid(pid);
+	}
 }

@@ -102,7 +102,7 @@
    	           {
    	        	   "aTargets": [2],
    	        	   "fnRender":function(data,type){
-   	        		   return  '<img src="'+data.aData[2]+'" width="100px" height="100px">';
+   	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
    	        	   }
    	           },
    	        	{
@@ -110,7 +110,7 @@
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[4]==1){
-   	        				str = '<img src="'+data.aData[3]+'" width="100px" height="100px">';
+   	        				str = '<a href="'+data.aData[3]+'" target="_blank" id="abpicture"><img src="'+data.aData[3]+'" width="100px" height="100px" id="b"> </a>';
    	        		   }else{
    	        				str = data.aData[3];
    	        		   }

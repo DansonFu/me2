@@ -43,6 +43,11 @@ public interface CommentMapper {
     Comment selectByPrimaryKey(Integer commentId);
 
     /**
+     *根据图片id查询记录 
+     */
+    List<Comment> selectByPid(Integer pid);
+    
+    /**
      * 根据条件更新属性不为空的记录
      */
     int updateByParamsSelective(@Param("record") Comment record, @Param("condition") Map<String, Object> condition);
