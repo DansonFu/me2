@@ -98,7 +98,7 @@ public class ChechPictureController {
 	    example.setOrderByClause("creat_time");
 	    example.setSord("desc");
 	    example.put("front", "a");
-	    example.put("del", "0");
+//	    example.put("del", "0");
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 
@@ -481,15 +481,15 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/checkview/comment")
-	public ModelAndView commontcontentPicture(String pid){
+	public ModelAndView commontcontentPicture(HttpSession session){
 		Criteria example = new Criteria();
 //		example.setOrderByClause("creat_time");
-	    example.put("pid", pid);
-		List<Comment> cs = commentService.selectByParams(example);
+//	    example.put("pid", pid);
+//		List<Comment> cs = commentService.selectByParams(pid);
 		
 		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject(cs);
+//		mav.addObject(cs);
 		mav.setViewName("/admin/commentmetoodel");
 		return mav;
 		
@@ -502,7 +502,7 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/check/comment")
-public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData){
+public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData,Integer pid){
 		
 		
 		
@@ -524,12 +524,14 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	    }
 		
 	    Criteria example = new Criteria();
-//		example.put("id", id);
-	    example.setOrderByClause("creat_time");
-	    example.setSord("desc");
-	    example.put("del", "0");
+	    example.setMysqlOffset(iDisplayStart);
+	    example.setMysqlLength(iDisplayLength);
+		example.put("pid", pid);
+//	    example.setOrderByClause("creat_time");
+//	    example.setSord("desc");
+//	    example.put("del", "0");
 		int count = commentService.countByParams(example);
-		List<Comment> clist = commentService.selectByParams(example);
+		List<Comment> clist = commentService.selectByPid(pid);
 		
 		
 		List list = new ArrayList();
