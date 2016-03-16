@@ -51,10 +51,11 @@
 						</th>
 						<th class="center">用户</th>
 						<th class="center">A面</th>
+						<th class="center">A面心情</th>
 						<th class="hidden-480 center">B面</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
-						<th class="center">心情</th>
+						<th class="center">B面心情</th>
 						<th class="center">发贴者</th>
 						<th class="center">创建时间</th>
 						<th class="center">操作</th>
@@ -102,7 +103,7 @@
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [4],
+   	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[4]=="1"){
@@ -117,7 +118,7 @@
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [9],
+   	        	   "aTargets": [10],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';

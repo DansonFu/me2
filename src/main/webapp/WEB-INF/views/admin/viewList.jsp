@@ -67,11 +67,11 @@
 <script type="text/javascript">
 
 function up(id){
-	window.location="<%=basePath %>admin/upcommendmetoo?id="+id;
+	window.location="<%=basePath %>admin/upcommend?id="+id;
 }
 
 function down(id){
-	window.location="<%=basePath %>admin/downcommendmetoo?id="+id;
+	window.location="<%=basePath %>admin/downcommend?id="+id;
 }
 	
 	function update(id){

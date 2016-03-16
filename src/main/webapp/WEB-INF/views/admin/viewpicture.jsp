@@ -65,6 +65,9 @@
                             <a class="close-link">
                                 <i class="fa fa-times"></i>
                             </a>
+                            <div>
+                            <h3>发布密图</h3>
+                            </div>
                         </div>
                         <h4>随机用户信息</h4>
                     </div>

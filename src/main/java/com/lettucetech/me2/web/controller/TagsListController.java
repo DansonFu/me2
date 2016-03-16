@@ -266,8 +266,8 @@ public class TagsListController {
 	 * @param pid
 	 * @return
 	 */
-	@RequestMapping("admin/upcommendmetoo")
-	public  ModelAndView upcommendmetoo(HttpSession session,String id){
+	@RequestMapping("admin/upcommend")
+	public  ModelAndView upcommend(HttpSession session,String id){
 		Taglist prec = tagListService.selectByPrimaryKey(Integer.valueOf(id));
 		Integer a = prec.getSort();
 		Integer b = null;
@@ -296,7 +296,7 @@ public class TagsListController {
 //		pc.setSort(sort+1);
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/showcommendcheck");
+		mav.setViewName("redirect:/admin/viewList");
 		return mav;
 	}
 	
@@ -306,8 +306,8 @@ public class TagsListController {
 	 * @param pid
 	 * @return
 	 */
-	@RequestMapping("admin/downcommendmetoo")
-	public  ModelAndView downcommendmetoo(HttpSession session,String id){
+	@RequestMapping("admin/downcommend")
+	public  ModelAndView downcommend(HttpSession session,String id){
 		Taglist prec = tagListService.selectByPrimaryKey(Integer.valueOf(id));
 		Integer a = prec.getSort();
 		Integer b = null;
@@ -333,7 +333,7 @@ public class TagsListController {
 //		pc.setSort(sort+1);
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/showcommendcheck");
+		mav.setViewName("redirect:/admin/viewList");
 		return mav;
 	}
 }

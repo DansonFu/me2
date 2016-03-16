@@ -8,7 +8,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>蜜图管理台(发布密图)</title>
+		<title>蜜图管理台</title>
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -65,6 +65,9 @@
                             <a class="close-link">
                                 <i class="fa fa-times"></i>
                             </a>
+                            <div>
+                            <h2>发布密图</h2>
+                            </div>
                         </div>
                         <h4>随机用户信息</h4>
                     </div>
@@ -143,8 +146,8 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="col-lg-3 input-column">
-                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔，最多五个标签，每标签最多7个字)：
+                                    <div class="col-lg-3 input-column" >
+                                       	<span class="dangger" style="color: red">*</span>标签<span style="color:red">(半角符号 # 分隔，最多五个标签，每标签最多7个字)：</span>
                                     </div>
                                     <div class="col-lg-9">
                                     	<input type="text" name="tags" style="width:80%;" value="${customer.username } #"/>
@@ -180,7 +183,7 @@
                                 
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                       	心情：
+                                       	A面心情：
                                     </div>
                                     <div class="col-lg-9">
                                     	<input type="text" name="feel" style="width:80%;"/>

@@ -87,9 +87,9 @@
 						<th class="center">帖子数</th>
 						<th class="center">蜜友</th>
 						<th class="center">更新时间</th>
-						<th class="center">添加热门标签</th>
+						<th class="center">添加到精选集合</th>
 						
-						<th class="center">添加推荐标签</th>
+						<th class="center">添加到热门标签</th>
 					</tr>
 				</thead>
 					

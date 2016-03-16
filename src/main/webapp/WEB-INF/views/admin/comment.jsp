@@ -172,10 +172,18 @@
                                 <!-- col-lg-6 -->
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                        	心情：
+                                        	A面心情：
                                     </div>
                                     <div class="col-lg-9">
-										<label id="mood">${picture.mood }</label>
+										<label id="amood">${picture.mood }</label>
+                                    </div>
+                                </div>
+                                 <div class="col-lg-6">
+                                    <div class="col-lg-3 input-column">
+                                        	B面心情：
+                                    </div>
+                                    <div class="col-lg-9">
+										<label id="bmood">${bpicture.mood }</label>
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -337,7 +345,8 @@
 				$("#afront").attr("href",domain+"/"+data[0].qiniukey);
 				$("#imgfront").attr("src",domain+"/"+data[0].qiniukey);
 				$("#tags").text(data[0].tags);
-				$("#mood").text(data[0].mood);
+				$("#amood").text(data[0].mood);
+				$("#bmood").text(data[0].mood);
 				$("#location").text(data[0].locationTitle+":"+data[0].locationContent);
 				$("#creatTime").text(data[0].creatTime);
 				$("#pid").val(data[0].pid);
