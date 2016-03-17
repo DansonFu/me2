@@ -7,6 +7,8 @@ public class DataTablePaginationForm {
 	private int iTotalRecords;
 	private int iTotalDisplayRecords;
 	private List aaData;
+	
+	
 	public String getsEcho() {
 		return sEcho;
 	}

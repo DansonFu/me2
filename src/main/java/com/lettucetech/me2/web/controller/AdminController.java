@@ -499,7 +499,7 @@ public class AdminController {
 	    String sEcho = null;
 	    int iDisplayStart = 0; // 起始索引
 	    int iDisplayLength = 0; // 每页显示的行数
-	 
+//	    String sear="";
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
 	    	 if (obj.get("name").equals("sEcho"))
@@ -510,6 +510,9 @@ public class AdminController {
 	  
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	         
+//	         if(obj.get("name").equals("sear"))
+//	        	 sear=obj.get("value").toString();
 	    }
 	    Criteria example = new Criteria();
 	    example.setMysqlOffset(iDisplayStart);
@@ -532,7 +535,7 @@ public class AdminController {
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
 			String burl="";
 			String type="";
-			String bmood="";
+			
 			//如果有B面
 			if(obj.getPicture().getBpicture()!=null){
 				if(obj.getPicture().getBpicture().getType().equals("1")){
@@ -540,15 +543,12 @@ public class AdminController {
 				}else{
 					burl = obj.getPicture().getBpicture().getQiniukey();
 				}
-				type = obj.getPicture().getBpicture().getType();
-				
-			}
-			if(obj.getPicture().getFront().equals("b")){
-				bmood=obj.getPicture().getMood();
+					type = obj.getPicture().getBpicture().getType();
 			}
 			
+			
 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
+					obj.getPicture().getTags(),obj.getUser().getName(),
 					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
 			list.add(d);
 		}

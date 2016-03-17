@@ -40,6 +40,7 @@
 				</c:forEach>
 			</select>
 		</div>
+		
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -55,7 +56,7 @@
 						<th class="hidden-480 center">B面</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
-						<th class="center">B面心情</th>
+						
 						<th class="center">发贴者</th>
 						<th class="center">创建时间</th>
 						<th class="center">操作</th>
@@ -84,24 +85,24 @@
 			"bSort":false,
 			"bFilter": false,
 			"aoColumnDefs": [
-   	           {
-   	        	   "aTargets": [2],
-   	        	   "fnRender":function(data,type){
-   	        		   return  '<img src="'+data.aData[2]+'" width="100px" height="100px">';
-   	        	   }
-   	           },
-   	        	{
-   	        	   "aTargets": [3],
-   	        	   "fnRender":function(data,type){
-   	        		   var str = "";
-   	        		   if(data.aData[4]==1){
-   	        				str = '<img src="'+data.aData[3]+'" width="100px" height="100px">';
-   	        		   }else{
-   	        				str = data.aData[3];
-   	        		   }
-   	        		   return  str;
-   	        	   }
-   	           },
+			                 {
+			     	        	   "aTargets": [2],
+			     	        	   "fnRender":function(data,type){
+			     	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
+			     	        	   }
+			     	           },
+			     	        	{
+			     	        	   "aTargets": [3],
+			     	        	   "fnRender":function(data,type){
+			     	        		   var str = "";
+			     	        		   if(data.aData[4]==1){
+			     	        				str = '<a href="'+data.aData[3]+'" target="_blank" id="abpicture"><img src="'+data.aData[3]+'" width="100px" height="100px" id="b"> </a>';
+			     	        		   }else{
+			     	        				str = data.aData[3];
+			     	        		   }
+			     	        		   return  str;
+			     	        	   }
+			     	           },
    	        	{
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
@@ -118,7 +119,7 @@
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [10],
+   	        	   "aTargets": [9],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
@@ -162,6 +163,7 @@
 		  $("#userId").bind("change", function(){
 			  oTable1.fnPageChange('first');
 		  });
+		
 
 	});
 	 

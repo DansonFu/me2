@@ -35,14 +35,14 @@
 		<h3 class="header smaller lighter blue">所有标签</h3>
 		
 		</div>
-		
+		<form action="<%=basePath %>admin/getmetooByTags" id="wayid" method="post">
 		 <div class="col-lg-6">
 		 	<div style="float:right;">
                         <div class="col-lg-3 input-column">
                                        	排序方式：
                                     </div>
                                     <div class="col-lg-9">
-                                    	<select id="wayid" onchange="way()"name="selectway">
+                                    	<select  onchange="way()"name="selectway">
 											<option value="0">标签ID</option>
 											<option value="1">更新时间</option>
 											<option value="2">热度</option>
@@ -52,6 +52,7 @@
 										</div>
                                     </div>
                                 </div>
+                              </form>
                                
 		<br>
 		<br>
@@ -65,7 +66,7 @@
 		</form>
 		<br>
 		<br>
-		<form action="<%=basePath %>admin/viewsearch" id="formid" method="post">
+		<form action="<%=basePath %>admin/getmetooByTags" id="formid" method="post">
 		<div style="float:left;">
 			&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<input type="text" name="search"  />
 			
@@ -126,7 +127,7 @@ function add(id){
     	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
-    	        			str += '<a class="green" href="javascript:void(0);" onclick="add('+"'"+data.aData[0]+"'"+')" >';
+    	        			str += '<a class="green" href="javascript:void(0);" onclick="add('+"'"+data.aData[6]+"'"+')" >';
     	        			str += '<i class="icon-check-empty bigger-130"></i>';
     	        			str += '</a>';
     	        			
@@ -142,7 +143,7 @@ function add(id){
 							data, type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
-						str += '<a class="blue" href="javascript:void(0);" onclick="recommend('+"'"+data.aData[0]+"'"+')" >';
+						str += '<a class="blue" href="javascript:void(0);" onclick="recommend('+"'"+data.aData[7]+"'"+')" >';
 						str += '<i class="icon-check bigger-130"></i>';
 						str += '</a>';
 

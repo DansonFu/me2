@@ -108,7 +108,7 @@ public class TagsSelectiveController {
 	    example.setMysqlLength(iDisplayLength);
 
 	    int count = tagsconnectionService.countByParams(example);
-	    List<Tagshot> conn = tagshotService.selectByParams(example);
+	    
 	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
 	    //拼接翻页数据
 	    List list = new ArrayList();

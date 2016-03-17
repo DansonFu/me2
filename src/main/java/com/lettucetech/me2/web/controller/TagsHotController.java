@@ -96,14 +96,15 @@ public class TagsHotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetooByTags")
-	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData) {
+	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String sear,String font) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
 	    int iDisplayStart = 0; // 起始索引
 	    int iDisplayLength = 0; // 每页显示的行数
-	    
+	   
+	   
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
 	    	 if (obj.get("name").equals("sEcho"))
@@ -115,27 +116,33 @@ public class TagsHotController {
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	         
+	         if(obj.get("name").equals("sear"))
+	        	 sear=obj.get("value").toString();
+	         
+//	         if(obj.get("name").equals("font"))
+//	        	 font=obj.get("value");
 	    }
 	     
 	    Criteria example = new Criteria();
 	    
-//    if( a != null && a>="1"){
-//		    example.setOrderByClause("last_time");
-//		    example.setSord("desc");
-//		    }
-//	    else if(a="2" && a!=null && a!=""){
-//	    	example.setOrderByClause("hits");
-//	 	    example.setSord("desc");
-//	 	 }
-//	    else if(a="3" && a!=null && a!=""){
-//	    	 example.setOrderByClause("acount");
-//	 	    example.setSord("desc");
-//	 	   }
-//	    else if(a="0" && a!=null && a!=""){
-//	    	 example.setOrderByClause("id");
-//	 	    example.setSord("desc");
-//	    }
-	    
+    if( font=="1"){
+		    example.setOrderByClause("last_time");
+		    example.setSord("desc");
+		    }
+	    else if(font=="2"){
+	    	example.setOrderByClause("hits");
+	 	    example.setSord("desc");
+	 	 }
+	    else if(font=="3"){
+	    	 example.setOrderByClause("acount");
+	 	    example.setSord("desc");
+	 	   }
+	    else if(font=="0"){
+	    	 example.setOrderByClause("id");
+	 	    example.setSord("desc");
+	    }
+	    example.put("sear", sear);
+	    example.put("font", font);
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -170,7 +177,7 @@ public class TagsHotController {
 		dtpf.setiTotalDisplayRecords(count);
 		dtpf.setiTotalRecords(count);
 		dtpf.setAaData(list);
-	    
+
 		String jsonArray = JsonUtil.Encode(dtpf);
 		
 		try {
@@ -254,12 +261,26 @@ public class TagsHotController {
 		return mav;
 		
 	}
-	/**
-	 * 搜索标签
-	 * 
-	 */
-//	@RequestMapping(value="/admin/searchtag")
-//	public ModelAndView search(HttpSession session){
+//	/**
+//	 * 搜索标签
+//	 * 
+//	 */
+////	@RequestMapping(value="/admin/searchtag")
+////	public ModelAndView search(HttpSession session){
+////		//String str =(String)session.getAttribute("str");
+////		
+////		String str=request.getParameter("search");
+////		Criteria example = new Criteria();
+////		
+////		example.put("str", str);
+////		tagshotService.selectByParams(example);
+////		ModelAndView mav = new ModelAndView();
+////		mav.addObject("str",str);
+////		mav.setViewName("redirect:/admin/searchTag");
+////		return mav;
+////}
+//	@RequestMapping(value="/admin/viewsearch")
+//	public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
 //		//String str =(String)session.getAttribute("str");
 //		
 //		String str=request.getParameter("search");
@@ -272,20 +293,6 @@ public class TagsHotController {
 //		mav.setViewName("redirect:/admin/searchTag");
 //		return mav;
 //}
-	@RequestMapping(value="/admin/viewsearch")
-	public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
-		//String str =(String)session.getAttribute("str");
-		
-		String str=request.getParameter("search");
-		Criteria example = new Criteria();
-		
-		example.put("str", str);
-		tagshotService.selectByParams(example);
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("str",str);
-		mav.setViewName("redirect:/admin/searchTag");
-		return mav;
-}
 	
 	/**
 	 * 刷新

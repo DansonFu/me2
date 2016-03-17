@@ -123,9 +123,9 @@ public class TagsListController {
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Taglist obj : metoo){
-			
+			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 			//String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum()};
-			String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum().toString()};
+			String[] d={obj.getId().toString(),obj.getTitle(),aurl,obj.getNum().toString()};
 			list.add(d);
 		}
 		
@@ -261,15 +261,15 @@ public class TagsListController {
 
 }
 	/**
-	 * 推荐图片当中顺序上调的方法
+	 * 精选集合当中顺序上调的方法
 	 * @param session
 	 * @param pid
 	 * @return
 	 */
 	@RequestMapping("admin/upcommend")
 	public  ModelAndView upcommend(HttpSession session,String id){
-		Taglist prec = tagListService.selectByPrimaryKey(Integer.valueOf(id));
-		Integer a = prec.getSort();
+		Taglist list=tagListService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = list.getSort();
 		Integer b = null;
 		
 		Criteria example = new Criteria();
@@ -284,8 +284,8 @@ public class TagsListController {
 		Taglist prec1 = tagListService.selectByPrimaryKey(b);
 		prec1.setSort(a);
 		tagListService.updateByPrimaryKeySelective(prec1);
-		prec.setSort(a-1);
-		tagListService.updateByPrimaryKeySelective(prec);
+		list.setSort(a-1);
+		tagListService.updateByPrimaryKeySelective(list);
 		
 		//Integer a = prec.getSort();
 		
@@ -301,15 +301,15 @@ public class TagsListController {
 	}
 	
 	/**
-	 * 推荐图片当中顺序下调的方法
+	 * 精选集合当中顺序下调的方法
 	 * @param session
 	 * @param pid
 	 * @return
 	 */
 	@RequestMapping("admin/downcommend")
 	public  ModelAndView downcommend(HttpSession session,String id){
-		Taglist prec = tagListService.selectByPrimaryKey(Integer.valueOf(id));
-		Integer a = prec.getSort();
+		Taglist list=tagListService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = list.getSort();
 		Integer b = null;
 		
 		Criteria example = new Criteria();
@@ -324,8 +324,8 @@ public class TagsListController {
 		Taglist prec1 = tagListService.selectByPrimaryKey(b);
 		prec1.setSort(a);
 		tagListService.updateByPrimaryKeySelective(prec1);
-		prec.setSort(a+1);
-		tagListService.updateByPrimaryKeySelective(prec);
+		list.setSort(a+1);
+		tagListService.updateByPrimaryKeySelective(list);
 //		Picturerecommend pc = new Picturerecommend();
 //		
 //		pc.setPid(pid);
