@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -132,7 +133,18 @@ public class ChechPictureController {
 			}else if(pp.getMood()==null){
 				mood = "";
 			}
-			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,burl,type,pp.getTags(),mood,
+			String bmood = "";
+			if(pp.getBpicture()!=null){
+				if(pp.getBpicture().getMood() != null){
+					bmood = pp.getBpicture().getMood();
+				}else if(pp.getBpicture().getMood() == null){
+					bmood = "";
+				}
+			}else{
+				bmood = "";
+			}
+			
+			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,mood,burl,bmood,type,pp.getTags(),
 					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),""};
 			list.add(d);
 		}
@@ -359,7 +371,7 @@ public class ChechPictureController {
 	}
 	
 	/**
-	 * 推荐图片当中图片删除的方法
+	 * 滚播图片当中图片删除的方法
 	 * 
 	 */
 	@RequestMapping("/admin/del/commend")
@@ -481,11 +493,14 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/checkview/comment")
-	public ModelAndView commontcontentPicture(HttpSession session){
+	public ModelAndView commontcontentPicture(HttpSession session,String pid){
 		Criteria example = new Criteria();
+		example.setOrderByClause("creat_time");
+	    example.setSord("desc");
+	    example.put("del", "0");
 //		example.setOrderByClause("creat_time");
-//	    example.put("pid", pid);
-//		List<Comment> cs = commentService.selectByParams(pid);
+	    example.put("pid", Integer.valueOf(pid));
+		List<Comment> cs = commentService.selectByParams(example);
 		
 		
 		ModelAndView mav = new ModelAndView();
@@ -502,7 +517,7 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/check/comment")
-public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData,Integer pid){
+public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData,@PathVariable String pid){
 		
 		
 		
@@ -526,12 +541,12 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	    Criteria example = new Criteria();
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
-		example.put("pid", pid);
-//	    example.setOrderByClause("creat_time");
-//	    example.setSord("desc");
-//	    example.put("del", "0");
+		example.put("pid",Integer.valueOf(pid) );
+	    example.setOrderByClause("creat_time");
+	    example.setSord("desc");
+	    example.put("del", "0");
 		int count = commentService.countByParams(example);
-		List<Comment> clist = commentService.selectByPid(pid);
+		List<Comment> clist = commentService.selectByParams(example);
 		
 		
 		List list = new ArrayList();

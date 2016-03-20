@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -34,6 +35,11 @@
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">审核蜜图</h3>
 		<br>
+		<input type="text"   style="width:30%;" class="form-control search-query" placeholder="Type your query" />
+																		<button type="button" class="btn btn-purple btn-sm">
+																			Search
+																			<i class="icon-search icon-on-right bigger-110"></i>
+																		</button>
 		<br>
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
@@ -44,11 +50,11 @@
 						</th>
 						<th class="center">内部用户</th>
 						<th class="center">A面</th>
+						<th class="center">A面心情</th>
 						<th class="hidden-480 center">B面</th>
+						<th class="center">B面心情</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
-						<th class="center">心情</th>
-						
 						<!-- 
 						<th class="center">发贴者</th>
 						 -->
@@ -106,45 +112,45 @@
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [3],
+   	        	   "aTargets": [4],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
-   	        		   if(data.aData[4]==1){
-   	        				str = '<a href="'+data.aData[3]+'" target="_blank" id="abpicture"><img src="'+data.aData[3]+'" width="100px" height="100px" id="b"> </a>';
+   	        		   if(data.aData[6]==1){
+   	        				str = '<a href="'+data.aData[4]+'" target="_blank" id="abpicture">  <img src="'+data.aData[4]+'" width="100px" height="100px" id="b"> </a>';
    	        		   }else{
-   	        				str = data.aData[3];
+   	        				str = data.aData[4];
    	        		   }
    	        		   return  str;
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [4],
+   	        	   "aTargets": [6],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
-   	        		   if(data.aData[4]=="1"){
+   	        		   if(data.aData[6]=="1"){
    	        				str = "图片";
-   	        		   }else if(data.aData[4]=="2"){
+   	        		   }else if(data.aData[6]=="2"){
    	        				str = "URL";
-   	        		   }else if(data.aData[4]==""){
+   	        		   }else if(data.aData[6]==""){
    	        				str = "";
    	        		   }
    	        		   return  str;
    	        	   }
    	           },
    	             {
-   	        	   "aTargets": [8],
+   	        	   "aTargets": [9],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
-   	        		   if(data.aData[8]=="1"){
+   	        		   if(data.aData[9]=="1"){
    	        				str = "是";
-   	        		   }else if(data.aData[8]=="0"){
+   	        		   }else if(data.aData[9]=="0"){
    	        				str = "否";
    	        		   }
    	        		   return  str;
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [9],
+   	        	   "aTargets": [10],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
@@ -153,9 +159,12 @@
    	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-pencil bigger-130"></i>';
    	        			str += '</a><br>';
-   	        			str += '<input type="button"  value="del"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
-   	        			str += '<input type="button"  value="add"  onclick="add('+"'"+data.aData[0]+"'"+')"/><br>';
-   	        			str += '<input type="button"  value="comment"  onclick="comment('+"'"+data.aData[0]+"'"+')"/>';
+   	        			str += '<input name="switch-field-1" class="ace ace-switch" type="checkbox"  onclick="del('+"'"+data.aData[0]+"'"+')"/>  <span class="lbl"></span> <br>';
+
+   	        			
+   	//        			str += '<input type="button"  value="逻辑删除"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        			str += '<input type="button"  value="加入滚播"  onclick="add('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        			str += '<input type="button"  value="查看评论"  onclick="comment('+"'"+data.aData[0]+"'"+')"/>';
    	        			str += '</div>';
    	        			
    	        		   return  str;
@@ -173,7 +182,7 @@
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111)
-		        	 // "ps":ps
+		        	  //"pid":pid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

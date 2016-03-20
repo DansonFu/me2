@@ -33,7 +33,7 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">推荐蜜图</h3>
+		<h3 class="header smaller lighter blue">滚播蜜图</h3>
 		<br>
 		<br>
 		<div class="table-responsive">

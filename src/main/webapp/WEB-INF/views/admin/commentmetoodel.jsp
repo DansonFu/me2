@@ -120,7 +120,7 @@ $(document).ready(function(){
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData1113)
-		        	  "pid":pid
+		        	  //"pid":pid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

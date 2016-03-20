@@ -8,7 +8,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>推荐蜜图管理</title>
+		<title>滚播蜜图管理</title>
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +31,7 @@
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/chosen.css" />
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/global.css">
 		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/common.css">
+		<link rel="stylesheet" href="<%=basePath %>resources/assets/css/datepicker.css">
 		<!--[if lte IE 8]>
 		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 		<![endif]-->
@@ -65,13 +66,29 @@
                                         <img  src="${domain}/${pct.picture.qiniukey}" width="100px" height="100px"/>
                                     </div>
                                     <div class="col-lg-3 input-column">
-                                       	有效期：
+                                       	有效期：输入格式为2016-01-13 11:10:12
                                     </div>
                                     <div class="col-lg-9">
                                         <input type="hidden" id="id" name="id" value="${pct.id}">
                                         <input type="hidden" id="pid" name="pid" value="${pct.pid}">
                                         <input type="hidden" id="sort" name="sort" value="${pct.sort}">
 										<input type="text" name="period" style="width:80%;" value="${pct.period}"/>
+										
+																	<label for="id-date-picker-1">Date Picker</label>
+
+														<div class="row">
+															<div class="col-xs-8 col-sm-11">
+																<div class="input-group">
+																	<input class="form-control date-picker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" />
+																	<span class="input-group-addon">
+																		<i class="icon-calendar bigger-110"></i>
+																	</span>
+																</div>
+															</div>
+														</div>
+
+										
+										
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -114,6 +131,7 @@
 		<script src="<%=basePath %>resources/assets/js/flot/jquery.flot.min.js"></script>
 		<script src="<%=basePath %>resources/assets/js/flot/jquery.flot.pie.min.js"></script>
 		<script src="<%=basePath %>resources/assets/js/flot/jquery.flot.resize.min.js"></script>
+		<script src="<%=basePath %>resources/assets/js/date-time/bootstrap-datepicker.min.js"></script>
 
 		<!-- ace scripts -->
 
