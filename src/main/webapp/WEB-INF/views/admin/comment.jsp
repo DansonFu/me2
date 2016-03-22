@@ -279,8 +279,9 @@
                                 <textarea class="form-control" rows="5" placeholder="评论内容" name="content"
                                 	style="margin-top: 0px; margin-bottom: 0px; height: 60px;"></textarea>
                             </div>
-                            <div class="col-lg-2">
-                                <input type="file"  name="file"/>
+                            <div class="col-lg-2" onclick="viewimg()"> 
+                            	
+                                <input type="file"  name="file" />
                             </div>
                         </div>
                         <!-- col-lg- -->
@@ -330,6 +331,7 @@
 	}); 
 	
 	function submitform(){
+		
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}

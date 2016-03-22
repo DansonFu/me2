@@ -64,11 +64,19 @@
 				</button>
 		</div>
 		</form>
-		<br>
-		<br>
+		<form action="<%=basePath %>admin/viewselective" id="submitid" method="post">
+		<div style="float:right;">
+		 &nbsp; &nbsp;<input type="text" name="search"  />
+			
+				<button class="btn" type="submit" onclick="submit()">
+				提交
+				</button>
+		</div>
+		</form>
+		
 		<form action="<%=basePath %>admin/getmetooByTags" id="formid" method="post">
 		<div style="float:left;">
-			&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<input type="text" name="search"  />
+		 &nbsp; &nbsp;<input type="text" name="search"  />
 			
 				<button class="btn" type="submit" onclick="searching()">
 				检索
@@ -127,8 +135,8 @@ function add(id){
     	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
-    	        			str += '<a class="green" href="javascript:void(0);" onclick="add('+"'"+data.aData[6]+"'"+')" >';
-    	        			str += '<i class="icon-check-empty bigger-130"></i>';
+    	        			str += '<a class="green" href="javascript:void(0);" >';
+    	        			str += '<input type="checkbox" name="btncheck"/>';
     	        			str += '</a>';
     	        			
     	        			str += '</div>';
@@ -143,8 +151,8 @@ function add(id){
 							data, type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
-						str += '<a class="blue" href="javascript:void(0);" onclick="recommend('+"'"+data.aData[7]+"'"+')" >';
-						str += '<i class="icon-check bigger-130"></i>';
+						str += '<a class="blue" href="javascript:void(0);" >';
+						str += '<input type="checkbox" name="check"/>';
 						str += '</a>';
 
 						str += '</div>';

@@ -49,7 +49,7 @@
 						</th>
 						<th class="center">集合名称</th>
 						<th class="center">图片</th>
-						<th class="center">排序</th>
+						<th class="center">标签数</th>
 						
 						<th class="center">调整</th>
 						<th class="center">操作</th>
@@ -103,7 +103,7 @@ function down(id){
 			     	        	   "aTargets": [3],
 			     	        	   "fnRender":function(data,type){
 			     	        		   var str = "";
-			     	        		   if(data.aData[4]==1){
+			     	        		   if(data.aData[2]==1){
 			     	        				str = '<a href="'+data.aData[3]+'" target="_blank" id="abpicture"><img src="'+data.aData[3]+'" width="100px" height="100px" id="b"> </a>';
 			     	        		   }else{
 			     	        				str = data.aData[3];
@@ -118,9 +118,9 @@ function down(id){
 //				 	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
 //				 	        			str += '<i class="icon-zoom-in bigger-130"></i>';
 //				 	        			str += '</a>';
-				 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[4]+"'"+')"/>';
+				 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
 				   	        			str += '</div>';
-				   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[4]+"'"+')"/>';
+				   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
 				   	        			str += '</div>';
 				 	        			
 				 	        		   return  str;
@@ -130,13 +130,13 @@ function down(id){
 				  	        	   "aTargets": [5],
 				 	        	   "fnRender":function(data,type){
 				       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-				  	        			str += '<a class="blue" href="javascript:void(0);"onclick="update('+"'"+data.aData[5]+"'"+')" >';;
+				  	        			str += '<a class="blue" href="javascript:void(0);"onclick="update('+"'"+data.aData[0]+"'"+')" >';;
 				  	        			str += '<i class="icon-pencil bigger-130"></i>';
 				   	        			str += '</a>';
-				   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[5]+"'"+')" >';
+				   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
 										str += '<i class="icon-trash bigger-130"></i>';
 										str += '</a>';
-										str += '<a  href="javascript:void(0);" onclick="manage('+"'"+data.aData[5]+"'"+')" >';
+										str += '<a  href="javascript:void(0);" onclick="manage('+"'"+data.aData[0]+"'"+')" >';
 										str += '<i class="icon-cog bigger-130"></i>';
 										str += '</a>';
 										str += '</div>';

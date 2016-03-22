@@ -9,7 +9,7 @@
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
     <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
-    <result column="pid" property="pid" jdbcType="INTEGER" />
+   
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -31,13 +31,11 @@
       <if test="condition.lastTime != null" >
          and last_time = #{condition.lastTime}
       </if>
-      <if test="condition.pid != null" >
-         and pid = #{condition.pid}
-      </if>
+     
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, tag, acount, hits, qiniukey, mefriends, last_time, pid
+    id, tag, acount, hits, qiniukey, mefriends, last_time
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -81,9 +79,7 @@
       <if test="condition.lastTime != null" >
          and last_time = #{condition.lastTime}
       </if>
-      <if test="condition.pid != null" >
-         and pid = #{condition.pid}
-      </if>
+     
     </where>
     <if test="orderByClause != null" >
       order by ${orderByClause}
@@ -108,10 +104,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Tagshot" >
-    insert into tagshot (id, tag, acount, hits, qiniukey, mefriends, last_time, 
-      pid)
-    values (#{id}, #{tag}, #{acount}, #{hits}, #{qiniukey}, #{mefriends}, #{lastTime}, 
-      #{pid})
+    insert into tagshot (id, tag, acount, hits, qiniukey, mefriends, last_time)
+    values (#{id}, #{tag}, #{acount}, #{hits}, #{qiniukey}, #{mefriends}, #{lastTime}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Tagshot" >
     insert into tagshot
@@ -137,9 +132,7 @@
       <if test="lastTime != null" >
         last_time,
       </if>
-      <if test="pid != null" >
-        pid,
-      </if>
+      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -163,9 +156,7 @@
       <if test="lastTime != null" >
         #{lastTime},
       </if>
-      <if test="pid != null" >
-        #{pid},
-      </if>
+      
     </trim>
   </insert>
   <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
@@ -198,9 +189,7 @@
       <if test="record.lastTime != null" >
         last_time = #{record.lastTime},
       </if>
-      <if test="record.pid != null" >
-        pid = #{record.pid},
-      </if>
+     
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -214,8 +203,8 @@
       hits = #{record.hits},
       qiniukey = #{record.qiniukey},
       mefriends = #{record.mefriends},
-      last_time = #{record.lastTime},
-      pid = #{record.pid}
+      last_time = #{record.lastTime}
+      
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -241,9 +230,7 @@
       <if test="lastTime != null" >
         last_time = #{lastTime},
       </if>
-      <if test="pid != null" >
-        pid = #{pid},
-      </if>
+     
     </set>
     where id = #{id}
   </update>
@@ -254,8 +241,8 @@
       hits = #{hits},
       qiniukey = #{qiniukey},
       mefriends = #{mefriends},
-      last_time = #{lastTime},
-      pid = #{pid}
+      last_time = #{lastTime}
+    
     where id = #{id}
   </update>
    <select id="strsplit1" statementType="CALLABLE">

@@ -32,7 +32,7 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">管理蜜图</h3>
+		<h3 class="header smaller lighter blue">内部蜜图</h3>
 		<div style="float: right;">
 			发贴人：<select id="userId">
 				<c:forEach items="${users }" var="user">
@@ -56,7 +56,7 @@
 						<th class="hidden-480 center">B面</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
-						
+						<th class="center">B面心情</th>
 						<th class="center">发贴者</th>
 						<th class="center">创建时间</th>
 						<th class="center">操作</th>
@@ -107,19 +107,19 @@
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
-   	        		   if(data.aData[4]=="1"){
+   	        		   if(data.aData[5]=="1"){
    	        				str = "图片";
    	        		   
-   	        		   }else if(data.aData[4]=="2"){
+   	        		   }else if(data.aData[5]=="2"){
    	        				str = "URL";
-   	        		   }else if(data.aData[4]==""){
+   	        		   }else if(data.aData[5]==""){
    	        				str = "";
    	        		   }
    	        		   return  str;
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [9],
+   	        	   "aTargets": [10],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';

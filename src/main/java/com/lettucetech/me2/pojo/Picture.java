@@ -36,8 +36,16 @@ public class Picture implements Serializable {
      * 心情
      */
     private String mood;
+    private String bmood;
+    public String getBmood() {
+		return bmood;
+	}
 
-    /**
+	public void setBmood(String bmood) {
+		this.bmood = bmood;
+	}
+
+	/**
      * a:a面   b:b面
      */
     private String front;

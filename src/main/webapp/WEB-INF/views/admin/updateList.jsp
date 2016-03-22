@@ -47,14 +47,7 @@
                         		</div>
                                    	</div>
 										 <br/>
-										
-                                   		
-									 <div>
-                                       	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${taglist.num}">
-									 </div>
-										
-                                   		 
-                                    
+										<div>
                                        	<span class="dangger" style="color: red">*</span> 七牛：
                                   	 	
                                    		
@@ -64,23 +57,16 @@
                                 		&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;
                                			 &nbsp;&nbsp;&nbsp;
                                			
-                                    	<img  src="${taglist.qiniukey}" width="70px" height="70px" name="key"/>
+                                    	<img  src="${aurl}" width="70px" height="70px" name="key"/>
                                    
                                 
                                     	<input type="file" name="afile"/>
-                                    	
-                                   
-                              
-							</form>
-          				</div>
-          				</div>
-          				</div>
-				
+                                    </div>
 						 <br>
 						 
 				               <div  style="text-align: center">
 								<div >
-									<button class="btn btn-primary" type="button" onclick="submitform()">
+									<button class="btn btn-primary" type="submit" onclick="submitform()">
 										<i class="icon-ok bigger-110"></i>
 										提交
 									</button>
@@ -92,50 +78,40 @@
 									</button>
 								</div>
 							</div>
-                    
+                    	</form>
+          				</div>
+          				</div>
+          				</div>
 <script type="text/javascript">
-$("#back").on("click",function(){
-	window.location="<%=basePath %>admin/viewList";
-});
-function changetype(){
+	$("#back").on("click",function(){
+		window.location="<%=basePath %>admin/viewList";
+	});
+	function changetype(){
 	
-	if(type=='1'){
+		if(type=='1'){
 		$("#fileDiv").css('display','block');
 		
-	}else if(type=='5'||type=='2'){
+		}else if(type=='5'||type=='2'){
 		$("#fileDiv").css('display','none');
 		
+		}
 	}
-}
-	function submitform(){
-		if($("input[name='title']").val()==""){
-			$("input[name='title']").focus();
-			return;
-		}
-		if($("input[name='title']").val()==null||$("input[name='title']").val()==""){
-			$("input[name='title']").focus();
-			return;
-		}
-		
-		if($("input[name='num']").val()==""){
-			$("input[name='num']").focus();
-			return;
-		}
-		if($("input[name='num']").val()==null||$("input[name='num']").val()==""){
-			$("input[name='num']").focus();
-			return;
-		}
-		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
-			$("input[name='tags']").focus();
-			return;
-		}
-		if($("img[name='key']").val()==null||$("img[name='key']").val()==""){
-			$("img[name='key']").focus();
-			return;
-		}
-		$("#me2form").submit();
-		$(":button").attr("disabled", true);  
-	}
+		function submitform(){
+				if($("input[name='title']").val()==""){
+					$("input[name='title']").focus();
+					return;
+				}
+				if($("input[name='title']").val()==null||$("input[name='title']").val()==""){
+					$("input[name='title']").focus();
+					return;
+				}
+				if($("img[name='key']").val()==null||$("img[name='key']").val()==""){
+					$("img[name='key']").focus();
+					return;
+				}
+				$("#me2form").submit();
+				$(":button").attr("disabled", true);  
+			}
 </script>
 
 </body>

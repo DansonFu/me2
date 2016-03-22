@@ -19,14 +19,14 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Recommend;
+//import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
-import com.lettucetech.me2.service.RecommendService;
+//import com.lettucetech.me2.service.RecommendService;
 import com.lettucetech.me2.service.TXtUserService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
@@ -51,7 +51,7 @@ public class TagsHotController {
 	@Autowired
 	private TaglistService tagsListService;
 	@Autowired
-	private RecommendService recommendService;
+//	private RecommendService recommendService;
 //	/**
 //	 * 根据热度查询标签
 //	 * @param session
@@ -96,7 +96,7 @@ public class TagsHotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetooByTags")
-	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String sear,String font) {
+	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -116,8 +116,8 @@ public class TagsHotController {
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	         
-	         if(obj.get("name").equals("sear"))
-	        	 sear=obj.get("value").toString();
+//	         if(obj.get("name").equals("sear"))
+//	        	 sear=obj.get("value").toString();
 	         
 //	         if(obj.get("name").equals("font"))
 //	        	 font=obj.get("value");
@@ -125,24 +125,24 @@ public class TagsHotController {
 	     
 	    Criteria example = new Criteria();
 	    
-    if( font=="1"){
-		    example.setOrderByClause("last_time");
-		    example.setSord("desc");
-		    }
-	    else if(font=="2"){
-	    	example.setOrderByClause("hits");
-	 	    example.setSord("desc");
-	 	 }
-	    else if(font=="3"){
-	    	 example.setOrderByClause("acount");
-	 	    example.setSord("desc");
-	 	   }
-	    else if(font=="0"){
-	    	 example.setOrderByClause("id");
-	 	    example.setSord("desc");
-	    }
-	    example.put("sear", sear);
-	    example.put("font", font);
+//    if( font=="1"){
+//		    example.setOrderByClause("last_time");
+//		    example.setSord("desc");
+//		    }
+//	    else if(font=="2"){
+//	    	example.setOrderByClause("hits");
+//	 	    example.setSord("desc");
+//	 	 }
+//	    else if(font=="3"){
+//	    	 example.setOrderByClause("acount");
+//	 	    example.setSord("desc");
+//	 	   }
+//	    else if(font=="0"){
+//	    	 example.setOrderByClause("id");
+//	 	    example.setSord("desc");
+//	    }
+//	    example.put("sear", sear);
+//	    example.put("font", font);
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);

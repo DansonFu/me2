@@ -26,8 +26,10 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
+import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.TaglistService;
+import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 import com.qiniu.common.QiniuException;
@@ -39,6 +41,8 @@ public class TagsListController {
 	private TaglistService tagListService;
 	@Autowired
 	private TagshotService tagshotService;
+	@Autowired
+	private TagsconnectionService tagsconnectionService;
 	/**
 	 * 跳转到标签集合页面
 	 *
@@ -63,8 +67,9 @@ public class TagsListController {
 	public ModelAndView updateByTags(HttpSession session,String id){		
 		
 		Taglist taglist = tagListService.selectByPrimaryKey(Integer.valueOf(id));
-		
+		String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+taglist.getQiniukey();
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("aurl",aurl);
 		mav.addObject("taglist",taglist);
 		mav.setViewName("/admin/updateList");;
 		return mav;
@@ -110,22 +115,28 @@ public class TagsListController {
     }
     Criteria example = new Criteria();
     example.put("taglist", taglist);
-    example.setOrderByClause("num");
+    example.setOrderByClause("id");
     example.setSord("asc");
 //    example.setMysqlOffset(iDisplayStart);
 //    example.setMysqlLength(iDisplayLength);
 
     int count = tagListService.countByParams(example);
     List<Taglist> metoo = tagListService.selectByParams(example);
-    
-	    //拼接翻页数据
+    List<Tagsconnection> conn=tagsconnectionService.selectByParams(example);
+   
 	    
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Taglist obj : metoo){
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 			//String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum()};
-			String[] d={obj.getId().toString(),obj.getTitle(),aurl,obj.getNum().toString()};
+			String s="";
+			if(obj.getId().equals(taglist)){
+				int c=tagsconnectionService.countByParams(example);
+				 s=String.valueOf(c);
+			}
+			
+			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s};
 			list.add(d);
 		}
 		
@@ -156,7 +167,7 @@ public class TagsListController {
 	 */
 
 	@RequestMapping(value="/admin/saveList",method={RequestMethod.POST})
-	public ModelAndView updateList(HttpSession session,String id,String title,String num,
+	public ModelAndView updateList(HttpSession session,String id,String title,
 			@RequestParam("afile")  CommonsMultipartFile afile){
 		
 		String akey=null;
@@ -179,7 +190,7 @@ public class TagsListController {
 		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setNum(Integer.valueOf(num));
+//		list.setNum(Integer.valueOf(num));
 		
 		tagListService.updateByPrimaryKeySelective(list);
 		

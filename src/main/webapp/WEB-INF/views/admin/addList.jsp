@@ -45,12 +45,7 @@
 										 <br/>
 										 <br/>
 										 <br/>
-                                       	排序:&nbsp;&nbsp;<input type="text" id="num" name="num" value="${list.num}">
-										 <br/>
-										<br/>
-										<br/>
-                            		
-                                    
+                                      
                                        	<span class="dangger" style="color: red">*</span> 七牛：
                                   
                                     <div class="col-lg-3" style="height: 120px">

@@ -478,9 +478,10 @@ public class AdminController {
 		}else{
 			users.add((TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME));
 		}
-		
+	
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("users", users);
+		
 		mav.setViewName("/admin/viewmetoo");
 		return mav;
 	}
@@ -535,7 +536,7 @@ public class AdminController {
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
 			String burl="";
 			String type="";
-			
+			String bmood="";
 			//如果有B面
 			if(obj.getPicture().getBpicture()!=null){
 				if(obj.getPicture().getBpicture().getType().equals("1")){
@@ -544,11 +545,14 @@ public class AdminController {
 					burl = obj.getPicture().getBpicture().getQiniukey();
 				}
 					type = obj.getPicture().getBpicture().getType();
+					
 			}
 			
 			
+			
+			
 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-					obj.getPicture().getTags(),obj.getUser().getName(),
+					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
 					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
 			list.add(d);
 		}
@@ -711,7 +715,7 @@ public class AdminController {
 			}
 		}
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/admin/viewmetoo");
+		mav.setViewName("redirect:/admin/viewmetoo");
 		return mav;
 	}
 	

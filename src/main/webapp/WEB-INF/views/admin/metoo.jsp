@@ -296,6 +296,10 @@
 			$("input[name='afile']").focus();
 			return;
 		}
+		if($("input[name='bfeel']").val()==""){
+			$("input[name='bfeel']").focus();
+			return;
+		}
 		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
 			$("input[name='tags']").focus();
 			return;
