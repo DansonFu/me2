@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,16 +18,16 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
-import com.lettucetech.me2.common.utils.DateUtil;
+
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picturerecommend;
+
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
-import com.lettucetech.me2.pojo.Tagshot;
+
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
@@ -284,17 +284,17 @@ public class TagsListController {
 		Integer b = null;
 		
 		Criteria example = new Criteria();
-		example.put("sort", a-1);
-		List<Taglist> lpc = tagListService.selectByParams(example);
-		for(Taglist pc:lpc){
-			if(pc.getSort().equals(a-1)){
-				b = pc.getId();
+		example.put("font", a-1);
+		List<Taglist> taglist = tagListService.selectByParams(example);
+		for(Taglist tagslist:taglist){
+			if(tagslist.getSort().equals(a-1)){
+				b = tagslist.getId();
 				break;
 			}
 		}
-		Taglist prec1 = tagListService.selectByPrimaryKey(b);
-		prec1.setSort(a);
-		tagListService.updateByPrimaryKeySelective(prec1);
+		Taglist list1 = tagListService.selectByPrimaryKey(b);
+		list1.setSort(a);
+		tagListService.updateByPrimaryKeySelective(list1);
 		list.setSort(a-1);
 		tagListService.updateByPrimaryKeySelective(list);
 		
@@ -307,7 +307,7 @@ public class TagsListController {
 //		pc.setSort(sort+1);
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewList");
+		mav.setViewName("/admin/viewList");
 		return mav;
 	}
 	
@@ -324,17 +324,17 @@ public class TagsListController {
 		Integer b = null;
 		
 		Criteria example = new Criteria();
-		example.put("sort", a+1);
-		List<Taglist> lpc = tagListService.selectByParams(example);
-		for(Taglist pc:lpc){
-			if(pc.getSort().equals(a+1)){
-				b = pc.getId();
+		example.put("font", a+1);
+		List<Taglist> taglist = tagListService.selectByParams(example);
+		for(Taglist tagslist:taglist){
+			if(tagslist.getSort().equals(a+1)){
+				b = tagslist.getId();
 				break;
 			}
 		}
-		Taglist prec1 = tagListService.selectByPrimaryKey(b);
-		prec1.setSort(a);
-		tagListService.updateByPrimaryKeySelective(prec1);
+		Taglist list1 = tagListService.selectByPrimaryKey(b);
+		list1.setSort(a);
+		tagListService.updateByPrimaryKeySelective(list1);
 		list.setSort(a+1);
 		tagListService.updateByPrimaryKeySelective(list);
 //		Picturerecommend pc = new Picturerecommend();
@@ -344,7 +344,7 @@ public class TagsListController {
 //		pc.setSort(sort+1);
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewList");
+		mav.setViewName("/admin/viewList");
 		return mav;
 	}
 }

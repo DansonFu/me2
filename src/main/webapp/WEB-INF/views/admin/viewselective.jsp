@@ -29,17 +29,18 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
-<h3 class="header smaller lighter blue">已选标签</h3>
-			<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
+<h3 class="header smaller lighter blue">已选标签(<input value="${name }" style="width:100px" />)</h3>
+			
+				
+				<%--<<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
 				<div style="float: left;">
 				<br/>
-				
-				<button class="btn btn-primary" type="submit" onclick="reset()">
+				button class="btn btn-primary" type="submit" onclick="reset()">
 					<i class="icon-undo bigger-60"></i>
 					恢复默认设置
 				</button>
 				</div>
-				</form>
+				</form>  --%> 
 		<div style="float: right;">
 		<br/>
 			<button class="btn btn-primary" type="submit" onclick="submit()">
@@ -89,7 +90,7 @@
 	</form>
 
 <script type="text/javascript">
-
+		
 	function del(id){
 		if(confirm('确实删除该标签吗?')){
 			window.location="<%=basePath %>admin/delselective?id="+id;
