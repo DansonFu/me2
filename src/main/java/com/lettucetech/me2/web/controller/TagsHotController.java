@@ -116,33 +116,12 @@ public class TagsHotController {
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	         
-//	         if(obj.get("name").equals("sear"))
-//	        	 sear=obj.get("value").toString();
-	         
-//	         if(obj.get("name").equals("font"))
-//	        	 font=obj.get("value");
+
 	    }
 	     
 	    Criteria example = new Criteria();
 	    
-//    if( font=="1"){
-//		    example.setOrderByClause("last_time");
-//		    example.setSord("desc");
-//		    }
-//	    else if(font=="2"){
-//	    	example.setOrderByClause("hits");
-//	 	    example.setSord("desc");
-//	 	 }
-//	    else if(font=="3"){
-//	    	 example.setOrderByClause("acount");
-//	 	    example.setSord("desc");
-//	 	   }
-//	    else if(font=="0"){
-//	    	 example.setOrderByClause("id");
-//	 	    example.setSord("desc");
-//	    }
-//	    example.put("sear", sear);
-//	    example.put("font", font);
+
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);

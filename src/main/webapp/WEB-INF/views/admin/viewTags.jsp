@@ -66,7 +66,7 @@
 		</form>
 		<form action="<%=basePath %>admin/viewselective" id="submitid" method="post">
 		<div style="float:right;">
-		 &nbsp; &nbsp;<input type="text" name="search"  />
+		 &nbsp; &nbsp;<input type="text" name="search" id="math" />
 			
 				<button class="btn" type="submit" onclick="submit()">
 				提交
@@ -115,11 +115,8 @@
 function recommend(id){
 	window.location="<%=basePath %>admin/add/recommend?id="+id;
 }
-function del(id){
-	if(confirm('确实删除该标签吗?')){
-	window.location="<%=basePath %>admin/delTags?id="+id;
-}
-}
+
+
 function add(id){
 	
 	window.location="<%=basePath %>admin/add?id="+id;
@@ -136,7 +133,7 @@ function add(id){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
     	        			str += '<a class="green" href="javascript:void(0);" >';
-    	        			str += '<input type="checkbox" name="btncheck"/>';
+    	        			str += '<input type="checkbox" name="btncheck" checked="checked" onclick="check1()"/>';
     	        			str += '</a>';
     	        			
     	        			str += '</div>';
@@ -152,7 +149,7 @@ function add(id){
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
 						str += '<a class="blue" href="javascript:void(0);" >';
-						str += '<input type="checkbox" name="check"/>';
+						str += '<input type="checkbox" name="check" checked="checked" onclick="check1()"/>';
 						str += '</a>';
 
 						str += '</div>';
@@ -168,7 +165,7 @@ function add(id){
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData111),
+		          data : {"aoData":JSON.stringify(aoData111)
 		        	 
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
@@ -189,6 +186,9 @@ function add(id){
 				$("#wayid").submit();
 				$(":button").attr("disable",true);
 			}
+		  function check1(){
+			  
+		  }
 	});
 	
 	
