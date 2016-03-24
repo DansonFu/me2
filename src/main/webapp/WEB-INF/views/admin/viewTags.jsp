@@ -64,10 +64,11 @@
 				</button>
 		</div>
 		</form>
-		<form action="<%=basePath %>admin/viewselective" id="submitid" method="post">
+		&nbsp; &nbsp;&nbsp; &nbsp;
+		<form action="<%=basePath %>admin/add" id="submitid" method="post">
 		<div style="float:right;">
 		 &nbsp; &nbsp;<input type="text" name="search" id="math" />
-			
+				<input type="hidden" name="name" id="btncheck" />
 				<button class="btn" type="submit" onclick="submit()">
 				提交
 				</button>
@@ -112,15 +113,10 @@
 	
 <script type="text/javascript">
 
-function recommend(id){
-	window.location="<%=basePath %>admin/add/recommend?id="+id;
-}
 
 
-function add(id){
-	
-	window.location="<%=basePath %>admin/add?id="+id;
-}
+
+
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
@@ -133,7 +129,7 @@ function add(id){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
     	        			str += '<a class="green" href="javascript:void(0);" >';
-    	        			str += '<input type="checkbox" name="btncheck" checked="checked" onclick="check1()"/>';
+    	        			str += '<input type="checkbox" name="check"/>';
     	        			str += '</a>';
     	        			
     	        			str += '</div>';
@@ -149,7 +145,7 @@ function add(id){
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
 						str += '<a class="blue" href="javascript:void(0);" >';
-						str += '<input type="checkbox" name="check" checked="checked" onclick="check1()"/>';
+						str += '<input type="checkbox" name="check"/>';
 						str += '</a>';
 
 						str += '</div>';
@@ -182,12 +178,18 @@ function add(id){
 				$("#formid").submit();
 				$(":button").attr("disable",true);
 			}
-		  function way(){
-				$("#wayid").submit();
-				$(":button").attr("disable",true);
-			}
-		  function check1(){
-			  
+		 
+		  
+			  $("input[name='check']").click(function(){
+				 var str=0;
+				 
+				 str=$("input[type=checkbox][name='check']:checked").length;
+				 $("#math").val(str);
+				var che= $("input[type=checkbox][name='check']:checked").val();
+			  });
+		  function submit(){
+			 
+				 $("input[type=checkbox][name='check']:checked").val();
 		  }
 	});
 	

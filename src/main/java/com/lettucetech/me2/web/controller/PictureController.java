@@ -29,6 +29,7 @@ import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Pictureagree;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.Picturerecommend;
+import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.MessageService;
@@ -36,6 +37,7 @@ import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PictureagreeService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
+import com.lettucetech.me2.service.RecommendService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
 import com.mysql.jdbc.log.Log;
@@ -56,6 +58,9 @@ public class PictureController {
 	private TagshotService tagshotService;
 	@Autowired
 	private TaglistService taglistService;
+	@Autowired
+	private RecommendService recommendService;
+	
 	/**
 	 * 保存蜜图AB面
 	 * @param session
@@ -503,6 +508,26 @@ public class PictureController {
 		example.setMysqlOffset(0);
 		example.setMysqlLength(20);
 		List<Tagshot> tags = tagshotService.selectByParams4Matching(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(JsonUtil.Encode(tags));
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	/**
+	 * 标签匹配
+	 * @param tag
+	 * @return
+	 */
+	@RequestMapping(value = "/recommend/{tagName}", method ={RequestMethod.GET})
+	public ModelAndView recommendMatching(@PathVariable String tagName){
+		Criteria example = new Criteria();
+		example.put("tagName", tagName);
+		example.setMysqlOffset(0);
+		example.setMysqlLength(20);
+		List<Recommend> tags = recommendService.selectByParams4Matching(example);
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);

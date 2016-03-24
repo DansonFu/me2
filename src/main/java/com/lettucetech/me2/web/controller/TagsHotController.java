@@ -32,6 +32,7 @@ import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
+import com.qiniu.util.Json;
 
 @Controller
 public class TagsHotController {
@@ -116,12 +117,33 @@ public class TagsHotController {
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	         
-
+//	         if(obj.get("name").equals("sear"))
+//	        	 sear=obj.get("value").toString();
+	         
+//	         if(obj.get("name").equals("font"))
+//	        	 font=obj.get("value");
 	    }
 	     
 	    Criteria example = new Criteria();
 	    
-
+//    if( font=="1"){
+//		    example.setOrderByClause("last_time");
+//		    example.setSord("desc");
+//		    }
+//	    else if(font=="2"){
+//	    	example.setOrderByClause("hits");
+//	 	    example.setSord("desc");
+//	 	 }
+//	    else if(font=="3"){
+//	    	 example.setOrderByClause("acount");
+//	 	    example.setSord("desc");
+//	 	   }
+//	    else if(font=="0"){
+//	    	 example.setOrderByClause("id");
+//	 	    example.setSord("desc");
+//	    }
+//	    example.put("sear", sear);
+//	    example.put("font", font);
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -167,40 +189,7 @@ public class TagsHotController {
 			e.printStackTrace();
 		}
 	}
-//	/**
-//	 *   修改标签
-//	 * @param session
-//	 * @param tag
-//	 * @param count
-//	 * @param hits
-//	 * @param mefriends
-//	 * @param key
-//	 * @param lastTime
-//	 * @return
-//	 */
-//	
-//	
-//	@RequestMapping("/admin/updateTags")
-//	public ModelAndView updateTags(HttpSession session,String tag,String acount,String hits,String mefriends
-//			,String key,Timestamp lastTime  ){
-//		
-//		
-//		Tagshot list=new Tagshot();
-//		
-//		list.setTag(tag);
-//		list.setAcount(Integer.valueOf(acount));
-//		list.setHits(Integer.valueOf(hits));
-//		list.setMefriends(Integer.valueOf(mefriends));
-//		list.setQiniukey(key);
-//		list.setLastTime(lastTime);
-//		
-//		
-//		tagshotService.updateByPrimaryKeySelective(list);
-//		
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("redirect:/admin/viewTags");
-//		return mav;
-//	}
+
 	/**
 	 * 删除标签
 	 * @param session
@@ -226,52 +215,27 @@ public class TagsHotController {
 	
 	
 	@RequestMapping(value="/admin/add")
-	public ModelAndView add(HttpSession session,String id){
+	public ModelAndView add(HttpSession session,HttpServletRequest request){
+		String[] tagshot = request.getParameterValues("check");
+		
 		String str =(String)session.getAttribute("str");
 		
 		Tagsconnection conn=new Tagsconnection();
-		conn.setTagsId(Integer.valueOf(id));
-		conn.setTagslistId(str);
-	
-		tagsconnectionService.insert(conn);
+		
+		
+			 
+			// conn.setTagsId(tagid);
+			 conn.setTagslistId(str);
+			 
+			 tagsconnectionService.insert(conn);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("conn",conn);
 		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 		
 	}
-//	/**
-//	 * 搜索标签
-//	 * 
-//	 */
-////	@RequestMapping(value="/admin/searchtag")
-////	public ModelAndView search(HttpSession session){
-////		//String str =(String)session.getAttribute("str");
-////		
-////		String str=request.getParameter("search");
-////		Criteria example = new Criteria();
-////		
-////		example.put("str", str);
-////		tagshotService.selectByParams(example);
-////		ModelAndView mav = new ModelAndView();
-////		mav.addObject("str",str);
-////		mav.setViewName("redirect:/admin/searchTag");
-////		return mav;
-////}
-//	@RequestMapping(value="/admin/viewsearch")
-//	public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
-//		//String str =(String)session.getAttribute("str");
-//		
-//		String str=request.getParameter("search");
-//		Criteria example = new Criteria();
-//		
-//		example.put("str", str);
-//		tagshotService.selectByParams(example);
-//		ModelAndView mav = new ModelAndView();
-//		mav.addObject("str",str);
-//		mav.setViewName("redirect:/admin/searchTag");
-//		return mav;
-//}
+
 	
 	/**
 	 * 刷新
@@ -292,3 +256,69 @@ public class TagsHotController {
 		return mav;
 	}
 }
+///**
+//* 搜索标签
+//* 
+//*/
+////@RequestMapping(value="/admin/searchtag")
+////public ModelAndView search(HttpSession session){
+////	//String str =(String)session.getAttribute("str");
+////	
+////	String str=request.getParameter("search");
+////	Criteria example = new Criteria();
+////	
+////	example.put("str", str);
+////	tagshotService.selectByParams(example);
+////	ModelAndView mav = new ModelAndView();
+////	mav.addObject("str",str);
+////	mav.setViewName("redirect:/admin/searchTag");
+////	return mav;
+////}
+//@RequestMapping(value="/admin/viewsearch")
+//public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
+//	//String str =(String)session.getAttribute("str");
+//	
+//	String str=request.getParameter("search");
+//	Criteria example = new Criteria();
+//	
+//	example.put("str", str);
+//	tagshotService.selectByParams(example);
+//	ModelAndView mav = new ModelAndView();
+//	mav.addObject("str",str);
+//	mav.setViewName("redirect:/admin/searchTag");
+//	return mav;
+//}
+///**
+//*   修改标签
+//* @param session
+//* @param tag
+//* @param count
+//* @param hits
+//* @param mefriends
+//* @param key
+//* @param lastTime
+//* @return
+//*/
+//
+//
+//@RequestMapping("/admin/updateTags")
+//public ModelAndView updateTags(HttpSession session,String tag,String acount,String hits,String mefriends
+//		,String key,Timestamp lastTime  ){
+//	
+//	
+//	Tagshot list=new Tagshot();
+//	
+//	list.setTag(tag);
+//	list.setAcount(Integer.valueOf(acount));
+//	list.setHits(Integer.valueOf(hits));
+//	list.setMefriends(Integer.valueOf(mefriends));
+//	list.setQiniukey(key);
+//	list.setLastTime(lastTime);
+//	
+//	
+//	tagshotService.updateByPrimaryKeySelective(list);
+//	
+//	ModelAndView mav = new ModelAndView();
+//	mav.setViewName("redirect:/admin/viewTags");
+//	return mav;
+//}
