@@ -29,7 +29,7 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
-<h3 class="header smaller lighter blue">已选标签(<input value="${name }" style="width:100px" />)</h3>
+<h3 class="header smaller lighter blue">已选标签&nbsp;<input value="${name }" style="border:0px" /></h3>
 			
 				
 				<%--<<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">

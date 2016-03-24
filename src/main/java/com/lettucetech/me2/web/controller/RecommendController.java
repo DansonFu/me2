@@ -140,7 +140,7 @@ public class RecommendController {
 			
 				
 					
-					String[] d={obj.getTagId().toString(),obj.getTagName(),obj.getHits().toString(),obj.getAcount().toString()
+					String[] d={obj.getTagId().toString(),obj.getTagname(),obj.getHits().toString(),obj.getAcount().toString()
 							,obj.getMefriends().toString(),
 							DateUtil.dateFormatToString(obj.getLasttime(), "yyyy-MM-dd HH:mm:ss"),""
 							};

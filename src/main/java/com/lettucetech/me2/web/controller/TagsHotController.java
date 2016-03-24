@@ -216,7 +216,7 @@ public class TagsHotController {
 	
 	@RequestMapping(value="/admin/add")
 	public ModelAndView add(HttpSession session,HttpServletRequest request){
-		String[] tagshot = request.getParameterValues("check");
+		String[] tagshot = request.getParameterValues("name");
 		
 		String str =(String)session.getAttribute("str");
 		

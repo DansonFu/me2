@@ -115,9 +115,7 @@ function down(id){
 				   	        	 "aTargets": [4],
 				 	        	   "fnRender":function(data,type){
 				 	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-//				 	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
-//				 	        			str += '<i class="icon-zoom-in bigger-130"></i>';
-//				 	        			str += '</a>';
+
 				 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
 				   	        			str += '</div>';
 				   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';

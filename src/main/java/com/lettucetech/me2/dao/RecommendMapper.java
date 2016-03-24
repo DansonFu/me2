@@ -63,6 +63,5 @@ public interface RecommendMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(Recommend record);
-    
-    List<Recommend> selectByParams4Matching(Criteria example);
+	List<Recommend> selectByParams4Matching(Criteria example);
 }

@@ -4,20 +4,21 @@
   <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Recommend" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="tag_id" property="tagId" jdbcType="INTEGER" />
-    <result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+    <result column="tagName" property="tagname" jdbcType="VARCHAR" />
     <result column="hits" property="hits" jdbcType="INTEGER" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
     <result column="acount" property="acount" jdbcType="INTEGER" />
     <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
-    <result column="lasttime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="lastTime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.tagId != null" >
          and tag_id = #{condition.tagId}
       </if>
-      <if test="condition.tagName != null" >
-         and tag_name = #{condition.tagName}
+      <if test="condition.tagname != null" >
+         and tagName = #{condition.tagname}
       </if>
       <if test="condition.hits != null" >
          and hits = #{condition.hits}
@@ -32,12 +33,15 @@
          and mefriends = #{condition.mefriends}
       </if>
       <if test="condition.lasttime != null" >
-         and lasttime = #{condition.lasttime}
+         and lastTime = #{condition.lasttime}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
       </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, tag_id, tag_name, hits, sort, acount, mefriends, lasttime
+    id, tag_id, tagName, hits, sort, acount, mefriends, lastTime, qiniukey
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -60,6 +64,39 @@
     from recommend
     where id = #{id}
   </select>
+  <select id="selectByParams4Matching" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from recommend
+    <where>
+          <if test="condition.tag != null" >
+         and tag like '%${condition.tagName}%'
+      </if>
+      <if test="condition.acount != null" >
+         and acount = #{condition.acount}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      
+      <if test="condition.mefriends != null" >
+         and mefriends = #{condition.mefriends}
+      </if>
+      <if test="condition.lastTime != null" >
+         and last_time = #{condition.lastTime}
+      </if>
+      <if test="condition.lastTime != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from recommend
     where id = #{id}
@@ -71,10 +108,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Recommend" >
-    insert into recommend (id, tag_id, tag_name, hits, sort, acount, mefriends, lasttime
-      )
-    values (#{id}, #{tagId}, #{tagName}, #{hits}, #{sort}, #{acount}, #{mefriends}, #{lasttime}
-      )
+    insert into recommend (id, tag_id, tagName, hits, sort, acount, mefriends, lastTime, 
+      qiniukey)
+    values (#{id}, #{tagId}, #{tagname}, #{hits}, #{sort}, #{acount}, #{mefriends}, #{lasttime}, 
+      #{qiniukey})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Recommend" >
     insert into recommend
@@ -85,8 +122,8 @@
       <if test="tagId != null" >
         tag_id,
       </if>
-      <if test="tagName != null" >
-        tag_name,
+      <if test="tagname != null" >
+        tagName,
       </if>
       <if test="hits != null" >
         hits,
@@ -101,7 +138,10 @@
         mefriends,
       </if>
       <if test="lasttime != null" >
-        lasttime,
+        lastTime,
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -111,8 +151,8 @@
       <if test="tagId != null" >
         #{tagId},
       </if>
-      <if test="tagName != null" >
-        #{tagName},
+      <if test="tagname != null" >
+        #{tagname},
       </if>
       <if test="hits != null" >
         #{hits},
@@ -128,6 +168,9 @@
       </if>
       <if test="lasttime != null" >
         #{lasttime},
+      </if>
+      <if test="qiniukey != null" >
+        #{qiniukey},
       </if>
     </trim>
   </insert>
@@ -146,8 +189,8 @@
       <if test="record.tagId != null" >
         tag_id = #{record.tagId},
       </if>
-      <if test="record.tagName != null" >
-        tag_name = #{record.tagName},
+      <if test="record.tagname != null" >
+        tagName = #{record.tagname},
       </if>
       <if test="record.hits != null" >
         hits = #{record.hits},
@@ -162,7 +205,10 @@
         mefriends = #{record.mefriends},
       </if>
       <if test="record.lasttime != null" >
-        lasttime = #{record.lasttime},
+        lastTime = #{record.lasttime},
+      </if>
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -173,12 +219,13 @@
     update recommend
     set id = #{record.id},
       tag_id = #{record.tagId},
-      tag_name = #{record.tagName},
+      tagName = #{record.tagname},
       hits = #{record.hits},
       sort = #{record.sort},
       acount = #{record.acount},
       mefriends = #{record.mefriends},
-      lasttime = #{record.lasttime}
+      lastTime = #{record.lasttime},
+      qiniukey = #{record.qiniukey}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -189,8 +236,8 @@
       <if test="tagId != null" >
         tag_id = #{tagId},
       </if>
-      <if test="tagName != null" >
-        tag_name = #{tagName},
+      <if test="tagname != null" >
+        tagName = #{tagname},
       </if>
       <if test="hits != null" >
         hits = #{hits},
@@ -205,7 +252,10 @@
         mefriends = #{mefriends},
       </if>
       <if test="lasttime != null" >
-        lasttime = #{lasttime},
+        lastTime = #{lasttime},
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
       </if>
     </set>
     where id = #{id}
@@ -213,12 +263,13 @@
   <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Recommend" >
     update recommend
     set tag_id = #{tagId},
-      tag_name = #{tagName},
+      tagName = #{tagname},
       hits = #{hits},
       sort = #{sort},
       acount = #{acount},
       mefriends = #{mefriends},
-      lasttime = #{lasttime}
+      lastTime = #{lasttime},
+      qiniukey = #{qiniukey}
     where id = #{id}
   </update>
 </mapper>

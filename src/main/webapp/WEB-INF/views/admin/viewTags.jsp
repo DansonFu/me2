@@ -186,6 +186,7 @@
 				 str=$("input[type=checkbox][name='check']:checked").length;
 				 $("#math").val(str);
 				var che= $("input[type=checkbox][name='check']:checked").val();
+				$("#btncheck").val(che);
 			  });
 		  function submit(){
 			 
