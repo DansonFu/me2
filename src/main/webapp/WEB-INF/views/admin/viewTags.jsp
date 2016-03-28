@@ -75,7 +75,7 @@
 		</div>
 		</form>
 		
-		<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
+		<form action="<%=basePath %>admin/getmetooByTags" id="formid" method="post">
 		<div style="float:left;">
 		 &nbsp; &nbsp;<input type="text" name="search" />
 			

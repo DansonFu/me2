@@ -103,7 +103,7 @@ public class GameController {
 	public ModelAndView saveGamesFace(HttpSession session,Gameface gameface) {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
-		
+		gameface.setCreateTime(new Date());
 		int i = gamefaceService.insertSelective(gameface);
 		if(i==1){
 			result.setSuccess(true);
@@ -116,7 +116,7 @@ public class GameController {
 			//存到用户消息表中
 			Message record = new Message();
 			record.setContent("请求你为他解蜜图片");
-			record.setCreateTime( new Date());
+			record.setCreateTime(new Date());
 			record.setCustomerId(picture.getCustomerId());
 			record.setPid(gameface.getPid());
 			record.setType("1");
