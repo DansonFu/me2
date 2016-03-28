@@ -281,7 +281,9 @@
                             </div>
                             <div class="col-lg-2" onclick="viewimg()"> 
                             	
-                                <input type="file"  name="file" />
+                                <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">
+
+                				<img id="image" src="" >
                             </div>
                         </div>
                         <!-- col-lg- -->
@@ -463,7 +465,15 @@
 		});
 
 	}
+	 function loadImageFile(event)
 
+     {
+
+             var image = document.getElementById('image');
+
+             image.src = URL.createObjectURL(event.target.files[0]); 
+
+     };
 </script>		
 	</body>
 </html>

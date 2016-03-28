@@ -10,7 +10,7 @@ public class Recommend implements Serializable {
 
     private Integer tagId;
 
-    private String tagname;
+    private String tagName;
 
     private Integer hits;
 
@@ -20,7 +20,7 @@ public class Recommend implements Serializable {
 
     private Integer mefriends;
 
-    private Date lasttime;
+    private Date lastTime;
 
     private String qiniukey;
 
@@ -41,11 +41,11 @@ public class Recommend implements Serializable {
     }
 
     public String getTagname() {
-        return tagname;
+        return tagName;
     }
 
-    public void setTagname(String tagname) {
-        this.tagname = tagname;
+    public void setTagname(String tagName) {
+        this.tagName = tagName;
     }
 
     public Integer getHits() {
@@ -81,11 +81,11 @@ public class Recommend implements Serializable {
     }
 
     public Date getLasttime() {
-        return lasttime;
+        return lastTime;
     }
 
-    public void setLasttime(Date lasttime) {
-        this.lasttime = lasttime;
+    public void setLasttime(Date lastTime) {
+        this.lastTime = lastTime;
     }
 
     public String getQiniukey() {

@@ -68,16 +68,16 @@
 		<form action="<%=basePath %>admin/add" id="submitid" method="post">
 		<div style="float:right;">
 		 &nbsp; &nbsp;<input type="text" name="search" id="math" />
-				<input type="hidden" name="name" id="btncheck" />
+				<input type="hidden" name="checkname" id="checkid" />
 				<button class="btn" type="submit" onclick="submit()">
 				提交
 				</button>
 		</div>
 		</form>
 		
-		<form action="<%=basePath %>admin/getmetooByTags" id="formid" method="post">
+		<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 		<div style="float:left;">
-		 &nbsp; &nbsp;<input type="text" name="search"  />
+		 &nbsp; &nbsp;<input type="text" name="search" />
 			
 				<button class="btn" type="submit" onclick="searching()">
 				检索
@@ -86,7 +86,8 @@
 		</form>
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
-				<thead>
+				<thead id="mytable">
+				
 					<tr>
 						
 						<th class="center" >
@@ -97,16 +98,18 @@
 						<th class="center">帖子数</th>
 						<th class="center">蜜友</th>
 						<th class="center">更新时间</th>
-						<th class="center">添加到精选集合</th>
+						<th class="center" id="listid">添加到精选集合</th>
 						
-						<th class="center">添加到热门标签</th>
+						<th class="center" id="tagid">添加到热门标签</th>
 					</tr>
 				</thead>
-					
 				<tbody>
+					
 				</tbody>
 				
 			</table>
+			<input type="hidden" id="flagid" value="${flag }" name="flag"/>
+			<input type="hidden" name="search" value="${svalue }" id="searchid"/>
 		</div>
 	</div>
 	</div>
@@ -114,9 +117,13 @@
 <script type="text/javascript">
 
 
-
-
-
+<%-- function add(id){
+	window.location="<%=basePath %>admin/add?id="+id;
+}
+function addtag(id){
+	window.location="<%=basePath %>admin/addtag?id="+id;
+}
+ --%>
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
@@ -125,12 +132,12 @@
       	          
     	        	{
     	        	   "aTargets": [6],
-    	        	   "fnRender":function(data,type){
+    	        	   "fnRender":function(data){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-
-    	        			str += '<a class="green" href="javascript:void(0);" >';
-    	        			str += '<input type="checkbox" name="check"/>';
-    	        			str += '</a>';
+    	        		 
+    	        			
+    	        			str += '<input type="checkbox" name="check" id="btn"/>';
+    	        			
     	        			
     	        			str += '</div>';
     	        		   return  str;
@@ -141,13 +148,14 @@
 				{
 					"aTargets" : [ 7 ],
 					"fnRender" : function(
-							data, type) {
+							data) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-
-						str += '<a class="blue" href="javascript:void(0);" >';
-						str += '<input type="checkbox" name="check"/>';
-						str += '</a>';
-
+						
+  	        			
+  	        			str += '<input type="checkbox" name="check" id="btn"/>';
+  	        			
+  	        			
+  	        		
 						str += '</div>';
 						return str;
 					}
@@ -159,10 +167,11 @@
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
+			  var searchid = $('#searchid').val();
 			      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData111)
-		        	 
+		          data : {"aoData":JSON.stringify(aoData111),
+		        	 "searchid":searchid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -174,24 +183,40 @@
 		          }
 		      });
 		  }
-		  function searching(){
-				$("#formid").submit();
-				$(":button").attr("disable",true);
-			}
-		 
 		  
 			  $("input[name='check']").click(function(){
-				 var str=0;
-				 
-				 str=$("input[type=checkbox][name='check']:checked").length;
-				 $("#math").val(str);
-				var che= $("input[type=checkbox][name='check']:checked").val();
-				$("#btncheck").val(che);
-			  });
+					 var str=0;
+					 
+					 str=$("input[type=checkbox][name='check']:checked").length;
+					 $("#math").val(str);
+					
+				  });
+			  $("input[name='check']").click(function(){
+					 var str=new Array;
+					 
+					 str=$("input[type=checkbox][name='check']:checked").value;
+					 $("#checkid").val(JSON.stringify(str));
+					
+				  });
 		  function submit(){
+			  $("#submitid").submit();
+				$(":button").attr("disable",true);
 			 
-				 $("input[type=checkbox][name='check']:checked").val();
+			  }  
+			 
+			
+			   
+	
+		  (function (){
+		  var flag=document.getElementById("flagid").value();
+		  if(flag.equals("1")){
+			  document.getElementById("listid").style.display='none';  
+			  }else if(flag.equals("2")){
+			  document.getElementById("tagid").style.display='none'; 
+				  
 		  }
+		  })
+         
 	});
 	
 	

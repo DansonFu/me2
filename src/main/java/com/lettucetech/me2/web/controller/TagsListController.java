@@ -54,7 +54,9 @@ public class TagsListController {
 	@RequestMapping("/admin/viewList")
 	public ModelAndView selectByTags(HttpSession session){	
 		session.setAttribute("taglist","taglist");
+		
 		ModelAndView mav = new ModelAndView();
+		
 		mav.setViewName("/admin/viewList");;
 		return mav;
 	}

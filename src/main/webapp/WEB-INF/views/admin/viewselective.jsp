@@ -52,6 +52,7 @@
 			<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 				<div style="float: right;">
 				<input type="hidden" name="taglist" value="${tid }"/>
+				<input type="hidden" name="flag" value="${flag }"/>
 				&nbsp; &nbsp; &nbsp;
 				<br/>
 				<button class="btn" type="submit" onclick="add()">
@@ -108,12 +109,7 @@
    	        	   "aTargets": [6],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
-//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
-//   	        			str += '</a>';
-//   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
-//   	        			str += '<i class="icon-pencil bigger-130"></i>';
-//   	        			str += '</a>';
+	        		
    	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-trash bigger-130"></i>';
    	        			str += '</a>';

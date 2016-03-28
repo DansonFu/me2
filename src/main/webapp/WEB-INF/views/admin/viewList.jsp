@@ -99,18 +99,8 @@ function down(id){
 			     	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
 			     	        	   }
 			     	           },
-			     	      	{
-			     	        	   "aTargets": [3],
-			     	        	   "fnRender":function(data,type){
-			     	        		   var str = "";
-			     	        		   if(data.aData[2]==1){
-			     	        				str = '<a href="'+data.aData[3]+'" target="_blank" id="abpicture"><img src="'+data.aData[3]+'" width="100px" height="100px" id="b"> </a>';
-			     	        		   }else{
-			     	        				str = data.aData[3];
-			     	        		   }
-			     	        		   return  str;
-			     	        	   }
-			     	           },
+			     	      
+			     	           
 						  {
 				   	        	 "aTargets": [4],
 				 	        	   "fnRender":function(data,type){
@@ -128,7 +118,7 @@ function down(id){
 				  	        	   "aTargets": [5],
 				 	        	   "fnRender":function(data,type){
 				       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-				  	        			str += '<a class="blue" href="javascript:void(0);"onclick="update('+"'"+data.aData[0]+"'"+')" >';;
+				  	        			str += '<a class="blue" href="javascript:void(0);"onclick="update('+"'"+data.aData[0]+"'"+')" >';
 				  	        			str += '<i class="icon-pencil bigger-130"></i>';
 				   	        			str += '</a>';
 				   	        			str += '<a class="blue" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';

@@ -73,7 +73,7 @@
     from recommend
     <where>
           <if test="condition.tag != null" >
-         and tag like '%${condition.tagName}%'
+         and tagName like '%${condition.tagName}%'
       </if>
       <if test="condition.acount != null" >
          and acount = #{condition.acount}
@@ -86,7 +86,7 @@
          and mefriends = #{condition.mefriends}
       </if>
       <if test="condition.lastTime != null" >
-         and last_time = #{condition.lastTime}
+         and lastTime = #{condition.lastTime}
       </if>
       <if test="condition.lastTime != null" >
          and qiniukey = #{condition.qiniukey}

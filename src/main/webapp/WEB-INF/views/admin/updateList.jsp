@@ -57,10 +57,12 @@
                                 		&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;
                                			 &nbsp;&nbsp;&nbsp;
                                			
-                                    	<img  src="${aurl}" width="70px" height="70px" name="key"/>
-                                   
+                                    	
+                                    <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">
+
+               						 <img id="image" src="" >
                                 
-                                    	<input type="file" name="afile"/>
+                                    	
                                     </div>
 						 <br>
 						 
@@ -112,6 +114,15 @@
 				$("#me2form").submit();
 				$(":button").attr("disabled", true);  
 			}
+		 function loadImageFile(event)
+
+	        {
+
+	                var image = document.getElementById('image');
+
+	                image.src = URL.createObjectURL(event.target.files[0]); 
+
+	        };
 </script>
 
 </body>

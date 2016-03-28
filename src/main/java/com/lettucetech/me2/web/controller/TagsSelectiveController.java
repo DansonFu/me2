@@ -63,13 +63,21 @@ public class TagsSelectiveController {
 	@RequestMapping("/admin/viewselective")
 	public ModelAndView selectByTags(HttpSession session,String id,HttpServletRequest request){
 		String str=id;
+		String flag="2";
 		String conn = request.getParameter("conn");
+		String tag=conn;
 		session.setAttribute("conn", conn);
 		session.setAttribute("taglist", id);
-		Taglist taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(str));
-		String name = taglist1.getTitle();
+		String name="";
+		if(str==null){
+			
+		Taglist taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
+			
+		 name = taglist1.getTitle();
+		}
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("conn",conn);
+		mav.addObject("flag",flag);
 		mav.addObject("tid",id);
 		mav.addObject("name",name);
 		mav.setViewName("/admin/viewselective");

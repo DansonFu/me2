@@ -1,5 +1,7 @@
 package com.lettucetech.me2.web.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -110,10 +112,11 @@ public class GameController {
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
 			
+			
 			//存到用户消息表中
 			Message record = new Message();
 			record.setContent("请求你为他解蜜图片");
-			record.setCreateTime(new Date());
+			record.setCreateTime( new Date());
 			record.setCustomerId(picture.getCustomerId());
 			record.setPid(gameface.getPid());
 			record.setType("1");
