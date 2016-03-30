@@ -33,6 +33,7 @@
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">所有标签</h3>
+		<input type="hidden" id="flagid" value="${flag }" name="flag"/>
 		
 		</div>
 		<form action="<%=basePath %>admin/getmetooByTags" id="wayid" method="post">
@@ -42,12 +43,13 @@
                                        	排序方式：
                                     </div>
                                     <div class="col-lg-9">
-                                    	<select  onchange="way()"name="selectway">
-											<option value="0">标签ID</option>
-											<option value="1">更新时间</option>
-											<option value="2">热度</option>
-											<option value="3">帖子数</option>
-										</select>
+                                    	<select id="projectPorperty" name="projectPorperty">  
+										    <option value="1">标签id</option>  
+										    <option value="2">热度</option>  
+										    <option value="3">帖子数</option>  
+										    <option value="4">蜜友</option> 
+										    <option value="5">更新时间</option> 
+										</select>  
 										
 										</div>
                                     </div>
@@ -68,6 +70,7 @@
 		<form action="<%=basePath %>admin/add" id="submitid" method="post">
 		<div style="float:right;">
 		 &nbsp; &nbsp;<input type="text" name="search" id="math" />
+		 				<input type="text" name="cue" id="cueid" style="border:0px"/>
 				<input type="hidden" name="checkname" id="checkid" />
 				<button class="btn" type="submit" onclick="submit()">
 				提交
@@ -75,22 +78,22 @@
 		</div>
 		</form>
 		
-		<form action="<%=basePath %>admin/getmetooByTags" id="formid" method="post">
+		<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 		<div style="float:left;">
-		 &nbsp; &nbsp;<input type="text" name="search" />
-			
-				<button class="btn" type="submit" onclick="searching()">
+		 &nbsp; &nbsp;<input type="text" name="search"/>
+			<input type="hidden"  id="searchid" value="${svalue }" />
+				<button class="btn" type="submit">
 				检索
 				</button>
 		</div>
 		</form>
 		<div class="table-responsive">
-			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
-				<thead id="mytable">
+			<table id="sample-table-2" class="table table-striped table-bordered table-hover" >
+				<thead>
 				
 					<tr>
 						
-						<th class="center" >
+						<th class="center">
 							标签ID
 						</th>
 						<th class="center">标签名称</th>
@@ -98,9 +101,8 @@
 						<th class="center">帖子数</th>
 						<th class="center">蜜友</th>
 						<th class="center">更新时间</th>
-						<th class="center" id="listid">添加到精选集合</th>
-						
-						<th class="center" id="tagid">添加到热门标签</th>
+						<th class="center">添加到精选集合</th>
+						<th class="center">添加到热门标签</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -108,8 +110,7 @@
 				</tbody>
 				
 			</table>
-			<input type="hidden" id="flagid" value="${flag }" name="flag"/>
-			<input type="hidden" name="search" value="${svalue }" id="searchid"/>
+		
 		</div>
 	</div>
 	</div>
@@ -132,31 +133,20 @@ function addtag(id){
       	          
     	        	{
     	        	   "aTargets": [6],
-    	        	   "fnRender":function(data){
+    	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-    	        		 
-    	        			
     	        			str += '<input type="checkbox" name="check" id="btn"/>';
-    	        			
-    	        			
-    	        			str += '</div>';
+	    	        		str += '</div>';
     	        		   return  str;
     	        	   }
-			    	           },
-			    	         
+			    	           }, 
 				
 				{
 					"aTargets" : [ 7 ],
-					"fnRender" : function(
-							data) {
+					"fnRender" : function(data,type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-						
-  	        			
-  	        			str += '<input type="checkbox" name="check" id="btn"/>';
-  	        			
-  	        			
-  	        		
-						str += '</div>';
+						str += '<input type="checkbox" name="check" id="btn"/>';
+  	        			str += '</div>';
 						return str;
 					}
 				}
@@ -167,11 +157,13 @@ function addtag(id){
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
-			  var searchid = $('#searchid').val();
+			  var searchid= $('#searchid').val();
+			  var font = $('#projectPorperty').val();
 			      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	 "searchid":searchid
+		        	 "searchid":searchid,
+		        	"font":font
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -183,6 +175,11 @@ function addtag(id){
 		          }
 		      });
 		  }
+		 
+		  $("#projectPorperty").bind("change", function(){
+			  oTable1.fnPageChange('first');
+		  });
+		 
 		  
 			  $("input[name='check']").click(function(){
 					 var str=0;
@@ -190,33 +187,35 @@ function addtag(id){
 					 str=$("input[type=checkbox][name='check']:checked").length;
 					 $("#math").val(str);
 					
-				  });
-			  $("input[name='check']").click(function(){
+				  }); 
+				
+			  <%--$("input[name='check']").click(function(){
 					 var str=new Array;
 					 
 					 str=$("input[type=checkbox][name='check']:checked").value;
 					 $("#checkid").val(JSON.stringify(str));
 					
-				  });
+				  }); --%>
 		  function submit(){
 			  $("#submitid").submit();
 				$(":button").attr("disable",true);
 			 
-			  }  
-			 
+			  }  ;
+		<%--$.hiddenit("onclick",function(){
 			
-			   
-	
-		  (function (){
-		  var flag=document.getElementById("flagid").value();
-		  if(flag.equals("1")){
-			  document.getElementById("listid").style.display='none';  
-			  }else if(flag.equals("2")){
-			  document.getElementById("tagid").style.display='none'; 
-				  
-		  }
-		  })
-         
+			  var name=document.getElementById("flagid").value
+				 if(name.equals("1")){
+					 var column = table.getColumn("添加到热门标签"); 
+					 column.setVisible(false); //设定该列对象的visible属性为false,用以隐藏该列 
+					 table1.refresh();//刷新表格，使新的设定生效 
+				 }else if(flag.equals("2")){
+					 var column = table.getColumn("添加到精选集合"); 
+					 column.setVisible(false); //设定该列对象的visible属性为false,用以隐藏该列 
+					 table1.refresh();//刷新表格，使新的设定生效 
+				 }
+		});--%>
+		  
+		  
 	});
 	
 	

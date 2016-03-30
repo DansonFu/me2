@@ -40,7 +40,16 @@
 				</c:forEach>
 			</select>
 		</div>
-		
+		<form action="<%=basePath %>admin/viewmetoo" id="formid" method="post">
+		<div style="float:left;">
+		 &nbsp; &nbsp;<input type="text" name="search"/>
+			<input type="hidden"  id="searchid" value="${svalue }" />
+				<button class="btn" type="submit">
+				检索
+				</button>
+		</div>
+		</form>
+		<input type="hidden" value="${bmood }" name="bmood"/>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -143,11 +152,12 @@
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			  var userId = $('#userId').val();
-
+			var searchid=$('#searchid').val();
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
+		        	  "userId":userId,
+		        	  "searchid":searchid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

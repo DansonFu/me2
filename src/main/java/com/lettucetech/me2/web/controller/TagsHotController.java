@@ -85,6 +85,7 @@ public class TagsHotController {
 	 
 	@RequestMapping("/admin/viewTags")
 	public ModelAndView selectByTags(HttpSession session,HttpServletRequest request){	
+		
 		String str = request.getParameter("taglist");
 		String s= request.getParameter("search");
 		String flg=request.getParameter("flag");
@@ -97,9 +98,16 @@ public class TagsHotController {
 		}
 		session.setAttribute("str",str);
 		ModelAndView mav = new ModelAndView();
+		
 		mav.addObject("svalue",s);
-		mav.addObject("flag",flag);
-		mav.addObject("flag",flg);
+		if(flg==null){
+			
+			 
+			mav.addObject("flag",flag);
+			}else if(flg!=null){
+				
+				mav.addObject("flag",flg);
+			}
 		mav.setViewName("/admin/viewTags");;
 		return mav;
 	}
@@ -112,14 +120,15 @@ public class TagsHotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetooByTags")
-	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String searchid) {
+	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String font,String searchid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
+		 
 			ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
-			 String sEcho = null;
+			  
 			 int iDisplayStart = 0; // 起始索引
-			 int iDisplayLength = 0; // 每页显示的行数
-			 
+			 int iDisplayLength = 0;
+			 String sEcho=null;
 			 for (int i = 0; i < jsonarray.size(); i++) {
 				 HashMap obj = (HashMap) jsonarray.get(i);
 				 if (obj.get("name").equals("sEcho"))
@@ -133,26 +142,86 @@ public class TagsHotController {
 				 
 				 
 			 }
-			
+		
 			 Criteria example = new Criteria();
 			 
-			 
+			
 			 example.setDistinct(true);
 			 example.setMysqlOffset(iDisplayStart);
 			 example.setMysqlLength(iDisplayLength);
 			 
+			 List list = new ArrayList();
+			 if(("1").equals(font)){
+					example.setOrderByClause("id");
+					example.setSord("asc");
+					
+				}else if(("2").equals(font)){
+					example.setOrderByClause("hits");
+					example.setSord("asc");
+					
+				}else if(("3").equals(font)){
+					example.setOrderByClause("acount");
+					example.setSord("asc");
+					
+				}else if(("4").equals(font)){
+					example.setOrderByClause("mefriends");
+					example.setSord("asc");
+				
+				}else if(("5").equals(font)){
+					example.setOrderByClause("last_time");
+					example.setSord("asc");
+					
+				}
+			 int count =1;
+			 if(!"".equals(searchid)){
+				 example.put("searchid", searchid);
+				 
+				 
+				 List<Tagshot> metoo = tagshotService.selectByParams(example);
+				 
+				 //拼接翻页数据
+				
+				 
+				 for(Tagshot obj : metoo){
+					 //判断如果图片的pid相同就去重
+					 if(searchid.equals(obj.getTag())){
+					 
+						 count = tagshotService.countByParams(example);
+					 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+					 list.add(d);
+					 }
+				 }
+			 }else{
 			 
 			 //是否有查看所有人权限
+		if(("1").equals(font)){
+			example.setOrderByClause("id");
+			example.setSord("asc");
+			
+		}else if(("2").equals(font)){
+			example.setOrderByClause("hits");
+			example.setSord("asc");
+			
+		}else if(("3").equals(font)){
+			example.setOrderByClause("acount");
+			example.setSord("asc");
+			
+		}else if(("4").equals(font)){
+			example.setOrderByClause("mefriends");
+			example.setSord("asc");
+		
+		}else if(("5").equals(font)){
+			example.setOrderByClause("last_time");
+			example.setSord("asc");
+			
+		}
 			 
-			 if(!"".equals(searchid)){
-				 example.put("searchid",searchid);
-			 }
-			 
-			 int count = tagshotService.countByParams(example);
+			  count = tagshotService.countByParams(example);
 			 List<Tagshot> metoo = tagshotService.selectByParams(example);
 			 
 			 //拼接翻页数据
-			 List list = new ArrayList();
+			 
 			 
 			 for(Tagshot obj : metoo){
 				 //判断如果图片的pid相同就去重
@@ -165,7 +234,7 @@ public class TagsHotController {
 				 
 			 }
 			 
-			 
+			 }
 			 
 			 
 			 DataTablePaginationForm dtpf = new DataTablePaginationForm();
@@ -183,10 +252,11 @@ public class TagsHotController {
 			 } catch (IOException e) {
 				 e.printStackTrace();
 			 }
-			
+		
+		} 
+	
 		
 		
-		}
 			 
 	/**
 	 * 删除标签
