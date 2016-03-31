@@ -303,7 +303,7 @@ public class AdminController {
 		}
 		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("bmood",bfeel);
+		
 		mav.setViewName("redirect:/admin/metoo");
 		return mav;
 
@@ -513,9 +513,7 @@ public class AdminController {
 	  
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
-	         
-//	         if(obj.get("name").equals("sear"))
-//	        	 sear=obj.get("value").toString();
+
 	    }
 	    Criteria example = new Criteria();
 	    example.setMysqlOffset(iDisplayStart);
@@ -557,8 +555,8 @@ public class AdminController {
 	 					burl = obj.getPicture().getBpicture().getQiniukey();
 	 				}
 	 					type = obj.getPicture().getBpicture().getType();
-	 					
 	 			}
+	 			bmood=obj.getPicture().getBpicture().getMood();
 	 			
 	 			
 	 			
@@ -588,7 +586,8 @@ public class AdminController {
 					burl = obj.getPicture().getBpicture().getQiniukey();
 				}
 					type = obj.getPicture().getBpicture().getType();
-					
+					bmood=obj.getPicture().getBpicture().getMood();
+				
 			}
 			
 			

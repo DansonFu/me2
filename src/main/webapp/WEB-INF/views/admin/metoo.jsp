@@ -232,6 +232,7 @@
                                     </div>
                                     <div class="col-lg-9">
 										<input type="text" name="bfeel" style="width:80%;"/>
+										
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->

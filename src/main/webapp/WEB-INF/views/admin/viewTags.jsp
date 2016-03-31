@@ -69,7 +69,7 @@
 		&nbsp; &nbsp;&nbsp; &nbsp;
 		<form action="<%=basePath %>admin/add" id="submitid" method="post">
 		<div style="float:right;">
-		 &nbsp; &nbsp;<input type="text" name="search" id="math" />
+		 &nbsp; &nbsp;<input type="text" name="search" id="math" /><br/>
 		 				<input type="text" name="cue" id="cueid" style="border:0px"/>
 				<input type="hidden" name="checkname" id="checkid" />
 				<button class="btn" type="submit" onclick="submit()">
@@ -93,9 +93,7 @@
 				
 					<tr>
 						
-						<th class="center">
-							标签ID
-						</th>
+						
 						<th class="center">标签名称</th>
 						<th class="center">热度</th>
 						<th class="center">帖子数</th>
@@ -132,7 +130,7 @@ function addtag(id){
 			"aoColumnDefs": [
       	          
     	        	{
-    	        	   "aTargets": [6],
+    	        	   "aTargets": [5],
     	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
     	        			str += '<input type="checkbox" name="check" id="btn"/>';
@@ -142,7 +140,7 @@ function addtag(id){
 			    	           }, 
 				
 				{
-					"aTargets" : [ 7 ],
+					"aTargets" : [6],
 					"fnRender" : function(data,type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 						str += '<input type="checkbox" name="check" id="btn"/>';
@@ -159,11 +157,13 @@ function addtag(id){
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			  var searchid= $('#searchid').val();
 			  var font = $('#projectPorperty').val();
+			  
 			      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
 		        	 "searchid":searchid,
 		        	"font":font
+		        	
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -183,24 +183,24 @@ function addtag(id){
 		  
 			  $("input[name='check']").click(function(){
 					 var str=0;
-					 
+					
 					 str=$("input[type=checkbox][name='check']:checked").length;
 					 $("#math").val(str);
 					
 				  }); 
-				
-			  <%--$("input[name='check']").click(function(){
-					 var str=new Array;
-					 
-					 str=$("input[type=checkbox][name='check']:checked").value;
-					 $("#checkid").val(JSON.stringify(str));
-					
-				  }); --%>
-		  function submit(){
-			  $("#submitid").submit();
-				$(":button").attr("disable",true);
 			 
-			  }  ;
+				function submit(){
+				    var checkboxes = document.getElementsByName('check');
+				    var checkedArr = new Array();
+				    for(var i=0;i<checkboxes.length;i++){
+				     if(checkboxes[i].checked){
+				      checkedArr.push(checkboxes[i].value);
+				     }
+				    }
+				    document.getElementById('checkid').value = checkedArr.join(',');
+				   }
+			
+		 
 		<%--$.hiddenit("onclick",function(){
 			
 			  var name=document.getElementById("flagid").value

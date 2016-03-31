@@ -49,7 +49,7 @@
 				</button>
 		</div>
 		</form>
-		<input type="hidden" value="${bmood }" name="bmood"/>
+		
 		<br>
 		<br>
 		<div class="table-responsive">

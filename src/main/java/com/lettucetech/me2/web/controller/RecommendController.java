@@ -119,7 +119,8 @@ public class RecommendController {
 	     
 	    Criteria example = new Criteria();
 	    
-
+	    example.setOrderByClause("sort");
+	    example.setSord("asc");
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -128,7 +129,8 @@ public class RecommendController {
 //		if(!"-1".equals(userId)){
 //			example.put("userId", userId);
 //		}
-//	    
+//	   
+	    String s="";
 	    int count = recommendService.countByParams(example);
 	    List<Recommend> metoo = recommendService.selectByParams(example);
 	    
@@ -140,10 +142,10 @@ public class RecommendController {
 			
 				
 					
-					String[] d={obj.getTagId().toString(),obj.getTagname(),obj.getHits().toString(),obj.getAcount().toString()
+					String[] d={obj.getId().toString(),obj.getTagId().toString(),obj.getTagname(),obj.getHits().toString(),obj.getAcount().toString()
 							,obj.getMefriends().toString(),
 							DateUtil.dateFormatToString(obj.getLasttime(), "yyyy-MM-dd HH:mm:ss"),""
-							};
+							,s,s};
 					list.add(d);
 				
 			}
@@ -167,40 +169,7 @@ public class RecommendController {
 			e.printStackTrace();
 		}
 	}
-//	/**
-//	 *   修改标签
-//	 * @param session
-//	 * @param tag
-//	 * @param count
-//	 * @param hits
-//	 * @param mefriends
-//	 * @param key
-//	 * @param lastTime
-//	 * @return
-//	 */
-//	
-//	
-//	@RequestMapping("/admin/updateTags")
-//	public ModelAndView updateTags(HttpSession session,String tag,String acount,String hits,String mefriends
-//			,String key,Timestamp lastTime  ){
-//		
-//		
-//		Tagshot list=new Tagshot();
-//		
-//		list.setTag(tag);
-//		list.setAcount(Integer.valueOf(acount));
-//		list.setHits(Integer.valueOf(hits));
-//		list.setMefriends(Integer.valueOf(mefriends));
-//		list.setQiniukey(key);
-//		list.setLastTime(lastTime);
-//		
-//		
-//		tagshotService.updateByPrimaryKeySelective(list);
-//		
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("redirect:/admin/viewTags");
-//		return mav;
-//	}
+
 	/**
 	 * 删除标签
 	 * @param session
@@ -219,38 +188,7 @@ public class RecommendController {
 		return mav;
 	}
 
-//	/**
-//	 * 搜索标签
-//	 * 
-//	 */
-////	@RequestMapping(value="/admin/searchtag")
-////	public ModelAndView search(HttpSession session){
-////		//String str =(String)session.getAttribute("str");
-////		
-////		String str=request.getParameter("search");
-////		Criteria example = new Criteria();
-////		
-////		example.put("str", str);
-////		tagshotService.selectByParams(example);
-////		ModelAndView mav = new ModelAndView();
-////		mav.addObject("str",str);
-////		mav.setViewName("redirect:/admin/searchTag");
-////		return mav;
-////}
-//	@RequestMapping(value="/admin/viewsearch")
-//	public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
-//		//String str =(String)session.getAttribute("str");
-//		
-//		String str=request.getParameter("search");
-//		Criteria example = new Criteria();
-//		
-//		example.put("str", str);
-//		tagshotService.selectByParams(example);
-//		ModelAndView mav = new ModelAndView();
-//		mav.addObject("str",str);
-//		mav.setViewName("redirect:/admin/searchTag");
-//		return mav;
-//}
+
 /**
  * 精选集合当中顺序上调的方法
  * @param session
@@ -264,7 +202,7 @@ public  ModelAndView upcommend(HttpSession session,String id){
 	Integer b = null;
 	
 	Criteria example = new Criteria();
-	example.put("font", a-1);
+	example.put("sort", a-1);
 	List<Recommend> taglist = recommendService.selectByParams(example);
 	for(Recommend tagslist:taglist){
 		if(tagslist.getSort().equals(a-1)){
@@ -304,7 +242,7 @@ public  ModelAndView downcommend(HttpSession session,String id){
 	Integer b = null;
 	
 	Criteria example = new Criteria();
-	example.put("font", a+1);
+	example.put("sort", a+1);
 	List<Recommend> taglist = recommendService.selectByParams(example);
 	for(Recommend tagslist:taglist){
 		if(tagslist.getSort().equals(a+1)){

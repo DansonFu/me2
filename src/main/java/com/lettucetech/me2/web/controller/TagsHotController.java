@@ -85,7 +85,7 @@ public class TagsHotController {
 	 
 	@RequestMapping("/admin/viewTags")
 	public ModelAndView selectByTags(HttpSession session,HttpServletRequest request){	
-		
+		 
 		String str = request.getParameter("taglist");
 		String s= request.getParameter("search");
 		String flg=request.getParameter("flag");
@@ -172,11 +172,12 @@ public class TagsHotController {
 					example.setSord("asc");
 					
 				}
-			 int count =1;
+			  
 			 if(!"".equals(searchid)){
-				 example.put("searchid", searchid);
+				 example.put("tag", searchid);
+			 }
 				 
-				 
+			 int count = tagshotService.countByParams(example);
 				 List<Tagshot> metoo = tagshotService.selectByParams(example);
 				 
 				 //拼接翻页数据
@@ -184,58 +185,20 @@ public class TagsHotController {
 				 
 				 for(Tagshot obj : metoo){
 					 //判断如果图片的pid相同就去重
-					 if(searchid.equals(obj.getTag())){
+					 if(searchid.contains(obj.getTag())){
 					 
-						 count = tagshotService.countByParams(example);
-					 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+					 String[] d={obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString()};
 					 list.add(d);
+					 }else{
+						 String[] d={obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+								 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString()};
+						 list.add(d);
 					 }
 				 }
-			 }else{
-			 
-			 //是否有查看所有人权限
-		if(("1").equals(font)){
-			example.setOrderByClause("id");
-			example.setSord("asc");
 			
-		}else if(("2").equals(font)){
-			example.setOrderByClause("hits");
-			example.setSord("asc");
-			
-		}else if(("3").equals(font)){
-			example.setOrderByClause("acount");
-			example.setSord("asc");
-			
-		}else if(("4").equals(font)){
-			example.setOrderByClause("mefriends");
-			example.setSord("asc");
 		
-		}else if(("5").equals(font)){
-			example.setOrderByClause("last_time");
-			example.setSord("asc");
 			
-		}
-			 
-			  count = tagshotService.countByParams(example);
-			 List<Tagshot> metoo = tagshotService.selectByParams(example);
-			 
-			 //拼接翻页数据
-			 
-			 
-			 for(Tagshot obj : metoo){
-				 //判断如果图片的pid相同就去重
-				 
-				 
-				 
-				 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-						 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-				 list.add(d);
-				 
-			 }
-			 
-			 }
-			 
 			 
 			 DataTablePaginationForm dtpf = new DataTablePaginationForm();
 			 dtpf.setsEcho(sEcho);
@@ -284,10 +247,15 @@ public class TagsHotController {
 	
 	@RequestMapping(value="/admin/add")
 	public ModelAndView add(HttpSession session,HttpServletRequest request){
-		String s=request.getParameter("checkname");
-	
-	//	Tagsconnection tagconn=tagsconnectionService.selectByPrimaryKey(Integer.valueOf(id));
-		
+		String[] ids = request.getParameterValues("checkname");
+
+	    if (null != ids && !"".equals(ids.toString())){
+	        for(int i = 0 ; i < ids.length; i++ ){ // 将ids 字符串按逗号分隔为 字符串数组
+	           
+	            List<String> list = new ArrayList<String>();
+	           
+	        }
+	    }
 		
 		String str =(String)session.getAttribute("str");
 

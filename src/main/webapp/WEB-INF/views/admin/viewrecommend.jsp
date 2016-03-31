@@ -40,10 +40,8 @@
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
-						
-						<th class="center" >
-							标签ID
-						</th>
+						<th class="center" >ID</th>
+						<th class="center" >标签ID</th>
 						<th class="center">标签名称</th>
 						<th class="center">热度</th>
 						<th class="center">帖子数</th>
@@ -84,10 +82,9 @@ function del(id){
 			"aoColumnDefs": [
       	          
     	        	{
-				   	        	 "aTargets": [6],
+				   	        	 "aTargets": [7],
 				 	        	   "fnRender":function(data,type){
 				 	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-
 				 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
 				   	        			str += '</div>';
 				   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
@@ -99,14 +96,12 @@ function del(id){
 			    	         
 				
 				 {
-				  	        	   "aTargets": [7],
+				  	        	   "aTargets": [8],
 				 	        	   "fnRender":function(data,type){
-				       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-				  	        			
+				       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';	
 				   	        			str += '<a class="blue" onclick="del('+"'"+data.aData[0]+"'"+')" >';
 										str += '<i class="icon-trash bigger-130"></i>';
 										str += '</a>';
-										
 										str += '</div>';
 					   					return  str;
 				 }

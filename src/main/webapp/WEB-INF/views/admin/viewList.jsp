@@ -49,9 +49,8 @@
 						</th>
 						<th class="center">集合名称</th>
 						<th class="center">图片</th>
-						<th class="center">标签数</th>
-						
 						<th class="center">调整</th>
+						<th class="center">标签数</th>
 						<th class="center">操作</th>
 					</tr>
 				</thead>
@@ -98,19 +97,16 @@ function down(id){
 			     	        	   "fnRender":function(data,type){
 			     	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
 			     	        	   }
-			     	           },
-			     	      
-			     	           
+			     	           },		     	      			 	           
 						  {
-				   	        	 "aTargets": [4],
+				   	        	 "aTargets": [3],
 				 	        	   "fnRender":function(data,type){
-				 	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+				 	        		  var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 
 				 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
 				   	        			str += '</div>';
 				   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
 				   	        			str += '</div>';
-				 	        			
 				 	        		   return  str;
 				 	        	   }
 				   	           },
@@ -129,8 +125,8 @@ function down(id){
 										str += '</a>';
 										str += '</div>';
 					   					return  str;
-				 }
-				 } ,
+							 }
+				 } 
 						 ],
 				"bServerSide" : true,//这个用来指明是通过服务端来取数据
 				"sAjaxSource" : "<%=basePath %>admin/getmetoo/connect",  //这个是请求的地址

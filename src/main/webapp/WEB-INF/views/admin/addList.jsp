@@ -29,9 +29,7 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
-<div class="page-content">
-			
-			 <div class="panel panel-default">
+
                     <div class="panel-body">
                     	<form class="form-bordered"  id="me2form" action="<%=basePath %>admin/insertList" method="post" enctype="multipart/form-data">
                              
@@ -49,7 +47,9 @@
                                        	<span class="dangger" style="color: red">*</span> 七牛：
                                   
                                     <div class="col-lg-3" style="height: 120px">
-                                    	<input type="file" name="afile"/>
+                                    	 <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">
+
+               						 <img id="image" src="" >
                                     
                                    		<br/>
                                			<br/>
@@ -57,10 +57,10 @@
 										集合名称:<input type="text" name="title"  value="${list.title}"/>
                                     </div>
                               
-					 <br>
+					 <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
 			               <div  style="text-align: center">
 							<div >
-								<button class="btn btn-primary" type="button" onclick="submitform()">
+								<button class="btn btn-primary" type="submit" onclick="submitform()">
 									<i class="icon-ok bigger-110"></i>
 									提交
 								</button>
@@ -74,9 +74,7 @@
 						</div>
                         
            		</form>
-           </div>
-		</div>
-	</div>		
+       		</div>
 <script type="text/javascript">
 
 $("#back").on("click",function(){
@@ -116,6 +114,15 @@ function changetype(){
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
+	 function loadImageFile(event)
+
+     {
+
+             var image = document.getElementById('image');
+
+             image.src = URL.createObjectURL(event.target.files[0]); 
+
+     };
 </script>
 
 </body>

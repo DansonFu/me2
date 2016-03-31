@@ -23,7 +23,7 @@ import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Criteria;
-
+import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
@@ -117,28 +117,25 @@ public class TagsListController {
     }
     Criteria example = new Criteria();
     example.put("taglist", taglist);
-    example.setOrderByClause("id");
+    example.setOrderByClause("sort");
     example.setSord("asc");
 //    example.setMysqlOffset(iDisplayStart);
 //    example.setMysqlLength(iDisplayLength);
 
     int count = tagListService.countByParams(example);
     List<Taglist> metoo = tagListService.selectByParams(example);
-    List<Tagsconnection> conn=tagsconnectionService.selectByParams(example);
+   
    
 	    
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Taglist obj : metoo){
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
-			//String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum()};
-			String s="";
-			if(obj.getId().equals(taglist)){
-				int c=tagsconnectionService.countByParams(example);
-				 s=String.valueOf(c);
-			}
 			
-			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s};
+			String s="";
+			
+			
+			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s,s,s};
 			list.add(d);
 		}
 		
@@ -170,7 +167,7 @@ public class TagsListController {
 
 	@RequestMapping(value="/admin/saveList",method={RequestMethod.POST})
 	public ModelAndView updateList(HttpSession session,String id,String title,
-			@RequestParam("afile")  CommonsMultipartFile afile){
+			@RequestParam("upload")  CommonsMultipartFile afile){
 		
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
@@ -228,8 +225,8 @@ public class TagsListController {
 	 * @return
 	 */
 	@RequestMapping(value="/admin/insertList",method={RequestMethod.POST})
-	public ModelAndView addList(HttpSession session,String id,String title,String num
-			,@RequestParam("afile")  CommonsMultipartFile afile){
+	public ModelAndView addList(HttpSession session,String id,String title
+			,@RequestParam("upload")  CommonsMultipartFile afile){
 		
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
@@ -242,12 +239,25 @@ public class TagsListController {
 				e.printStackTrace();
 			}
 		}
-		
+		Criteria example = new Criteria();
+		example.put("id", id);
+		List<Taglist> tag=tagListService.selectByParams(example);
+		List<Integer> list1 = new ArrayList<Integer>(); 
+		for(Taglist pcs : tag){
+			Integer b = pcs.getSort();
+			list1.add(b);
+		}
+		Integer sort=0;
+		for(int i=0;i<tag.size();i++){
+			if(list1.get(i)>sort){
+				sort = list1.get(i);
+			}
+		}
 		Taglist list =new Taglist();
 //		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setNum(Integer.valueOf(num));
+		list.setSort(sort+1);
 		tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();
 	
@@ -286,7 +296,7 @@ public class TagsListController {
 		Integer b = null;
 		
 		Criteria example = new Criteria();
-		example.put("font", a-1);
+		example.put("sort", a-1);
 		List<Taglist> taglist = tagListService.selectByParams(example);
 		for(Taglist tagslist:taglist){
 			if(tagslist.getSort().equals(a-1)){
@@ -326,7 +336,7 @@ public class TagsListController {
 		Integer b = null;
 		
 		Criteria example = new Criteria();
-		example.put("font", a+1);
+		example.put("sort", a+1);
 		List<Taglist> taglist = tagListService.selectByParams(example);
 		for(Taglist tagslist:taglist){
 			if(tagslist.getSort().equals(a+1)){
