@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface CommentService {
     int countByParams(Criteria example);
-
-    List<Comment> selectByPid(Integer pid);
     
     Comment selectByPrimaryKey(Integer commentId);
 

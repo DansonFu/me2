@@ -33,6 +33,7 @@
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">蜜图评论内容</h3>
+		<input type="hidden"   id="pi" name="pp"  value=" ${pid}" />
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -120,7 +121,7 @@ $(document).ready(function(){
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData1113)
-		        	  //"pid":pid
+		        	 // "pp":pp
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

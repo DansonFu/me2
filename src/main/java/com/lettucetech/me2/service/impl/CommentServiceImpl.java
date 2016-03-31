@@ -65,7 +65,4 @@ public class CommentServiceImpl implements CommentService {
         return this.commentMapper.insertSelective(record);
     }
 
-	public List<Comment> selectByPid(Integer pid) {
-		return this.commentMapper.selectByPid(pid);
-	}
 }
