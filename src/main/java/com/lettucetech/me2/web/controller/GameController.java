@@ -1,5 +1,7 @@
 package com.lettucetech.me2.web.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -101,7 +103,7 @@ public class GameController {
 	public ModelAndView saveGamesFace(HttpSession session,Gameface gameface) {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
-		
+		gameface.setCreateTime(new Date());
 		int i = gamefaceService.insertSelective(gameface);
 		if(i==1){
 			result.setSuccess(true);
@@ -109,6 +111,7 @@ public class GameController {
 			Picture picture = pictureService.selectByPrimaryKey(gameface.getPid());
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
+			
 			
 			//存到用户消息表中
 			Message record = new Message();

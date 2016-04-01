@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -24,6 +25,7 @@ import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.dao.TagsconnectionMapper;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.TXtUser;
+import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PictureService;
@@ -59,10 +61,25 @@ public class TagsSelectiveController {
 	 */
 	 
 	@RequestMapping("/admin/viewselective")
-	public ModelAndView selectByTags(HttpSession session,String id){
+	public ModelAndView selectByTags(HttpSession session,String id,HttpServletRequest request){
+		String str=id;
+		String flag="2";
+		String conn = request.getParameter("conn");
+		String tag=conn;
+		session.setAttribute("conn", conn);
 		session.setAttribute("taglist", id);
+		String name="";
+		if(str==null){
+			
+		Taglist taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
+			
+		 name = taglist1.getTitle();
+		}
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("conn",conn);
+		mav.addObject("flag",flag);
 		mav.addObject("tid",id);
+		mav.addObject("name",name);
 		mav.setViewName("/admin/viewselective");
 		return mav;
 	}
@@ -84,6 +101,7 @@ public class TagsSelectiveController {
 	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		String taglist=(String)session.getAttribute("taglist");
+		String tagslist=(String)session.getAttribute("conn");
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
 	    
@@ -107,8 +125,8 @@ public class TagsSelectiveController {
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 
-	    int count = tagsconnectionService.countByParams(example);
-	    
+	   
+	    int count=0;
 	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
 	    //拼接翻页数据
 	    List list = new ArrayList();
@@ -117,12 +135,20 @@ public class TagsSelectiveController {
 	    			
 	    			Tagshot tagshot=tagshotService.selectByPrimaryKey(obj.getTagsId());
 			//加一个条件,判断是在哪一个集合中?
-	    		if(taglist.equals(obj.getTagslistId())){
-			
+	    		if(taglist !=null && taglist.equals(obj.getTagslistId())){
+	    			  count = tagsconnectionService.countByParams(example);
 	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
 						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
 						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 	    			list.add(d);	
+	    			break;
+				}else if(tagslist!=null && tagslist.equals(obj.getTagslistId())){
+					  count = tagsconnectionService.countByParams(example);
+	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
+						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
+						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
+	    			list.add(d);
+	    			break;
 				}
 	    		}
 	    	

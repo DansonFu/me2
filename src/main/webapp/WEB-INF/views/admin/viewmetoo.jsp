@@ -32,7 +32,7 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">管理蜜图</h3>
+		<h3 class="header smaller lighter blue">内部蜜图</h3>
 		<div style="float: right;">
 			发贴人：<select id="userId">
 				<c:forEach items="${users }" var="user">
@@ -40,6 +40,15 @@
 				</c:forEach>
 			</select>
 		</div>
+		<form action="<%=basePath %>admin/viewmetoo" id="formid" method="post">
+		<div style="float:left;">
+		 &nbsp; &nbsp;<input type="text" name="search"/>
+			<input type="hidden"  id="searchid" value="${svalue }" />
+				<button class="btn" type="submit">
+				检索
+				</button>
+		</div>
+		</form>
 		
 		<br>
 		<br>
@@ -56,7 +65,7 @@
 						<th class="hidden-480 center">B面</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
-						
+						<th class="center">B面心情</th>
 						<th class="center">发贴者</th>
 						<th class="center">创建时间</th>
 						<th class="center">操作</th>
@@ -107,19 +116,19 @@
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
-   	        		   if(data.aData[4]=="1"){
+   	        		   if(data.aData[5]=="1"){
    	        				str = "图片";
    	        		   
-   	        		   }else if(data.aData[4]=="2"){
+   	        		   }else if(data.aData[5]=="2"){
    	        				str = "URL";
-   	        		   }else if(data.aData[4]==""){
+   	        		   }else if(data.aData[5]==""){
    	        				str = "";
    	        		   }
    	        		   return  str;
    	        	   }
    	           },
    	        	{
-   	        	   "aTargets": [9],
+   	        	   "aTargets": [10],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
@@ -143,11 +152,12 @@
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			  var userId = $('#userId').val();
-
+			var searchid=$('#searchid').val();
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
+		        	  "userId":userId,
+		        	  "searchid":searchid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

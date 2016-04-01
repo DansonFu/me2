@@ -29,17 +29,18 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
-<h3 class="header smaller lighter blue">已选标签</h3>
-			<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
+<h3 class="header smaller lighter blue">已选标签&nbsp;<input value="${name }" style="border:0px" /></h3>
+			
+				
+				<%--<<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
 				<div style="float: left;">
 				<br/>
-				
-				<button class="btn btn-primary" type="submit" onclick="reset()">
+				button class="btn btn-primary" type="submit" onclick="reset()">
 					<i class="icon-undo bigger-60"></i>
 					恢复默认设置
 				</button>
 				</div>
-				</form>
+				</form>  --%> 
 		<div style="float: right;">
 		<br/>
 			<button class="btn btn-primary" type="submit" onclick="submit()">
@@ -51,6 +52,7 @@
 			<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 				<div style="float: right;">
 				<input type="hidden" name="taglist" value="${tid }"/>
+				<input type="hidden" name="flag" value="${flag }"/>
 				&nbsp; &nbsp; &nbsp;
 				<br/>
 				<button class="btn" type="submit" onclick="add()">
@@ -89,7 +91,7 @@
 	</form>
 
 <script type="text/javascript">
-
+		
 	function del(id){
 		if(confirm('确实删除该标签吗?')){
 			window.location="<%=basePath %>admin/delselective?id="+id;
@@ -107,12 +109,7 @@
    	        	   "aTargets": [6],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
-//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
-//   	        			str += '</a>';
-//   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
-//   	        			str += '<i class="icon-pencil bigger-130"></i>';
-//   	        			str += '</a>';
+	        		
    	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-trash bigger-130"></i>';
    	        			str += '</a>';

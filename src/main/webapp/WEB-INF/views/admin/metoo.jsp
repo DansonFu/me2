@@ -232,6 +232,7 @@
                                     </div>
                                     <div class="col-lg-9">
 										<input type="text" name="bfeel" style="width:80%;"/>
+										
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -294,6 +295,10 @@
 	function submitform(){
 		if($("input[name='afile']").val()==""){
 			$("input[name='afile']").focus();
+			return;
+		}
+		if($("input[name='bfeel']").val()==""){
+			$("input[name='bfeel']").focus();
 			return;
 		}
 		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){

@@ -75,11 +75,11 @@ public class Message implements Serializable {
     }
 
     /**
-     * @param createTime 
+     * @param string 
 	 *            创建时间
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateTime(Date string) {
+        this.createTime = string;
     }
 
     /**

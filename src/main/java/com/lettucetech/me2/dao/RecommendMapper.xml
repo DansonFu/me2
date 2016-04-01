@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.RecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Recommend" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tag_id" property="tagId" jdbcType="INTEGER" />
+    <result column="tagName" property="tagname" jdbcType="VARCHAR" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+    <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
+    <result column="lastTime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.tagId != null" >
+         and tag_id = #{condition.tagId}
+      </if>
+      <if test="condition.tagname != null" >
+         and tagName = #{condition.tagname}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      <if test="condition.sort != null" >
+         and sort = #{condition.sort}
+      </if>
+      <if test="condition.acount != null" >
+         and acount = #{condition.acount}
+      </if>
+      <if test="condition.mefriends != null" >
+         and mefriends = #{condition.mefriends}
+      </if>
+      <if test="condition.lasttime != null" >
+         and lastTime = #{condition.lasttime}
+      </if>
+      <if test="condition.qiniukey != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, tag_id, tagName, hits, sort, acount, mefriends, lastTime, qiniukey
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from recommend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from recommend
+    where id = #{id}
+  </select>
+  <select id="selectByParams4Matching" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from recommend
+    <where>
+          <if test="condition.tag != null" >
+         and tagName like '%${condition.tagName}%'
+      </if>
+      <if test="condition.acount != null" >
+         and acount = #{condition.acount}
+      </if>
+      <if test="condition.hits != null" >
+         and hits = #{condition.hits}
+      </if>
+      
+      <if test="condition.mefriends != null" >
+         and mefriends = #{condition.mefriends}
+      </if>
+      <if test="condition.lastTime != null" >
+         and lastTime = #{condition.lastTime}
+      </if>
+      <if test="condition.lastTime != null" >
+         and qiniukey = #{condition.qiniukey}
+      </if>
+    </where>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from recommend
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from recommend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Recommend" >
+    insert into recommend (id, tag_id, tagName, hits, sort, acount, mefriends, lastTime, 
+      qiniukey)
+    values (#{id}, #{tagId}, #{tagname}, #{hits}, #{sort}, #{acount}, #{mefriends}, #{lasttime}, 
+      #{qiniukey})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Recommend" >
+    insert into recommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tagId != null" >
+        tag_id,
+      </if>
+      <if test="tagname != null" >
+        tagName,
+      </if>
+      <if test="hits != null" >
+        hits,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+      <if test="mefriends != null" >
+        mefriends,
+      </if>
+      <if test="lasttime != null" >
+        lastTime,
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="tagId != null" >
+        #{tagId},
+      </if>
+      <if test="tagname != null" >
+        #{tagname},
+      </if>
+      <if test="hits != null" >
+        #{hits},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      <if test="acount != null" >
+        #{acount},
+      </if>
+      <if test="mefriends != null" >
+        #{mefriends},
+      </if>
+      <if test="lasttime != null" >
+        #{lasttime},
+      </if>
+      <if test="qiniukey != null" >
+        #{qiniukey},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from recommend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update recommend
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.tagId != null" >
+        tag_id = #{record.tagId},
+      </if>
+      <if test="record.tagname != null" >
+        tagName = #{record.tagname},
+      </if>
+      <if test="record.hits != null" >
+        hits = #{record.hits},
+      </if>
+      <if test="record.sort != null" >
+        sort = #{record.sort},
+      </if>
+      <if test="record.acount != null" >
+        acount = #{record.acount},
+      </if>
+      <if test="record.mefriends != null" >
+        mefriends = #{record.mefriends},
+      </if>
+      <if test="record.lasttime != null" >
+        lastTime = #{record.lasttime},
+      </if>
+      <if test="record.qiniukey != null" >
+        qiniukey = #{record.qiniukey},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update recommend
+    set id = #{record.id},
+      tag_id = #{record.tagId},
+      tagName = #{record.tagname},
+      hits = #{record.hits},
+      sort = #{record.sort},
+      acount = #{record.acount},
+      mefriends = #{record.mefriends},
+      lastTime = #{record.lasttime},
+      qiniukey = #{record.qiniukey}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Recommend" >
+    update recommend
+    <set >
+      <if test="tagId != null" >
+        tag_id = #{tagId},
+      </if>
+      <if test="tagname != null" >
+        tagName = #{tagname},
+      </if>
+      <if test="hits != null" >
+        hits = #{hits},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount},
+      </if>
+      <if test="mefriends != null" >
+        mefriends = #{mefriends},
+      </if>
+      <if test="lasttime != null" >
+        lastTime = #{lasttime},
+      </if>
+      <if test="qiniukey != null" >
+        qiniukey = #{qiniukey},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Recommend" >
+    update recommend
+    set tag_id = #{tagId},
+      tagName = #{tagname},
+      hits = #{hits},
+      sort = #{sort},
+      acount = #{acount},
+      mefriends = #{mefriends},
+      lastTime = #{lasttime},
+      qiniukey = #{qiniukey}
+    where id = #{id}
+  </update>
+</mapper>

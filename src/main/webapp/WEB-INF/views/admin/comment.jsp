@@ -172,20 +172,13 @@
                                 <!-- col-lg-6 -->
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                        	A面心情：
+                                        	心情：
                                     </div>
                                     <div class="col-lg-9">
 										<label id="amood">${picture.mood }</label>
                                     </div>
                                 </div>
-                                 <div class="col-lg-6">
-                                    <div class="col-lg-3 input-column">
-                                        	B面心情：
-                                    </div>
-                                    <div class="col-lg-9">
-										<label id="bmood">${bpicture.mood }</label>
-                                    </div>
-                                </div>
+                                
                                 <!-- col-lg-6 -->
                             </div>
                         
@@ -245,7 +238,7 @@
                         <h4>已有评论</h4>
                     </div>
                     <div id="comments">
-
+						
                     </div>
                     <!-- row -->
 
@@ -279,8 +272,11 @@
                                 <textarea class="form-control" rows="5" placeholder="评论内容" name="content"
                                 	style="margin-top: 0px; margin-bottom: 0px; height: 60px;"></textarea>
                             </div>
-                            <div class="col-lg-2">
-                                <input type="file"  name="file"/>
+                            <div class="col-lg-2" onclick="viewimg()"> 
+                            	
+                                <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">
+
+                				<img id="image" src="" >
                             </div>
                         </div>
                         <!-- col-lg- -->
@@ -330,6 +326,7 @@
 	}); 
 	
 	function submitform(){
+		
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
@@ -409,7 +406,8 @@
 				$("#afront").attr("href",domain+"/"+data[0].qiniukey);
 				$("#imgfront").attr("src",domain+"/"+data[0].qiniukey);
 				$("#tags").text(data[0].tags);
-				$("#mood").text(data[0].mood);
+				$("#amood").text(data[0].mood);
+				$("#bmood").text(data[0].mood);
 				$("#location").text(data[0].locationTitle+":"+data[0].locationContent);
 				$("#creatTime").text(data[0].creatTime);
 				$("#pid").val(data[0].pid);
@@ -461,7 +459,15 @@
 		});
 
 	}
+	 function loadImageFile(event)
 
+     {
+
+             var image = document.getElementById('image');
+
+             image.src = URL.createObjectURL(event.target.files[0]); 
+
+     };
 </script>		
 	</body>
 </html>

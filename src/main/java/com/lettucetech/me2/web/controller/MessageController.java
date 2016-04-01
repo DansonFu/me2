@@ -243,13 +243,11 @@ public class MessageController {
 		} catch (KeystoreException e) {
 			e.printStackTrace();
 		}
-		
-Gson gson=new Gson();
+
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
-		result.setObj(gson.toJson(record));
-		result.setObj(gson.toJson(gameface));
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;

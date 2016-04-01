@@ -230,7 +230,7 @@
                             <div class="row form-group">
                             	<div class="col-lg-6" >
                                     <div class="col-lg-3 input-column" >
-                                       	<span class="dangger" style="color: red">*</span>标签(半角符号 # 分隔)：
+                                       	<span class="dangger" style="color: red">*</span>标签<span style="color:red">(半角符号 # 分隔)</span>：
                                     </div>
                                     <div class="col-lg-9" >
                                     	<input type="text" name="tags" style="width:80%;" value="${picture.tags}"/>
@@ -249,7 +249,7 @@
                             </div>
                             <!-- row -->
                            
-                    </div>
+                   
                     <!-- panel-body -->
                 </div>
 			
@@ -292,7 +292,10 @@
                     </div>
 				</c:forEach>
              </div>
-		
+             
+		 </form>
+		  </div>
+		  
 		 <br>
                <div  style="text-align: center">
 				<div >
@@ -309,7 +312,7 @@
 				</div>
 			</div>
                         
-                    </form>
+                   
 		</div>
 		
 		<script src="<%=basePath %>resources/assets/js/jquery.min.js"></script>

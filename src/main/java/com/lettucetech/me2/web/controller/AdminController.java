@@ -303,6 +303,7 @@ public class AdminController {
 		}
 		
 		ModelAndView mav = new ModelAndView();
+		
 		mav.setViewName("redirect:/admin/metoo");
 		return mav;
 
@@ -465,7 +466,8 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("/admin/viewmetoo")
-	public ModelAndView pcase(HttpSession session) {
+	public ModelAndView pcase(HttpSession session,HttpServletRequest request) {
+		String s= request.getParameter("search");
 		List<TXtUser> users = new ArrayList<TXtUser>();
 		if(checkPermission(session,"viewall")){
 			Criteria example = new Criteria();
@@ -478,9 +480,10 @@ public class AdminController {
 		}else{
 			users.add((TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME));
 		}
-		
+	
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("users", users);
+		mav.addObject("svalue",s);
 		mav.setViewName("/admin/viewmetoo");
 		return mav;
 	}
@@ -492,7 +495,7 @@ public class AdminController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo")
-	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String userId) {
+	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String userId,String searchid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -510,9 +513,7 @@ public class AdminController {
 	  
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
-	         
-//	         if(obj.get("name").equals("sear"))
-//	        	 sear=obj.get("value").toString();
+
 	    }
 	    Criteria example = new Criteria();
 	    example.setMysqlOffset(iDisplayStart);
@@ -525,17 +526,58 @@ public class AdminController {
 		if(!"-1".equals(userId)){
 			example.put("userId", userId);
 		}
-	    
-	    int count = metooService.countByParams(example);
+		
+		 List list = new ArrayList();
+		 int count=0;
+	    if(!"".equals(searchid)){
+	    	example.put("searchid",searchid);
+	    	
+	    	 count= metooService.countByParams(example);
+	 	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
+	 	    
+	 	    //拼接翻页数据
+	 	   
+	 		for(TXtMetoo obj : metoo){
+	 			
+	 			if(obj.getPicture().getTags().contains(searchid)){
+	 				
+	 			
+	 			
+	 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
+	 			String burl="";
+	 			String type="";
+	 			String bmood="";
+	 			//如果有B面
+	 			if(obj.getPicture().getBpicture()!=null){
+	 				if(obj.getPicture().getBpicture().getType().equals("1")){
+	 					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+	 				}else{
+	 					burl = obj.getPicture().getBpicture().getQiniukey();
+	 				}
+	 					type = obj.getPicture().getBpicture().getType();
+	 			}
+	 			bmood=obj.getPicture().getBpicture().getMood();
+	 			
+	 			
+	 			
+	 			
+	 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
+	 					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
+	 					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
+	 			list.add(d);
+	 			}
+	 		}
+	    }else{
+	     count = metooService.countByParams(example);
 	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
 	    
 	    //拼接翻页数据
-	    List list = new ArrayList();
+	    
 		for(TXtMetoo obj : metoo){
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
 			String burl="";
 			String type="";
-			
+			String bmood="";
 			//如果有B面
 			if(obj.getPicture().getBpicture()!=null){
 				if(obj.getPicture().getBpicture().getType().equals("1")){
@@ -544,15 +586,19 @@ public class AdminController {
 					burl = obj.getPicture().getBpicture().getQiniukey();
 				}
 					type = obj.getPicture().getBpicture().getType();
+					bmood=obj.getPicture().getBpicture().getMood();
+				
 			}
 			
 			
+			
+			
 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-					obj.getPicture().getTags(),obj.getUser().getName(),
+					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
 					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
 			list.add(d);
 		}
-		
+	    }
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);
@@ -711,7 +757,8 @@ public class AdminController {
 			}
 		}
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/admin/viewmetoo");
+		 
+		mav.setViewName("redirect:/admin/viewmetoo");
 		return mav;
 	}
 	

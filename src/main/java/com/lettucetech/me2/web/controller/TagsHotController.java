@@ -3,6 +3,7 @@ package com.lettucetech.me2.web.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,19 +20,23 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Recommend;
+//import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
-import com.lettucetech.me2.service.RecommendService;
+//import com.lettucetech.me2.service.RecommendService;
 import com.lettucetech.me2.service.TXtUserService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
+import com.qiniu.util.Json;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 public class TagsHotController {
@@ -51,7 +56,7 @@ public class TagsHotController {
 	@Autowired
 	private TaglistService tagsListService;
 	@Autowired
-	private RecommendService recommendService;
+//	private RecommendService recommendService;
 //	/**
 //	 * 根据热度查询标签
 //	 * @param session
@@ -80,10 +85,29 @@ public class TagsHotController {
 	 
 	@RequestMapping("/admin/viewTags")
 	public ModelAndView selectByTags(HttpSession session,HttpServletRequest request){	
+		 
 		String str = request.getParameter("taglist");
+		String s= request.getParameter("search");
+		String flg=request.getParameter("flag");
+		String flag="";
+		if(flg==null){
+			
+		 flag="1";
+		}else if(flg!=null){
+			flag="";
+		}
 		session.setAttribute("str",str);
 		ModelAndView mav = new ModelAndView();
 		
+		mav.addObject("svalue",s);
+		if(flg==null){
+			
+			 
+			mav.addObject("flag",flag);
+			}else if(flg!=null){
+				
+				mav.addObject("flag",flg);
+			}
 		mav.setViewName("/admin/viewTags");;
 		return mav;
 	}
@@ -96,132 +120,107 @@ public class TagsHotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetooByTags")
-	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String sear,String font) {
+	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String font,String searchid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
-		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
-	    String sEcho = null;
-	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 0; // 每页显示的行数
-	   
-	   
-	    for (int i = 0; i < jsonarray.size(); i++) {
-	    	HashMap obj = (HashMap) jsonarray.get(i);
-	    	 if (obj.get("name").equals("sEcho"))
-	             sEcho = obj.get("value").toString();
-	  
-	         if (obj.get("name").equals("iDisplayStart"))
-	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
-	  
-	         if (obj.get("name").equals("iDisplayLength"))
-	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
-	         
-	         if(obj.get("name").equals("sear"))
-	        	 sear=obj.get("value").toString();
-	         
-//	         if(obj.get("name").equals("font"))
-//	        	 font=obj.get("value");
-	    }
-	     
-	    Criteria example = new Criteria();
-	    
-    if( font=="1"){
-		    example.setOrderByClause("last_time");
-		    example.setSord("desc");
-		    }
-	    else if(font=="2"){
-	    	example.setOrderByClause("hits");
-	 	    example.setSord("desc");
-	 	 }
-	    else if(font=="3"){
-	    	 example.setOrderByClause("acount");
-	 	    example.setSord("desc");
-	 	   }
-	    else if(font=="0"){
-	    	 example.setOrderByClause("id");
-	 	    example.setSord("desc");
-	    }
-	    example.put("sear", sear);
-	    example.put("font", font);
-	   example.setDistinct(true);
-	    example.setMysqlOffset(iDisplayStart);
-	    example.setMysqlLength(iDisplayLength);
-	    //是否有查看所有人权限
-
-//		if(!"-1".equals(userId)){
-//			example.put("userId", userId);
-//		}
-//	    
-	    int count = tagshotService.countByParams(example);
-	    List<Tagshot> metoo = tagshotService.selectByParams(example);
-	    
-	    //拼接翻页数据
-	    List list = new ArrayList();
-	    
-		for(Tagshot obj : metoo){
-		//判断如果图片的pid相同就去重
+		 
+			ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
+			  
+			 int iDisplayStart = 0; // 起始索引
+			 int iDisplayLength = 0;
+			 String sEcho=null;
+			 for (int i = 0; i < jsonarray.size(); i++) {
+				 HashMap obj = (HashMap) jsonarray.get(i);
+				 if (obj.get("name").equals("sEcho"))
+					 sEcho = obj.get("value").toString();
+				 
+				 if (obj.get("name").equals("iDisplayStart"))
+					 iDisplayStart = Integer.parseInt(obj.get("value").toString());
+				 
+				 if (obj.get("name").equals("iDisplayLength"))
+					 iDisplayLength = Integer.parseInt(obj.get("value").toString());
+				 
+				 
+			 }
+		
+			 Criteria example = new Criteria();
+			 
 			
-				
+			 example.setDistinct(true);
+			 example.setMysqlOffset(iDisplayStart);
+			 example.setMysqlLength(iDisplayLength);
+			 
+			 List list = new ArrayList();
+			 if(("1").equals(font)){
+					example.setOrderByClause("id");
+					example.setSord("asc");
 					
-					String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-							DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-					list.add(d);
+				}else if(("2").equals(font)){
+					example.setOrderByClause("hits");
+					example.setSord("asc");
+					
+				}else if(("3").equals(font)){
+					example.setOrderByClause("acount");
+					example.setSord("asc");
+					
+				}else if(("4").equals(font)){
+					example.setOrderByClause("mefriends");
+					example.setSord("asc");
 				
-			}
+				}else if(("5").equals(font)){
+					example.setOrderByClause("last_time");
+					example.setSord("asc");
+					
+				}
+			  
+			 if(!"".equals(searchid)){
+				 example.put("tag", searchid);
+			 }
+				 
+			 int count = tagshotService.countByParams(example);
+				 List<Tagshot> metoo = tagshotService.selectByParams(example);
+				 
+				 //拼接翻页数据
+				
+				 
+				 for(Tagshot obj : metoo){
+					 //判断如果图片的pid相同就去重
+					 if(searchid.contains(obj.getTag())){
+					 
+					 String[] d={obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString()};
+					 list.add(d);
+					 }else{
+						 String[] d={obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+								 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString()};
+						 list.add(d);
+					 }
+				 }
+			
+		
+			
+			 
+			 DataTablePaginationForm dtpf = new DataTablePaginationForm();
+			 dtpf.setsEcho(sEcho);
+			 dtpf.setiTotalDisplayRecords(count);
+			 dtpf.setiTotalRecords(count);
+			 dtpf.setAaData(list);
+			 
+			 String jsonArray = JsonUtil.Encode(dtpf);
+			 
+			 try {
+				 response.setHeader("Cache-Control", "no-cache");
+				 response.setContentType("aplication/json;charset=UTF-8");
+				 response.getWriter().print(jsonArray);
+			 } catch (IOException e) {
+				 e.printStackTrace();
+			 }
+		
+		} 
+	
 		
 		
-		
-		
-		DataTablePaginationForm dtpf = new DataTablePaginationForm();
-		dtpf.setsEcho(sEcho);
-		dtpf.setiTotalDisplayRecords(count);
-		dtpf.setiTotalRecords(count);
-		dtpf.setAaData(list);
-
-		String jsonArray = JsonUtil.Encode(dtpf);
-		
-		try {
-			response.setHeader("Cache-Control", "no-cache");
-			response.setContentType("aplication/json;charset=UTF-8");
-			response.getWriter().print(jsonArray);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-//	/**
-//	 *   修改标签
-//	 * @param session
-//	 * @param tag
-//	 * @param count
-//	 * @param hits
-//	 * @param mefriends
-//	 * @param key
-//	 * @param lastTime
-//	 * @return
-//	 */
-//	
-//	
-//	@RequestMapping("/admin/updateTags")
-//	public ModelAndView updateTags(HttpSession session,String tag,String acount,String hits,String mefriends
-//			,String key,Timestamp lastTime  ){
-//		
-//		
-//		Tagshot list=new Tagshot();
-//		
-//		list.setTag(tag);
-//		list.setAcount(Integer.valueOf(acount));
-//		list.setHits(Integer.valueOf(hits));
-//		list.setMefriends(Integer.valueOf(mefriends));
-//		list.setQiniukey(key);
-//		list.setLastTime(lastTime);
-//		
-//		
-//		tagshotService.updateByPrimaryKeySelective(list);
-//		
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("redirect:/admin/viewTags");
-//		return mav;
-//	}
+			 
 	/**
 	 * 删除标签
 	 * @param session
@@ -247,52 +246,57 @@ public class TagsHotController {
 	
 	
 	@RequestMapping(value="/admin/add")
-	public ModelAndView add(HttpSession session,String id){
-		String str =(String)session.getAttribute("str");
+	public ModelAndView add(HttpSession session,HttpServletRequest request){
+		String[] ids = request.getParameterValues("checkname");
+
+	    if (null != ids && !"".equals(ids.toString())){
+	        for(int i = 0 ; i < ids.length; i++ ){ // 将ids 字符串按逗号分隔为 字符串数组
+	           
+	            List<String> list = new ArrayList<String>();
+	           
+	        }
+	    }
 		
+		String str =(String)session.getAttribute("str");
+
 		Tagsconnection conn=new Tagsconnection();
-		conn.setTagsId(Integer.valueOf(id));
-		conn.setTagslistId(str);
-	
-		tagsconnectionService.insert(conn);
+		
+			// conn.setTagsId(c);
+			 conn.setTagslistId(str);
+			 
+			 tagsconnectionService.insert(conn);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("conn",conn);
 		mav.setViewName("redirect:/admin/viewselective");
 		return mav;
 		
 	}
-//	/**
-//	 * 搜索标签
-//	 * 
-//	 */
-////	@RequestMapping(value="/admin/searchtag")
-////	public ModelAndView search(HttpSession session){
-////		//String str =(String)session.getAttribute("str");
-////		
-////		String str=request.getParameter("search");
-////		Criteria example = new Criteria();
-////		
-////		example.put("str", str);
-////		tagshotService.selectByParams(example);
-////		ModelAndView mav = new ModelAndView();
-////		mav.addObject("str",str);
-////		mav.setViewName("redirect:/admin/searchTag");
-////		return mav;
-////}
-//	@RequestMapping(value="/admin/viewsearch")
-//	public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
-//		//String str =(String)session.getAttribute("str");
-//		
-//		String str=request.getParameter("search");
-//		Criteria example = new Criteria();
-//		
-//		example.put("str", str);
-//		tagshotService.selectByParams(example);
-//		ModelAndView mav = new ModelAndView();
-//		mav.addObject("str",str);
-//		mav.setViewName("redirect:/admin/searchTag");
-//		return mav;
-//}
+	@RequestMapping(value="/admin/addtag")
+	public ModelAndView addtag(HttpSession session,HttpServletRequest request){
+		String[] tagshot = request.getParameterValues("name");
+		String cate="";
+		for(int i=0;i<tagshot.length;i++)
+		{
+		    cate+=tagshot[i]+" ";
+		}
+		String str =(String)session.getAttribute("str");
+		
+		Tagsconnection conn=new Tagsconnection();
+		
+		
+			 
+			// conn.setTagsId(tagid);
+			 conn.setTagslistId(str);
+			 
+			 tagsconnectionService.insert(conn);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("conn",conn);
+		mav.setViewName("redirect:/admin/viewselective");
+		return mav;
+		
+	}
 	
 	/**
 	 * 刷新
@@ -313,3 +317,70 @@ public class TagsHotController {
 		return mav;
 	}
 }
+/**
+* 搜索标签
+* 
+*/
+//@RequestMapping(value="/admin/searchtag")
+//public ModelAndView search(HttpSession session,HttpServletRequest request){
+//	//String str =(String)session.getAttribute("str");
+//	
+//	String str=request.getParameter("searcher");
+//	Criteria example = new Criteria();
+//	
+//	example.put("str", str);
+//	tagshotService.selectByParams(example);
+//	ModelAndView mav = new ModelAndView();
+//	mav.addObject("str",str);
+//	mav.setViewName("redirect:/admin/viewTags");
+//	return mav;
+//}
+//}
+//@RequestMapping(value="/admin/viewsearch")
+//public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
+//	//String str =(String)session.getAttribute("str");
+//	
+//	String str=request.getParameter("search");
+//	Criteria example = new Criteria();
+//	
+//	example.put("str", str);
+//	tagshotService.selectByParams(example);
+//	ModelAndView mav = new ModelAndView();
+//	mav.addObject("str",str);
+//	mav.setViewName("redirect:/admin/searchTag");
+//	return mav;
+//}
+///**
+//*   修改标签
+//* @param session
+//* @param tag
+//* @param count
+//* @param hits
+//* @param mefriends
+//* @param key
+//* @param lastTime
+//* @return
+//*/
+//
+//
+//@RequestMapping("/admin/updateTags")
+//public ModelAndView updateTags(HttpSession session,String tag,String acount,String hits,String mefriends
+//		,String key,Timestamp lastTime  ){
+//	
+//	
+//	Tagshot list=new Tagshot();
+//	
+//	list.setTag(tag);
+//	list.setAcount(Integer.valueOf(acount));
+//	list.setHits(Integer.valueOf(hits));
+//	list.setMefriends(Integer.valueOf(mefriends));
+//	list.setQiniukey(key);
+//	list.setLastTime(lastTime);
+//	
+//	
+//	tagshotService.updateByPrimaryKeySelective(list);
+//	
+//	ModelAndView mav = new ModelAndView();
+//	mav.setViewName("redirect:/admin/viewTags");
+//	return mav;
+//}

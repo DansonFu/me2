@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
-import com.lettucetech.me2.common.utils.DateUtil;
+
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
@@ -26,8 +26,10 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
-import com.lettucetech.me2.pojo.Tagshot;
+import com.lettucetech.me2.pojo.Tagsconnection;
+
 import com.lettucetech.me2.service.TaglistService;
+import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 import com.qiniu.common.QiniuException;
@@ -39,6 +41,8 @@ public class TagsListController {
 	private TaglistService tagListService;
 	@Autowired
 	private TagshotService tagshotService;
+	@Autowired
+	private TagsconnectionService tagsconnectionService;
 	/**
 	 * 跳转到标签集合页面
 	 *
@@ -50,7 +54,9 @@ public class TagsListController {
 	@RequestMapping("/admin/viewList")
 	public ModelAndView selectByTags(HttpSession session){	
 		session.setAttribute("taglist","taglist");
+		
 		ModelAndView mav = new ModelAndView();
+		
 		mav.setViewName("/admin/viewList");;
 		return mav;
 	}
@@ -63,8 +69,9 @@ public class TagsListController {
 	public ModelAndView updateByTags(HttpSession session,String id){		
 		
 		Taglist taglist = tagListService.selectByPrimaryKey(Integer.valueOf(id));
-		
+		String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+taglist.getQiniukey();
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("aurl",aurl);
 		mav.addObject("taglist",taglist);
 		mav.setViewName("/admin/updateList");;
 		return mav;
@@ -110,22 +117,25 @@ public class TagsListController {
     }
     Criteria example = new Criteria();
     example.put("taglist", taglist);
-    example.setOrderByClause("num");
+    example.setOrderByClause("sort");
     example.setSord("asc");
 //    example.setMysqlOffset(iDisplayStart);
 //    example.setMysqlLength(iDisplayLength);
 
     int count = tagListService.countByParams(example);
     List<Taglist> metoo = tagListService.selectByParams(example);
-    
-	    //拼接翻页数据
+   
+   
 	    
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Taglist obj : metoo){
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
-			//String[] d={obj.getId().toString(),obj.getTitle(),obj.getNum()};
-			String[] d={obj.getId().toString(),obj.getTitle(),aurl,obj.getNum().toString()};
+			
+			String s="";
+			
+			
+			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s,s,s};
 			list.add(d);
 		}
 		
@@ -156,8 +166,8 @@ public class TagsListController {
 	 */
 
 	@RequestMapping(value="/admin/saveList",method={RequestMethod.POST})
-	public ModelAndView updateList(HttpSession session,String id,String title,String num,
-			@RequestParam("afile")  CommonsMultipartFile afile){
+	public ModelAndView updateList(HttpSession session,String id,String title,
+			@RequestParam("upload")  CommonsMultipartFile afile){
 		
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
@@ -179,7 +189,7 @@ public class TagsListController {
 		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setNum(Integer.valueOf(num));
+//		list.setNum(Integer.valueOf(num));
 		
 		tagListService.updateByPrimaryKeySelective(list);
 		
@@ -215,8 +225,8 @@ public class TagsListController {
 	 * @return
 	 */
 	@RequestMapping(value="/admin/insertList",method={RequestMethod.POST})
-	public ModelAndView addList(HttpSession session,String id,String title,String num
-			,@RequestParam("afile")  CommonsMultipartFile afile){
+	public ModelAndView addList(HttpSession session,String id,String title
+			,@RequestParam("upload")  CommonsMultipartFile afile){
 		
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
@@ -229,12 +239,25 @@ public class TagsListController {
 				e.printStackTrace();
 			}
 		}
-		
+		Criteria example = new Criteria();
+		example.put("id", id);
+		List<Taglist> tag=tagListService.selectByParams(example);
+		List<Integer> list1 = new ArrayList<Integer>(); 
+		for(Taglist pcs : tag){
+			Integer b = pcs.getSort();
+			list1.add(b);
+		}
+		Integer sort=0;
+		for(int i=0;i<tag.size();i++){
+			if(list1.get(i)>sort){
+				sort = list1.get(i);
+			}
+		}
 		Taglist list =new Taglist();
 //		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setNum(Integer.valueOf(num));
+		list.setSort(sort+1);
 		tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();
 	
@@ -274,16 +297,16 @@ public class TagsListController {
 		
 		Criteria example = new Criteria();
 		example.put("sort", a-1);
-		List<Taglist> lpc = tagListService.selectByParams(example);
-		for(Taglist pc:lpc){
-			if(pc.getSort().equals(a-1)){
-				b = pc.getId();
+		List<Taglist> taglist = tagListService.selectByParams(example);
+		for(Taglist tagslist:taglist){
+			if(tagslist.getSort().equals(a-1)){
+				b = tagslist.getId();
 				break;
 			}
 		}
-		Taglist prec1 = tagListService.selectByPrimaryKey(b);
-		prec1.setSort(a);
-		tagListService.updateByPrimaryKeySelective(prec1);
+		Taglist list1 = tagListService.selectByPrimaryKey(b);
+		list1.setSort(a);
+		tagListService.updateByPrimaryKeySelective(list1);
 		list.setSort(a-1);
 		tagListService.updateByPrimaryKeySelective(list);
 		
@@ -296,7 +319,7 @@ public class TagsListController {
 //		pc.setSort(sort+1);
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewList");
+		mav.setViewName("/admin/viewList");
 		return mav;
 	}
 	
@@ -314,16 +337,16 @@ public class TagsListController {
 		
 		Criteria example = new Criteria();
 		example.put("sort", a+1);
-		List<Taglist> lpc = tagListService.selectByParams(example);
-		for(Taglist pc:lpc){
-			if(pc.getSort().equals(a+1)){
-				b = pc.getId();
+		List<Taglist> taglist = tagListService.selectByParams(example);
+		for(Taglist tagslist:taglist){
+			if(tagslist.getSort().equals(a+1)){
+				b = tagslist.getId();
 				break;
 			}
 		}
-		Taglist prec1 = tagListService.selectByPrimaryKey(b);
-		prec1.setSort(a);
-		tagListService.updateByPrimaryKeySelective(prec1);
+		Taglist list1 = tagListService.selectByPrimaryKey(b);
+		list1.setSort(a);
+		tagListService.updateByPrimaryKeySelective(list1);
 		list.setSort(a+1);
 		tagListService.updateByPrimaryKeySelective(list);
 //		Picturerecommend pc = new Picturerecommend();
@@ -333,7 +356,7 @@ public class TagsListController {
 //		pc.setSort(sort+1);
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/viewList");
+		mav.setViewName("/admin/viewList");
 		return mav;
 	}
 }

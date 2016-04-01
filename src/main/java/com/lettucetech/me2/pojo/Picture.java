@@ -36,8 +36,9 @@ public class Picture implements Serializable {
      * 心情
      */
     private String mood;
+   
 
-    /**
+	/**
      * a:a面   b:b面
      */
     private String front;
