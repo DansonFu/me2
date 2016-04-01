@@ -8,8 +8,7 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
-    <association property="customer" column="customer_id"
-			select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"/>
+    <association property="customer" column="customer_id" select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -57,12 +56,6 @@
     from comment
     where comment_id = #{commentId}
   </select>
-  <select id="selectByPid"  resultMap="BaseResultMap"  parameterType="java.lang.Integer">
-    select 
-    <include refid="Base_Column_List" />
-    from comment
-    where pid = #{pid} and del=0 order by  creat_time desc
-  </select>  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from comment
     where comment_id = #{commentId}

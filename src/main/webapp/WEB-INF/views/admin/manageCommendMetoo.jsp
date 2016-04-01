@@ -33,7 +33,7 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">推荐蜜图</h3>
+		<h3 class="header smaller lighter blue">滚播蜜图</h3>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -49,6 +49,7 @@
 						
 						<th class="center">有效期</th>
 						<th class="center">操作</th>
+						<th class="center">有效期限</th>
 					</tr>
 				</thead>
 	
@@ -80,6 +81,10 @@ function down(id){
 	window.location="<%=basePath %>admin/downcommendmetoo?id="+id;
 }
 
+function view(pid){
+	window.location="<%=basePath %>admin/viewcheckmetoopicture?pid="+pid;
+}
+
 $(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
@@ -103,7 +108,7 @@ $(document).ready(function(){
    	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
    	        			str += '</div>';
  	        			
- 	        		   return  str;
+ 	        		    return  str;
  	        	   }
    	           },
    	        {
@@ -119,10 +124,23 @@ $(document).ready(function(){
    	        			
    	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-trash bigger-130"></i>';
-   	        			str += '</a>';
+   	        			str += '</a><br>';
    	        			
+   	        			str += '<input type="button" value="查看蜜图" onclick="view('+"'"+data.aData[1]+"'"+')">';
    	        		   return  str;
    	        	   }
+   	           },
+   	           {
+   	        	 "aTargets": [6],
+   	        	"fnRender":function(data,type){
+	        		   var str = " ";
+	        		   if(data.aData[6]!="0"){
+	        				str = data.aData[6];
+	        		   }else if(data.aData[6]=="0"){
+	        				str = "已过有效期";
+	        		   }
+	        		   return  str;
+	        	   }
    	           }
    	        	
    	         ],

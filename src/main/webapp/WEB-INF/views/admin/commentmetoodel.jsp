@@ -33,6 +33,7 @@
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">蜜图评论内容</h3>
+		<input type="hidden"   id="pi" name="pp"  value=" ${pid}" />
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -92,14 +93,7 @@ $(document).ready(function(){
    	        {
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
-//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
-//   	        			str += '</a>';
-//   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
-//  	        			str += '<i class="icon-pencil bigger-130"></i>';
-// 	        			str += '</a>';
-   	        			
+   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';  	        			
    	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-trash bigger-130"></i>';
    	        			str += '</a>';
@@ -119,8 +113,9 @@ $(document).ready(function(){
 
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData1113),
-		        	  "pid":pid
+ 						data : {"aoData":JSON.stringify(aoData1113),
+		        	  "pid":pid		  
+		        	 
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

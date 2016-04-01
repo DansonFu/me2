@@ -6,11 +6,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +36,7 @@ import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtMetoo;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.service.CommentService;
+import com.lettucetech.me2.service.GameService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TXtMetooService;
@@ -49,33 +53,35 @@ public class ChechPictureController {
 	private PicturerecommendService picurerecommendService;
 	@Autowired
 	private CommentService commentService;
+	@Autowired
+	private GameService gameService;
 	/**
 	 * 跳转审核蜜图页面,为了给推荐表确定那个蜜图需要添加到推荐表当中。
 	 * @return
 	 */
 	@RequestMapping("/admin/commendcheckmetoo")
-	public ModelAndView commondPicture(){
+	public ModelAndView commondPicture(HttpSession session,HttpServletRequest request){
 //		Criteria example = new Criteria();
 //		example.setOrderByClause("creat_time");
 //		example.setSord("desc");
 //		List<Picture> ps = pictureService.selectByParams(example);
-		
+		String tag = request.getParameter("tag");
 		
 		ModelAndView mav = new ModelAndView();
-		//mav.addObject(ps);
+		mav.addObject("tag",tag);
 		mav.setViewName("/admin/checkmetoo");
 		return mav;
 		
 	}
 	
 	/**
-	 * 以创建时间倒序排列查询蜜图列表，确定推荐蜜图到推荐表。
+	 * 以创建时间倒序排列查询蜜图列表，确定滚播蜜图到推荐表。
 	 * @param session
 	 * @param response
 	 * @param aoData
 	 */
 	@RequestMapping("/amdin/check/metoo")
-	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData) {
+	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String tag) {
 		//TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -94,6 +100,9 @@ public class ChechPictureController {
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
+	    
+	    
+	    
 	    Criteria example = new Criteria();
 	    example.setOrderByClause("creat_time");
 	    example.setSord("desc");
@@ -102,6 +111,9 @@ public class ChechPictureController {
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 
+	    if(!"".equals(tag)){
+	    	example.put("tags",tag);
+	    }
 	    //是否有查看所有人权限
 
 //		if(!"-1".equals(userId)){
@@ -114,6 +126,9 @@ public class ChechPictureController {
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Picture pp : ps){
+			
+			if(pp.getTags().contains(tag)){
+			
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pp.getQiniukey();
 			String burl="";
 			String type="";
@@ -132,11 +147,22 @@ public class ChechPictureController {
 			}else if(pp.getMood()==null){
 				mood = "";
 			}
-			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,burl,type,pp.getTags(),mood,
-					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),""};
+			String bmood = "";
+			if(pp.getBpicture()!=null){
+				if(pp.getBpicture().getMood() != null){
+					bmood = pp.getBpicture().getMood();
+				}else if(pp.getBpicture().getMood() == null){
+					bmood = "";
+				}
+			}else{
+				bmood = "";
+			}
+			
+			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,mood,burl,bmood,type,pp.getTags(),
+					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),"",pp.getDel()};
 			list.add(d);
 		}
-		
+		}
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);
@@ -156,7 +182,7 @@ public class ChechPictureController {
 	
 
 	/**
-	 * 跳转蜜图推荐页面，将推荐蜜图表中的数据呈现，为了方便推荐蜜图的管理。
+	 * 跳转滚播蜜图页面，将推荐表中的数据呈现，为了方便滚播蜜图的管理。
 	 * @return
 	 */
 	@RequestMapping("/admin/showcommendcheck")
@@ -174,7 +200,7 @@ public class ChechPictureController {
 		
 	}
 	/**
-	 * 显示推荐蜜图表的信息，并进行有效的管理
+	 * 显示推荐表的信息，并进行有效的管理
 	 * @param session
 	 * @return
 	 */
@@ -209,15 +235,29 @@ public class ChechPictureController {
 		
 		List list = new ArrayList();
 		String aa ;
+		Integer bb;
 		for(Picturerecommend pcs : pc){
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pcs.getPicture().getQiniukey();
 			if(pcs.getPeriod()!=null){
 				aa = DateUtil.dateFormatToString(pcs.getPeriod(),"yyyy-MM-dd HH:mm:ss");
+				if(pcs.getPeriod().getTime() > (new Date()).getTime()){
+					bb = (int) ((pcs.getPeriod().getTime() -  (new Date()).getTime())/3600/1000);
+					if(bb>24){
+						bb=bb/24+1;
+					}else{
+						bb=1;
+					}
+				}else{
+					bb = 0;
+				}
 			}else{
 				aa="";
+				bb=0;
 			}
+			
+			
 			String[] d = {pcs.getId().toString(),pcs.getPid().toString(),aurl,pcs.getSort().toString(),
-					aa,""};
+					aa,"",bb.toString()};
 			list.add(d);
 		}
 		
@@ -239,7 +279,7 @@ public class ChechPictureController {
 	}
 	
 	/**
-	 * 修改推荐蜜图时的载入页面，即查询修改的推荐蜜图信息
+	 * 修改滚播蜜图时的载入页面，即查询修改的滚播蜜图信息
 	 * @param session
 	 * @param pid
 	 * @return
@@ -343,23 +383,46 @@ public class ChechPictureController {
 	@RequestMapping("/admin/delcheckmetoo/commend")
 	public  ModelAndView delcheckdmetoo(HttpSession session,String pid){
 		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
-		if("0".equals(p.getDel())){
-			p.setDel("1");
+//		if("0".equals(p.getDel())){
+			  p.setDel("1");
 			  pictureService.updateByPrimaryKeySelective(p);
 			ModelAndView mav = new ModelAndView();
 			mav.setViewName("redirect:/admin/commendcheckmetoo");
 			return mav;
-		}else{
-//			p.setDel("1");
+//		}else{
+//			  p.setDel("1");
 //			  pictureService.updateByPrimaryKeySelective(p);
+//			ModelAndView mav = new ModelAndView();
+//			mav.setViewName("redirect:/admin/commendcheckmetoo");
+//			return mav;
+//		}
+	}
+	/**
+	 * 恢复逻辑删除方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("/admin/delcheckmetooa/commend")
+	public  ModelAndView delcheckdmetooa(HttpSession session,String pid){
+		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+//		if("1".equals(p.getDel())){
+			p.setDel("0");
+			  pictureService.updateByPrimaryKeySelective(p);
 			ModelAndView mav = new ModelAndView();
 			mav.setViewName("redirect:/admin/commendcheckmetoo");
 			return mav;
-		}
+//		}else{
+//			p.setDel("1");
+//			  pictureService.updateByPrimaryKeySelective(p);
+//			ModelAndView mav = new ModelAndView();
+//			mav.setViewName("redirect:/admin/commendcheckmetoo");
+//			return mav;
+//		}
 	}
 	
 	/**
-	 * 推荐图片当中图片删除的方法
+	 * 滚播图片当中图片删除的方法
 	 * 
 	 */
 	@RequestMapping("/admin/del/commend")
@@ -399,7 +462,7 @@ public class ChechPictureController {
 		return mav;
 	}
 	/**
-	 * 推荐图片当中顺序上调的方法
+	 * 滚播蜜图当中顺序上调的方法
 	 * @param session
 	 * @param pid
 	 * @return
@@ -439,7 +502,7 @@ public class ChechPictureController {
 	}
 	
 	/**
-	 * 推荐图片当中顺序下调的方法
+	 * 滚播蜜图当中顺序下调的方法
 	 * @param session
 	 * @param pid
 	 * @return
@@ -481,15 +544,18 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/checkview/comment")
-	public ModelAndView commontcontentPicture(HttpSession session){
-		Criteria example = new Criteria();
+	public ModelAndView commontcontentPicture(HttpSession session,String pid){
+//		Criteria example = new Criteria();
 //		example.setOrderByClause("creat_time");
-//	    example.put("pid", pid);
-//		List<Comment> cs = commentService.selectByParams(pid);
-		
-		
+//	    example.setSord("desc");
+//	    example.put("del", "0");
+//		example.setOrderByClause("creat_time");
+//        example.put("pid", Integer.valueOf(pid));
+//	    List<Comment> cs = commentService.selectByParams(example);
+//		Comment c = commentService.selectByPrimaryKey(commentId);
+		session.setAttribute("pid", pid);
 		ModelAndView mav = new ModelAndView();
-//		mav.addObject(cs);
+		mav.addObject("pid",pid);
 		mav.setViewName("/admin/commentmetoodel");
 		return mav;
 		
@@ -502,9 +568,10 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping("/admin/check/comment")
-public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData,Integer pid){
+public void  getCommentContent(HttpSession session,HttpServletResponse response,String aoData){
 		
 		
+		String pp = session.getAttribute("pid").toString();
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
@@ -526,12 +593,12 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	    Criteria example = new Criteria();
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
-		example.put("pid", pid);
-//	    example.setOrderByClause("creat_time");
-//	    example.setSord("desc");
-//	    example.put("del", "0");
+		example.put("pid",Integer.valueOf(pp) );
+	    example.setOrderByClause("creat_time");
+	    example.setSord("desc");
+	    example.put("del", "0");
 		int count = commentService.countByParams(example);
-		List<Comment> clist = commentService.selectByPid(pid);
+		List<Comment> clist = commentService.selectByParams(example);
 		
 		
 		List list = new ArrayList();
@@ -539,13 +606,18 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 		for(Comment cs : clist){
 			if(cs.getCreatTime()!=null){
 				aa = DateUtil.dateFormatToString(cs.getCreatTime(),"yyyy-MM-dd HH:mm:ss");
+//				String[] d = {cs.getCommentId().toString(),cs.getPid().toString(),cs.getCustomer().getInneruser(),cs.getContent(),
+//						aa,""};
+//				list.add(d);
 			}else{
-				aa="";
+				aa = "";
 			}
 			String[] d = {cs.getCommentId().toString(),cs.getPid().toString(),cs.getCustomer().getInneruser(),cs.getContent(),
 					aa,""};
 			list.add(d);
 		}
+		
+//     	int count = list.size();
 		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
@@ -587,5 +659,78 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 			return mav;
 		}
 	}
+
+	
+	/**
+	 * 查询蜜图信息
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("/admin/viewcheckpicture")
+	public ModelAndView viewmetoopicture(HttpSession session,String pid) {
+		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
+		picture.setTags(picture.getTags().replace(",", "#"));
+		if(picture.getBpicture()!=null && ("1".equals(picture.getBpicture().getType())||
+				"3".equals(picture.getBpicture().getType())||"4".equals(picture.getBpicture().getType())))
+		{
+			String key = QiniuUtil.getDownUrl(picture.getBpicture().getQiniukey());
+			picture.getBpicture().setQiniukey(key);
+		}
+		
+		Criteria example = new Criteria();
+		example.put("pid", pid);
+		List<Comment> comments = commentService.selectByParams(example);
+		
+//		example.clear();
+//		example.put("del", "0");
+//		List<Game> games = gameService.selectByParams(example);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("picture", picture);
+		mav.addObject("comments", comments);
+//		mav.addObject("games", games);
+		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
+		mav.setViewName("/admin/viewmetoopicture");
+		return mav;
+	}
+	
+	
+	/**
+	 * 查询滚播蜜图信息
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/viewcheckmetoopicture")
+	public ModelAndView viewcheckmetoopicture(HttpSession session,String pid) {
+		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
+		picture.setTags(picture.getTags().replace(",", "#"));
+		if(picture.getBpicture()!=null && ("1".equals(picture.getBpicture().getType())||
+				"3".equals(picture.getBpicture().getType())||"4".equals(picture.getBpicture().getType())))
+		{
+			String key = QiniuUtil.getDownUrl(picture.getBpicture().getQiniukey());
+			picture.getBpicture().setQiniukey(key);
+		}
+		
+		Criteria example = new Criteria();
+		example.put("pid", pid);
+		List<Comment> comments = commentService.selectByParams(example);
+		
+//		example.clear();
+//		example.put("del", "0");
+//		List<Game> games = gameService.selectByParams(example);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("picture", picture);
+		mav.addObject("comments", comments);
+//		mav.addObject("games", games);
+		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
+		mav.setViewName("/admin/checkview");
+		return mav;
+	}
+	
+	
+	
 
 }

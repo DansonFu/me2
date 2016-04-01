@@ -41,11 +41,6 @@ public interface CommentMapper {
      * 根据主键查询记录
      */
     Comment selectByPrimaryKey(Integer commentId);
-
-    /**
-     *根据图片id查询记录 
-     */
-    List<Comment> selectByPid(Integer pid);
     
     /**
      * 根据条件更新属性不为空的记录
