@@ -22,7 +22,7 @@ public class Me2Constants {
 	/**
 	 * 7牛SecretKey
 	 */
-	public static final String SECRETKEY = "jwv6tLTjkpn8EzDHJ3lFatShKUcz0jSwsbPxY4zF";
+	public static final String SECRETKEY = "jwv6tLTjkpn8EzDHJ31FatShKUcz0jSwsbPxY4zF";
 	/**
 	 * session存储用户参数
 	 */
@@ -30,11 +30,11 @@ public class Me2Constants {
 	/**
 	 * 7牛公共域名
 	 */ 
-	public static final String QINIUPUBLICDOMAIN = "http://7xs120.com2.z0.glb.qiniucdn.com";
+	public static final String QINIUPUBLICDOMAIN = "http://7xsl20.com2.z0.glb.qiniucdn.com";
 	/**
 	 * 7牛私有域名
 	 */ 
-	public static final String QINIUPRIVATEDOMAIN = "http://7xs122.com2.z0.glb.qiniucdn.com";
+	public static final String QINIUPRIVATEDOMAIN = "http://7xsl22.com2.z0.glb.qiniucdn.com";
 	
 	public static final Integer METOOHOTVALUE = 1;
 }

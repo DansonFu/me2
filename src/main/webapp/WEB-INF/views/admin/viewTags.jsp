@@ -131,12 +131,18 @@ function addtag(id){
       	          
     	        	{
     	        	   "aTargets": [6],
-    	        	  
+    	        	   
     	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
     	        			str += '<input type="checkbox" name="check" id="btn"/>';
 	    	        		str += '</div>';
     	        		   return  str;
+    	        		   /**var tableid = document.getElementById("tableid");
+	    	        		alert(tableid);
+	    	        		if(tableid){
+	    	        			alert(1);
+	    	        			tableid.css("display", "none");
+	    	        		}*/
     	        	   }
 			    	           }, 
 				
@@ -144,9 +150,11 @@ function addtag(id){
 					"aTargets" : [7],
 					
 					"fnRender" : function(data,type) {
-						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+						var str = '<div  class="visible-md visible-lg hidden-sm hidden-xs action-buttons" style="display:none">';
 						str += '<input type="checkbox" name="check" id="btn"/>';
   	        			str += '</div>';
+  	        			
+  	        			
 						return str;
 					}
 				}
@@ -171,7 +179,7 @@ function addtag(id){
 		          dataType : 'json',
 		          async : false,
 		          success : function(result) {
-		              fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
+		        	  fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
 		          },
 		          error : function(msg) {
 		          }
@@ -217,7 +225,9 @@ function addtag(id){
 					
 				 }
 		};
-		  
+		
+		  var column = oTable1.aoColumnDefs;
+		  alert(column);
 		  
 	});
 	
