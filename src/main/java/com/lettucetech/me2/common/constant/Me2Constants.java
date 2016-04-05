@@ -18,11 +18,11 @@ public class Me2Constants {
 	/**
 	 * 7牛accessKey
 	 */
-	public static final String ACCESSKEY = "G8vPvJGMMZ_2mCLrTpHUDuuHWHZYg0JoUVpFEPHR";
+	public static final String ACCESSKEY = "KNV-MH5jxaBsPQRQ-Bh-Z_Llv9mzeQrdIbnF9wnA";
 	/**
 	 * 7牛SecretKey
 	 */
-	public static final String SECRETKEY = "eK6IFx3sqEg7yTRmL7VsNyx3JGSybesJlso1gy96";
+	public static final String SECRETKEY = "jwv6tLTjkpn8EzDHJ3lFatShKUcz0jSwsbPxY4zF";
 	/**
 	 * session存储用户参数
 	 */
@@ -30,11 +30,11 @@ public class Me2Constants {
 	/**
 	 * 7牛公共域名
 	 */ 
-	public static final String QINIUPUBLICDOMAIN = "http://7xoaf5.com2.z0.glb.qiniucdn.com";
+	public static final String QINIUPUBLICDOMAIN = "http://7xs120.com2.z0.glb.qiniucdn.com";
 	/**
 	 * 7牛私有域名
 	 */ 
-	public static final String QINIUPRIVATEDOMAIN = "http://7xoaf7.com2.z0.glb.qiniucdn.com";
+	public static final String QINIUPRIVATEDOMAIN = "http://7xs122.com2.z0.glb.qiniucdn.com";
 	
 	public static final Integer METOOHOTVALUE = 1;
 }

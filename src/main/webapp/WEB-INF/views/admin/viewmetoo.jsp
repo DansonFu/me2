@@ -111,6 +111,10 @@
 			     	        		   }
 			     	        		   return  str;
 			     	        	   }
+			     	           },{
+			     	        	   "aTargets": [4],
+			     	        	  "sTitle": "B面 ", "sWidth": "80px", "sClass": "center"
+			     	        	   
 			     	           },
    	        	{
    	        	   "aTargets": [5],

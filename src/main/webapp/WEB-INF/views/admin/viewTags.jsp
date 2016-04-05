@@ -93,7 +93,7 @@
 				
 					<tr>
 						
-						
+						<th class="center">标签ID</th>
 						<th class="center">标签名称</th>
 						<th class="center">热度</th>
 						<th class="center">帖子数</th>
@@ -103,7 +103,7 @@
 						<th class="center">添加到热门标签</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody onload="javascript:hiddenit()">
 					
 				</tbody>
 				
@@ -125,12 +125,13 @@ function addtag(id){
  --%>
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
-			"bSort":false,
+			"bSort":true,
 			"bFilter": false,
 			"aoColumnDefs": [
       	          
     	        	{
-    	        	   "aTargets": [5],
+    	        	   "aTargets": [6],
+    	        	  
     	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
     	        			str += '<input type="checkbox" name="check" id="btn"/>';
@@ -140,7 +141,8 @@ function addtag(id){
 			    	           }, 
 				
 				{
-					"aTargets" : [6],
+					"aTargets" : [7],
+					
 					"fnRender" : function(data,type) {
 						var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 						str += '<input type="checkbox" name="check" id="btn"/>';
@@ -201,19 +203,20 @@ function addtag(id){
 				   }
 			
 		 
-		<%--$.hiddenit("onclick",function(){
+		function hiddenit(){
 			
-			  var name=document.getElementById("flagid").value
+			  var name="1";
 				 if(name.equals("1")){
-					 var column = table.getColumn("添加到热门标签"); 
+					
+					    var bVis = oTable1.fnSettings().aoColumnDefs[7].bVisible(false);
+					    oTable1.fnSetColumnVis(bVis);
+				 }else if(name.equals("2")){
+					 var columnname=oTable1.Columns[6].ColumnName.ToString();
+					 var column = oTable1.getColumn("columnname"); 
 					 column.setVisible(false); //设定该列对象的visible属性为false,用以隐藏该列 
-					 table1.refresh();//刷新表格，使新的设定生效 
-				 }else if(flag.equals("2")){
-					 var column = table.getColumn("添加到精选集合"); 
-					 column.setVisible(false); //设定该列对象的visible属性为false,用以隐藏该列 
-					 table1.refresh();//刷新表格，使新的设定生效 
+					
 				 }
-		});--%>
+		};
 		  
 		  
 	});

@@ -98,7 +98,7 @@ public class TagsSelectiveController {
 	 * @param userId
 	 */
 	@RequestMapping(value="/admin/getmetoo/selective",method={RequestMethod.POST})
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,String tid,String cid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		String taglist=(String)session.getAttribute("taglist");
 		String tagslist=(String)session.getAttribute("conn");
@@ -106,7 +106,7 @@ public class TagsSelectiveController {
 	    String sEcho = null;
 	    
 	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 25; // 每页显示的行数
+	    int iDisplayLength = 0; // 每页显示的行数
 	 
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
@@ -121,12 +121,17 @@ public class TagsSelectiveController {
 	         
 	    }
 	    Criteria example = new Criteria();
-	  
+	 
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
-
+if(!"".equals(tid)){
+	 example.put("tagslistId",tid);
+}
+if(!"".equals(cid)){
+	example.put("tagslistId", cid);
+}
 	   
-	    int count=0;
+	    int count = tagsconnectionService.countByParams(example);
 	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
 	    //拼接翻页数据
 	    List list = new ArrayList();
@@ -135,20 +140,21 @@ public class TagsSelectiveController {
 	    			
 	    			Tagshot tagshot=tagshotService.selectByPrimaryKey(obj.getTagsId());
 			//加一个条件,判断是在哪一个集合中?
-	    		if(taglist !=null && taglist.equals(obj.getTagslistId())){
-	    			  count = tagsconnectionService.countByParams(example);
+	    			
+	    		if(obj.getTagslistId().equals(tid)){
+	    			 
 	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
 						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
 						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 	    			list.add(d);	
-	    			break;
-				}else if(tagslist!=null && tagslist.equals(obj.getTagslistId())){
-					  count = tagsconnectionService.countByParams(example);
+	    			
+				}else if(obj.getTagslistId().equals(cid)){
+					 
 	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
 						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
 						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 	    			list.add(d);
-	    			break;
+	    			
 				}
 	    		}
 	    	

@@ -94,20 +94,14 @@ public class TagsHotController {
 			
 		 flag="1";
 		}else if(flg!=null){
-			flag="";
+			flag=flg;
 		}
 		session.setAttribute("str",str);
+		session.setAttribute("flag",flag);
 		ModelAndView mav = new ModelAndView();
-		
+		//mav.addObject("flag",flag);
 		mav.addObject("svalue",s);
-		if(flg==null){
-			
-			 
-			mav.addObject("flag",flag);
-			}else if(flg!=null){
-				
-				mav.addObject("flag",flg);
-			}
+		
 		mav.setViewName("/admin/viewTags");;
 		return mav;
 	}
@@ -129,6 +123,7 @@ public class TagsHotController {
 			 int iDisplayStart = 0; // 起始索引
 			 int iDisplayLength = 0;
 			 String sEcho=null;
+			  
 			 for (int i = 0; i < jsonarray.size(); i++) {
 				 HashMap obj = (HashMap) jsonarray.get(i);
 				 if (obj.get("name").equals("sEcho"))
@@ -139,7 +134,7 @@ public class TagsHotController {
 				 
 				 if (obj.get("name").equals("iDisplayLength"))
 					 iDisplayLength = Integer.parseInt(obj.get("value").toString());
-				 
+				
 				 
 			 }
 		
@@ -182,17 +177,17 @@ public class TagsHotController {
 				 
 				 //拼接翻页数据
 				
-				 
+				 String s="";
 				 for(Tagshot obj : metoo){
 					 //判断如果图片的pid相同就去重
 					 if(searchid.contains(obj.getTag())){
 					 
-					 String[] d={obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString()};
+					 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",s,s};
 					 list.add(d);
 					 }else{
-						 String[] d={obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-								 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString()};
+						 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
+								 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",s,s};
 						 list.add(d);
 					 }
 				 }
