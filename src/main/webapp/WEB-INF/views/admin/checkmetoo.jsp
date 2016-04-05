@@ -104,6 +104,7 @@
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
+			"autoWidth": false,
 			"aoColumnDefs": [
 			    {
    	        	   "aTargets": [1],
@@ -123,9 +124,8 @@
    	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
    	        	   }
    	           },
-   	        	{ 
+   	        	{ "sWidth": "1.9" ,"width": "1.10",
    	        	   "aTargets": [4],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[6]==1){

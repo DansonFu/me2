@@ -521,6 +521,7 @@ public class AdminController {
 	    example.put("state", "0");
 	    example.setOrderByClause("creat_time");
 	    example.setSord("desc");
+	    example.put("front", "a");
 	    //是否有查看所有人权限
 
 		if(!"-1".equals(userId)){
@@ -531,7 +532,7 @@ public class AdminController {
 		 int count=0;
 	    if(!"".equals(searchid)){
 	    	example.put("searchid",searchid);
-	    	
+	    }
 	    	 count= metooService.countByParams(example);
 	 	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
 	 	    
@@ -549,7 +550,7 @@ public class AdminController {
 	 			String bmood="";
 	 			//如果有B面
 	 			if(obj.getPicture().getBpicture()!=null){
-	 				if(obj.getPicture().getBpicture().getType().equals("1")){
+	 				if("1".equals(obj.getPicture().getBpicture().getType())){
 	 					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
 	 				}else{
 	 					burl = obj.getPicture().getBpicture().getQiniukey();
@@ -567,38 +568,38 @@ public class AdminController {
 	 			list.add(d);
 	 			}
 	 		}
-	    }else{
-	     count = metooService.countByParams(example);
-	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
-	    
-	    //拼接翻页数据
-	    
-		for(TXtMetoo obj : metoo){
-			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
-			String burl="";
-			String type="";
-			String bmood="";
-			//如果有B面
-			if(obj.getPicture().getBpicture()!=null){
-				if(obj.getPicture().getBpicture().getType().equals("1")){
-					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-				}else{
-					burl = obj.getPicture().getBpicture().getQiniukey();
-				}
-					type = obj.getPicture().getBpicture().getType();
-					bmood=obj.getPicture().getBpicture().getMood();
-				
-			}
-			
-			
-			
-			
-			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
-					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			list.add(d);
-		}
-	    }
+//	    }else{
+//	     count = metooService.countByParams(example);
+//	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
+//	    
+//	    //拼接翻页数据
+//	    
+//		for(TXtMetoo obj : metoo){
+//			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
+//			String burl="";
+//			String type="";
+//			String bmood="";
+//			//如果有B面
+//			if(obj.getPicture().getBpicture()!=null){
+//				if(obj.getPicture().getBpicture().getType().equals("1")){
+//					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+//				}else{
+//					burl = obj.getPicture().getBpicture().getQiniukey();
+//				}
+//					type = obj.getPicture().getBpicture().getType();
+//					bmood=obj.getPicture().getBpicture().getMood();
+//				
+//			}
+//			
+//			
+//			
+//			
+//			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
+//					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
+//					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
+//			list.add(d);
+//		}
+//	    }
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);
