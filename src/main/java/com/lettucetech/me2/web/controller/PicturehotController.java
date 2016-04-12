@@ -115,7 +115,7 @@ public class PicturehotController {
 	    //加一个条件判断图片是否重复,并去重?
 	    		
 	    		for(Tagshot obj : metoo){
-	    		
+	    			
 	    			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 	    			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
 	    					obj.getHits().toString(),obj.getMefriends().toString(),

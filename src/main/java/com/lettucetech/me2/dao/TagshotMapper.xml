@@ -9,7 +9,7 @@
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
     <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
-    <association property="taglist" column="taglist_id"	select="com.lettucetech.me2.dao.TaglistMapper.selectByPrimaryKey"></association>
+    <association property="taglist" column="id"	select="com.lettucetech.me2.dao.TaglistMapper.selectByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
