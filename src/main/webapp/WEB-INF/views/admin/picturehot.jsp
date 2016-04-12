@@ -34,17 +34,14 @@
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">热门标签帖</h3>
-		<%-- <div style="float: right;">
-			<form action="<%=basePath %>admin/getmetoo/picturehot" id="wayid" method="post">		
+		<div style="float: right;">	
           	排序方式：                            
 			<select id="hotid">
 				<c:forEach items="${taglists }" var="hot">
-					<option value="${list.id}" >${list.title}</option>
+					<option value="${hot.id}" >${hot.title}</option>
 				</c:forEach>
 			</select>
-			            
-            </form> 
-		</div> --%>
+		</div>
 		<br>
 		<br>
 		<div class="table-responsive">

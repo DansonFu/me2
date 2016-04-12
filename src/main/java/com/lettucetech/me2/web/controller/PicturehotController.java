@@ -101,22 +101,21 @@ public class PicturehotController {
 	    example.put("state", "0");
 	    
 	    //是否有查看所有人权限
-
-//		if(!"-1".equals(hotid)){
-//			example.put("tagslistId", hotid);
-//		}
-	    
 	    int count = pictureHotService.countByParams(example);
 	    List<Tagshot> metoo = tagshotService.selectByParams(example);
-	  //  List<Picturehot> hot =pictureHotService.selectByParams(example);
+	    List list = new ArrayList();
+
+		if(!"".equals(hotid)){
+			example.put("tagslistId", hotid);
+		}
+	//	List<Picturehot> hot =pictureHotService.selectByParams(example);
+		
+	    
 	    //拼接翻页数据
 	    //加一个条件判断图片是否重复,并去重?
-	    List list = new ArrayList();
-	  //  for(Picturehot phot:hot){
-	    //	if(phot.getTagslistId().equals(hotid)){
 	    		
 	    		for(Tagshot obj : metoo){
-	    			
+	    		
 	    			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 	    			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
 	    					obj.getHits().toString(),obj.getMefriends().toString(),
@@ -125,19 +124,7 @@ public class PicturehotController {
 	    			
 	    			list.add(d);
 	    		}
-	    //	}else{
-//	    			for(Tagshot obj : metoo){
-//	    			
-//	    			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
-//	    			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
-//	    					obj.getHits().toString(),obj.getMefriends().toString(),
-//	    					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-//	    			
-//	    			
-//	    			list.add(d);
-//	    		}
-	   // 	}
-	   // }
+	    	
 		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
