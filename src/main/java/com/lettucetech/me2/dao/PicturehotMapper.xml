@@ -6,7 +6,7 @@
     <result column="pid" property="pid" jdbcType="INTEGER" />
     <result column="tagslist_id" property="tagslistId" jdbcType="INTEGER" />
     <association property="picture" column="pid" select="com.lettucetech.me2.dao.PictureMapper.selectByPrimaryKey"></association>
-  <association property="taglist" column="taglist_id" select="com.lettucetech.me2.dao.TaglistMapper.selectByPrimaryKey"></association>
+  <association property="taglist" column="tagslist_id" select="com.lettucetech.me2.dao.TaglistMapper.selectByPrimaryKey"></association>
   <association property="tagsconnection" column="tags_id" select="com.lettucetech.me2.dao.TagsconnectionMapper.selectByPrimaryKey"></association>
   <association property="tagshot" column="tags_id" select="com.lettucetech.me2.dao.TagshotMapper.selectByPrimaryKey"></association>
  

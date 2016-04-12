@@ -130,6 +130,7 @@ public class TagsListController {
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Taglist obj : metoo){
+			
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 			
 			String s="";

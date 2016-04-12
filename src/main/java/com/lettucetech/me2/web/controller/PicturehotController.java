@@ -36,12 +36,9 @@ import com.lettucetech.me2.web.form.DataTablePaginationForm;
 public class PicturehotController {
 	private static final Logger logger = Logger.getLogger(PicturehotController.class);
 
+	
 	@Autowired
-	private TXtUserService usi;
-	@Autowired
-		private PicturehotService pictureHotService;
-	@Autowired
-	private TagsconnectionService tagsconnectionService;
+	private PicturehotService pictureHotService;
 	@Autowired
 	private TagshotService tagshotService;
 	@Autowired
@@ -142,40 +139,4 @@ public class PicturehotController {
 			e.printStackTrace();
 		}
 	}
-	private boolean checkPermission(HttpSession session,String code){
-		List<TXtMenu> menuList = (List<TXtMenu>) session.getAttribute(Me2Constants.LOGIN_USER_MENUS);
-		boolean flag = false;
-		if(menuList!=null && menuList.size()>0){
-			for (TXtMenu tXtMenu : menuList) {
-				if(code.equals(tXtMenu.getCode())){
-					flag = true;
-					break;
-				}
-			}
-		}
-		return flag;
-	}
-//	/**
-//	 *  将pid,taglist_id添加到Picturehot表中
-//	 * @param session
-//	 * @param id
-//	 * @param pid
-//	 * @param taglist_id
-//	 * @return
-//	 */
-//	
-//	@RequestMapping("/admin/insertpicturehot")
-//	public ModelAndView addList(HttpSession session,String id,String pid,String taglist_id){
-//		
-////		 Criteria example = new Criteria();
-////		example.put("taglist", taglist);
-//		Picturehot hot=new Picturehot();
-//		hot.setId(Integer.valueOf(id));
-//		hot.setPid(Integer.valueOf(pid));
-//		hot.setTagslistId(Integer.valueOf(taglist_id));
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("/admin/picturehot");
-//		return mav;
-//		
-//	}
 }

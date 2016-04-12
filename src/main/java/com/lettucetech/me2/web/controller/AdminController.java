@@ -570,38 +570,38 @@ public class AdminController {
 	    if(!"".equals(searchid)){
 	    	example.put("searchid",searchid);
 	    	
-	    	 count= metooService.countByParams(example);
-	 	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
-	 	    
+	    	 count= pictureService.countByParams(example);
+	 	   // List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
+	 	    List<Picture> pic=pictureService.selectByParams(example);
 	 	    //拼接翻页数据
 	 	   
-	 		for(TXtMetoo obj : metoo){
+	 		for(Picture obj : pic){
 	 			
-	 			if(obj.getPicture().getTags().contains(searchid)){
+	 			if(obj.getTags().contains(searchid)){
 	 				
 	 			
 	 			
-	 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
+	 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 	 			String burl="";
 	 			String type="";
 	 			String bmood="";
 	 			//如果有B面
-	 			if(obj.getPicture().getBpicture()!=null){
-	 				if(obj.getPicture().getBpicture().getType().equals("1")){
-	 					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+	 			if(obj.getBpicture()!=null){
+	 				if(obj.getBpicture().getType().equals("1")){
+	 					burl = QiniuUtil.getDownUrl(obj.getBpicture().getQiniukey());
 	 				}else{
-	 					burl = obj.getPicture().getBpicture().getQiniukey();
+	 					burl = obj.getBpicture().getQiniukey();
 	 				}
-	 					type = obj.getPicture().getBpicture().getType();
+	 					type = obj.getBpicture().getType();
 	 			}
-	 			bmood=obj.getPicture().getBpicture().getMood();
+	 			bmood=obj.getBpicture().getMood();
 	 			
 	 			
 	 			
 	 			
-	 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-	 					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
-	 					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
+	 			String[] d = {obj.getPid().toString(),obj.getCustomer().getUsername(),aurl,obj.getMood(),burl,type,
+	 					obj.getTags(),bmood,obj.getCustomer().getNickname(),
+	 					DateUtil.dateFormatToString(obj.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
 	 			list.add(d);
 	 			}
 	 		}

@@ -7,6 +7,7 @@
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="num" property="num" jdbcType="INTEGER" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
+    <association property="tagsconnection" column="tagslist_id" select="com.lettucetech.me2.dao.TagsconnectionMapper.selectByPrimaryKey"></association>  
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
