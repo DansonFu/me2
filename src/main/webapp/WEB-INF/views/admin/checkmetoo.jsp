@@ -15,6 +15,21 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 
+<style type="text/css">
+/* 单元格连续纯字母数字强制换行显示 */
+.wordwrap{
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+}
+/* 超长文字单元格省略号显示 */
+.ellipsis{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+</style>
 <link href="<%=basePath %>resources/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace.min.css" />
@@ -54,7 +69,7 @@
 						<th class="center">内部用户</th>
 						<th class="center">A面</th>
 						<th class="center">A面心情</th>
-						<th class="hidden-480 center">B面</th>
+						<th style="white-space:nowrap" class="hidden-480 center" >B面</th>
 						<th class="center">B面心情</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
@@ -104,7 +119,12 @@
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
-			"autoWidth": false,
+			"bAutoWidth":false,
+			 columns: [
+			           {
+			               data: "content", class: "wordwrap ellipsis"
+			           }
+			       ],
 			"aoColumnDefs": [
 			    {
    	        	   "aTargets": [1],
@@ -124,7 +144,7 @@
    	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
    	        	   }
    	           },
-   	        	{ "sWidth": "1.9" ,"width": "1.10",
+   	        	{  //"sWidth": "1%",
    	        	   "aTargets": [4],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
@@ -132,6 +152,20 @@
    	        				str = '<a href="'+data.aData[4]+'" target="_blank" id="abpicture">  <img src="'+data.aData[4]+'" width="100px" height="100px" id="b"> </a>';
    	        		   }else{
    	        				str = data.aData[4];
+   	        				
+   	        				//str = '<a href="'+data.aData[4]+'">Download</a>';
+   	        				
+   	        				//if (type === 'display') {
+   	        	            //    if (data.aData[4].length > 10) {
+   	        	            //        str= '<span title="' + data.aData[4] + '">' + data.aData[4].substr(0, 25) + '...</span>';
+   	        	              //  } else {
+   	        	             //       str= '<span title="' + data.aData[4] + '>' + data.aData[4] + '</span>';
+   	        	             //   }
+   	        	           // }
+   	        				
+   	        					//type === 'display' && data.aData[4].length > 40 ?
+   	        				       // '<span title="'+data.aData[4]+'">'+data.aData[4].substr( 0, 38 )+'...</span>' :
+   	        				        	//data.aData[4];
    	        		   }
    	        		   return  str;
    	        	   }
@@ -173,9 +207,9 @@
    	        			str += '<i class="icon-pencil bigger-130"></i>';
    	        			str += '</a><br>';
    	        			if(data.aData[11]=="0"){
-   	        				str += '<input type="button"  value="OFF"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        				str += '<input type="button"  value="ON"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
    	        			}else if(data.aData[11]=="1"){
-   	        				str += '<input type="button"  value="ON"  onclick="dela('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        				str += '<input type="button"  value="OFF"  onclick="dela('+"'"+data.aData[0]+"'"+')"/><br>';
    	        			}
    	 //       			str += '<input name="switch-field-1" class="ace ace-switch" type="checkbox"  onclick="del('+"'"+data.aData[0]+"'"+')"/>  <span class="lbl"></span> <br>';
    	        			

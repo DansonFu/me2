@@ -417,7 +417,7 @@ public class AdminController {
  * @return
  */
 	@RequestMapping(value = "/admin/savecomment", method ={RequestMethod.POST})
-	public ModelAndView savecomment(HttpSession session,String pid,String[] cid,String[] content,@RequestParam("file") CommonsMultipartFile[] file){
+	public ModelAndView savecomment(HttpSession session,String pid,String[] cid,String[] content,@RequestParam("upload") CommonsMultipartFile[] file){
 		
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		

@@ -36,7 +36,7 @@ public class GameCollectionController {
 		Gamecomment g = new Gamecomment();
 		g.setCustomerId(Integer.valueOf(customerId.trim()));
 		g.setComments(comments);
-		gamecommentService.insert(g);
+		gamecommentService.insertSelective(g);
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);

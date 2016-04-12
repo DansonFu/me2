@@ -177,6 +177,12 @@
                                     <div class="col-lg-9">
 										<label id="amood">${picture.mood }</label>
                                     </div>
+                                    <div class="col-lg-3 input-column">
+                                        	心情：
+                                    </div>
+                                    <div class="col-lg-9">
+										<label id="bmood">${picture.mood }</label>
+                                    </div>
                                 </div>
                                 
                                 <!-- col-lg-6 -->
@@ -343,7 +349,7 @@
 				$("#imgfront").attr("src",domain+"/"+data[0].qiniukey);
 				$("#tags").text(data[0].tags);
 				$("#amood").text(data[0].mood);
-				$("#bmood").text(data[0].mood);
+				$("#bmood").text(data[0].bpicture.mood);
 				$("#location").text(data[0].locationTitle+":"+data[0].locationContent);
 				$("#creatTime").text(data[0].creatTime);
 				$("#pid").val(data[0].pid);
@@ -378,7 +384,7 @@
 					html += '</div>';
 					html += '</div>';
 				}
-                $("comments").html(html);
+                $("#comments").html(html);
 				
 				bkey = data[0].bpicture.qiniukey;
 				$.ajax({
@@ -407,7 +413,7 @@
 				$("#imgfront").attr("src",domain+"/"+data[0].qiniukey);
 				$("#tags").text(data[0].tags);
 				$("#amood").text(data[0].mood);
-				$("#bmood").text(data[0].mood);
+				$("#bmood").text(data[0].bpicture.mood);
 				$("#location").text(data[0].locationTitle+":"+data[0].locationContent);
 				$("#creatTime").text(data[0].creatTime);
 				$("#pid").val(data[0].pid);
@@ -442,7 +448,7 @@
 					html += '</div>';
 					html += '</div>';
 				}
-                $("comments").html(html);
+                $("#comments").html(html);
                 
 				bkey = data[0].bpicture.qiniukey;
 				$.ajax({
