@@ -5,6 +5,8 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.TagshotService;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,4 +68,11 @@ public class TagshotServiceImpl implements TagshotService {
 	public List<Tagshot> selectByParams4Matching(Criteria example) {
 		return this.tagshotMapper.selectByParams4Matching(example);
 	}
+
+	@Override
+	public List<Tagshot> qeuryBorrAvaPage(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

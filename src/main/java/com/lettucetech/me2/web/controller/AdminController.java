@@ -95,6 +95,44 @@ public class AdminController {
 		//否则跳转到登录界面
 		return "login";
 	}
+	@RequestMapping("/h5Test")
+	public String h5Test(HttpSession session){
+		//获取用户session中的TXtUser对象
+		TXtUser user=(TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+
+		if(user!=null){
+			return "redirect:/admin/H5test";
+		}
+					
+		//否则跳转到登录界面
+		return "/admin/H5test1";
+	}
+	@RequestMapping("/h5Test1")
+	public String h5Test1(HttpSession session){
+		//获取用户session中的TXtUser对象
+		TXtUser user=(TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+
+		if(user!=null){
+			return "redirect:/admin/H5test";
+		}
+					
+		//否则跳转到登录界面
+		return "/admin/H5test1";
+	}
+
+	@RequestMapping("/h5Test2")
+	public String h5Test2(HttpSession session){
+		//获取用户session中的TXtUser对象
+		TXtUser user=(TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
+
+		if(user!=null){
+			return "redirect:/admin/H5test";
+		}
+					
+		//否则跳转到登录界面
+		return "/admin/H5test1";
+	}
+
 	/**
 	 * 退出
 	 * @param session
@@ -417,7 +455,7 @@ public class AdminController {
  * @return
  */
 	@RequestMapping(value = "/admin/savecomment", method ={RequestMethod.POST})
-	public ModelAndView savecomment(HttpSession session,String pid,String[] cid,String[] content,@RequestParam("file") CommonsMultipartFile[] file){
+	public ModelAndView savecomment(HttpSession session,String pid,String[] cid,String[] content,@RequestParam("upload") CommonsMultipartFile[] file){
 		
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
@@ -586,12 +624,9 @@ public class AdminController {
 					burl = obj.getPicture().getBpicture().getQiniukey();
 				}
 					type = obj.getPicture().getBpicture().getType();
-					bmood=obj.getPicture().getBpicture().getMood();
 				
 			}
-			
-			
-			
+			bmood=obj.getPicture().getBpicture().getMood();
 			
 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
 					obj.getPicture().getTags(),bmood,obj.getUser().getName(),

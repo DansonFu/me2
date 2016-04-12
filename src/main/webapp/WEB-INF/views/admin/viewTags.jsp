@@ -29,6 +29,7 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
+
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
@@ -69,10 +70,10 @@
 		&nbsp; &nbsp;&nbsp; &nbsp;
 		<form action="<%=basePath %>admin/add" id="submitid" method="post">
 		<div style="float:right;">
-		 &nbsp; &nbsp;<input type="text" name="search" id="math" /><br/>
-		 				<input type="text" name="cue" id="cueid" style="border:0px"/>
-				<input type="hidden" name="checkname" id="checkid" />
-				<button class="btn" type="submit" onclick="submit()">
+		 &nbsp; &nbsp;<input type="text" name="search" id="math" style="border:0px"/><br/>
+		 				
+				<input type=text name="arr" id="arrid" style="border:0px"/>
+				<button class="btn" type="submit">
 				提交
 				</button>
 		</div>
@@ -87,10 +88,10 @@
 				</button>
 		</div>
 		</form>
+				
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover" >
 				<thead>
-				
 					<tr>
 						
 						<th class="center">标签ID</th>
@@ -103,74 +104,68 @@
 						<th class="center">添加到热门标签</th>
 					</tr>
 				</thead>
-				<tbody onload="javascript:hiddenit()">
-					
+				<tbody>
 				</tbody>
 				
 			</table>
-		
+					
 		</div>
 	</div>
 	</div>
-	
+	<input type="button" style="display: none" id="bu" name="bu" onclick="but()">
+			
 <script type="text/javascript">
+var test = [];
 
+function ad(id){
+	test.push(id);
+	
+	$("#arrid").val(test);
+	var str=test.length;
+	$("#math").val(str);
+	
+	uniqueArray(test);
+	 if(str>5){
+		alert("最多可以选择5个标签哟!");
+	test.splice(str-1,1);
+	$("#arrid").val(test);
+	 str=test.length;
+	$("#math").val(str);
+	 }
+		
+	
+}; 
+/**
+ * 去除数组重复元素
+ */
+function uniqueArray(data){  
+  data = data || [];  
+  var a = {};  
+  for (var i=0; i<data.length; i++) {  
+      var v = data[i];  
+      if (typeof(a[v]) == 'undefined'){  
+           a[v] = 1;  
+      }  
+  };  
+  data.length=0;  
+  for (var i in a){  
+       data[data.length] = i;  
+  }  
+  return data;  
+}  
 
-<%-- function add(id){
-	window.location="<%=basePath %>admin/add?id="+id;
-}
-function addtag(id){
-	window.location="<%=basePath %>admin/addtag?id="+id;
-}
- --%>
+	var datas = [];
+
 	$(document).ready(function(){
-		var oTable1 = $('#sample-table-2').dataTable( {
-			"bSort":true,
-			"bFilter": false,
-			"aoColumnDefs": [
-      	          
-    	        	{
-    	        	   "aTargets": [6],
-    	        	   
-    	        	   "fnRender":function(data,type){
-    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-    	        			str += '<input type="checkbox" name="check" id="btn"/>';
-	    	        		str += '</div>';
-    	        		   return  str;
-    	        		   /**var tableid = document.getElementById("tableid");
-	    	        		alert(tableid);
-	    	        		if(tableid){
-	    	        			alert(1);
-	    	        			tableid.css("display", "none");
-	    	        		}*/
-    	        	   }
-			    	           }, 
-				
-				{
-					"aTargets" : [7],
-					
-					"fnRender" : function(data,type) {
-						var str = '<div  class="visible-md visible-lg hidden-sm hidden-xs action-buttons" style="display:none">';
-						str += '<input type="checkbox" name="check" id="btn"/>';
-  	        			str += '</div>';
-  	        			
-  	        			
-						return str;
-					}
-				}
-			    	         ],
-			  "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetooByTags",  	//这个是请求的地址
-		     "fnServerData": retrieveData, // 获取数据的处理函数
-		} );
+		
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			  var searchid= $('#searchid').val();
 			  var font = $('#projectPorperty').val();
 			  
 			      $.ajax({
-		          url : sSource111,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData111),
+		          url : "<%=basePath %>admin/getmetooByTags",//sSource111,//这个就是请求地址对应sAjaxSource
+		         data : {"aoData":JSON.stringify(aoData111),
 		        	 "searchid":searchid,
 		        	"font":font
 		        	
@@ -179,57 +174,98 @@ function addtag(id){
 		          dataType : 'json',
 		          async : false,
 		          success : function(result) {
+		        	//  alert(JSON.stringify(result));
+		        	//  datas = result["aaData"][0];
+		        	  
 		        	  fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
 		          },
 		          error : function(msg) {
+		        	  
 		          }
 		      });
 		  }
+		
+		
+		var oTable1 = $('#sample-table-2').dataTable( {
+			"bSort":true,
+			"bFilter": false,
+			"bPaginate":true,
+			//"data": datas,
+			"bInfo":true,
+			
+			"aoColumnDefs": [               
+			                
+    	        	{
+    	        	   "aTargets": [6],
+    	        	 
+    	        	   "fnRender":function(data,type){
+    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+    	        			str += '<input type="checkbox" name="check" id="btn" onclick="ad ('+"'"+data.aData[0]+"'"+')"/>';
+	    	        		str += '</div>';
+    	        		   return  str;
+    	        		  
+    	        	   }
+			    	           }, 
+				
+				{
+					"aTargets" : [7],
+					 
+					"fnRender" : function(data,type) {
+						var str = '<div  class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+						str += '<input type="checkbox" name="check" id="btn" onclick="ad('+"'"+data.aData[0]+"'"+')"/>';
+  	        			str += '</div>';
+  	        			
+  	        			
+						return str;
+					}
+				}
+			    	         ],
+			  "bServerSide": true ,//这个用来指明是通过服务端来取数据
+		  "sAjaxSource": "<%=basePath %>/admin/getmetooByTags",//这个是请求的地址	
+		      "fnServerData": retrieveData // 获取数据的处理函数
+		     
+		} );
+		
+		but();//datatable执行之后调一次but方法
 		 
 		  $("#projectPorperty").bind("change", function(){
 			  oTable1.fnPageChange('first');
 		  });
-		 
-		  
-			  $("input[name='check']").click(function(){
+
+		  //$("input[name='check']").bind("click",function(){self.checkClick(){
+			  
+				/* $("input[name='check']").click(function(){//获取checkbox的个数
 					 var str=0;
-					
+				
+					var s="";
 					 str=$("input[type=checkbox][name='check']:checked").length;
+					 var coo =document.setCookie(str);
 					 $("#math").val(str);
-					
-				  }); 
-			 
-				function submit(){
-				    var checkboxes = document.getElementsByName('check');
-				    var checkedArr = new Array();
-				    for(var i=0;i<checkboxes.length;i++){
-				     if(checkboxes[i].checked){
-				      checkedArr.push(checkboxes[i].value);
-				     }
-				    }
-				    document.getElementById('checkid').value = checkedArr.join(',');
-				   }
 			
-		 
-		function hiddenit(){
-			
-			  var name="1";
-				 if(name.equals("1")){
+		  }); */
+  
+				
+			 	 function but(){
+					//alert(1);
+					var name=$("#flagid").val();
+					var a="1";
+					var b="2";
+				
+					if(name==a){
+						//alert(1);
+			 oTable1.fnSetColumnVis(6, false);
+					}
+					else if(name==b){
+						//alert(1);
+			oTable1.fnSetColumnVis(7, false);
+					}
+					};
 					
-					    var bVis = oTable1.fnSettings().aoColumnDefs[7].bVisible(false);
-					    oTable1.fnSetColumnVis(bVis);
-				 }else if(name.equals("2")){
-					 var columnname=oTable1.Columns[6].ColumnName.ToString();
-					 var column = oTable1.getColumn("columnname"); 
-					 column.setVisible(false); //设定该列对象的visible属性为false,用以隐藏该列 
-					
-				 }
-		};
-		
-		  var column = oTable1.aoColumnDefs;
-		  alert(column);
-		  
+			  
 	});
+	
+	
+		
 	
 	
 </script>

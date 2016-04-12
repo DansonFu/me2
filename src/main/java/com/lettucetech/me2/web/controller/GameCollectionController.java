@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
@@ -33,14 +34,15 @@ public class GameCollectionController {
 	
 	@RequestMapping(value="/othergame",method=RequestMethod.POST)
 	public ModelAndView othergame(HttpSession session, String customerId, String comments) {
+		Gson gson=new Gson();
 		Gamecomment g = new Gamecomment();
-		g.setCustomerId(Integer.valueOf(customerId.trim()));
+		g.setCustomerId(Integer.valueOf(customerId));
 		g.setComments(comments);
 		gamecommentService.insert(g);
-		
+		gson.toJson(g);
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
-		
+		result.setObj(g);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		

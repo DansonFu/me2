@@ -29,13 +29,22 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
+
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">热门标签帖</h3>
-		<div style="float: right;">
-			
-		</div>
+		<%-- <div style="float: right;">
+			<form action="<%=basePath %>admin/getmetoo/picturehot" id="wayid" method="post">		
+          	排序方式：                            
+			<select id="hotid">
+				<c:forEach items="${taglists }" var="hot">
+					<option value="${list.id}" >${list.title}</option>
+				</c:forEach>
+			</select>
+			            
+            </form> 
+		</div> --%>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -85,12 +94,12 @@
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
-			  var userId = $('#userId').val();
+			  var hotid = $('#hotid').val();
 
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
+		        	  "hotid":hotid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -103,7 +112,7 @@
 		      });
 		  }
 		
-		  $("#userId").bind("change", function(){
+		  $("#hotid").bind("change", function(){
 			  oTable1.fnPageChange('first');
 		  });
 

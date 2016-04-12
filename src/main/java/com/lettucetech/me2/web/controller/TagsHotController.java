@@ -3,7 +3,6 @@ package com.lettucetech.me2.web.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,43 +18,37 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
+import com.lettucetech.me2.dao.TagshotMapper;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Recommend;
 //import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtUser;
+import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
+import com.lettucetech.me2.service.RecommendService;
 //import com.lettucetech.me2.service.RecommendService;
 import com.lettucetech.me2.service.TXtUserService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
-import com.qiniu.util.Json;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 @Controller
 public class TagsHotController {
+	@Autowired
+	private TagshotMapper mapper;
 
-	@Autowired
-	private PictureService pictureService;
-	@Autowired
-	private PicturehotService picturehotService;
-	@Autowired
-	private PicturerecommendService picturerecommendService;
 	@Autowired
 	private TagsconnectionService tagsconnectionService;
 	@Autowired
 	private TagshotService tagshotService;
+
 	@Autowired
-	private TXtUserService usi;
-	@Autowired
-	private TaglistService tagsListService;
-	@Autowired
+	private RecommendService recommendService;
 //	private RecommendService recommendService;
 //	/**
 //	 * 根据热度查询标签
@@ -117,13 +110,12 @@ public class TagsHotController {
 	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,String font,String searchid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
-		 
 			ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 			  
 			 int iDisplayStart = 0; // 起始索引
 			 int iDisplayLength = 0;
 			 String sEcho=null;
-			  
+			 
 			 for (int i = 0; i < jsonarray.size(); i++) {
 				 HashMap obj = (HashMap) jsonarray.get(i);
 				 if (obj.get("name").equals("sEcho"))
@@ -135,7 +127,7 @@ public class TagsHotController {
 				 if (obj.get("name").equals("iDisplayLength"))
 					 iDisplayLength = Integer.parseInt(obj.get("value").toString());
 				
-				 
+				
 			 }
 		
 			 Criteria example = new Criteria();
@@ -146,25 +138,25 @@ public class TagsHotController {
 			 example.setMysqlLength(iDisplayLength);
 			 
 			 List list = new ArrayList();
-			 if(("1").equals(font)){
+			if(("0").equals(font)){
 					example.setOrderByClause("id");
-					example.setSord("asc");
+					example.setSord("desc");
 					
 				}else if(("2").equals(font)){
 					example.setOrderByClause("hits");
-					example.setSord("asc");
+					example.setSord("desc");
 					
 				}else if(("3").equals(font)){
 					example.setOrderByClause("acount");
-					example.setSord("asc");
+					example.setSord("desc");
 					
 				}else if(("4").equals(font)){
 					example.setOrderByClause("mefriends");
-					example.setSord("asc");
+					example.setSord("desc");
 				
 				}else if(("5").equals(font)){
 					example.setOrderByClause("last_time");
-					example.setSord("asc");
+					example.setSord("desc");
 					
 				}
 			  
@@ -183,11 +175,11 @@ public class TagsHotController {
 					 if(searchid.contains(obj.getTag())){
 					 
 					 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",s,s};
+							 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString(),obj.getId().toString()};
 					 list.add(d);
 					 }else{
 						 String[] d={obj.getId().toString(),obj.getTag(),obj.getHits().toString(),obj.getAcount().toString(),obj.getMefriends().toString(),
-								 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",s,s};
+								 DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),"",obj.getId().toString(),obj.getId().toString()};
 						 list.add(d);
 					 }
 				 }
@@ -242,56 +234,85 @@ public class TagsHotController {
 	
 	@RequestMapping(value="/admin/add")
 	public ModelAndView add(HttpSession session,HttpServletRequest request){
-		String[] ids = request.getParameterValues("checkname");
-
-	    if (null != ids && !"".equals(ids.toString())){
-	        for(int i = 0 ; i < ids.length; i++ ){ // 将ids 字符串按逗号分隔为 字符串数组
-	           
-	            List<String> list = new ArrayList<String>();
-	           
-	        }
-	    }
-		
+		String ids = request.getParameter("arr");
 		String str =(String)session.getAttribute("str");
-
-		Tagsconnection conn=new Tagsconnection();
-		
-			// conn.setTagsId(c);
-			 conn.setTagslistId(str);
-			 
-			 tagsconnectionService.insert(conn);
-		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("conn",conn);
-		mav.setViewName("redirect:/admin/viewselective");
-		return mav;
-		
-	}
-	@RequestMapping(value="/admin/addtag")
-	public ModelAndView addtag(HttpSession session,HttpServletRequest request){
-		String[] tagshot = request.getParameterValues("name");
-		String cate="";
-		for(int i=0;i<tagshot.length;i++)
-		{
-		    cate+=tagshot[i]+" ";
+		if(str==null){
+			String[] d =ids.split(",");
+			Recommend recommend=new Recommend();
+			for(int i=0;i<d.length;i++){
+				String c=d[i];
+				Tagshot tag=tagshotService.selectByPrimaryKey(Integer.valueOf(c));
+				recommend.setTagId(tag.getId());
+				recommend.setAcount(tag.getAcount());
+				recommend.setHits(tag.getHits());
+				recommend.setMefriends(tag.getMefriends());
+				recommend.setTagname(tag.getTag());
+				recommend.setQiniukey(tag.getQiniukey());
+				recommend.setLasttime(tag.getLastTime());
+				Criteria example = new Criteria();
+				example.put("id", c);
+				List<Recommend> commend=recommendService.selectByParams(example);
+				List<Integer> list1 = new ArrayList<Integer>(); 
+				for(Recommend pcs : commend){
+					Integer b = pcs.getSort();
+					list1.add(b);
+				}
+				Integer sort=0;
+				int sum=0;
+				int lost=0;
+				int max=0;
+				int total=0;
+				 for(int j=0; j<commend.size(); j++){  
+			            if(list1.get(j)>max){  
+			                max = list1.get(j);  
+			            }  
+			            sum += list1.get(j);  
+			        }  
+			        total=(max*(max+1))/2;  
+			         lost = total-sum;
+			         if(lost==0){
+			        	 
+			        	 for(int k=0;k<commend.size();k++){
+			        		 if(list1.get(k)>sort){
+			        			 sort = list1.get(k);
+			        		 }
+			        		 
+			        	 }
+			        	 recommend.setSort(sort+1);
+			         }else if(lost>0 && lost<commend.size()){
+			        	 recommend.setSort(lost);
+			         }
+				recommendService.insert(recommend);
+				
+				mav.setViewName("redirect:/admin/viewrecommend");
+			}
+			
 		}
-		String str =(String)session.getAttribute("str");
+		else if(str!=null){
+			
+			Tagsconnection conn=new Tagsconnection();
+			String d[] =ids.split(",");
+			for(int i=0;i<d.length;i++){
+				String c=d[i];
+				Tagshot tag=tagshotService.selectByPrimaryKey(Integer.valueOf(c));
+				
+				
+				 conn.setTagsId(tag.getId());
+				conn.setTagslistId(str);
+				
+				tagsconnectionService.insert(conn);
+			}
+			String cid=conn.getTagslistId();
+			 request.getSession().setAttribute("cid",cid);
+			//mav.addObject("cid",cid);
+			mav.setViewName("redirect:/admin/viewselective");
+			
 		
-		Tagsconnection conn=new Tagsconnection();
-		
-		
-			 
-			// conn.setTagsId(tagid);
-			 conn.setTagslistId(str);
-			 
-			 tagsconnectionService.insert(conn);
-		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("conn",conn);
-		mav.setViewName("redirect:/admin/viewselective");
+		}
 		return mav;
-		
 	}
+	
 	
 	/**
 	 * 刷新
@@ -305,46 +326,15 @@ public class TagsHotController {
 		
 		  Map<String, Object> map = new HashMap<String, Object>();
 		  map.put("str3",",");
-		 
+		 List<Tagshot> tagshot=mapper.strsplit1(map);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(map);
 		mav.setViewName("redirect:/admin/viewTags");
 		return mav;
 	}
 }
-/**
-* 搜索标签
-* 
-*/
-//@RequestMapping(value="/admin/searchtag")
-//public ModelAndView search(HttpSession session,HttpServletRequest request){
-//	//String str =(String)session.getAttribute("str");
-//	
-//	String str=request.getParameter("searcher");
-//	Criteria example = new Criteria();
-//	
-//	example.put("str", str);
-//	tagshotService.selectByParams(example);
-//	ModelAndView mav = new ModelAndView();
-//	mav.addObject("str",str);
-//	mav.setViewName("redirect:/admin/viewTags");
-//	return mav;
-//}
-//}
-//@RequestMapping(value="/admin/viewsearch")
-//public ModelAndView searchTag(HttpSession session,HttpServletRequest request){
-//	//String str =(String)session.getAttribute("str");
-//	
-//	String str=request.getParameter("search");
-//	Criteria example = new Criteria();
-//	
-//	example.put("str", str);
-//	tagshotService.selectByParams(example);
-//	ModelAndView mav = new ModelAndView();
-//	mav.addObject("str",str);
-//	mav.setViewName("redirect:/admin/searchTag");
-//	return mav;
-//}
+
 ///**
 //*   修改标签
 //* @param session

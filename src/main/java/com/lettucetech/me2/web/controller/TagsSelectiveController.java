@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.tomcat.util.http.mapper.Mapper;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,17 +33,13 @@ import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
-import com.lettucetech.me2.service.impl.TagsconnectionServiceImpl;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 
 @Controller
 public class TagsSelectiveController {
 	@Autowired
-	private PictureService pictureService;
-	@Autowired
-	private PicturehotService picturehotService;
-	@Autowired
-	private PicturerecommendService picturerecommendService;
+	private TagsconnectionMapper mapper;
+
 	@Autowired
 	private TagsconnectionService tagsconnectionService;
 	@Autowired
@@ -64,22 +59,38 @@ public class TagsSelectiveController {
 	public ModelAndView selectByTags(HttpSession session,String id,HttpServletRequest request){
 		String str=id;
 		String flag="2";
-		String conn = request.getParameter("conn");
-		String tag=conn;
-		session.setAttribute("conn", conn);
+		String conn= (String)request.getSession().getAttribute("cid");
+		//String conn = request.getParameter("conn");
+		String tag=id;
+		String i=conn;
+		String hotid=conn;
+		String hotid1=id;
+//		session.setAttribute("conn", conn);
 		session.setAttribute("taglist", id);
 		String name="";
+		Taglist taglist1;
 		if(str==null){
+			taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(i));
+		}else{
 			
-		Taglist taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
-			
-		 name = taglist1.getTitle();
+		 taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
 		}
+		
+		 name = taglist1.getTitle();
+		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("conn",conn);
+		mav.addObject("cid",conn);
 		mav.addObject("flag",flag);
 		mav.addObject("tid",id);
 		mav.addObject("name",name);
+		if(hotid==null){
+			mav.addObject("hotid",hotid1);
+
+		}else{
+			
+			mav.addObject("hotid",hotid);
+		}
+		
 		mav.setViewName("/admin/viewselective");
 		return mav;
 	}
@@ -100,8 +111,8 @@ public class TagsSelectiveController {
 	@RequestMapping(value="/admin/getmetoo/selective",method={RequestMethod.POST})
 	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,String tid,String cid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
-		String taglist=(String)session.getAttribute("taglist");
-		String tagslist=(String)session.getAttribute("conn");
+//		String taglist=(String)session.getAttribute("taglist");
+//		String tagslist=(String)session.getAttribute("conn");
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
 	    
@@ -185,13 +196,16 @@ if(!"".equals(cid)){
 	 * @param pid
 	 * @param taglist_id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("/admin/submit")
-	public ModelAndView submit(HttpSession session){
-		
-		  Map<String, Object> map = new HashMap<String, Object>();
-		  map.put("beginlength",0);
+	public ModelAndView submit(HttpSession session) throws IOException{
 		 
+	
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("beginlength",0);
+		List<Tagshot> conn=mapper.testpro(map);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(map);
 		mav.setViewName("redirect:/admin/picturehot");

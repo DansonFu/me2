@@ -101,20 +101,16 @@
 			     	        	   }
 			     	           },
 			     	        	{
-			     	        	   "aTargets": [3],
+			     	        	   "aTargets": [4],
 			     	        	   "fnRender":function(data,type){
 			     	        		   var str = "";
-			     	        		   if(data.aData[4]==1){
-			     	        				str = '<a href="'+data.aData[3]+'" target="_blank" id="abpicture"><img src="'+data.aData[3]+'" width="100px" height="100px" id="b"> </a>';
+			     	        		   if(data.aData[5]==1){
+			     	        				str = '<a href="'+data.aData[4]+'" target="_blank" id="abpicture"><img src="'+data.aData[4]+'" width="100px" height="100px" id="b"> </a>';
 			     	        		   }else{
-			     	        				str = data.aData[3];
+			     	        				str = data.aData[4];
 			     	        		   }
 			     	        		   return  str;
 			     	        	   }
-			     	           },{
-			     	        	   "aTargets": [4],
-			     	        	  "sTitle": "B面 ", "sWidth": "80px", "sClass": "center"
-			     	        	   
 			     	           },
    	        	{
    	        	   "aTargets": [5],

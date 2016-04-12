@@ -30,29 +30,20 @@
 </head>
 <body>
 <h3 class="header smaller lighter blue">已选标签&nbsp;<input value="${name }" style="border:0px" /></h3>
-			
-				
-				<%--<<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
-				<div style="float: left;">
-				<br/>
-				button class="btn btn-primary" type="submit" onclick="reset()">
-					<i class="icon-undo bigger-60"></i>
-					恢复默认设置
-				</button>
-				</div>
-				</form>  --%> 
+				<input type="hidden" name="conn" value="${cid }" id="cid"/>
+		<form  action="<%=basePath %>admin/submit" id="hid" method="post">
 		<div style="float: right;">
-		<br/>
-			<button class="btn btn-primary" type="submit" onclick="submit()">
-					<i class="icon-ok bigger-80"></i>
+			<input type="hidden" name="hot" value="${hotid }" id="hotid"/>
+			<button class="btn btn-primary" type="submit">
+			<i class="icon-ok bigger-80"></i>
 					提交
 				</button>
+					
 				</div>
-				
+			</form>	
 			<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 				<div style="float: right;">
 				<input type="hidden" name="taglist" value="${tid }" id="tid"/>
-				<input type="hidden" name="conn" value="${conn }" id="cid"/>
 				<input type="hidden" name="flag" value="${flag }"/>
 				&nbsp; &nbsp; &nbsp;
 				<br/>

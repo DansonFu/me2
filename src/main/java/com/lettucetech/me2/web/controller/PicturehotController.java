@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -21,10 +22,11 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtMenu;
 import com.lettucetech.me2.pojo.TXtUser;
-import com.lettucetech.me2.pojo.Tagsconnection;
+import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.TXtUserService;
+import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
@@ -42,28 +44,25 @@ public class PicturehotController {
 	private TagsconnectionService tagsconnectionService;
 	@Autowired
 	private TagshotService tagshotService;
+	@Autowired
+	private TaglistService tagListService;
 	/**
 	 * 跳转查看热门标签帖页面
 	 * @param session
 	 * @return
 	 */
 	@RequestMapping("/admin/picturehot")
-	public ModelAndView pcase(HttpSession session) {
-		List<TXtUser> users = new ArrayList<TXtUser>();
-		if(checkPermission(session,"viewall")){
-			Criteria example = new Criteria();
-			users = usi.selectByParams(example);
-			//增加全部的选项
-			TXtUser u=new TXtUser();
-			u.setUserId(-1);
-			u.setName("全部");
-			users.add(0, u);
-		}else{
-			users.add((TXtUser)session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME));
-		}
-		
+	public ModelAndView pcase(HttpSession session,HttpServletRequest request) {
+		String hot = (String )request.getParameter("hot");
+		 Criteria example = new Criteria();
+		 example.put("hot",hot);
+		 List<Taglist> taglist=tagListService.selectByParams(example);
+		Taglist list=new Taglist();
+		list.setNum(0);;
+		list.setTitle("全部");
+		taglist.add(list);
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("users", users);
+		mav.addObject("taglists",taglist);
 		mav.setViewName("/admin/picturehot");
 		return mav;
 	}
@@ -75,7 +74,7 @@ public class PicturehotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/picturehot")
-	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData,String userId) {
+	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData,String hotid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -96,32 +95,49 @@ public class PicturehotController {
 	    }
 	    Criteria example = new Criteria();
 	    example.setOrderByClause("hits");
-	    example.setSord("asc");
+	   example.setSord("desc");
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    example.put("state", "0");
 	    
 	    //是否有查看所有人权限
 
-		if(!"-1".equals(userId)){
-			example.put("userId", userId);
-		}
+//		if(!"-1".equals(hotid)){
+//			example.put("tagslistId", hotid);
+//		}
 	    
 	    int count = pictureHotService.countByParams(example);
 	    List<Tagshot> metoo = tagshotService.selectByParams(example);
-	    
+	  //  List<Picturehot> hot =pictureHotService.selectByParams(example);
 	    //拼接翻页数据
 	    //加一个条件判断图片是否重复,并去重?
 	    List list = new ArrayList();
-		for(Tagshot obj : metoo){
-			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
-			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
-					obj.getHits().toString(),obj.getMefriends().toString(),
-					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-			
-			
-			list.add(d);
-		}
+	  //  for(Picturehot phot:hot){
+	    //	if(phot.getTagslistId().equals(hotid)){
+	    		
+	    		for(Tagshot obj : metoo){
+	    			
+	    			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
+	    			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
+	    					obj.getHits().toString(),obj.getMefriends().toString(),
+	    					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+	    			
+	    			
+	    			list.add(d);
+	    		}
+	    //	}else{
+//	    			for(Tagshot obj : metoo){
+//	    			
+//	    			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
+//	    			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
+//	    					obj.getHits().toString(),obj.getMefriends().toString(),
+//	    					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
+//	    			
+//	    			
+//	    			list.add(d);
+//	    		}
+	   // 	}
+	   // }
 		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);

@@ -53,7 +53,7 @@ public class TagsListController {
 	 
 	@RequestMapping("/admin/viewList")
 	public ModelAndView selectByTags(HttpSession session){	
-		session.setAttribute("taglist","taglist");
+		
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -133,10 +133,8 @@ public class TagsListController {
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 			
 			String s="";
-			int c=0;
-			
-			String coo=Integer.toString(c);
-			String[] d={obj.getId().toString(),obj.getTitle(),aurl,coo,s,s};
+		
+			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s,s};
 			list.add(d);
 		}
 		
@@ -240,6 +238,7 @@ public class TagsListController {
 				e.printStackTrace();
 			}
 		}
+		Taglist list =new Taglist();
 		Criteria example = new Criteria();
 		example.put("id", id);
 		List<Taglist> tag=tagListService.selectByParams(example);
@@ -249,16 +248,35 @@ public class TagsListController {
 			list1.add(b);
 		}
 		Integer sort=0;
-		for(int i=0;i<tag.size();i++){
-			if(list1.get(i)>sort){
-				sort = list1.get(i);
-			}
-		}
-		Taglist list =new Taglist();
+		int sum=0;
+		int lost=0;
+		int max=0;
+		int total=0;
+		 for(int j=0; j<tag.size(); j++){  
+	            if(list1.get(j)>max){  
+	                max = list1.get(j);  
+	            }  
+	            sum += list1.get(j);  
+	        }  
+	        total=(max*(max+1))/2;  
+	         lost = total-sum;
+	         if(lost==0){
+	        	 
+	        	 for(int k=0;k<tag.size();k++){
+	        		 if(list1.get(k)>sort){
+	        			 sort = list1.get(k);
+	        		 }
+	        		 
+	        	 }
+	        	 list.setSort(sort+1);
+	         }else if(lost>0 && lost<tag.size()){
+	        	 list.setSort(lost);
+	         }
+		
 //		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		list.setSort(sort+1);
+		
 		tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();
 	

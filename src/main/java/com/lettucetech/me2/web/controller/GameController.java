@@ -18,11 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Game;
 import com.lettucetech.me2.pojo.Gamecustomer;
 import com.lettucetech.me2.pojo.Gameface;
 import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.GamecustomerService;
 import com.lettucetech.me2.service.GamefaceService;
 import com.lettucetech.me2.service.MessageService;
@@ -42,6 +44,8 @@ public class GameController {
 	private PictureService pictureService;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private CustomerService customerService;
 	/**
 	 * 查询解密游戏
 	 * @param session
@@ -139,7 +143,16 @@ public class GameController {
 		gamecustomer.setPid(Integer.parseInt(pid));
 		gamecustomer.setCustomerId(-1);
 		
-		gamecustomerService.insertSelective(gamecustomer);
+		Customer customer=customerService.selectByPrimaryKey(gamecustomer.getCustomerId());
+		if(customer.getInneruser().equals("1")){
+			
+			gamecustomerService.insertSelective(gamecustomer);
+			
+		}else if(customer.getInneruser().equals("0")){
+			
+			gamecustomerService.insertSelective(gamecustomer);
+		}
+		
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
