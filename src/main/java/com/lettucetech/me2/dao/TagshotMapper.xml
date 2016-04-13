@@ -9,7 +9,6 @@
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
     <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
-     <association property="picturehot" column="taglist_id" jdbcType="Picturehot" select="com.lettucetech.me2.dao.TaglistMapper.selectByParams"></association>
  
   </resultMap>
   <sql id="Example_Where_Clause" >

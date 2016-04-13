@@ -571,36 +571,36 @@ public class AdminController {
 	    	example.put("searchid",searchid);
 	    	
 	    	 count= pictureService.countByParams(example);
-	 	   // List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
-	 	    List<Picture> pic=pictureService.selectByParams(example);
+	 	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
+	 	   // List<Picture> pic=pictureService.selectByParams(example);
 	 	    //拼接翻页数据
 	 	   
-	 		for(Picture obj : pic){
+	 		for(TXtMetoo obj : metoo){
 	 			
-	 			if(obj.getTags().contains(searchid)){
+	 			if(obj.getPicture().getTags().contains(searchid)){
 	 				
 	 			
 	 			
-	 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
+	 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
 	 			String burl="";
 	 			String type="";
 	 			String bmood="";
 	 			//如果有B面
-	 			if(obj.getBpicture()!=null){
-	 				if(obj.getBpicture().getType().equals("1")){
-	 					burl = QiniuUtil.getDownUrl(obj.getBpicture().getQiniukey());
+	 			if(obj.getPicture().getBpicture()!=null){
+	 				if(obj.getPicture().getBpicture().getType().equals("1")){
+	 					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
 	 				}else{
-	 					burl = obj.getBpicture().getQiniukey();
+	 					burl = obj.getPicture().getBpicture().getQiniukey();
 	 				}
-	 					type = obj.getBpicture().getType();
+	 					type = obj.getPicture().getBpicture().getType();
 	 			}
-	 			bmood=obj.getBpicture().getMood();
+	 			bmood=obj.getPicture().getBpicture().getMood();
 	 			
 	 			
 	 			
 	 			
-	 			String[] d = {obj.getPid().toString(),obj.getCustomer().getUsername(),aurl,obj.getMood(),burl,type,
-	 					obj.getTags(),bmood,obj.getCustomer().getNickname(),
+	 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
+	 					obj.getPicture().getTags(),bmood,obj.getPicture().getCustomer().getNickname(),
 	 					DateUtil.dateFormatToString(obj.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
 	 			list.add(d);
 	 			}
