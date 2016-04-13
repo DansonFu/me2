@@ -112,7 +112,7 @@ public class PictureController {
 	 * @param pid
 	 * @return
 	 */
-	@RequestMapping(value = "/pictures/{pid}/increasehot", method ={RequestMethod.POST})
+	@RequestMapping(value = "/pictures/{pid}/increasehot", method ={RequestMethod.PUT})
 	public ModelAndView addPicture(HttpSession session,@PathVariable Integer pid){
 		Picture picture = pictureService.selectByPrimaryKey(pid);
 		picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);

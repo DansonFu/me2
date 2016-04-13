@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -22,11 +21,10 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtMenu;
 import com.lettucetech.me2.pojo.TXtUser;
-import com.lettucetech.me2.pojo.Taglist;
+import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.TXtUserService;
-import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
@@ -41,25 +39,17 @@ public class PicturehotController {
 	private PicturehotService pictureHotService;
 	@Autowired
 	private TagshotService tagshotService;
-	@Autowired
-	private TaglistService tagListService;
 	/**
 	 * 跳转查看热门标签帖页面
 	 * @param session
 	 * @return
 	 */
 	@RequestMapping("/admin/picturehot")
-	public ModelAndView pcase(HttpSession session,HttpServletRequest request) {
-		String hot = (String )request.getParameter("hot");
-		 Criteria example = new Criteria();
-		 example.put("hot",hot);
-		 List<Taglist> taglist=tagListService.selectByParams(example);
-		Taglist list=new Taglist();
-		list.setNum(0);;
-		list.setTitle("全部");
-		taglist.add(list);
+	public ModelAndView pcase(HttpSession session) {
+		
+		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("taglists",taglist);
+	
 		mav.setViewName("/admin/picturehot");
 		return mav;
 	}
@@ -71,7 +61,7 @@ public class PicturehotController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/picturehot")
-	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData,String hotid) {
+	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData,String userId,String hotid) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -92,14 +82,22 @@ public class PicturehotController {
 	    }
 	    Criteria example = new Criteria();
 	    example.setOrderByClause("hits");
-	   example.setSord("desc");
+	    example.setSord("asc");
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 	    example.put("state", "0");
 	    
 	    //是否有查看所有人权限
+
+
+		if(!"-1".equals(userId)){
+			example.put("userId", userId);
+		}
+	    
+
 	    int count = pictureHotService.countByParams(example);
 	    List<Tagshot> metoo = tagshotService.selectByParams(example);
+
 	    List list = new ArrayList();
 
 		if(!"".equals(hotid)){
@@ -107,9 +105,12 @@ public class PicturehotController {
 		}
 	//	List<Picturehot> hot =pictureHotService.selectByParams(example);
 		
+
+
 	    
 	    //拼接翻页数据
 	    //加一个条件判断图片是否重复,并去重?
+
 	    		
 	    		for(Tagshot obj : metoo){
 	    			
@@ -122,7 +123,6 @@ public class PicturehotController {
 	    			list.add(d);
 	    		}
 	    	
-		
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);

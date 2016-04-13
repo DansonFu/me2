@@ -50,7 +50,7 @@
 						<th class="center">集合名称</th>
 						<th class="center">图片</th>
 						<th class="center">调整</th>
-						
+						<th class="center">标签数</th>
 						<th class="center">操作</th>
 					</tr>
 				</thead>
@@ -111,7 +111,7 @@ function down(id){
 				 	        	   }
 				   	           },
 				   	        {
-				  	        	   "aTargets": [4],
+				  	        	   "aTargets": [5],
 				 	        	   "fnRender":function(data,type){
 				       		  		 var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 				  	        			str += '<a class="blue" href="javascript:void(0);"onclick="update('+"'"+data.aData[0]+"'"+')" >';

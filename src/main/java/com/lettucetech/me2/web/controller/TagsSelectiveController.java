@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.tomcat.util.http.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,13 +34,17 @@ import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
+import com.lettucetech.me2.service.impl.TagsconnectionServiceImpl;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 
 @Controller
 public class TagsSelectiveController {
 	@Autowired
-	private TagsconnectionMapper mapper;
-
+	private PictureService pictureService;
+	@Autowired
+	private PicturehotService picturehotService;
+	@Autowired
+	private PicturerecommendService picturerecommendService;
 	@Autowired
 	private TagsconnectionService tagsconnectionService;
 	@Autowired
@@ -59,38 +64,22 @@ public class TagsSelectiveController {
 	public ModelAndView selectByTags(HttpSession session,String id,HttpServletRequest request){
 		String str=id;
 		String flag="2";
-		String conn= (String)request.getSession().getAttribute("cid");
-		//String conn = request.getParameter("conn");
-		String tag=id;
-		String i=conn;
-		String hotid=conn;
-		String hotid1=id;
-//		session.setAttribute("conn", conn);
+		String conn = request.getParameter("conn");
+		String tag=conn;
+		session.setAttribute("conn", conn);
 		session.setAttribute("taglist", id);
 		String name="";
-		Taglist taglist1;
 		if(str==null){
-			taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(i));
-		}else{
 			
-		 taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
-		}
-		
+		Taglist taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
+			
 		 name = taglist1.getTitle();
-		
+		}
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("cid",conn);
+		mav.addObject("conn",conn);
 		mav.addObject("flag",flag);
 		mav.addObject("tid",id);
 		mav.addObject("name",name);
-		if(hotid==null){
-			mav.addObject("hotid",hotid1);
-
-		}else{
-			
-			mav.addObject("hotid",hotid);
-		}
-		
 		mav.setViewName("/admin/viewselective");
 		return mav;
 	}
@@ -109,15 +98,15 @@ public class TagsSelectiveController {
 	 * @param userId
 	 */
 	@RequestMapping(value="/admin/getmetoo/selective",method={RequestMethod.POST})
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData,String tid,String cid) {
+	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
 		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
-//		String taglist=(String)session.getAttribute("taglist");
-//		String tagslist=(String)session.getAttribute("conn");
+		String taglist=(String)session.getAttribute("taglist");
+		String tagslist=(String)session.getAttribute("conn");
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
 	    
 	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 0; // 每页显示的行数
+	    int iDisplayLength = 25; // 每页显示的行数
 	 
 	    for (int i = 0; i < jsonarray.size(); i++) {
 	    	HashMap obj = (HashMap) jsonarray.get(i);
@@ -132,17 +121,12 @@ public class TagsSelectiveController {
 	         
 	    }
 	    Criteria example = new Criteria();
-	 
+	  
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
-if(!"".equals(tid)){
-	 example.put("tagslistId",tid);
-}
-if(!"".equals(cid)){
-	example.put("tagslistId", cid);
-}
+
 	   
-	    int count = tagsconnectionService.countByParams(example);
+	    int count=0;
 	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
 	    //拼接翻页数据
 	    List list = new ArrayList();
@@ -151,21 +135,20 @@ if(!"".equals(cid)){
 	    			
 	    			Tagshot tagshot=tagshotService.selectByPrimaryKey(obj.getTagsId());
 			//加一个条件,判断是在哪一个集合中?
-	    			
-	    		if(obj.getTagslistId().equals(tid)){
-	    			 
+	    		if(taglist !=null && taglist.equals(obj.getTagslistId())){
+	    			  count = tagsconnectionService.countByParams(example);
 	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
 						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
 						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 	    			list.add(d);	
-	    			
-				}else if(obj.getTagslistId().equals(cid)){
-					 
+	    			break;
+				}else if(tagslist!=null && tagslist.equals(obj.getTagslistId())){
+					  count = tagsconnectionService.countByParams(example);
 	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
 						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
 						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
 	    			list.add(d);
-	    			
+	    			break;
 				}
 	    		}
 	    	
@@ -196,16 +179,13 @@ if(!"".equals(cid)){
 	 * @param pid
 	 * @param taglist_id
 	 * @return
-	 * @throws IOException 
 	 */
 	@RequestMapping("/admin/submit")
-	public ModelAndView submit(HttpSession session) throws IOException{
-		 
-	
+	public ModelAndView submit(HttpSession session){
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("beginlength",0);
-		List<Tagshot> conn=mapper.testpro(map);
+		  Map<String, Object> map = new HashMap<String, Object>();
+		  map.put("beginlength",0);
+		 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(map);
 		mav.setViewName("redirect:/admin/picturehot");

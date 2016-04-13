@@ -53,7 +53,7 @@ public class TagsListController {
 	 
 	@RequestMapping("/admin/viewList")
 	public ModelAndView selectByTags(HttpSession session){	
-		
+		session.setAttribute("taglist","taglist");
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -96,31 +96,31 @@ public class TagsListController {
 	 * @param userId
 	 */
 	@RequestMapping("/admin/getmetoo/connect")
-	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData) {
+	public void getMetooByTags(HttpSession session,HttpServletResponse response,String aoData,Taglist taglist) {
 	TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 	 
 	ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
     String sEcho = null;
-    int iDisplayStart = 0; // 起始索引
-    int iDisplayLength = 0; // 每页显示的行数
+//    int iDisplayStart = 0; // 起始索引
+//    int iDisplayLength = 0; // 每页显示的行数
  
     for (int i = 0; i < jsonarray.size(); i++) {
     	HashMap obj = (HashMap) jsonarray.get(i);
     	 if (obj.get("name").equals("sEcho"))
              sEcho = obj.get("value").toString();
   
-         if (obj.get("name").equals("iDisplayStart"))
-             iDisplayStart = Integer.parseInt(obj.get("value").toString());
-  
-         if (obj.get("name").equals("iDisplayLength"))
-             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+//         if (obj.get("name").equals("iDisplayStart"))
+//             iDisplayStart = Integer.parseInt(obj.get("value").toString());
+//  
+//         if (obj.get("name").equals("iDisplayLength"))
+//             iDisplayLength = Integer.parseInt(obj.get("value").toString());
     }
     Criteria example = new Criteria();
-    
+    example.put("taglist", taglist);
     example.setOrderByClause("sort");
     example.setSord("asc");
-    example.setMysqlOffset(iDisplayStart);
-    example.setMysqlLength(iDisplayLength);
+//    example.setMysqlOffset(iDisplayStart);
+//    example.setMysqlLength(iDisplayLength);
 
     int count = tagListService.countByParams(example);
     List<Taglist> metoo = tagListService.selectByParams(example);
@@ -134,8 +134,9 @@ public class TagsListController {
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
 			
 			String s="";
-		
-			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s,s};
+			
+			
+			String[] d={obj.getId().toString(),obj.getTitle(),aurl,s,s,s};
 			list.add(d);
 		}
 		
@@ -239,7 +240,6 @@ public class TagsListController {
 				e.printStackTrace();
 			}
 		}
-		Taglist list =new Taglist();
 		Criteria example = new Criteria();
 		example.put("id", id);
 		List<Taglist> tag=tagListService.selectByParams(example);
@@ -249,35 +249,16 @@ public class TagsListController {
 			list1.add(b);
 		}
 		Integer sort=0;
-		int sum=0;
-		int lost=0;
-		int max=0;
-		int total=0;
-		 for(int j=0; j<tag.size(); j++){  
-	            if(list1.get(j)>max){  
-	                max = list1.get(j);  
-	            }  
-	            sum += list1.get(j);  
-	        }  
-	        total=(max*(max+1))/2;  
-	         lost = total-sum;
-	         if(lost==0){
-	        	 
-	        	 for(int k=0;k<tag.size();k++){
-	        		 if(list1.get(k)>sort){
-	        			 sort = list1.get(k);
-	        		 }
-	        		 
-	        	 }
-	        	 list.setSort(sort+1);
-	         }else if(lost>0 && lost<tag.size()){
-	        	 list.setSort(lost);
-	         }
-		
+		for(int i=0;i<tag.size();i++){
+			if(list1.get(i)>sort){
+				sort = list1.get(i);
+			}
+		}
+		Taglist list =new Taglist();
 //		list.setId(Integer.valueOf(id));
 		list.setTitle(title);
 		list.setQiniukey(akey);
-		
+		list.setSort(sort+1);
 		tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();
 	

@@ -12,7 +12,7 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 public class LoginInterceptor implements HandlerInterceptor{
 		//免登录的页面
 	 	private static final String[] IGNORE_URI = {"/qiniutoken/simple", "/register","/login",
-	 		"/thirdPartyLogin","/toLogin","/resources","/h5Test","/h5Test1","/h5Test2"};
+	 		"/thirdPartyLogin","/toLogin","/resources"};
 	 	@Override  
 	    public void afterCompletion(HttpServletRequest request,  
 	            HttpServletResponse response, Object obj, Exception err)  

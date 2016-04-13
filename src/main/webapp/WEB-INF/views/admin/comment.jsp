@@ -172,20 +172,19 @@
                                 <!-- col-lg-6 -->
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                        	A面心情：
+                                        	心情：
                                     </div>
                                     <div class="col-lg-9">
 										<label id="amood">${picture.mood }</label>
                                     </div>
-                                </div>
-                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                        	B面心情：
+                                        	心情：
                                     </div>
                                     <div class="col-lg-9">
 										<label id="bmood">${picture.mood }</label>
                                     </div>
                                 </div>
+                                
                                 <!-- col-lg-6 -->
                             </div>
                         
@@ -449,7 +448,7 @@
 					html += '</div>';
 					html += '</div>';
 				}
-                $("comments").html(html);
+                $("#comments").html(html);
                 
 				bkey = data[0].bpicture.qiniukey;
 				$.ajax({

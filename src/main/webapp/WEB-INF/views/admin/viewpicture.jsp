@@ -268,7 +268,6 @@
                         </div>
                         <h4>修改评论</h4>
                     </div>
-                    <div>
 					<c:forEach items="${comments }" var="comment">
                     <!-- row -->
 					<div class="row form-group">
@@ -292,7 +291,6 @@
                         <!-- col-lg- -->
                     </div>
 				</c:forEach>
-				</div>
              </div>
              
 		 </form>
@@ -336,8 +334,6 @@
 		<script src="<%=basePath %>resources/assets/js/ace.min.js"></script>		
 		
 <script type="text/javascript">
-//7牛公共资源域名
-var domain = '${domain}';
 $(document).ready(function(){
 	changetype();
 }); 

@@ -93,7 +93,14 @@ $(document).ready(function(){
    	        {
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';  	        			
+   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
+//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+//   	        			str += '</a>';
+//   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
+//  	        			str += '<i class="icon-pencil bigger-130"></i>';
+// 	        			str += '</a>';
+   	        			
    	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
    	        			str += '<i class="icon-trash bigger-130"></i>';
    	        			str += '</a>';
@@ -113,9 +120,8 @@ $(document).ready(function(){
 
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
- 						data : {"aoData":JSON.stringify(aoData1113),
-		        	  "pid":pid		  
-		        	 
+		          data : {"aoData":JSON.stringify(aoData1113)
+		        	 // "pp":pp
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

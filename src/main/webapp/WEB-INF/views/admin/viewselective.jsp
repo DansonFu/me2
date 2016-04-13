@@ -30,20 +30,28 @@
 </head>
 <body>
 <h3 class="header smaller lighter blue">已选标签&nbsp;<input value="${name }" style="border:0px" /></h3>
-				<input type="hidden" name="conn" value="${cid }" id="cid"/>
-		<form  action="<%=basePath %>admin/submit" id="hid" method="post">
+			
+				
+				<%--<<form action="<%=basePath %>admin/getmetoo/selective" id="reagain" method="post">
+				<div style="float: left;">
+				<br/>
+				button class="btn btn-primary" type="submit" onclick="reset()">
+					<i class="icon-undo bigger-60"></i>
+					恢复默认设置
+				</button>
+				</div>
+				</form>  --%> 
 		<div style="float: right;">
-			<input type="hidden" name="hot" value="${hotid }" id="hotid"/>
-			<button class="btn btn-primary" type="submit">
-			<i class="icon-ok bigger-80"></i>
+		<br/>
+			<button class="btn btn-primary" type="submit" onclick="submit()">
+					<i class="icon-ok bigger-80"></i>
 					提交
 				</button>
-					
 				</div>
-			</form>	
+				
 			<form action="<%=basePath %>admin/viewTags" id="formid" method="post">
 				<div style="float: right;">
-				<input type="hidden" name="taglist" value="${tid }" id="tid"/>
+				<input type="hidden" name="taglist" value="${tid }"/>
 				<input type="hidden" name="flag" value="${flag }"/>
 				&nbsp; &nbsp; &nbsp;
 				<br/>
@@ -117,13 +125,11 @@
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			 // var addid = document.getElementById("addid").value;
-				var tid=$('#tid').val();
-				var cid=$('#cid').val();
+
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "tid":tid,
-		        	  "cid":cid
+		        	//  "addid":addid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

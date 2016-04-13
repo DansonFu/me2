@@ -2,8 +2,6 @@ package com.lettucetech.me2.dao;
 
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Tagsconnection;
-import com.lettucetech.me2.pojo.Tagshot;
-
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Param;
@@ -63,5 +61,4 @@ public interface TagsconnectionMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(Tagsconnection record);
-    List<Tagshot> testpro(Map<String, Object> map);
 }

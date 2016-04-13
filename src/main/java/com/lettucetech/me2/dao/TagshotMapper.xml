@@ -247,7 +247,7 @@
   </update>
    <select id="strsplit1" statementType="CALLABLE">
   	{
-  		call strsplit1( #{str3,jdbcType=INTEGER,mode=IN})
+  		call pro( #{str3,jdbcType=INTEGER,mode=IN})
   	}
   </select>
 </mapper>
