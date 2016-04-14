@@ -29,23 +29,29 @@
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
 </head>
 <body>
+
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">热门标签帖</h3>
-<<<<<<< HEAD
-		<div style="float: right;">	
+		<div style="float: right;">
+					
           	排序方式：                            
 			<select id="hotid">
 				<c:forEach items="${taglists }" var="hot">
 					<option value="${hot.id}" >${hot.title}</option>
 				</c:forEach>
-			</select>
-=======
-		<div style="float: right;">
-			
->>>>>>> branch 'master' of https://git.oschina.net/joesong168/Me2Java.git
+			</select>			
+		</div> 
+		<form action="<%=basePath %>admin/picturehot" id="formid" method="post">
+		<div style="float:left;">
+		 &nbsp; &nbsp;<input type="text" name="search" />
+			<input type="hidden"  id="searchid" value="${svalue }" />
+				<button class="btn" type="submit">
+				检索
+				</button>
 		</div>
+		</form>
 		<br>
 		<br>
 		<div class="table-responsive">
@@ -95,25 +101,29 @@
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
-			  var userId = $('#userId').val();
-
+			  var hotid = $('#hotid').val();
+				var searchid=$('#searchid').val();
+				
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "userId":userId
+		        	  "hotid":hotid,
+		        	  "searchid":searchid
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
 		          async : false,
 		          success : function(result) {
 		              fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
+		              
 		          },
 		          error : function(msg) {
 		          }
+		         
 		      });
 		  }
 		
-		  $("#userId").bind("change", function(){
+		  $("#hotid").bind("change", function(){
 			  oTable1.fnPageChange('first');
 		  });
 

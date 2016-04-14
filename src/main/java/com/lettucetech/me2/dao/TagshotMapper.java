@@ -63,4 +63,5 @@ public interface TagshotMapper {
     int updateByPrimaryKey(Tagshot record);
 
 	List<Tagshot> selectByParams4Matching(Criteria example);
+	  List<Tagshot> strsplit1(Map<String, Object> map);
 }

@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <form action="http://localhost:8088/me2/pictures/71/increasehot.json"  method="post">
+  <form action="http://localhost:8088/me2/pictures/635/gain.json"  method="post">
     <!-- <input type="text" name="customerId">
     <input type="text" name="comments"> -->
     <input type="submit" value="tijiao">

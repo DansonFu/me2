@@ -161,9 +161,9 @@
                                     	<select name="type" onchange="changetype()">
 											<option value="1" <c:if test="${picture.bpicture.type == '1'}">selected="selected"</c:if>>图片</option>
 											<option value="2" <c:if test="${picture.bpicture.type == '2'}">selected="selected"</c:if>>URL</option>
-											<!-- 
-											<option value="5" <c:if test="${picture.bpicture.type == '5'}">selected="selected"</c:if>>URL</option>
-											 -->
+										 	<option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>										 
+											<option value="4" <c:if test="${picture.bpicture.type == '4'}">selected="selected"</c:if>>音频</option>
+											 
 										</select>
                                     </div>
                                     <div class="col-lg-7" id="fileDiv" style="height: 120px">
@@ -268,6 +268,7 @@
                         </div>
                         <h4>修改评论</h4>
                     </div>
+                    <div>
 					<c:forEach items="${comments }" var="comment">
                     <!-- row -->
 					<div class="row form-group">
@@ -291,6 +292,7 @@
                         <!-- col-lg- -->
                     </div>
 				</c:forEach>
+				</div>
              </div>
              
 		 </form>
@@ -334,6 +336,8 @@
 		<script src="<%=basePath %>resources/assets/js/ace.min.js"></script>		
 		
 <script type="text/javascript">
+//7牛公共资源域名
+var domain = '${domain}';
 $(document).ready(function(){
 	changetype();
 }); 

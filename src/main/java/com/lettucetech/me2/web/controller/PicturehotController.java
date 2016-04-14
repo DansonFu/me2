@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -19,13 +20,11 @@ import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturehot;
-import com.lettucetech.me2.pojo.TXtMenu;
 import com.lettucetech.me2.pojo.TXtUser;
-import com.lettucetech.me2.pojo.Tagsconnection;
+import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
 import com.lettucetech.me2.service.PicturehotService;
-import com.lettucetech.me2.service.TXtUserService;
-import com.lettucetech.me2.service.TagsconnectionService;
+import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
 
@@ -33,8 +32,8 @@ import com.lettucetech.me2.web.form.DataTablePaginationForm;
 @Controller
 public class PicturehotController {
 	private static final Logger logger = Logger.getLogger(PicturehotController.class);
-
-	
+	@Autowired
+	private TaglistService tagListService;
 	@Autowired
 	private PicturehotService pictureHotService;
 	@Autowired
@@ -44,15 +43,24 @@ public class PicturehotController {
 	 * @param session
 	 * @return
 	 */
-	@RequestMapping("/admin/picturehot")
-	public ModelAndView pcase(HttpSession session) {
-		
-		
-		ModelAndView mav = new ModelAndView();
-	
-		mav.setViewName("/admin/picturehot");
-		return mav;
-	}
+	 @RequestMapping({"/admin/picturehot"})
+	  public ModelAndView pcase(HttpSession session, HttpServletRequest request) { 
+		 String s = request.getParameter("search");
+		 String hot = request.getParameter("hot");
+	    Criteria example = new Criteria();
+	    example.put("hot", hot);
+	    List<Taglist> taglist = tagListService.selectByParams(example);
+	    Taglist list = new Taglist();
+	    list.setNum(Integer.valueOf("0"));
+	    
+	    list.setTitle("全部");
+	    taglist.add(list);
+	    ModelAndView mav = new ModelAndView();
+	    mav.addObject("taglists", taglist);
+	    mav.addObject("svalue", s);
+	    mav.setViewName("/admin/picturehot");
+	    return mav;
+	  }
 	/**
 	 * 查询热门标签帖列表
 	 * @param session
@@ -60,83 +68,79 @@ public class PicturehotController {
 	 * @param aoData
 	 * @param userId
 	 */
-	@RequestMapping("/admin/getmetoo/picturehot")
-	public void getMetooByPictureHot(HttpSession session,HttpServletResponse response,String aoData,String userId,String hotid) {
-		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
-		
-		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
+	 @RequestMapping({"/admin/getmetoo/picturehot"})
+	  public void getMetooByPictureHot(HttpSession session, HttpServletResponse response, String aoData, String hotid,String searchid)
+	  {
+	    TXtUser au = (TXtUser)session.getAttribute("adminuser");
+
+	    ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
-	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 0; // 每页显示的行数
-	 
+	    int iDisplayStart = 0;
+	    int iDisplayLength = 0;
+
 	    for (int i = 0; i < jsonarray.size(); i++) {
-	    	HashMap obj = (HashMap) jsonarray.get(i);
-	    	 if (obj.get("name").equals("sEcho"))
-	             sEcho = obj.get("value").toString();
-	  
-	         if (obj.get("name").equals("iDisplayStart"))
-	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
-	  
-	         if (obj.get("name").equals("iDisplayLength"))
-	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	      HashMap obj = (HashMap)jsonarray.get(i);
+	      if (obj.get("name").equals("sEcho")) {
+	        sEcho = obj.get("value").toString();
+	      }
+	      if (obj.get("name").equals("iDisplayStart")) {
+	        iDisplayStart = Integer.parseInt(obj.get("value").toString());
+	      }
+	      if (obj.get("name").equals("iDisplayLength"))
+	        iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
 	    Criteria example = new Criteria();
 	    example.setOrderByClause("hits");
-	    example.setSord("asc");
-	    example.setMysqlOffset(iDisplayStart);
-	    example.setMysqlLength(iDisplayLength);
+	    example.setSord("desc");
+	    example.setMysqlOffset(Integer.valueOf(iDisplayStart));
+	    example.setMysqlLength(Integer.valueOf(iDisplayLength));
 	    example.put("state", "0");
-	    
-	    //是否有查看所有人权限
 
-
-		if(!"-1".equals(userId)){
-			example.put("userId", userId);
-		}
-	    
-
+	    if(!"".equals(hotid)){
+	    	example.put("tagslist_id",hotid);
+	    	
+	    }
+	    if(!"".equals(searchid)){
+	    	example.put("tag",searchid);
+	    }
 	    int count = pictureHotService.countByParams(example);
 	    List<Tagshot> metoo = tagshotService.selectByParams(example);
-
+	   // List<Picturehot> hot=pictureHotService.selectByParams(example);
+	   
 	    List list = new ArrayList();
 
-		if(!"".equals(hotid)){
-			example.put("tagslistId", hotid);
-		}
-	//	List<Picturehot> hot =pictureHotService.selectByParams(example);
-		
+	    for (Tagshot obj : metoo)
+	    {
+	    	if(obj.getTag().equals(searchid)){
+	      String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+ obj.getQiniukey();
+	      String[] d = { obj.getId().toString(), obj.getTag(), aurl, obj.getAcount().toString(), 
+	        obj.getHits().toString(), obj.getMefriends().toString(), 
+	        DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"), "" };
 
+	      list.add(d);
+	    }else{
+	    	 String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+ obj.getQiniukey();
+		      String[] d = { obj.getId().toString(), obj.getTag(), aurl, obj.getAcount().toString(), 
+		        obj.getHits().toString(), obj.getMefriends().toString(), 
+		        DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"), "" };
 
-	    
-	    //拼接翻页数据
-	    //加一个条件判断图片是否重复,并去重?
+		      list.add(d);
+	    }
+	    }
+	    DataTablePaginationForm dtpf = new DataTablePaginationForm();
+	    dtpf.setsEcho(sEcho);
+	    dtpf.setiTotalDisplayRecords(count);
+	    dtpf.setiTotalRecords(count);
+	    dtpf.setAaData(list);
 
-	    		
-	    		for(Tagshot obj : metoo){
-	    			
-	    			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getQiniukey();
-	    			String[] d = {obj.getId().toString(),obj.getTag(),aurl,obj.getAcount().toString(),
-	    					obj.getHits().toString(),obj.getMefriends().toString(),
-	    					DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};
-	    			
-	    			
-	    			list.add(d);
-	    		}
-	    	
-		DataTablePaginationForm dtpf = new DataTablePaginationForm();
-		dtpf.setsEcho(sEcho);
-		dtpf.setiTotalDisplayRecords(count);
-		dtpf.setiTotalRecords(count);
-		dtpf.setAaData(list);
-	    
-		String jsonArray = JsonUtil.Encode(dtpf);
-		
-		try {
-			response.setHeader("Cache-Control", "no-cache");
-			response.setContentType("aplication/json;charset=UTF-8");
-			response.getWriter().print(jsonArray);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	    String jsonArray = JsonUtil.Encode(dtpf);
+	    try
+	    {
+	      response.setHeader("Cache-Control", "no-cache");
+	      response.setContentType("aplication/json;charset=UTF-8");
+	      response.getWriter().print(jsonArray);
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	  }
 }

@@ -172,19 +172,20 @@
                                 <!-- col-lg-6 -->
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                        	心情：
+                                        	A面心情：
                                     </div>
                                     <div class="col-lg-9">
 										<label id="amood">${picture.mood }</label>
                                     </div>
+                                </div>
+                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column">
-                                        	心情：
+                                        	B面心情：
                                     </div>
                                     <div class="col-lg-9">
 										<label id="bmood">${picture.mood }</label>
                                     </div>
                                 </div>
-                                
                                 <!-- col-lg-6 -->
                             </div>
                         
@@ -278,6 +279,7 @@
                                 <textarea class="form-control" rows="5" placeholder="评论内容" name="content"
                                 	style="margin-top: 0px; margin-bottom: 0px; height: 60px;"></textarea>
                             </div>
+                          
                             <div class="col-lg-2" onclick="viewimg()"> 
                             	
                                 <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">

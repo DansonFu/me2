@@ -61,4 +61,5 @@ public interface TagsconnectionMapper {
      * 根据主键更新记录
      */
     int updateByPrimaryKey(Tagsconnection record);
+    List<Tagsconnection> testpro(Map<String, Object> paramMap);
 }

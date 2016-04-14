@@ -95,6 +95,41 @@ public class AdminController {
 		//否则跳转到登录界面
 		return "login";
 	}
+	
+	@RequestMapping({"/h5Test"})
+	  public String h5Test(HttpSession session)
+	  {
+	    TXtUser user = (TXtUser)session.getAttribute("adminuser");
+
+	    if (user != null) {
+	      return "redirect:/admin/H5test";
+	    }
+
+	    return "/admin/H5test1";
+	  }
+
+	  @RequestMapping({"/h5Test1"})
+	  public String h5Test1(HttpSession session) {
+	    TXtUser user = (TXtUser)session.getAttribute("adminuser");
+
+	    if (user != null) {
+	      return "redirect:/admin/H5test";
+	    }
+
+	    return "/admin/H5test1";
+	  }
+
+	  @RequestMapping({"/h5Test2"})
+	  public String h5Test2(HttpSession session)
+	  {
+	    TXtUser user = (TXtUser)session.getAttribute("adminuser");
+
+	    if (user != null) {
+	      return "redirect:/admin/H5test";
+	    }
+
+	    return "/admin/H5test1";
+	  }
 	/**
 	 * 退出
 	 * @param session
@@ -530,81 +565,64 @@ public class AdminController {
 		
 		 List list = new ArrayList();
 		 int count=0;
-	    if(!"".equals(searchid)){
-	    	example.put("searchid",searchid);
+		 if (!"".equals(searchid)) {
+		      example.put("searchid", searchid);
 
-	    	
-	    	 count= pictureService.countByParams(example);
+		      count = this.metooService.countByParams(example);
+		      List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
 
-	    }
-	    	 count= metooService.countByParams(example);
+		      for (TXtMetoo obj : metoo)
+		      {
+		        if (obj.getPicture().getTags().contains(searchid))
+		        {
+		          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
+		          String burl = "";
+		          String type = "";
+		          String bmood = "";
 
-	 	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
-	 	   // List<Picture> pic=pictureService.selectByParams(example);
-	 	    //拼接翻页数据
-	 	   
-	 		for(TXtMetoo obj : metoo){
-	 			
-	 			if(obj.getPicture().getTags().contains(searchid)){
-	 				
-	 			
-	 			
-	 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
-	 			String burl="";
-	 			String type="";
-	 			String bmood="";
-	 			//如果有B面
-	 			if(obj.getPicture().getBpicture()!=null){
-	 				if("1".equals(obj.getPicture().getBpicture().getType())){
-	 					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-	 				}else{
-	 					burl = obj.getPicture().getBpicture().getQiniukey();
-	 				}
-	 					type = obj.getPicture().getBpicture().getType();
-	 			}
-	 			bmood=obj.getPicture().getBpicture().getMood();
-	 			
-	 			
-	 			
-	 			
-	 			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-	 					obj.getPicture().getTags(),bmood,obj.getPicture().getCustomer().getNickname(),
-	 					DateUtil.dateFormatToString(obj.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
-	 			list.add(d);
-	 			}
-	 		}
-//	    }else{
-//	     count = metooService.countByParams(example);
-//	    List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
-//	    
-//	    //拼接翻页数据
-//	    
-//		for(TXtMetoo obj : metoo){
-//			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+obj.getPicture().getQiniukey();
-//			String burl="";
-//			String type="";
-//			String bmood="";
-//			//如果有B面
-//			if(obj.getPicture().getBpicture()!=null){
-//				if(obj.getPicture().getBpicture().getType().equals("1")){
-//					burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-//				}else{
-//					burl = obj.getPicture().getBpicture().getQiniukey();
-//				}
-//					type = obj.getPicture().getBpicture().getType();
-//					bmood=obj.getPicture().getBpicture().getMood();
-//				
-//			}
-//			
-//			
-//			
-//			
-//			String[] d = {obj.getPicture().getPid().toString(),obj.getPicture().getCustomer().getUsername(),aurl,obj.getPicture().getMood(),burl,type,
-//					obj.getPicture().getTags(),bmood,obj.getUser().getName(),
-//					DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"),""};
-//			list.add(d);
-//		}
-//	    }
+		          if (obj.getPicture().getBpicture() != null) {
+		            if (obj.getPicture().getBpicture().getType().equals("1"))
+		              burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+		            else {
+		              burl = obj.getPicture().getBpicture().getQiniukey();
+		            }
+		            type = obj.getPicture().getBpicture().getType();
+		          }
+		          bmood = obj.getPicture().getBpicture().getMood();
+
+		          String[] d = { obj.getPicture().getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
+		            obj.getPicture().getTags(), bmood, obj.getUser().getName(), 
+		            DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+		          list.add(d);
+		        }
+		      }
+		    } else {
+		      count = this.metooService.countByParams(example);
+		      List<TXtMetoo> metoo = this.metooService.selectByParams4MetooPicture(example);
+
+		      for (TXtMetoo obj : metoo) {
+		        String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
+		        String burl = "";
+		        String type = "";
+		        String bmood = "";
+
+		        if (obj.getPicture().getBpicture() != null) {
+		          if (obj.getPicture().getBpicture().getType().equals("1"))
+		            burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+		          else {
+		            burl = obj.getPicture().getBpicture().getQiniukey();
+		          }
+		          type = obj.getPicture().getBpicture().getType();
+		        }
+
+		        bmood = obj.getPicture().getBpicture().getMood();
+
+		        String[] d = { obj.getPicture().getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
+		          obj.getPicture().getTags(), bmood, obj.getUser().getName(), 
+		          DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+		        list.add(d);
+		      }
+		    }
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);
@@ -679,7 +697,7 @@ public class AdminController {
 	public ModelAndView updatepicture(HttpSession session,String tags,String mood,String bmood,String gameId
 			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
 			,String content,String type,String locationTitle,String locationContent,String pid,String bpid,
-			String[] cid,String[] commentContent,@RequestParam(value ="file",required = false) CommonsMultipartFile[] file){
+			String[] cid,String[] commentContent,@RequestParam(value ="upload",required = false) CommonsMultipartFile[] file){
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
 			try {

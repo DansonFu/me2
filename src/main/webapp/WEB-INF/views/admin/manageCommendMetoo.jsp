@@ -47,9 +47,9 @@
 						<th class="center">A面</th>
 						<th class="center">排序</th>
 						
-						<th class="center">截止有效期</th>
+						<th class="center">有效期</th>
 						<th class="center">操作</th>
-						<th class="center">有效期限(天)</th>
+						<th class="center">有效期限</th>
 					</tr>
 				</thead>
 	

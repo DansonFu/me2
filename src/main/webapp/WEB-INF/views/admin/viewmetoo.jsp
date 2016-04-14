@@ -117,10 +117,13 @@
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[5]=="1"){
-   	        				str = "图片";
-   	        		   
+   	        				str = "图片";  	        		   
    	        		   }else if(data.aData[5]=="2"){
    	        				str = "URL";
+   	        		   }else if(data.aData[5]=="3"){
+   	        				str = "视频";
+   	        		   }else if(data.aData[5]=="4"){
+   	        				str = "音频";
    	        		   }else if(data.aData[5]==""){
    	        				str = "";
    	        		   }
@@ -164,6 +167,7 @@
 		          async : false,
 		          success : function(result) {
 		              fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
+		             // alert(JSON.stringify(result));
 		          },
 		          error : function(msg) {
 		          }

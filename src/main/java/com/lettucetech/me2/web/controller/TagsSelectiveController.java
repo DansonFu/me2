@@ -51,7 +51,8 @@ public class TagsSelectiveController {
 	private TagshotService tagshotService;
 	@Autowired
 	private TaglistService tagListService;
-	
+	@Autowired
+	private TagsconnectionMapper mapper;
 	/**
 	 * 跳转到标签集合页面
 	 *
@@ -61,28 +62,46 @@ public class TagsSelectiveController {
 	 */
 	 
 	@RequestMapping("/admin/viewselective")
-	public ModelAndView selectByTags(HttpSession session,String id,HttpServletRequest request){
-		String str=id;
-		String flag="2";
-		String conn = request.getParameter("conn");
-		String tag=conn;
-		session.setAttribute("conn", conn);
-		session.setAttribute("taglist", id);
-		String name="";
-		if(str==null){
-			
-		Taglist taglist1=tagListService.selectByPrimaryKey(Integer.valueOf(tag));
-			
-		 name = taglist1.getTitle();
-		}
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("conn",conn);
-		mav.addObject("flag",flag);
-		mav.addObject("tid",id);
-		mav.addObject("name",name);
-		mav.setViewName("/admin/viewselective");
-		return mav;
-	}
+	 public ModelAndView selectByTags(HttpSession session, String id, HttpServletRequest request)
+	  {
+	    String str = id;
+	    String flag = "2";
+	    String conn = (String)request.getSession().getAttribute("cid");
+
+	    String tag = id;
+	    String i = conn;
+	    String hotid = conn;
+	    String hotid1 = id;
+
+	    session.setAttribute("taglist", id);
+	    String name = "";
+	    Taglist taglist1;
+	  
+	    if (str == null) {
+	      taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(i));
+	    }
+	    else {
+	      taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(tag));
+	    }
+
+	    name = taglist1.getTitle();
+
+	    ModelAndView mav = new ModelAndView();
+	    mav.addObject("cid", conn);
+	    mav.addObject("flag", flag);
+	    mav.addObject("tid", id);
+	    mav.addObject("name", name);
+	    if (hotid == null) {
+	      mav.addObject("hotid", hotid1);
+	    }
+	    else
+	    {
+	      mav.addObject("hotid", hotid);
+	    }
+
+	    mav.setViewName("/admin/viewselective");
+	    return mav;
+	  }
 	@RequestMapping("/admin/viewTag")
 	public ModelAndView viewByTags(HttpSession session){	
 		
@@ -97,80 +116,82 @@ public class TagsSelectiveController {
 	 * @param aoData
 	 * @param userId
 	 */
-	@RequestMapping(value="/admin/getmetoo/selective",method={RequestMethod.POST})
-	public void getMetooByselective(HttpSession session,HttpServletResponse response,String aoData) {
-		TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
-		String taglist=(String)session.getAttribute("taglist");
-		String tagslist=(String)session.getAttribute("conn");
-		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
+	 @RequestMapping(value={"/admin/getmetoo/selective"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+	  public void getMetooByselective(HttpSession session, HttpServletResponse response, String aoData, String tid, String cid)
+	  {
+	    TXtUser au = (TXtUser)session.getAttribute("adminuser");
+
+	    ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
-	    
-	    int iDisplayStart = 0; // 起始索引
-	    int iDisplayLength = 25; // 每页显示的行数
-	 
+
+	    int iDisplayStart = 0;
+	    int iDisplayLength = 0;
+
 	    for (int i = 0; i < jsonarray.size(); i++) {
-	    	HashMap obj = (HashMap) jsonarray.get(i);
-	    	 if (obj.get("name").equals("sEcho"))
-	             sEcho = obj.get("value").toString();
-	  
-	         if (obj.get("name").equals("iDisplayStart"))
-	             iDisplayStart = Integer.parseInt(obj.get("value").toString());
-	  
-	         if (obj.get("name").equals("iDisplayLength"))
-	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
-	         
+	      HashMap obj = (HashMap)jsonarray.get(i);
+	      if (obj.get("name").equals("sEcho")) {
+	        sEcho = obj.get("value").toString();
+	      }
+	      if (obj.get("name").equals("iDisplayStart")) {
+	        iDisplayStart = Integer.parseInt(obj.get("value").toString());
+	      }
+	      if (obj.get("name").equals("iDisplayLength")) {
+	        iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	      }
 	    }
 	    Criteria example = new Criteria();
-	  
-	    example.setMysqlOffset(iDisplayStart);
-	    example.setMysqlLength(iDisplayLength);
 
-	   
-	    int count=0;
-	    List<Tagsconnection> metoo=tagsconnectionService.selectByParams(example);
-	    //拼接翻页数据
+	    example.setMysqlOffset(Integer.valueOf(iDisplayStart));
+	    example.setMysqlLength(Integer.valueOf(iDisplayLength));
+	    if (!"".equals(tid)) {
+	      example.put("tagslistId", tid);
+	    }
+	    if (!"".equals(cid)) {
+	      example.put("tagslistId", cid);
+	    }
+
+	    int count = this.tagsconnectionService.countByParams(example);
+	    List<Tagsconnection> metoo = tagsconnectionService.selectByParams(example);
+
 	    List list = new ArrayList();
-	   
-	    		for(Tagsconnection obj:metoo){
-	    			
-	    			Tagshot tagshot=tagshotService.selectByPrimaryKey(obj.getTagsId());
-			//加一个条件,判断是在哪一个集合中?
-	    		if(taglist !=null && taglist.equals(obj.getTagslistId())){
-	    			  count = tagsconnectionService.countByParams(example);
-	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
-						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
-						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
-	    			list.add(d);	
-	    			break;
-				}else if(tagslist!=null && tagslist.equals(obj.getTagslistId())){
-					  count = tagsconnectionService.countByParams(example);
-	    			String[] d={obj.getId().toString(),tagshot.getTag(),tagshot.getAcount().toString()
-						,tagshot.getHits().toString(),tagshot.getMefriends().toString(),
-						DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"),""};		
-	    			list.add(d);
-	    			break;
-				}
-	    		}
-	    	
-	    
-		
-		DataTablePaginationForm dtpf = new DataTablePaginationForm();
-		dtpf.setsEcho(sEcho);
-		dtpf.setiTotalDisplayRecords(count);
-		dtpf.setiTotalRecords(count);
-		dtpf.setAaData(list);
-	    
-		String jsonArray = JsonUtil.Encode(dtpf);
-		
-		try {
-			response.setHeader("Cache-Control", "no-cache");
-			response.setContentType("aplication/json;charset=UTF-8");
-			response.getWriter().print(jsonArray);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	    	}
+
+	    for (Tagsconnection obj : metoo)
+	    {
+	      Tagshot tagshot = tagshotService.selectByPrimaryKey(obj.getTagsId());
+
+	      if (obj.getTagslistId().equals(tid))
+	      {
+	        String[] d = { obj.getId().toString(), tagshot.getTag(), tagshot.getAcount().toString(), 
+	          tagshot.getHits().toString(), tagshot.getMefriends().toString(), 
+	          DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+	        list.add(d);
+	      }
+	      else if (obj.getTagslistId().equals(cid))
+	      {
+	        String[] d = { obj.getId().toString(), tagshot.getTag(), tagshot.getAcount().toString(), 
+	          tagshot.getHits().toString(), tagshot.getMefriends().toString(), 
+	          DateUtil.dateFormatToString(tagshot.getLastTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+	        list.add(d);
+	      }
+
+	    }
+
+	    DataTablePaginationForm dtpf = new DataTablePaginationForm();
+	    dtpf.setsEcho(sEcho);
+	    dtpf.setiTotalDisplayRecords(count);
+	    dtpf.setiTotalRecords(count);
+	    dtpf.setAaData(list);
+
+	    String jsonArray = JsonUtil.Encode(dtpf);
+	    try
+	    {
+	      response.setHeader("Cache-Control", "no-cache");
+	      response.setContentType("aplication/json;charset=UTF-8");
+	      response.getWriter().print(jsonArray);
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	  }
 	
 	
 	/**
@@ -180,17 +201,17 @@ public class TagsSelectiveController {
 	 * @param taglist_id
 	 * @return
 	 */
-	@RequestMapping("/admin/submit")
-	public ModelAndView submit(HttpSession session){
-		
-		  Map<String, Object> map = new HashMap<String, Object>();
-		  map.put("beginlength",0);
-		 
-		ModelAndView mav = new ModelAndView();
-		mav.addObject(map);
-		mav.setViewName("redirect:/admin/picturehot");
-		return mav;
-	}
+	 @RequestMapping({"/admin/submit"})
+	  public ModelAndView submit(HttpSession session){
+	  
+	    Map map = new HashMap();
+	    map.put("beginlength", Integer.valueOf(0));
+	    List<Tagsconnection> conn = mapper.testpro(map);
+	    ModelAndView mav = new ModelAndView();
+	    mav.addObject(map);
+	    mav.setViewName("redirect:/admin/picturehot");
+	    return mav;
+	  }
 //	/**
 //	 * 保存已选标签
 //	 * @param session

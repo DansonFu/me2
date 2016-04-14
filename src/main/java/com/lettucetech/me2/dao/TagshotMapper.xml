@@ -9,7 +9,7 @@
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
     <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
- 
+    
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -37,7 +37,7 @@
   <sql id="Base_Column_List" >
     id, tag, acount, hits, qiniukey, mefriends, last_time
   </sql>
-  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >
       distinct
@@ -52,7 +52,7 @@
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
-  
+ 
     <select id="selectByParams4Matching" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >
@@ -247,7 +247,7 @@
   </update>
    <select id="strsplit1" statementType="CALLABLE">
   	{
-  		call pro( #{str3,jdbcType=INTEGER,mode=IN})
+  		call strsplit1( #{str3,jdbcType=INTEGER,mode=IN})
   	}
   </select>
 </mapper>

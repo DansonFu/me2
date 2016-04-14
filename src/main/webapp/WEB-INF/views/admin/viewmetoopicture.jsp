@@ -18,15 +18,7 @@
 	rel="stylesheet" />
 <link rel="stylesheet"
 	href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
-<!--[if IE 7]>
-		  <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome-ie7.min.css" />
-		<![endif]-->
 
-<!-- page specific plugin styles -->
-
-<!-- fonts -->
-
-<!-- ace styles -->
 
 <link rel="stylesheet"
 	href="<%=basePath %>resources/assets/css/ace.min.css" />
@@ -40,22 +32,10 @@
 	href="<%=basePath %>resources/assets/css/global.css">
 <link rel="stylesheet"
 	href="<%=basePath %>resources/assets/css/common.css">
-<!--[if lte IE 8]>
-		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
-		<![endif]-->
 
-<!-- inline styles related to this page -->
-
-<!-- ace settings handler -->
 
 <script src="<%=basePath %>resources/assets/js/ace-extra.min.js"></script>
 
-<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-
-<!--[if lt IE 9]>
-		<script src="<%=basePath %>resources/assets/js/html5shiv.js"></script>
-		<script src="<%=basePath %>resources/assets/js/respond.min.js"></script>
-		<![endif]-->
 
 </head>
 
@@ -155,9 +135,9 @@
 										<c:if test="${picture.bpicture.type == '1'}">selected="selected"</c:if>>图片</option>
 									<option value="2"
 										<c:if test="${picture.bpicture.type == '2'}">selected="selected"</c:if>>URL</option>
-									<!-- 
-											<option value="5" <c:if test="${picture.bpicture.type == '5'}">selected="selected"</c:if>>URL</option>
-											 -->
+									
+									<option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>
+								<option value="4" <c:if test="${picture.bpicture.type == '4'}">selected="selected"</c:if>>音频</option>
 								</select>
 							</div>
 							<div class="col-lg-7" id="fileDiv" style="height: 120px">
@@ -341,7 +321,7 @@ $(document).ready(function(){
 			$("#fileDiv").css('display','block');
 			$("#textDiv").css('display','none');
 			$("#bfeelDiv").css('display','block');
-		}else if(type=='2'){
+		}else if(type=='2'||type=='3'||type=='4'){
 			$("#fileDiv").css('display','none');
 			$("#textDiv").css('display','block');
 			$("#bfeelDiv").css('display','none');

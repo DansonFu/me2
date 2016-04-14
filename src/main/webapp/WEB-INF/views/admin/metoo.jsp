@@ -211,11 +211,10 @@
                                     </div>
                                     <div class="col-lg-2">
                                     	<select name="type" onchange="changetype()">
-											<option value="1">图片</option>
-											<!-- 
-											<option value="2">文字</option>
-											 -->
+											<option value="1">图片</option>											 
 											<option value="2">URL</option>
+											<option value="3">视频</option>
+											<option value="4">音频</option>
 										</select>
                                     </div>
                                     <div class="col-lg-7" id="fileDiv" >
@@ -282,14 +281,14 @@
 <script type="text/javascript">
 	function changetype(){
 		var type = $("select[name='type']").val();
-		if(type=='1'){
+		if(type=='1'||type=='3'||type=='4'){
 			$("#fileDiv").css('display','block');
 			$("#textDiv").css('display','none');
 			$("#bfeelDiv").css('display','block');
-		}else if(type=='5'||type=='2'){
+		}else if(type=='2'){
 			$("#fileDiv").css('display','none');
 			$("#textDiv").css('display','block');
-			$("#bfeelDiv").css('display','none');
+			$("#bfeelDiv").css('display','block');
 		}
 	}
 	function submitform(){
@@ -303,6 +302,9 @@
 		}
 		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
 			$("input[name='tags']").focus();
+			return;
+		}if($("input[name='content']").val()==null||$("input[name='content']").val()==""){
+			$("input[name='content']").focus();
 			return;
 		}
 		
