@@ -15,6 +15,28 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 
+<style type="text/css">
+/* 单元格连续纯字母数字强制换行显示 */
+.wordwrap{
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+}
+/* 超长文字单元格省略号显示 */
+.ellipsis{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+td{  
+    width:100%;  
+     word-break:break-all;/* keep不换行   换行break*/  
+     /*white-space:nowrap; 不换行 */  
+     overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */  
+     text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/  
+} 
+</style>
 <link href="<%=basePath %>resources/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace.min.css" />
@@ -38,14 +60,14 @@
 		<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/commendcheckmetoo" method="post" enctype="multipart/form-data">
 		<input type="text"   name="tag"   style="width:30%;" class="form-control search-query" placeholder="Type your query" />
 		<input type="hidden"  id="tag" value="${tag }" />
-		<button type="button" class="btn btn-purple btn-sm"  onclick="submitform()">
-				Search
-		<i class="icon-search icon-on-right bigger-110"></i>
-		</button>
+																		<button type="button" class="btn btn-purple btn-sm"  onclick="submitform()">
+																			Search
+																			<i class="icon-search icon-on-right bigger-110"></i>
+																		</button>
 		</form>
 		<br>
 		<div class="table-responsive">
-			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
+			<table style="table-layout:fixed"   id="sample-table-2" class="table table-striped table-bordered table-hover" >
 				<thead>
 					<tr>
 						<th class="center" >
@@ -54,7 +76,7 @@
 						<th class="center">内部用户</th>
 						<th class="center">A面</th>
 						<th class="center">A面心情</th>
-						<th class="hidden-480 center">B面</th>
+						<th style="white-space:nowrap" class="hidden-480 center" >B面</th>
 						<th class="center">B面心情</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
@@ -104,11 +126,19 @@
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
-			
+			"bAutoWidth":false,
+			 //columns: [
+			         //  {
+			               //data: "content", class: "wordwrap ellipsis"
+			         //  }
+			     //  ],
 			"aoColumnDefs": [
-			    {
+			                 {
+			                	 "sWidth": "5%",
+			                	 "aTargets": [0],
+			                 },
+			    { "sWidth": "5%",
    	        	   "aTargets": [1],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   var str = " ";
    	        		   if(data.aData[1]=="1"){
@@ -119,38 +149,40 @@
    	        		   return  str;
    	        	   }
    	           },
-   	           {
+   	           {  "sWidth": "15%",
    	        	   "aTargets": [2],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
    	        	   }
-   	           }, {
-   	        	   "aTargets": [3],
-      	        	"sWidth":"10%",
-      	        	  
-      	           },
-   	        	{ 
+   	           },
+   	        	{  "sWidth": "15%",
    	        	   "aTargets": [4],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[6]==1){
    	        				str = '<a href="'+data.aData[4]+'" target="_blank" id="abpicture">  <img src="'+data.aData[4]+'" width="100px" height="100px" id="b"> </a>';
    	        		   }else{
    	        				str = data.aData[4];
+   	        				
+   	        				//str = '<a href="'+data.aData[4]+'">Download</a>';
+   	        				
+   	        				//if (type === 'display') {
+   	        	            //    if (data.aData[4].length > 10) {
+   	        	            //        str= '<span title="' + data.aData[4] + '">' + data.aData[4].substr(0, 25) + '...</span>';
+   	        	              //  } else {
+   	        	             //       str= '<span title="' + data.aData[4] + '>' + data.aData[4] + '</span>';
+   	        	             //   }
+   	        	           // }
+   	        				
+   	        					//type === 'display' && data.aData[4].length > 40 ?
+   	        				       // '<span title="'+data.aData[4]+'">'+data.aData[4].substr( 0, 38 )+'...</span>' :
+   	        				        	//data.aData[4];
    	        		   }
    	        		   return  str;
    	        	   }
    	           },
-   	        {
-   	        	   "aTargets": [5],
-      	        	"sWidth":"10%",
-      	        	  
-      	           },
-   	        	{
+   	        	{"sWidth": "5%",
    	        	   "aTargets": [6],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[6]=="1"){
@@ -160,24 +192,13 @@
    	        		   }else if(data.aData[6]=="3"){
    	        				str = "视频";
    	        		   }else if(data.aData[6]=="4"){
-   	        				str = "音频";
-   	        		   }else if(data.aData[6]==""){
-   	        				str = "";
+   	        			   str = "音频";
    	        		   }
    	        		   return  str;
    	        	   }
-   	           }, {
-   	        	   "aTargets": [7],
-     	        	"sWidth":"10%",
-     	        	  
-     	           }, {
-       	        	   "aTargets": [8],
-         	        	"sWidth":"10%",
-         	        	  
-         	           },
-   	             {
+   	           },
+   	             {"sWidth": "5%",
    	        	   "aTargets": [9],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
    	        		   if(data.aData[9]=="1"){
@@ -190,7 +211,6 @@
    	           },
    	        	{
    	        	   "aTargets": [10],
-   	        	"sWidth":"10%",
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
 //   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
@@ -200,9 +220,9 @@
    	        			str += '<i class="icon-pencil bigger-130"></i>';
    	        			str += '</a><br>';
    	        			if(data.aData[11]=="0"){
-   	        				str += '<input type="button"  value="OFF"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        				str += '<input type="button"  value="ON"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
    	        			}else if(data.aData[11]=="1"){
-   	        				str += '<input type="button"  value="ON"  onclick="dela('+"'"+data.aData[0]+"'"+')"/><br>';
+   	        				str += '<input type="button"  value="OFF"  onclick="dela('+"'"+data.aData[0]+"'"+')"/><br>';
    	        			}
    	 //       			str += '<input name="switch-field-1" class="ace ace-switch" type="checkbox"  onclick="del('+"'"+data.aData[0]+"'"+')"/>  <span class="lbl"></span> <br>';
    	        			

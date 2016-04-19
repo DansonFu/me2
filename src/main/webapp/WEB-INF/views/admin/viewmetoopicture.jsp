@@ -18,7 +18,15 @@
 	rel="stylesheet" />
 <link rel="stylesheet"
 	href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
+<!--[if IE 7]>
+		  <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
 
+<!-- page specific plugin styles -->
+
+<!-- fonts -->
+
+<!-- ace styles -->
 
 <link rel="stylesheet"
 	href="<%=basePath %>resources/assets/css/ace.min.css" />
@@ -32,10 +40,22 @@
 	href="<%=basePath %>resources/assets/css/global.css">
 <link rel="stylesheet"
 	href="<%=basePath %>resources/assets/css/common.css">
+<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
 
+<!-- inline styles related to this page -->
+
+<!-- ace settings handler -->
 
 <script src="<%=basePath %>resources/assets/js/ace-extra.min.js"></script>
 
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+<!--[if lt IE 9]>
+		<script src="<%=basePath %>resources/assets/js/html5shiv.js"></script>
+		<script src="<%=basePath %>resources/assets/js/respond.min.js"></script>
+		<![endif]-->
 
 </head>
 
@@ -106,7 +126,7 @@
 			</div>
 			<div class="panel-body">
 				<form class="form-bordered" id="me2form"
-					action="<%=basePath %>admin/commendcheckmetoo" method="post"
+					action="<%=basePath %>admin/commendcheckviewmetoo" method="post"
 					enctype="multipart/form-data">
 					<input type="hidden" value="${picture.pid }" name="pid" id="pid" />
 					<input type="hidden" value="${picture.bpicture.pid }" name="bpid"
@@ -135,9 +155,9 @@
 										<c:if test="${picture.bpicture.type == '1'}">selected="selected"</c:if>>图片</option>
 									<option value="2"
 										<c:if test="${picture.bpicture.type == '2'}">selected="selected"</c:if>>URL</option>
-									
-									<option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>
-								<option value="4" <c:if test="${picture.bpicture.type == '4'}">selected="selected"</c:if>>音频</option>
+									<!-- 
+											<option value="5" <c:if test="${picture.bpicture.type == '5'}">selected="selected"</c:if>>URL</option>
+											 -->
 								</select>
 							</div>
 							<div class="col-lg-7" id="fileDiv" style="height: 120px">
@@ -187,7 +207,7 @@
 							</div>
 						</div>
 						<!-- col-lg-6 -->
-						<!--  
+						 
 						<div class="col-lg-6">
 							<div class="col-lg-3 input-column">解蜜游戏：</div>
 							<div class="col-lg-9">
@@ -199,7 +219,7 @@
 								</select>
 							</div>
 						</div>
-						-->
+						
 					</div>
 					<!-- row -->
 					<div class="row form-group">
@@ -227,7 +247,7 @@
 			<!-- panel-body -->
 		</div>
         
-        <!--  
+          
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="panel-btns">
@@ -239,9 +259,9 @@
 				<h4>修改评论</h4>
 			</div>
 			<c:forEach items="${comments }" var="comment">
-			-->
+			
 				<!-- row -->
-				<!-- 
+				
 				<div class="row form-group">
 					<div class="col-lg-12">
 						<div class="col-lg-2 input-column">
@@ -263,13 +283,13 @@
 							</c:if>
 						</div>
 					</div>
-					 -->
+					
 					<!-- col-lg- -->
-					<!-- 
+					
 				</div>
 			</c:forEach>
 		</div>
-                    -->
+                   
 		<br>
 		<div style="text-align: center">
 			<div>
@@ -321,7 +341,7 @@ $(document).ready(function(){
 			$("#fileDiv").css('display','block');
 			$("#textDiv").css('display','none');
 			$("#bfeelDiv").css('display','block');
-		}else if(type=='2'||type=='3'||type=='4'){
+		}else if(type=='2'){
 			$("#fileDiv").css('display','none');
 			$("#textDiv").css('display','block');
 			$("#bfeelDiv").css('display','none');

@@ -158,7 +158,14 @@ public class ChechPictureController {
 				bmood = "";
 			}
 			
-			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,mood,burl,bmood,type,pp.getTags(),
+			String ts = "";
+			if(pp.getTags() == null){
+				ts = "";
+			}else{
+				ts = pp.getTags();
+			}
+			
+			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,mood,burl,bmood,type,ts,
 					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),"",pp.getDel()};
 			list.add(d);
 		}
@@ -257,7 +264,7 @@ public class ChechPictureController {
 			
 			
 			String[] d = {pcs.getId().toString(),pcs.getPid().toString(),aurl,pcs.getSort().toString(),
-					aa,"",bb.toString()};
+					aa,"",bb.toString(),""};
 			list.add(d);
 		}
 		
@@ -337,18 +344,30 @@ public class ChechPictureController {
 			List<Integer> list1 = new ArrayList<Integer>(); 
 			for(Picturerecommend pcs : list){
 				Integer b = pcs.getSort();
+				if(pcs.getPeriod()==null){
+	    			pcs.setPeriod(null);
+	    		}else{
+	    			pcs.setPeriod(pcs.getPeriod());
+	    		}
+	    		//Integer b = p.getSort();
+	    		pcs.setSort(b+1);
+	    		
+	    		pcs.setPid(pcs.getPid());
+	    		pcs.setId(pcs.getId());
+	    		picurerecommendService.updateByPrimaryKey(pcs);
 				list1.add(b);
 			}
 			Integer sort = 0;
 			for(int i=0;i<list1.size();i++){
-				if(list1.get(i)>sort){
+				if(list1.get(i)>	sort){
 					sort = list1.get(i);
 				}
 			}
+			System.out.println(sort-list1.size()+1);
 			Picturerecommend pc = new Picturerecommend();
 			pc.setPid(Integer.valueOf(pid));
 			
-			pc.setSort(sort+1);
+			pc.setSort(sort-list1.size()+1);
 			picurerecommendService.insertSelective(pc);
 			p.setRecommend("1");
 			pictureService.updateByPrimaryKeySelective(p);
@@ -682,16 +701,129 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 		example.put("pid", pid);
 		List<Comment> comments = commentService.selectByParams(example);
 		
-//		example.clear();
-//		example.put("del", "0");
-//		List<Game> games = gameService.selectByParams(example);
+		example.clear();
+		example.put("del", "0");
+		List<Game> games = gameService.selectByParams(example);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("picture", picture);
 		mav.addObject("comments", comments);
-//		mav.addObject("games", games);
+		mav.addObject("games", games);
 		mav.addObject("domain", Me2Constants.QINIUPUBLICDOMAIN);
 		mav.setViewName("/admin/viewmetoopicture");
+		return mav;
+	}
+	
+	/**
+	 * 修改密图
+	 * @param session
+	 * @param tags
+	 * @param mood
+	 * @param bmood
+	 * @param gameId
+	 * @param afile
+	 * @param bfile
+	 * @param content
+	 * @param type
+	 * @param locationTitle
+	 * @param locationContent
+	 * @param pid
+	 * @param bpid
+	 * @param cid
+	 * @param commentContent
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping("/admin/commendcheckviewmetoo")
+	public ModelAndView updatepicture(HttpSession session,String tags,String mood,String bmood,String gameId
+			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
+			,String content,String type,String locationTitle,String locationContent,String pid,String bpid,
+			String[] cid,String[] commentContent,@RequestParam(value ="file",required = false) CommonsMultipartFile[] file){
+		String akey=null;
+		if(afile.getFileItem().getName()!=""){
+			try {
+				String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+		        Response res = QiniuUtil.uploadManager.put(afile.getBytes(), null, token);
+				MyRet ret = res.jsonToObject(MyRet.class); 
+				akey = ret.getKey();
+			} catch (QiniuException e) {
+				e.printStackTrace();
+			}
+		}
+		//a面
+		Picture ap = new Picture();
+		
+		ap.setPid(Integer.valueOf(pid));
+		ap.setQiniukey(akey);
+		//去除空格、制表符、换页符等空白字符,#号换成逗号
+		ap.setTags(tags.replaceAll("\\s*", "").replaceAll("#", ","));
+		ap.setMood(mood);
+		ap.setFront("a");
+		ap.setLocationTitle(locationTitle);
+		ap.setLocationContent(locationContent);
+		pictureService.updateByPrimaryKeySelective(ap);
+		
+		//如果有B面
+		if(!"".equals(bfile.getFileItem().getName()) || (content!=null && content!="")){
+			String bkey=null;
+			//判断B面是什么内容
+			if("1".equals(type)&&bfile.getFileItem().getName()!=""){
+				try {
+					String token = QiniuUtil.uploadToken(Me2Constants.METOOPRIVATE);
+			        Response res = QiniuUtil.uploadManager.put(bfile.getBytes(), null, token);
+					MyRet ret = res.jsonToObject(MyRet.class); 
+					bkey = ret.getKey();
+				} catch (QiniuException e) {
+					e.printStackTrace();
+				}
+			}else if("2".equals(type)){
+				bkey = content;
+			}
+			
+			//B面
+			Picture bp = new Picture();
+			bp.setQiniukey(bkey);
+			bp.setFront("b");
+			bp.setType(type);
+			bp.setGameId(Integer.valueOf(gameId));
+			bp.setParentId(ap.getPid());
+			bp.setMood(bmood);
+			if(bpid==null || bpid==""){
+				bp.setCreatTime(new Date());
+				pictureService.insertSelective(bp);
+			}else{
+				bp.setPid(Integer.valueOf(bpid));
+				pictureService.updateByPrimaryKeySelective(bp);
+			}
+			
+		}
+		
+		if(cid!=null){
+			//修改评论
+			for(int i=0;i<cid.length;i++){
+				String key=null;
+				if(!StringUtil.isNullOrEmpty(file[i].getFileItem().getName())){
+					try {
+						String token = QiniuUtil.uploadToken(Me2Constants.METOOPULIC);
+				        Response res = QiniuUtil.uploadManager.put(file[i].getBytes(), null, token);
+						MyRet ret = res.jsonToObject(MyRet.class); 
+						key = ret.getKey();
+					} catch (QiniuException e) {
+						e.printStackTrace();
+					}
+				}
+				Comment record = new Comment();
+				record.setCommentId(Integer.parseInt(cid[i]));
+				record.setContent(commentContent[i]);
+				record.setQiniukey(key);
+				
+				commentService.updateByPrimaryKeySelective(record);
+	
+			}
+		}
+		ModelAndView mav = new ModelAndView();
+		 
+		mav.setViewName("redirect:/admin/commendcheckmetoo");
 		return mav;
 	}
 	
