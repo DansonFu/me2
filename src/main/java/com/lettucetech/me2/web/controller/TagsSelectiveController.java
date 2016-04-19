@@ -65,9 +65,11 @@ public class TagsSelectiveController {
 	 public ModelAndView selectByTags(HttpSession session, String id, HttpServletRequest request)
 	  {
 	    String str = id;
-	    String flag = "2";
-	    String conn = (String)request.getSession().getAttribute("cid");
-
+	    String flag = "2";//flag用于判断tagshot页面的复选框隐藏,2是隐藏添加到热门的复选框
+	    String conn = (String)request.getSession().getAttribute("cid");//获取tagshot页面传来的tagsconnection的taglistid,用于展示页面的集合名字
+	   // String g=(String)request.getSession().getAttribute("g");//获取tagshot页面穿来的g值,用于判断是否隐藏添加标签按钮
+	  //  String k=(String) request.getSession().getAttribute("k");//获取taglist页面传过来的k值,用于判断是否隐藏添加标签按钮
+	   String g=request.getParameter("g");
 	    String tag = id;
 	    String i = conn;
 	    String hotid = conn;
@@ -84,13 +86,16 @@ public class TagsSelectiveController {
 	      taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(tag));
 	    }
 
-	    name = taglist1.getTitle();
+	    name = taglist1.getTitle();//如果是从taglist页面进来的,展示的名字为id获取的,如果是从tagshot页面进来的,展示的名字是conn获取的
 
 	    ModelAndView mav = new ModelAndView();
 	    mav.addObject("cid", conn);
 	    mav.addObject("flag", flag);
 	    mav.addObject("tid", id);
 	    mav.addObject("name", name);
+	   
+	    mav.addObject("g",g);
+	    
 	    if (hotid == null) {
 	      mav.addObject("hotid", hotid1);
 	    }
@@ -212,33 +217,6 @@ public class TagsSelectiveController {
 	    mav.setViewName("redirect:/admin/picturehot");
 	    return mav;
 	  }
-//	/**
-//	 * 保存已选标签
-//	 * @param session
-//	 * @param id
-//	 * @param tag
-//	 * @param acount
-//	 * @param hits
-//	 * @param mefriends
-//	 * @param key
-//	 * @param lastTime
-//	 * @return
-//	 */
-//	@RequestMapping(value="/admin/saveselective")
-//	public ModelAndView saveselective(HttpSession session,String id,Tagsconnection conn,Taglist taglist){
-//		
-//		Tagsconnection c=new Tagsconnection();
-//		
-//		c.setTagslistId(conn.getTagslistId());
-//		c.setTagsId(conn.getTagsId());
-//		
-//		tagsconnectionService.insert(conn);
-//		
-//		ModelAndView mav = new ModelAndView();
-//	
-//		mav.setViewName("redirect:/admin/viewselective");
-//		return mav;
-//	}
 
 	
 	/**

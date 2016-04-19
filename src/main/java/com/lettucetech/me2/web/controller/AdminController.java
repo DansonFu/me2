@@ -566,15 +566,15 @@ public class AdminController {
 		 List list = new ArrayList();
 		 int count=0;
 		 if (!"".equals(searchid)) {
-		      example.put("searchid", searchid);
-
+		      example.put("metoo", searchid);
+	}
 		      count = this.metooService.countByParams(example);
 		      List<TXtMetoo> metoo = metooService.selectByParams4MetooPicture(example);
 
 		      for (TXtMetoo obj : metoo)
 		      {
-		        if (obj.getPicture().getTags().contains(searchid))
-		        {
+//		        if (obj.getPicture().getTags().contains(searchid))
+//		        {
 		          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
 		          String burl = "";
 		          String type = "";
@@ -587,42 +587,54 @@ public class AdminController {
 		              burl = obj.getPicture().getBpicture().getQiniukey();
 		            }
 		            type = obj.getPicture().getBpicture().getType();
+		        
+		            if(obj.getPicture().getBpicture().getMood().equals("")){
+		            	bmood="他很懒,没有留下心情!!";
+		            }else{
+		            	bmood=obj.getPicture().getBpicture().getMood();
+		            }
 		          }
-		          bmood = obj.getPicture().getBpicture().getMood();
+		        
 
 		          String[] d = { obj.getPicture().getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
 		            obj.getPicture().getTags(), bmood, obj.getUser().getName(), 
 		            DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
 		          list.add(d);
 		        }
-		      }
-		    } else {
-		      count = this.metooService.countByParams(example);
-		      List<TXtMetoo> metoo = this.metooService.selectByParams4MetooPicture(example);
+		      
+//		    } else {
+//		      count = this.metooService.countByParams(example);
+//		      List<TXtMetoo> metoo = this.metooService.selectByParams4MetooPicture(example);
+//
+//		      for (TXtMetoo obj : metoo) {
+//		        String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
+//		        String burl = "";
+//		        String type = "";
+//		        String bmood = "";
+//
+//		        if (obj.getPicture().getBpicture() != null) {
+//		          if (obj.getPicture().getBpicture().getType().equals("1"))
+//		            burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+//		          else {
+//		            burl = obj.getPicture().getBpicture().getQiniukey();
+//		          }
+//		          type = obj.getPicture().getBpicture().getType();
+//	
+//		          if(obj.getPicture().getBpicture().getMood().equals("")){
+//		            	bmood="他很懒,没有留下心情!!";
+//		            }else{
+//		            	bmood=obj.getPicture().getBpicture().getMood();
+//		            }
+//		        }
 
-		      for (TXtMetoo obj : metoo) {
-		        String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
-		        String burl = "";
-		        String type = "";
-		        String bmood = "";
+	
 
-		        if (obj.getPicture().getBpicture() != null) {
-		          if (obj.getPicture().getBpicture().getType().equals("1"))
-		            burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-		          else {
-		            burl = obj.getPicture().getBpicture().getQiniukey();
-		          }
-		          type = obj.getPicture().getBpicture().getType();
-		        }
-
-		        bmood = obj.getPicture().getBpicture().getMood();
-
-		        String[] d = { obj.getPicture().getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
-		          obj.getPicture().getTags(), bmood, obj.getUser().getName(), 
-		          DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
-		        list.add(d);
-		      }
-		    }
+//		        String[] d = { obj.getPicture().getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
+//		          obj.getPicture().getTags(), bmood, obj.getUser().getName(), 
+//		          DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+//		        list.add(d);
+//		      }
+//		    }
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);

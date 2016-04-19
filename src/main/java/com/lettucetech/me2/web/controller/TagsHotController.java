@@ -97,27 +97,33 @@ public class TagsHotController
     example.setMysqlLength(Integer.valueOf(iDisplayLength));
 
     List list = new ArrayList();
-    if ("0".equals(font)) {
-      example.setOrderByClause("id");
-      example.setSord("desc");
-    }
-    else if ("2".equals(font)) {
-      example.setOrderByClause("hits");
-      example.setSord("desc");
-    }
-    else if ("3".equals(font)) {
-      example.setOrderByClause("acount");
-      example.setSord("desc");
-    }
-    else if ("4".equals(font)) {
-      example.setOrderByClause("mefriends");
-      example.setSord("desc");
-    }
-    else if ("5".equals(font)) {
-      example.setOrderByClause("last_time");
-      example.setSord("desc");
-    }
-
+//    if ("5".equals(font)) {
+//      example.setOrderByClause("id");
+//      example.setSord("asc");
+//    }
+//    else if ("2".equals(font)) {
+//      example.setOrderByClause("hits");
+//      example.setSord("desc");
+//    }
+//    else if ("3".equals(font)) {
+//      example.setOrderByClause("acount");
+//      example.setSord("desc");
+//    }
+//    else if ("4".equals(font)) {
+//      example.setOrderByClause("mefriends");
+//      example.setSord("desc");
+//    }
+//    else if ("1".equals(font)) {
+//      example.setOrderByClause("last_time");
+//      example.setSord("desc");
+//    }
+//
+//    if(!"-1".equals(font)){
+//    	
+//    	example.setOrderByClause("hits");
+//    	example.setSord("desc");
+//    }
+    
     if (!"".equals(searchid)) {
       example.put("tag", searchid);
     }
@@ -234,6 +240,7 @@ public class TagsHotController
     }
     else if (str != null)
     {
+    	String g="1";
       Tagsconnection conn = new Tagsconnection();
       String[] d = ids.split(",");
       for (int i = 0; i < d.length; i++) {
@@ -247,7 +254,8 @@ public class TagsHotController
       }
       String cid = conn.getTagslistId();
       request.getSession().setAttribute("cid", cid);
-
+     // request.getSession().setAttribute("g",g);
+     mav.addObject("g",g);
       mav.setViewName("redirect:/admin/viewselective");
     }
     return mav;

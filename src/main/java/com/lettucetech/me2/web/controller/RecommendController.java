@@ -197,10 +197,14 @@ public class RecommendController {
  */
 @RequestMapping("admin/uprecommend")
 public  ModelAndView upcommend(HttpSession session,String id){
+	
+	ModelAndView mav = new ModelAndView();
 	Recommend list=recommendService.selectByPrimaryKey(Integer.valueOf(id));
 	Integer a = list.getSort();
 	Integer b = null;
-	
+	if(a==1){
+		mav.setViewName("/admin/viewrecommend");
+	}else{
 	Criteria example = new Criteria();
 	example.put("sort", a-1);
 	List<Recommend> taglist = recommendService.selectByParams(example);
@@ -216,16 +220,9 @@ public  ModelAndView upcommend(HttpSession session,String id){
 	list.setSort(a-1);
 	recommendService.updateByPrimaryKeySelective(list);
 	
-	//Integer a = prec.getSort();
-	
-//	Picturerecommend pc = new Picturerecommend();
-//	
-//	pc.setPid(pid);
-//	
-//	pc.setSort(sort+1);
-//	picurerecommendService.insert(pc);
-	ModelAndView mav = new ModelAndView();
+
 	mav.setViewName("/admin/viewrecommend");
+	}
 	return mav;
 }
 
@@ -237,10 +234,13 @@ public  ModelAndView upcommend(HttpSession session,String id){
  */
 @RequestMapping("admin/downrecommend")
 public  ModelAndView downcommend(HttpSession session,String id){
+	ModelAndView mav = new ModelAndView();
 	Recommend list=recommendService.selectByPrimaryKey(Integer.valueOf(id));
 	Integer a = list.getSort();
 	Integer b = null;
-	
+	if(a==1){
+		mav.setViewName("/admin/viewrecommend");
+	}else{
 	Criteria example = new Criteria();
 	example.put("sort", a+1);
 	List<Recommend> taglist = recommendService.selectByParams(example);
@@ -250,19 +250,18 @@ public  ModelAndView downcommend(HttpSession session,String id){
 			break;
 		}
 	}
+	if(b==null){
+		mav.setViewName("/admin/viewrecommend");
+	}else{
 	Recommend list1 = recommendService.selectByPrimaryKey(b);
 	list1.setSort(a);
 	recommendService.updateByPrimaryKeySelective(list1);
 	list.setSort(a+1);
 	recommendService.updateByPrimaryKeySelective(list);
-//	Picturerecommend pc = new Picturerecommend();
-//	
-//	pc.setPid(pid);
-//	
-//	pc.setSort(sort+1);
-//	picurerecommendService.insert(pc);
-	ModelAndView mav = new ModelAndView();
+	}
+	
 	mav.setViewName("/admin/viewrecommend");
+	}
 	return mav;
 }
 }

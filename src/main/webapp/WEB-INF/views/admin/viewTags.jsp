@@ -45,11 +45,12 @@
                                     </div>
                                     <div class="col-lg-9">
                                     	<select id="projectPorperty" name="projectPorperty">  
-										    <option value="1">标签id</option>  
+                                    	 	 <option value="-1">全部</option> 
+										    <option value="1">更新时间</option> 
 										    <option value="2">热度</option>  
+										    <option value="5">标签id</option>  
 										    <option value="3">帖子数</option>  
 										    <option value="4">蜜友</option> 
-										    <option value="5">更新时间</option> 
 										</select>  
 										
 										</div>
@@ -70,6 +71,7 @@
 		<div style="float:right;">
 		<input type="text" name="search" id="math" style="border:0px"/>		
 				<input type=text name="arr" id="arrid" style="border:0px"/>
+				<input type="button" name="checkbtn" onclick="checkAll('check');" value="全选/反选"/>
 				<button class="btn" type="submit">
 				<i class="icon-ok bigger-80"></i>
 				提交
@@ -90,8 +92,7 @@
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover" >
 				<thead>
-					<tr>
-						
+					<tr>	
 						<th class="center">标签ID</th>
 						<th class="center">标签名称</th>
 						<th class="center">热度</th>
@@ -103,10 +104,8 @@
 					</tr>
 				</thead>
 				<tbody>
-				</tbody>
-				
-			</table>
-					
+				</tbody>				
+			</table>					
 		</div>
 	</div>
 	</div>
@@ -118,11 +117,11 @@ var test = [];
 function ad(id){
 	test.push(id);
 	
-	$("#arrid").val(test);
+	/* $("#arrid").val(test);
 	var str=test.length;
-	$("#math").val(str);
+	$("#math").val(str); */
 	//get(test);
-	uniqueArray(test);
+/* 	uniqueArray(test);
 	 if(str>10){
 		alert("最多可以选择10个标签哟!");
 	test.splice(str-1,1);
@@ -131,30 +130,59 @@ function ad(id){
 	$("#math").val(str);
 	 }else if(str==null){
 		 alert("钱包里空空如也呢!!");
-	 }
-		
+	 } */
+	var b=[];
+	for(var i=0;i<test.length;i++){
+	    var bFound = false;
+	    for(var j=i-1;j>=0;j--){
+	        if(test[i]==test[j]) {
+	        	test.splice(i,1);
+	        	test.splice(j,1);
+	        	bFound=true;
+	        	break;
+	        	}
+	    }
+	    if(!bFound) b[b.length]=test[i]
+	}
+	$("#arrid").val(b);
 	
+	$("#math").val(b.length);
+	 if(b.length>10){
+			alert("最多可以选择10个标签哟!");
+		b.splice(b.length-1,1);
+		$("#arrid").val(b);
+		
+		$("#math").val(b.length);
+	 }
 }; 
-/* function get(test) {
-    var array = new Array();
-    var list = test.split(",");
-    for (var i = 0; i < list.length; i++) {
-        var s = list[i];
-        if (array.indexOf(s) == -1) {
-            if (check(test, s)) {
-                array.push(array.length, list[i]);
-            }
-        }
-    }
-    return array;
+
+/**
+ * 全选反选
+ */
+/* function checkAll() {
+	var code_Values = document.getElementsByName("check");
+	for (i = 0; i < code_Values.length; i++) {
+		if (code_Values[i].type == "checkbox") {
+			code_Values[i].checked = true;
+			ad(i+1);
+		
+		}else if(code_Values[i].checked = false){
+			
+		}
+		
+	}
+} */
+/* function checkAll() {
+	 var m = document.getElementsByName('check');
+    var l = m.length;
+  
+    for ( var i=0; i< l; i++)
+    {
+        m[i].checked == true
+            ? m[i].checked = false
+            : m[i].checked = true;
 }
-function check(test, s) {
-    var start = test.indexOf(s);
-    var n = str.indexOf(s, start + 1);
-    if (n > 0) {
-        return true;
-    }
-    return false;
+  
 } */
 /**
  * 去除数组重复元素
@@ -209,7 +237,7 @@ function uniqueArray(data){
 		
 		
 		var oTable1 = $('#sample-table-2').dataTable( {
-			"bSort":true,
+			"bSort":false,
 			"bFilter": false,
 			"bPaginate":true,
 			//"data": datas,
@@ -254,7 +282,7 @@ function uniqueArray(data){
 		      "fnServerData": retrieveData // 获取数据的处理函数
 		     
 		} );
-		
+		//oTable1.fnClearTable(false);
 		but();//datatable执行之后调一次but方法
 		 
 		  $("#projectPorperty").bind("change", function(){

@@ -27,6 +27,18 @@
 <script src="<%=basePath %>resources/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
+<style type="text/css">
+
+td{  
+    width:100% ;
+     word-break :break;/* 不换行   换行break*/  
+    
+     overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */  
+     text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/  
+} 
+
+
+</style>
 </head>
 <body>
 <div class="page-content">
@@ -53,7 +65,7 @@
 		<br>
 		<br>
 		<div class="table-responsive">
-			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
+			<table style="table-layout:fixed; " id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
 						<th class="center" >
@@ -79,6 +91,7 @@
 	</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	function update(pid){
 		window.location="<%=basePath %>admin/viewpicture?pid="+pid;
@@ -93,14 +106,24 @@
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
-			"aoColumnDefs": [
-			                 {
+			"aoColumnDefs": [ 
+			                 {"sWidth":"8%",
+	        	   				"aTargets": [0]
+			                 }, 
+			                 {"sWidth":"8%",
+	        	  			 "aTargets": [1]
+	        	   				},
+			                 {		"sWidth":"12%",
 			     	        	   "aTargets": [2],
 			     	        	   "fnRender":function(data,type){
 			     	        		   return  '<a href="'+data.aData[2]+'" target="_blank" id="afront">  <img src="'+data.aData[2]+'" width="100px" height="100px" id="a"> </a>';
 			     	        	   }
 			     	           },
+			     	          {
+			     	        	   "sWidth":"7%",
+			       	        	   "aTargets": [3]},
 			     	        	{
+			       	        		   "sWidth":"13%",
 			     	        	   "aTargets": [4],
 			     	        	   "fnRender":function(data,type){
 			     	        		   var str = "";
@@ -112,7 +135,7 @@
 			     	        		   return  str;
 			     	        	   }
 			     	           },
-   	        	{
+   	        	{"sWidth":"7%",
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
    	        		   var str = "";
@@ -130,7 +153,20 @@
    	        		   return  str;
    	        	   }
    	           },
-   	        	{
+   	           {"sWidth":"10%",
+   	        	   "aTargets": [6]
+   	           },
+   	        	  {"sWidth":"7%",
+   	   	        	   "aTargets": [7]
+   	        	   },
+   	   	         {"sWidth":"8%",
+   	    	        	   "aTargets": [8]
+   	        	   },
+   	    	        	  {"sWidth":"7%",
+   	    	   	        	   "aTargets": [9]
+   	        	   },
+   	    	   	        	   
+   	        	{"sWidth":"8%",
    	        	   "aTargets": [10],
    	        	   "fnRender":function(data,type){
    	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';

@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -27,6 +28,18 @@
 <script src="<%=basePath %>resources/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
+<style type="text/css">
+
+td{  
+    width:100% ;
+     word-break :break;/* 不换行   换行break*/  
+    
+     overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */  
+     text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/  
+} 
+
+
+</style>
 </head>
 <body>
 
@@ -38,8 +51,8 @@
 					
           	排序方式：                            
 			<select id="hotid">
-				<c:forEach items="${taglists }" var="hot">
-					<option value="${hot.id}" >${hot.title}</option>
+				<c:forEach items="${taglists }" var="list">
+					<option value="${list.id}" >${list.title}</option>
 				</c:forEach>
 			</select>			
 		</div> 
@@ -55,29 +68,40 @@
 		<br>
 		<br>
 		<div class="table-responsive">
-			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
+			<table style="table-layout:fixed;" id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
+				
 					<tr>
-						
 						<th class="center" >
-							标签ID
+							密图ID
 						</th>
-						<th class="center">标签名称</th>
+						<th class="center">用户</th>
 						<th class="center">A面</th>
-						<th class="center">出现次数</th>
+						<th class="center">A面心情</th>
+						<th class="hidden-480 center">B面</th>
+						<th class="center">B面类型</th>
+						<th class="center">标签</th>
 						<th class="center">热度</th>
-						<th class="center">密友</th>
-						
-						<th class="center">更新时间</th>
+						<th class="center">B面心情</th>
+						<th class="center">集合名称</th>
+						<th class="center">创建时间</th>
 					</tr>
-				</thead>	
+				</thead>
+					
 				<tbody>
+				
 				</tbody>
+				
 			</table>
+			
 		</div>
+		
 	</div>
 	</div>
+	
 </div>
+
+
 <script type="text/javascript">
 
 
@@ -85,14 +109,73 @@
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
+			
 			"bFilter": false,
 			"aoColumnDefs": [
+			                 {
+			     	        	 "sWidth":"10%",
+			     	        	   "aTargets": [0]
+			     	           }, {
+				     	        	 "sWidth":"10%",
+			     	        	   "aTargets": [1]
+				     	           },
 	                 {
+	     	        	   "sWidth":"10%",
 	     	        	   "aTargets": [2],
 	     	        	   "fnRender":function(data,type){
 	     	        		   return  '<img src="'+data.aData[2]+'" width="100px" height="100px">';
 	     	        	   }
-	     	           },         
+	     	           }, {
+		     	        	 "sWidth":"10%",
+	     	        	   "aTargets": [3]
+		     	           },
+	     	          {
+	     	        	  "sWidth":"10%",
+	     	        	   "aTargets": [4],
+	     	        	   "fnRender":function(data,type){
+	     	        		   var str = "";
+	     	        		   if(data.aData[5]==1){
+	     	        				str = '<a href="'+data.aData[4]+'" target="_blank" id="abpicture"><img src="'+data.aData[4]+'" width="100px" height="100px" id="b"> </a>';
+	     	        		   }else{
+	     	        				str = data.aData[4];
+	     	        		   }
+	     	        		   return  str;
+	     	        	   }
+	     	           },
+	     	           {
+	       	        	 "sWidth":"10%",
+	       	        	   "aTargets": [5],
+	       	        	   "fnRender":function(data,type){
+	       	        		   var str = "";
+	       	        		   if(data.aData[5]=="1"){
+	       	        				str = "图片";  	        		   
+	       	        		   }else if(data.aData[5]=="2"){
+	       	        				str = "URL";
+	       	        		   }else if(data.aData[5]=="3"){
+	       	        				str = "视频";
+	       	        		   }else if(data.aData[5]=="4"){
+	       	        				str = "音频";
+	       	        		   }else if(data.aData[5]==""){
+	       	        				str = "";
+	       	        		   }
+	       	        		   return  str;
+	       	        	   }
+	       	           }, {
+		     	        	 "sWidth":"10%",
+	     	        	   "aTargets": [6]
+		     	           }, {
+			     	        	 "sWidth":"7%",
+		     	        	   "aTargets": [7]
+			     	           }, {
+				     	        	 "sWidth":"10%",
+			     	        	   "aTargets": [8]
+				     	           }, {
+					     	        	 "sWidth":"8%",
+				     	        	   "aTargets": [9]
+					     	           }, {
+						     	        	 "sWidth":"10%",
+					     	        	   "aTargets": [10]
+						     	           }        
       	          
 			    	         ],
 			  "bServerSide": true,//这个用来指明是通过服务端来取数据

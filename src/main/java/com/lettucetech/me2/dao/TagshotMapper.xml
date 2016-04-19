@@ -9,6 +9,7 @@
     <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
     <result column="mefriends" property="mefriends" jdbcType="INTEGER" />
     <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
+  
     
   </resultMap>
   <sql id="Example_Where_Clause" >

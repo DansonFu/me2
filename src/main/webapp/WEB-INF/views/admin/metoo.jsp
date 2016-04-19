@@ -292,12 +292,12 @@
 		}
 	}
 	function submitform(){
-		if($("input[name='afile']").val()==""){
+		if($("input[name='afile']").val()==null||$("input[name='afile']").val()==""){
 			$("input[name='afile']").focus();
 			return;
 		}
-		if($("input[name='bfeel']").val()==""){
-			$("input[name='bfeel']").focus();
+		if($("input[name='bfile']").val()==null||$("input[name='bfile']").val()==""){
+			$("input[name='bfile']").focus();
 			return;
 		}
 		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){

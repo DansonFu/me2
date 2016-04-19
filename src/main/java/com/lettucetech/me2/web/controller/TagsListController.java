@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,16 +18,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
-
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
-import com.lettucetech.me2.pojo.Tagsconnection;
-
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagsconnectionService;
 import com.lettucetech.me2.service.TagshotService;
@@ -52,8 +48,9 @@ public class TagsListController {
 	 */
 	 
 	@RequestMapping("/admin/viewList")
-	public ModelAndView selectByTags(HttpSession session){	
-		session.setAttribute("taglist","taglist");
+	public ModelAndView selectByTags(HttpSession session,HttpServletRequest request){	
+//		String k="2";
+//		request.getSession().setAttribute("k",k);
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -85,7 +82,7 @@ public class TagsListController {
 	@RequestMapping("/admin/viewaddList")
 	public ModelAndView addByTags(HttpSession session){		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/admin/addList");;
+		mav.setViewName("/admin/addList");
 		return mav;
 	}
 	/**
@@ -208,11 +205,23 @@ public class TagsListController {
 	@RequestMapping("/admin/delList")
 	public ModelAndView delList(HttpSession session,String id){
 		
-		tagListService.deleteByPrimaryKey(Integer.valueOf(id));
-//		 Criteria example = new Criteria();
-//		 example.put("id", id);
-//		 tagListService.deleteByParams(example);
-		 
+		Taglist pc=tagListService.selectByPrimaryKey(Integer.valueOf(id));
+		 Integer  s  = pc.getSort();
+		    Criteria example = new Criteria();
+		    List<Taglist> pclist = tagListService.selectByParams(example);
+		    for(Taglist p:pclist){
+		    	if(p.getSort()>s){
+		    		
+		    		Integer b = p.getSort();
+		    		p.setSort(b-1);
+		    		p.setId(p.getId());
+		    		p.setNum(p.getNum());
+		    		p.setQiniukey(p.getQiniukey());
+		    		p.setTitle(p.getTitle());
+		    		tagListService.updateByPrimaryKey(p);
+		    	}
+		    }
+		 tagListService.deleteByPrimaryKey(Integer.valueOf(id));
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewList");
 		return mav;
@@ -292,10 +301,13 @@ public class TagsListController {
 	 */
 	@RequestMapping("admin/upcommend")
 	public  ModelAndView upcommend(HttpSession session,String id){
+		ModelAndView mav = new ModelAndView();
 		Taglist list=tagListService.selectByPrimaryKey(Integer.valueOf(id));
 		Integer a = list.getSort();
 		Integer b = null;
-		
+		if(a==1){
+			mav.setViewName("/admin/viewList");
+		}else{
 		Criteria example = new Criteria();
 		example.put("sort", a-1);
 		List<Taglist> taglist = tagListService.selectByParams(example);
@@ -310,17 +322,10 @@ public class TagsListController {
 		tagListService.updateByPrimaryKeySelective(list1);
 		list.setSort(a-1);
 		tagListService.updateByPrimaryKeySelective(list);
-		
-		//Integer a = prec.getSort();
-		
-//		Picturerecommend pc = new Picturerecommend();
-//		
-//		pc.setPid(pid);
-//		
-//		pc.setSort(sort+1);
-//		picurerecommendService.insert(pc);
-		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/admin/viewList");
+		}
+
+		
 		return mav;
 	}
 	
@@ -332,9 +337,14 @@ public class TagsListController {
 	 */
 	@RequestMapping("admin/downcommend")
 	public  ModelAndView downcommend(HttpSession session,String id){
+		ModelAndView mav = new ModelAndView();
 		Taglist list=tagListService.selectByPrimaryKey(Integer.valueOf(id));
 		Integer a = list.getSort();
 		Integer b = null;
+		if(a==1){
+			mav.setViewName("/admin/viewList");
+		}else{
+			
 		
 		Criteria example = new Criteria();
 		example.put("sort", a+1);
@@ -345,19 +355,18 @@ public class TagsListController {
 				break;
 			}
 		}
+		if(b==null){
+			mav.setViewName("/admin/viewList");
+		}else{
 		Taglist list1 = tagListService.selectByPrimaryKey(b);
 		list1.setSort(a);
 		tagListService.updateByPrimaryKeySelective(list1);
 		list.setSort(a+1);
 		tagListService.updateByPrimaryKeySelective(list);
-//		Picturerecommend pc = new Picturerecommend();
-//		
-//		pc.setPid(pid);
-//		
-//		pc.setSort(sort+1);
-//		picurerecommendService.insert(pc);
-		ModelAndView mav = new ModelAndView();
+		}
+		
 		mav.setViewName("/admin/viewList");
+		}
 		return mav;
 	}
 }

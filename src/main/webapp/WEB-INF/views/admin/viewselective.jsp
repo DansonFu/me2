@@ -31,6 +31,7 @@
 <body>
 <h3 class="header smaller lighter blue">已选标签&nbsp;<input value="${name }" style="border:0px" /></h3>
 				<input type="hidden" name="conn" value="${cid }" id="cid"/>
+				<input type="hidden" name="g" value="${g }" id="gid"/>
 		<form  action="<%=basePath %>admin/submit" id="hid" method="post">
 		<div style="float: right;">
 			<input type="hidden" name="hot" value="${hotid }" id="hotid"/>
@@ -47,7 +48,7 @@
 				<input type="hidden" name="flag" value="${flag }"/>
 				&nbsp; &nbsp; &nbsp;
 				
-				<button class="btn" type="submit" onclick="add()">
+				<button class="btn" type="submit" onclick="add()" id="bid">
 					<i class="icon-undo bigger-80"></i>
 					添加标签
 				</button>
@@ -89,7 +90,20 @@
 			window.location="<%=basePath %>admin/delselective?id="+id;
 		}
 	}
-
+	bid();
+function bid(){
+	
+	  var currentBtn = document.getElementById("bid");
+	  var type=$('#gid').val();
+	    if (type == "1") {
+	        currentBtn.style.display = "none";
+	        //alert(1);
+	    }
+	    else {
+	    	//alert(2);
+	        currentBtn.style.display = "block"; //style中的display属性
+	    }
+}
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
+import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtUser;
@@ -51,7 +52,7 @@ public class PicturehotController {
 	    example.put("hot", hot);
 	    List<Taglist> taglist = tagListService.selectByParams(example);
 	    Taglist list = new Taglist();
-	    list.setNum(Integer.valueOf("0"));
+	    list.setId(-1);
 	    
 	    list.setTitle("全部");
 	    taglist.add(list);
@@ -69,9 +70,9 @@ public class PicturehotController {
 	 * @param userId
 	 */
 	 @RequestMapping({"/admin/getmetoo/picturehot"})
-	  public void getMetooByPictureHot(HttpSession session, HttpServletResponse response, String aoData, String hotid,String searchid)
-	  {
-	    TXtUser au = (TXtUser)session.getAttribute("adminuser");
+	  public void getMetooByPictureHot(HttpSession session, HttpServletResponse response, String aoData,
+			  String hotid,String searchid) {
+	  //  TXtUser au = (TXtUser)session.getAttribute("adminuser");
 
 	    ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
@@ -90,42 +91,81 @@ public class PicturehotController {
 	        iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
 	    Criteria example = new Criteria();
-	    example.setOrderByClause("hits");
-	    example.setSord("desc");
+	    example.setOrderByClause("tagslist_id");
+	    example.setSord("asc");
 	    example.setMysqlOffset(Integer.valueOf(iDisplayStart));
 	    example.setMysqlLength(Integer.valueOf(iDisplayLength));
 	    example.put("state", "0");
-
-	    if(!"".equals(hotid)){
-	    	example.put("tagslist_id",hotid);
+	    example.put("front", "a");
+	    if(!"-1".equals(hotid)){
+	    	example.put("tagslistId",hotid);
 	    	
 	    }
 	    if(!"".equals(searchid)){
-	    	example.put("tag",searchid);
+	    	example.put("pid",searchid);
 	    }
 	    int count = pictureHotService.countByParams(example);
-	    List<Tagshot> metoo = tagshotService.selectByParams(example);
-	   // List<Picturehot> hot=pictureHotService.selectByParams(example);
+	    //List<Tagshot> metoo = tagshotService.selectByParams(example);
+	    List<Picturehot> hot=pictureHotService.selectByParams(example);
 	   
 	    List list = new ArrayList();
 
-	    for (Tagshot obj : metoo)
-	    {
-	    	if(obj.getTag().equals(searchid)){
-	      String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+ obj.getQiniukey();
-	      String[] d = { obj.getId().toString(), obj.getTag(), aurl, obj.getAcount().toString(), 
-	        obj.getHits().toString(), obj.getMefriends().toString(), 
-	        DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+	    for (Picturehot obj : hot) {
+//	    	System.out.println(obj.getTagslistId());
+	    	Taglist li=tagListService.selectByPrimaryKey(Integer.valueOf(obj.getTagslistId()));
+	    	String title=li.getTitle();
+	//    	System.out.println(title);
+//	    		 if (obj.getPicture().getTags().contains(searchid))
+//			        {
+	    			// if(obj.getTagslistId().equals(hotid)){
+			          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
+			          String burl = "";
+			          String type = "";
+			          String bmood = "";
 
-	      list.add(d);
-	    }else{
-	    	 String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+ obj.getQiniukey();
-		      String[] d = { obj.getId().toString(), obj.getTag(), aurl, obj.getAcount().toString(), 
-		        obj.getHits().toString(), obj.getMefriends().toString(), 
-		        DateUtil.dateFormatToString(obj.getLastTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+			          if (obj.getPicture().getBpicture() != null) {
+			            if (obj.getPicture().getBpicture().getType().equals("1"))
+			              burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+			            else {
+			              burl = obj.getPicture().getBpicture().getQiniukey();
+			            }
+			            type = obj.getPicture().getBpicture().getType();
+			            if(obj.getPicture().getBpicture().getMood().equals("")){
+			            	bmood="他很懒,没有留下心情!!";
+			            }else{
+			            	bmood=obj.getPicture().getBpicture().getMood();
+			            }
+			          }
+			        
 
-		      list.add(d);
-	    }
+			          String[] d = { obj.getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
+			            obj.getPicture().getTags(),obj.getPicture().getHits().toString(), bmood,title,
+			            DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), ""};
+			          list.add(d);
+	    		//	 }
+//			      }else{
+//			    	 
+//				          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
+//				          String burl = "";
+//				          String type = "";
+//				          String bmood = "";
+//
+//				          if (obj.getPicture().getBpicture() != null) {
+//				            if (obj.getPicture().getBpicture().getType().equals("1"))
+//				              burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+//				            else {
+//				              burl = obj.getPicture().getBpicture().getQiniukey();
+//				            }
+//				            type = obj.getPicture().getBpicture().getType();
+//				          }
+//				          bmood = obj.getPicture().getBpicture().getMood();
+//
+//				          String[] d = { obj.getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
+//				            obj.getPicture().getTags(), obj.getPicture().getHits().toString(),bmood, 
+//				            DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
+//				          list.add(d);
+//				        }
+//				      
 	    }
 	    DataTablePaginationForm dtpf = new DataTablePaginationForm();
 	    dtpf.setsEcho(sEcho);
