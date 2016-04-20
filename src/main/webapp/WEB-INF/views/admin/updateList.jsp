@@ -27,6 +27,19 @@
 <script src="<%=basePath %>resources/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
+<style type="text/css">
+	.col-lg-3{
+		
+		width:300px;
+		top:0px;
+		left:300px;
+	}
+	.box{
+	
+		width:200px;
+		height:200px;
+	}
+</style>
 </head>
 <body>
 
@@ -60,7 +73,7 @@
                                     	
                                     <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">
 
-               						 <img id="image" src="" >
+               						 <img id="image" src="" class="box">
                                 
                                     	
                                     </div>

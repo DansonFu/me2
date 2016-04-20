@@ -359,7 +359,7 @@ public class ChechPictureController {
 			}
 			Integer sort = 0;
 			for(int i=0;i<list1.size();i++){
-				if(list1.get(i)>	sort){
+				if(list1.get(i)>sort){
 					sort = list1.get(i);
 				}
 			}

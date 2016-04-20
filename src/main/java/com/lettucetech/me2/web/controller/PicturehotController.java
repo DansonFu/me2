@@ -55,7 +55,7 @@ public class PicturehotController {
 	    list.setId(-1);
 	    
 	    list.setTitle("全部");
-	    taglist.add(list);
+	    taglist.add(0,list);
 	    ModelAndView mav = new ModelAndView();
 	    mav.addObject("taglists", taglist);
 	    mav.addObject("svalue", s);
@@ -111,14 +111,9 @@ public class PicturehotController {
 	    List list = new ArrayList();
 
 	    for (Picturehot obj : hot) {
-//	    	System.out.println(obj.getTagslistId());
 	    	Taglist li=tagListService.selectByPrimaryKey(Integer.valueOf(obj.getTagslistId()));
 	    	String title=li.getTitle();
-	//    	System.out.println(title);
-//	    		 if (obj.getPicture().getTags().contains(searchid))
-//			        {
-	    			// if(obj.getTagslistId().equals(hotid)){
-			          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
+		          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
 			          String burl = "";
 			          String type = "";
 			          String bmood = "";
@@ -142,30 +137,7 @@ public class PicturehotController {
 			            obj.getPicture().getTags(),obj.getPicture().getHits().toString(), bmood,title,
 			            DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), ""};
 			          list.add(d);
-	    		//	 }
-//			      }else{
-//			    	 
-//				          String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
-//				          String burl = "";
-//				          String type = "";
-//				          String bmood = "";
-//
-//				          if (obj.getPicture().getBpicture() != null) {
-//				            if (obj.getPicture().getBpicture().getType().equals("1"))
-//				              burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-//				            else {
-//				              burl = obj.getPicture().getBpicture().getQiniukey();
-//				            }
-//				            type = obj.getPicture().getBpicture().getType();
-//				          }
-//				          bmood = obj.getPicture().getBpicture().getMood();
-//
-//				          String[] d = { obj.getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
-//				            obj.getPicture().getTags(), obj.getPicture().getHits().toString(),bmood, 
-//				            DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
-//				          list.add(d);
-//				        }
-//				      
+	    	
 	    }
 	    DataTablePaginationForm dtpf = new DataTablePaginationForm();
 	    dtpf.setsEcho(sEcho);

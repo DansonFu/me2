@@ -213,6 +213,7 @@ public class TagsListController {
 		    	if(p.getSort()>s){
 		    		
 		    		Integer b = p.getSort();
+		    		
 		    		p.setSort(b-1);
 		    		p.setId(p.getId());
 		    		p.setNum(p.getNum());
@@ -237,7 +238,7 @@ public class TagsListController {
 	@RequestMapping(value="/admin/insertList",method={RequestMethod.POST})
 	public ModelAndView addList(HttpSession session,String id,String title
 			,@RequestParam("upload")  CommonsMultipartFile afile){
-		
+		//Taglist list2=tagListService.selectByPrimaryKey(Integer.valueOf(id));
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
 			try {
@@ -249,26 +250,52 @@ public class TagsListController {
 				e.printStackTrace();
 			}
 		}
-		Criteria example = new Criteria();
-		example.put("id", id);
-		List<Taglist> tag=tagListService.selectByParams(example);
-		List<Integer> list1 = new ArrayList<Integer>(); 
-		for(Taglist pcs : tag){
-			Integer b = pcs.getSort();
-			list1.add(b);
-		}
-		Integer sort=0;
-		for(int i=0;i<tag.size();i++){
-			if(list1.get(i)>sort){
-				sort = list1.get(i);
+	
+		 Taglist list = new Taglist();
+		    Criteria example = new Criteria();
+		    example.put("id", id);
+		    List<Taglist> tag = this.tagListService.selectByParams(example);
+		    List list1 = new ArrayList();
+		    for(Taglist pcs : tag){
+				Integer b = pcs.getSort();
+				if(b==1){
+					pcs.setSort(b);;
+				}else{
+				pcs.setSort(b+1);
+				}
+	    		pcs.setQiniukey(pcs.getQiniukey());
+				pcs.setId(pcs.getId());
+				pcs.setTitle(pcs.getTitle());
+				tagListService.updateByPrimaryKey(pcs);
+				list1.add(b);
 			}
-		}
-		Taglist list =new Taglist();
-//		list.setId(Integer.valueOf(id));
-		list.setTitle(title);
-		list.setQiniukey(akey);
-		list.setSort(sort+1);
-		tagListService.insertSelective(list);
+		    Integer sort = Integer.valueOf(0);
+		    int sum = 0;
+		    int lost = 0;
+		    int max = 0;
+		    int total = 0;
+		    for (int j = 0; j < tag.size(); j++) {
+		      if (((Integer)list1.get(j)).intValue() > max) {
+		        max = ((Integer)list1.get(j)).intValue();
+		      }
+		      sum += ((Integer)list1.get(j)).intValue();//300
+		    }
+		    total = max * (max + 1) / 2;
+		    lost = total - sum;
+		     if ((lost > 0) && (lost < tag.size())) {
+		      list.setSort(lost);
+		    }else if(lost==0){
+		    	lost=2;
+		    	list.setSort(lost);
+		    }
+//		     else if(lost==0){
+//		    	list.setSort(max+1);
+//		    }
+
+		    list.setTitle(title);
+		    list.setQiniukey(akey);
+
+		    this.tagListService.insertSelective(list);
 		ModelAndView mav = new ModelAndView();
 	
 		mav.setViewName("redirect:/admin/viewList");

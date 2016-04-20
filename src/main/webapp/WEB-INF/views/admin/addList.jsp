@@ -27,13 +27,26 @@
 <script src="<%=basePath %>resources/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
+<style type="text/css">
+	.col-lg-3{
+		
+		width:300px;
+		top:0px;
+		left:300px;
+	}
+	.box{
+	
+		width:200px;
+		height:200px;
+	}
+</style>
 </head>
 <body>
 
                     <div class="panel-body">
                     	<form class="form-bordered"  id="me2form" action="<%=basePath %>admin/insertList" method="post" enctype="multipart/form-data">
                              
-                                    <div class="col-lg-3 input-column">
+                                    <div class="col-lg-4 input-column">
                                        	新建集合：
                                     </div>
                                     <br/>
@@ -43,21 +56,25 @@
 										 <br/>
 										 <br/>
 										 <br/>
-                                      
+                                      <div>
                                        	<span class="dangger" style="color: red">*</span> 七牛：
                                   
-                                    <div class="col-lg-3" style="height: 120px">
+                                    <div class="col-lg-3" style="height: 80px">
                                     	 <input type="file" name="upload" id="upload" onchange="loadImageFile(event)">
 
-               						 <img id="image" src="" >
-                                    
+               						 <img id="image" src="" class="box">
+                                    </div>
                                    		<br/>
                                			<br/>
 										 <br/>
+										 <div>
+										 
 										集合名称:<input type="text" name="title"  value="${list.title}"/>
+										</div>
                                     </div>
                               
 					 <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					
 			               <div  style="text-align: center">
 							<div >
 								<button class="btn btn-primary" type="submit" onclick="submitform()">

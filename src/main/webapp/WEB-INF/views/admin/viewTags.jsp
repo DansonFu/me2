@@ -13,7 +13,10 @@
 <title></title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-
+<meta name="save" content="history">   
+<style type="text/css">   
+    input{behavior: url (#default#behaviorName)};   
+ </style> 
 <link href="<%=basePath %>resources/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace.min.css" />
@@ -68,11 +71,22 @@
 		</form>
 		
 		<form action="<%=basePath %>admin/add" id="submitid" method="post">
-		<div style="float:right;">
+		<div style="float:right;" id="list">
 		<input type="text" name="search" id="math" style="border:0px"/>		
 				<input type=text name="arr" id="arrid" style="border:0px"/>
-				<input type="button" name="checkbtn" onclick="checkAll('check');" value="全选/反选"/>
-				<button class="btn" type="submit">
+				
+				<button class="btn" type="submit" >
+				<i class="icon-ok bigger-80"></i>
+				提交
+				</button>
+		</div>
+		</form>
+		<form action="<%=basePath %>admin/addtag" id="submitid" method="post">
+		<div style="float:right;"id="tag">
+		<input type="text" name="search" id="mathtag" style="border:0px"/>		
+				<input type=text name="arr" id="arridtag" style="border:0px"/>
+				
+				<button class="btn" type="submit" >
 				<i class="icon-ok bigger-80"></i>
 				提交
 				</button>
@@ -112,25 +126,13 @@
 	<input type="button" style="display: none" id="bu" name="bu" onclick="but()">
 	<input type="hidden"  id="aid" name="aname" value="${avalue }">		
 <script type="text/javascript">
+//创建一个数组
 var test = [];
-
+//ad方法接收复选框的id,判断后将选中的复选框的id添加到input标签中,提交到后台的方法
 function ad(id){
 	test.push(id);
 	
-	/* $("#arrid").val(test);
-	var str=test.length;
-	$("#math").val(str); */
-	//get(test);
-/* 	uniqueArray(test);
-	 if(str>10){
-		alert("最多可以选择10个标签哟!");
-	test.splice(str-1,1);
-	$("#arrid").val(test);
-	 str=test.length;
-	$("#math").val(str);
-	 }else if(str==null){
-		 alert("钱包里空空如也呢!!");
-	 } */
+	
 	var b=[];
 	for(var i=0;i<test.length;i++){
 	    var bFound = false;
@@ -153,6 +155,35 @@ function ad(id){
 		$("#arrid").val(b);
 		
 		$("#math").val(b.length);
+	 }
+}; 
+//adtag方法为获取复选框的id,存入test数组,判断之后将id存入input域中,提交到后台的方法中
+function adtag(id){
+	test.push(id);
+	
+	//去重复的和相同值的方法
+	var b=[];
+	for(var i=0;i<test.length;i++){
+	    var bFound = false;
+	    for(var j=i-1;j>=0;j--){
+	        if(test[i]==test[j]) {
+	        	test.splice(i,1);
+	        	test.splice(j,1);
+	        	bFound=true;
+	        	break;
+	        	}
+	    }
+	    if(!bFound) b[b.length]=test[i]
+	}
+	$("#arridtag").val(b);
+	
+	$("#mathtag").val(b.length);
+	 if(b.length>10){
+			alert("最多可以选择10个标签哟!");
+		b.splice(b.length-1,1);
+		$("#arridtag").val(b);
+		
+		$("#mathtag").val(b.length);
 	 }
 }; 
 
@@ -201,9 +232,25 @@ function uniqueArray(data){
        data[data.length] = i;  
   }  
   return data;  
-}  
+}  ;
 
-	var datas = [];
+sub();
+//判断两个提交的按钮的隐藏和显示
+function sub(){
+	//alert(1);
+	 var currentBtn1 = document.getElementById("tag");
+	 var currentBtn2 = document.getElementById("list");
+	var name=$("#flagid").val();
+	
+	if (name == "1") {
+        currentBtn2.style.display = "none";
+       // alert(1);
+    }
+    else if(name=="2"){
+    	//alert(2);
+        currentBtn1.style.display = "none"; //style中的display属性
+    }
+	};
 
 	$(document).ready(function(){
 		
@@ -269,7 +316,7 @@ function uniqueArray(data){
 					 
 					"fnRender" : function(data,type) {
 						var str = '<div  class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
-						str += '<input type="checkbox" name="check" id="btn" onclick="ad('+"'"+data.aData[0]+"'"+')"/>';
+						str += '<input type="checkbox" name="check" id="btn" onclick="adtag('+"'"+data.aData[0]+"'"+')"/>';
   	        			str += '</div>';
   	        			
   	        			
@@ -300,20 +347,23 @@ function uniqueArray(data){
 					 $("#math").val(str);
 			
 		  }); */
-		
+		//判断两列复选框的隐藏和显示
 			 	 function but(){
 					//alert(1);
 					var name=$("#flagid").val();
 					var a="1";
 					var b="2";
+				if(name==b && name==a){
+					name==b;
 				
-					if(name==a){
-						//alert(1);
-			 oTable1.fnSetColumnVis(6, false);
-					}
-					else if(name==b){
+				}
+					 if(name==b){
 						//alert(1);
 			oTable1.fnSetColumnVis(7, false);
+					}
+					 else if(name==a){
+						//alert(1);
+			 oTable1.fnSetColumnVis(6, false);
 					}
 					};
 			

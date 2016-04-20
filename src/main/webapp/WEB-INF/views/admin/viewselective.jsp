@@ -91,6 +91,7 @@
 		}
 	}
 	bid();
+	//判断添加标签的按钮的隐藏和显示
 function bid(){
 	
 	  var currentBtn = document.getElementById("bid");

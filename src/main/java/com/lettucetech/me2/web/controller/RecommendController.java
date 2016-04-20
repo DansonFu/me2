@@ -179,10 +179,30 @@ public class RecommendController {
 	@RequestMapping("/admin/delrecommend")
 	public ModelAndView delTags(HttpSession session,String id){
 	
+		Recommend pc=recommendService.selectByPrimaryKey(Integer.valueOf(id));
+		 Integer  s  = pc.getSort();
+		    Criteria example = new Criteria();
+		    List<Recommend> pclist = recommendService.selectByParams(example);
+		    for(Recommend p:pclist){
+		    	if(p.getSort()>s){
+		    		
+		    		Integer b = p.getSort();
+		    		p.setSort(b-1);
+		    		p.setId(p.getId());
+		    		p.setAcount(p.getAcount());
+		    		p.setHits(p.getHits());
+		    		p.setLasttime(p.getLasttime());
+		    		p.setMefriends(p.getMefriends());
+		    		p.setTagname(p.getTagname());
+		    		p.setTagId(p.getTagId());
+		    		p.setQiniukey(p.getQiniukey());
+		    	
+		    		recommendService.updateByPrimaryKey(p);
+		    	}
+		    }
+		
 		recommendService.deleteByPrimaryKey(Integer.valueOf(id));
-//		 Criteria example = new Criteria();
-//		 example.put("id", id);
-//		 tagshotService.deleteByParams(example);
+
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/viewrecommend");
 		return mav;
