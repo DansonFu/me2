@@ -63,7 +63,7 @@ td{
 																		<button type="button" class="btn btn-purple btn-sm"  onclick="submitform()">
 																			Search
 																			<i class="icon-search icon-on-right bigger-110"></i>
-																		</button>
+																		</button><span style="color:red">(请输入你想查询的标签名称)</span>
 		</form>
 		<br>
 		<div class="table-responsive">

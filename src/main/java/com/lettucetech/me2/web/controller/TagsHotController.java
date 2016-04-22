@@ -58,6 +58,7 @@ public class TagsHotController
 @RequestMapping({"/admin/viewTags"})
   public ModelAndView selectByTags(HttpSession session, HttpServletRequest request)
   {
+	
     String str = request.getParameter("taglist");
     String s = request.getParameter("search");
     String flg = request.getParameter("flag");
@@ -65,6 +66,7 @@ public class TagsHotController
 
     if (flg == null){
     	String f=(String)session.getAttribute("f");
+    	session.removeAttribute("f");
     	if(f==null){
       flag = "1";
     	}else if(f!=null){
@@ -82,6 +84,7 @@ public class TagsHotController
     	
     	session.setAttribute("ss", str);
     }
+    
 //    session.setAttribute("flag", flag);
     ModelAndView mav = new ModelAndView();
 
@@ -225,6 +228,7 @@ public class TagsHotController
 	    return mav;
   }else{
     String str = (String)session.getAttribute("ss");
+    session.removeAttribute("ss");
     ModelAndView mav = new ModelAndView();
 //    if (str == null) {
 //      String[] d = ids.split(",");

@@ -62,7 +62,7 @@ td{
 			<input type="hidden"  id="searchid" value="${svalue }" />
 				<button class="btn" type="submit">
 				检索
-				</button>
+				</button><span style="color:red">(请输入你想查询的密图ID)</span>
 		</div>
 		</form>
 		<br>

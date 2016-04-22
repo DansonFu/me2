@@ -67,7 +67,8 @@ public class TagsSelectiveController {
 	    String str = id;
 	    String flag = "2";//flag用于判断tagshot页面的复选框隐藏,2是隐藏添加到热门的复选框
 	    String conn = (String)request.getSession().getAttribute("cid");//获取tagshot页面传来的tagsconnection的taglistid,用于展示页面的集合名字
-	   // String g=(String)request.getSession().getAttribute("g");//获取tagshot页面穿来的g值,用于判断是否隐藏添加标签按钮
+	    session.removeAttribute("cid");
+	    // String g=(String)request.getSession().getAttribute("g");//获取tagshot页面穿来的g值,用于判断是否隐藏添加标签按钮
 	  //  String k=(String) request.getSession().getAttribute("k");//获取taglist页面传过来的k值,用于判断是否隐藏添加标签按钮
 	   String g=request.getParameter("g");
 	    String tag = id;

@@ -112,7 +112,7 @@ public class ChechPictureController {
 	    example.setMysqlLength(iDisplayLength);
 
 	    if(!"".equals(tag)){
-	    	example.put("tags",tag);
+	    	example.put("tag",tag);
 	    }
 	    //是否有查看所有人权限
 
@@ -127,7 +127,7 @@ public class ChechPictureController {
 	    List list = new ArrayList();
 		for(Picture pp : ps){
 			
-			if(pp.getTags().contains(tag)){
+//			if(pp.getTags().contains(tag)){
 			
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pp.getQiniukey();
 			String burl="";
@@ -169,7 +169,7 @@ public class ChechPictureController {
 					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),"",pp.getDel()};
 			list.add(d);
 		}
-		}
+//		}
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);

@@ -47,7 +47,14 @@
 		<script src="<%=basePath %>resources/assets/js/html5shiv.js"></script>
 		<script src="<%=basePath %>resources/assets/js/respond.min.js"></script>
 		<![endif]-->
-
+<style type="text/css">
+	
+	.box{
+	
+		width:200px;
+		height:200px;
+	}
+</style>
 	</head>
 
 	<body>
@@ -142,7 +149,9 @@
                                        	<span class="dangger" style="color: red">*</span> A面：
                                     </div>
                                     <div class="col-lg-9">
-                                    	<input type="file" name="afile"/>
+                                    	 <input type="file" name="afile" id="upload" onchange="loadImageFile(event)">
+
+               						 <img id="image" src="" class="box">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -218,7 +227,9 @@
 										</select>
                                     </div>
                                     <div class="col-lg-7" id="fileDiv" >
-                                    	<input type="file" name="bfile"/>
+                                    	<input type="file" name="bfile" id="upload" onchange="loadImageFile1(event)">
+
+               						 <img id="image1" src="" class="box">
                                     </div>
                                     <div class="col-lg-7" id="textDiv" style="display: none;">
                                     	<input type="text" name="content" style="width:80%;" />
@@ -240,7 +251,7 @@
                             <br>
 			                <div  style="text-align: center">
 								<div >
-									<button class="btn btn-primary" type="button" onclick="submitform()">
+									<button class="btn btn-primary" type="submit" onclick="submitform()">
 										<i class="icon-ok bigger-110"></i>
 										提交
 									</button>
@@ -325,7 +336,23 @@
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
+	 function loadImageFile(event)
 
+     {
+
+             var image = document.getElementById('image');
+
+             image.src = URL.createObjectURL(event.target.files[0]); 
+
+     }; function loadImageFile1(event)
+
+     {
+
+             var image = document.getElementById('image1');
+
+             image.src = URL.createObjectURL(event.target.files[0]); 
+
+     };
 </script>		
 	</body>
 </html>

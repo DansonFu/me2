@@ -99,7 +99,7 @@
 			<input type="hidden"  id="searchid" value="${svalue }" />
 				<button class="btn" type="submit">
 				检索
-				</button>
+				</button><span style="color:red">(请输入你想查询的标签名称)</span>
 		</div>
 		</form>
 				
@@ -136,15 +136,18 @@ function ad(id){
 	var b=[];
 	for(var i=0;i<test.length;i++){
 	    var bFound = false;
+	   
 	    for(var j=i-1;j>=0;j--){
 	        if(test[i]==test[j]) {
 	        	test.splice(i,1);
 	        	test.splice(j,1);
+	        	
 	        	bFound=true;
 	        	break;
 	        	}
 	    }
-	    if(!bFound) b[b.length]=test[i]
+	    if(!bFound) b=test;
+	    b.length=test.length;
 	}
 	$("#arrid").val(b);
 	
@@ -169,11 +172,13 @@ function adtag(id){
 	        if(test[i]==test[j]) {
 	        	test.splice(i,1);
 	        	test.splice(j,1);
+	        	//alert(test);
 	        	bFound=true;
 	        	break;
 	        	}
 	    }
-	    if(!bFound) b[b.length]=test[i]
+	    if(!bFound) b=test;
+	    b.length=test.length;
 	}
 	$("#arridtag").val(b);
 	
