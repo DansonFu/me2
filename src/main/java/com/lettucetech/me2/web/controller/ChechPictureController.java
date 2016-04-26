@@ -66,9 +66,11 @@ public class ChechPictureController {
 //		example.setSord("desc");
 //		List<Picture> ps = pictureService.selectByParams(example);
 		String tag = request.getParameter("tag");
+		String id = request.getParameter("id");
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("tag",tag);
+		mav.addObject("id",id);
 		mav.setViewName("/admin/checkmetoo");
 		return mav;
 		
@@ -81,7 +83,7 @@ public class ChechPictureController {
 	 * @param aoData
 	 */
 	@RequestMapping("/amdin/check/metoo")
-	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String tag) {
+	public void getMetoo(HttpSession session,HttpServletResponse response,String aoData,String tag,String id) {
 		//TXtUser au = (TXtUser) session.getAttribute(Me2Constants.LOGIN_SESSION_DATANAME);
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
@@ -112,7 +114,12 @@ public class ChechPictureController {
 	    example.setMysqlLength(iDisplayLength);
 
 	    if(!"".equals(tag)){
-	    	example.put("tag",tag);
+	    	example.put("pid",Integer.valueOf(tag));
+	    	//example.put("type", "0");
+	    }
+	    if(!"".equals(id)){
+	    	example.put("tags",id);
+	    	//example.put("type", "0");
 	    }
 	    //是否有查看所有人权限
 
@@ -120,14 +127,14 @@ public class ChechPictureController {
 //			example.put("userId", userId);
 //		}
 //	    
-    int count = pictureService.countByParams(example);
-    List<Picture> ps = pictureService.selectByParams(example);
+        int count = pictureService.countByParams(example);
+        List<Picture> ps = pictureService.selectByParams(example);
 	    
 	    //拼接翻页数据
 	    List list = new ArrayList();
 		for(Picture pp : ps){
 			
-//			if(pp.getTags().contains(tag)){
+			//if(pp.getTags().contains(id)){
 			
 			String aurl = Me2Constants.QINIUPUBLICDOMAIN+"/"+pp.getQiniukey();
 			String burl="";
@@ -157,19 +164,17 @@ public class ChechPictureController {
 			}else{
 				bmood = "";
 			}
-			
-			String ts = "";
-			if(pp.getTags() == null){
-				ts = "";
+			String tt = "";
+			if(pp.getTags()==null){
+				tt="";
 			}else{
-				ts = pp.getTags();
+				tt=pp.getTags();
 			}
-			
-			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,mood,burl,bmood,type,ts,
+			String[] d = {pp.getPid().toString(),pp.getCustomer().getInneruser(),aurl,mood,burl,bmood,type,tt,
 					DateUtil.dateFormatToString(pp.getCreatTime(), "yyyy-MM-dd HH:mm:ss"),pp.getRecommend(),"",pp.getDel()};
 			list.add(d);
+		 // }
 		}
-//		}
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);
@@ -212,7 +217,7 @@ public class ChechPictureController {
 	 * @return
 	 */
 	@RequestMapping( "/admin/showcommendmetoo")
-	public void  getCommendMetoo(HttpSession session,HttpServletResponse response,String aoData){
+	public void  getCommendMetoo(HttpSession session,HttpServletResponse response,String aoData,String param){
 		
 		ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
 	    String sEcho = null;
@@ -259,7 +264,7 @@ public class ChechPictureController {
 				}
 			}else{
 				aa="";
-				bb=0;
+				bb=-1;
 			}
 			
 			
@@ -359,7 +364,7 @@ public class ChechPictureController {
 			}
 			Integer sort = 0;
 			for(int i=0;i<list1.size();i++){
-				if(list1.get(i)>sort){
+				if(list1.get(i)>	sort){
 					sort = list1.get(i);
 				}
 			}
@@ -492,6 +497,12 @@ public class ChechPictureController {
 		Integer a = prec.getSort();
 		Integer b = null;
 		
+		if(a==1){
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("/admin/firstcommend");
+			return mav;
+		}else{
+			
 		Criteria example = new Criteria();
 		example.put("sort", a-1);
 		List<Picturerecommend> lpc = picurerecommendService.selectByParams(example);
@@ -518,6 +529,7 @@ public class ChechPictureController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/showcommendcheck");
 		return mav;
+		}
 	}
 	
 	/**
@@ -532,7 +544,26 @@ public class ChechPictureController {
 		Integer a = prec.getSort();
 		Integer b = null;
 		
-		Criteria example = new Criteria();
+		Criteria  example  = new Criteria();
+		List<Picturerecommend> list = picurerecommendService.selectByParams(example);
+		List<Integer> list1 = new ArrayList<Integer>(); 
+		for(Picturerecommend pcs : list){
+			Integer c = pcs.getSort();
+			list1.add(c);
+		}
+		Integer sort = 0;
+		for(int i=0;i<list1.size();i++){
+			if(list1.get(i)>	sort){
+				sort = list1.get(i);
+			}
+		}
+		if(a==sort){
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("admin/lastcommend");
+			return mav;
+		}else{
+		
+		//Criteria example = new Criteria();
 		example.put("sort", a+1);
 		List<Picturerecommend> lpc = picurerecommendService.selectByParams(example);
 		for(Picturerecommend pc:lpc){
@@ -555,6 +586,7 @@ public class ChechPictureController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/showcommendcheck");
 		return mav;
+		}
 	}
 	
 	/**
@@ -615,7 +647,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 		example.put("pid",Integer.valueOf(pp) );
 	    example.setOrderByClause("creat_time");
 	    example.setSord("desc");
-	    example.put("del", "0");
+	    //example.put("del", "0");
 		int count = commentService.countByParams(example);
 		List<Comment> clist = commentService.selectByParams(example);
 		
@@ -632,7 +664,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 				aa = "";
 			}
 			String[] d = {cs.getCommentId().toString(),cs.getPid().toString(),cs.getCustomer().getInneruser(),cs.getContent(),
-					aa,""};
+					aa,cs.getDel()};
 			list.add(d);
 		}
 		
@@ -664,21 +696,34 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	@RequestMapping("/admin/delcontent/comment")
 	public  ModelAndView delcontentcheckdmetoo(HttpSession session,String commentId){
 		Comment c = commentService.selectByPrimaryKey(Integer.valueOf(commentId));
-		if("0".equals(c.getDel())){
+		//if("0".equals(c.getDel())){
 			c.setDel("1");
 			  commentService.updateByPrimaryKeySelective(c);
 			ModelAndView mav = new ModelAndView();
-			mav.setViewName("redirect:/admin/checkview/comment");
+			mav.setViewName("redirect:/admin/commendcheckmetoo");
 			return mav;
-		}else{
+		//}else{
 //			p.setDel("1");
 //			  pictureService.updateByPrimaryKeySelective(p);
-			ModelAndView mav = new ModelAndView();
-			mav.setViewName("redirect:/admin/checkview/comment");
-			return mav;
-		}
+//			ModelAndView mav = new ModelAndView();
+//			mav.setViewName("redirect:/admin/checkview/comment");
+//			return mav;
+//		}
 	}
 
+	/**
+	 * 蜜图评论内容当中恢复逻辑删除的方法
+	 * 
+	 */
+	@RequestMapping("/admin/delcontenta/comment")
+	public  ModelAndView delcontentacheckdmetoo(HttpSession session,String commentId){
+		Comment c = commentService.selectByPrimaryKey(Integer.valueOf(commentId));
+			c.setDel("0");
+			  commentService.updateByPrimaryKeySelective(c);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName("redirect:/admin/commendcheckmetoo");
+			return mav;
+	}
 	
 	/**
 	 * 查询蜜图信息
@@ -738,7 +783,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	public ModelAndView updatepicture(HttpSession session,String tags,String mood,String bmood,String gameId
 			,@RequestParam("afile") CommonsMultipartFile afile,@RequestParam("bfile") CommonsMultipartFile bfile
 			,String content,String type,String locationTitle,String locationContent,String pid,String bpid,
-			String[] cid,String[] commentContent,@RequestParam(value ="file",required = false) CommonsMultipartFile[] file){
+			String[] cid,String[] commentContent, String[] del, @RequestParam(value ="file",required = false) CommonsMultipartFile[] file){
 		String akey=null;
 		if(afile.getFileItem().getName()!=""){
 			try {
@@ -815,6 +860,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 				Comment record = new Comment();
 				record.setCommentId(Integer.parseInt(cid[i]));
 				record.setContent(commentContent[i]);
+				record.setDel(del[i]);
 				record.setQiniukey(key);
 				
 				commentService.updateByPrimaryKeySelective(record);

@@ -282,6 +282,11 @@
 								<br>
 							</c:if>
 						</div>
+						
+						<div class="col-lg-2 input-column">
+							<input name="del" value="${comment.del }">逻辑删除与否(0：否；1：是)
+						</div>
+						
 					</div>
 					
 					<!-- col-lg- -->
@@ -298,7 +303,7 @@
 				</button>
 
 				&nbsp; &nbsp; &nbsp;
-				<button class="btn" type="reset">
+				<button class="btn" type="reset" onclick="aa()">
 					<i class="icon-undo bigger-110"></i> 取消
 				</button>
 			</div>
@@ -356,6 +361,9 @@ $(document).ready(function(){
 
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
+	}
+	function aa(){
+		window.location = "<%=basePath %>/admin/commendcheckmetoo";
 	}
 
 </script>

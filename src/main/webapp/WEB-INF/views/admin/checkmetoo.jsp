@@ -32,7 +32,7 @@
 td{  
     width:100%;  
      word-break:break-all;/* keep不换行   换行break*/  
-     /*white-space:nowrap; 不换行 */  
+     /* white-space:nowrap;不换行 */  
      overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */  
      text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/  
 } 
@@ -58,13 +58,23 @@ td{
 		<h3 class="header smaller lighter blue">审核蜜图</h3>
 		<br>
 		<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/commendcheckmetoo" method="post" enctype="multipart/form-data">
-		<input type="text"   name="tag"   style="width:30%;" class="form-control search-query" placeholder="Type your query" />
+		<input type="text"   name="tag"   style="width:20%;" class="form-control search-query" placeholder="请输入蜜图id" />
 		<input type="hidden"  id="tag" value="${tag }" />
 																		<button type="button" class="btn btn-purple btn-sm"  onclick="submitform()">
 																			Search
 																			<i class="icon-search icon-on-right bigger-110"></i>
-																		</button><span style="color:red">(请输入你想查询的标签名称)</span>
+																		</button>
 		</form>
+		
+		<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/commendcheckmetoo" method="post" enctype="multipart/form-data">
+		<input type="text"   name="id"   style="width:30%;" class="form-control search-query" placeholder="请输入标签" />
+		<input type="hidden"  id="id" value="${id }" />
+																		<button type="button" class="btn btn-purple btn-sm"  onclick="submitforma()">
+																			Search
+																			<i class="icon-search icon-on-right bigger-110"></i>
+																		</button>
+		</form>
+		
 		<br>
 		<div class="table-responsive">
 			<table style="table-layout:fixed"   id="sample-table-2" class="table table-striped table-bordered table-hover" >
@@ -121,12 +131,24 @@ td{
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
+	function submitforma(){
+		$("#me2form").submit();
+		$(":button").attr("disabled", true);  
+	}
     
 	$(document).ready(function(){
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
+			"pagingType":   "full_numbers",
 			"bAutoWidth":false,
+			"language": {
+                "lengthMenu": "每页 _MENU_ 条记录",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)"
+            },
 			 //columns: [
 			         //  {
 			               //data: "content", class: "wordwrap ellipsis"
@@ -243,10 +265,13 @@ td{
 		  function retrieveData( sSource111,aoData111, fnCallback111) {
 			 // var ps = $('#ps').val();
               var tag=$('#tag').val();
+              var id=$('#id').val();
+              
 		      $.ajax({
 		          url : sSource111,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData111),
-		        	  "tag":tag
+		        	  "tag":tag,
+		        	  "id":id
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',

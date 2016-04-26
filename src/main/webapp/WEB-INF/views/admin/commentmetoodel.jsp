@@ -63,12 +63,16 @@
 	
 	
 function del(commentId){
-	if(confirm('确实删除该评论吗?')){
+	if(confirm('确实逻辑删除该评论吗?')){
 		window.location="<%=basePath %>admin/delcontent/comment?commentId="+commentId;
 	}
 }
 
-
+function dela(commentId){
+	if(confirm('要恢复逻辑删除该评论吗?')){
+		window.location="<%=basePath %>admin/delcontenta/comment?commentId="+commentId;
+	}
+}
 
 
 
@@ -93,10 +97,23 @@ $(document).ready(function(){
    	        {
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
-   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';  	        			
-   	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
-   	        			str += '<i class="icon-trash bigger-130"></i>';
-   	        			str += '</a>';
+   	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
+//   	        			str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
+//   	        			str += '<i class="icon-zoom-in bigger-130"></i>';
+//   	        			str += '</a>';
+//   	        			str += '<a class="green" href="javascript:void(0);" onclick="update('+"'"+data.aData[0]+"'"+')" >';
+//  	        			str += '<i class="icon-pencil bigger-130"></i>';
+// 	        			str += '</a>';
+   	        			
+   	        		if(data.aData[5]=="0"){
+	        				str += '<input type="button"  value="ON"  onclick="del('+"'"+data.aData[0]+"'"+')"/><br>';
+	        			}else if(data.aData[5]=="1"){
+	        				str += '<input type="button"  value="OFF"  onclick="dela('+"'"+data.aData[0]+"'"+')"/><br>';
+	        			}
+   	        			
+  // 	        			str += '<a class="red" href="javascript:void(0);" onclick="del('+"'"+data.aData[0]+"'"+')" >';
+   	//        			str += '<i class="icon-trash bigger-130"></i>';
+   //	        			str += '</a>';
    	        			
    	        		   return  str;
    	        	   }
@@ -113,9 +130,8 @@ $(document).ready(function(){
 
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
- 						data : {"aoData":JSON.stringify(aoData1113),
-		        	  //"pid":pid		  
-		        	 
+		          data : {"aoData":JSON.stringify(aoData1113)
+		        	 // "pp":pp
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
