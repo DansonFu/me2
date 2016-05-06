@@ -81,10 +81,20 @@ public class TagsSelectiveController {
 	    Taglist taglist1;
 	  
 	    if (str == null) {
+	    	if(i==null){
+	    		String tagslistid =(String)session.getAttribute("taglistid");
+		    	session.removeAttribute("taglistid");
+		    	conn=tagslistid;
+		    	taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(tagslistid));
+	    	}else{
 	      taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(i));
+	    	}
 	    }
+	    	
+	    
 	    else {
 	      taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(tag));
+	      session.setAttribute("taglistid",tag);
 	    }
 
 	    name = taglist1.getTitle();//如果是从taglist页面进来的,展示的名字为id获取的,如果是从tagshot页面进来的,展示的名字是conn获取的
@@ -229,7 +239,7 @@ public class TagsSelectiveController {
 	@RequestMapping("/admin/delselective")
 	public ModelAndView delList(HttpSession session,String id){
 		
-		tagshotService.deleteByPrimaryKey(Integer.valueOf(id));
+		tagsconnectionService.deleteByPrimaryKey(Integer.valueOf(id));
 //		 Criteria example = new Criteria();
 //		 example.put("id", id);
 //		 tagsconnectionService.deleteByParams(example);

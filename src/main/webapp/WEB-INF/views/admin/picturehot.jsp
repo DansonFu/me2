@@ -78,7 +78,7 @@ td{
 						<th class="center">用户</th>
 						<th class="center">A面</th>
 						<th class="center">A面心情</th>
-						<th class="hidden-480 center">B面</th>
+						<th class="center">B面</th>
 						<th class="center">B面类型</th>
 						<th class="center">标签</th>
 						<th class="center">热度</th>
@@ -179,7 +179,7 @@ td{
       	          
 			    	         ],
 			  "bServerSide": true,//这个用来指明是通过服务端来取数据
-		     "sAjaxSource": "<%=basePath %>admin/getmetoo/picturehot",  	//这个是请求的地址
+		     "sAjaxSource": "<%=basePath %>/admin/getmetoo/picturehot",  	//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
 		} );
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
@@ -198,7 +198,7 @@ td{
 		          async : false,
 		          success : function(result) {
 		              fnCallback111(result);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
-		              
+		             
 		          },
 		          error : function(msg) {
 		          }

@@ -83,6 +83,70 @@ public class MessageController {
 				}
 			}
 		}
+		Customer customer1=customerService.selectByPrimaryKey(Integer.valueOf(customerId));
+		if(customer1.getInneruser().equals("1")){
+			Gameface gameface= gamefaceService.selectByPrimaryKey(Integer.parseInt(customerId));
+			//设置解蜜申请为已处理
+			gameface.setProcessed("1");
+			gamefaceService.updateByPrimaryKey(gameface);
+			String dispose="agree";
+			//如果同意则加入gamecustomer表
+			if("agree".equals(dispose)){
+				Gamecustomer gamecustomer = new Gamecustomer();
+				gamecustomer.setPid(gameface.getPid());
+				gamecustomer.setCustomerId(gameface.getProposer());
+				
+				gamecustomerService.insertSelective(gamecustomer);
+			}
+			
+			//设置消息为已处理
+			 example = new Criteria();
+			example.put("pid", gameface.getPid());
+			example.put("type", 1);
+			example.put("proposer", gameface.getProposer());
+			List<Message> messages1 = messageService.selectByParams(example);
+			for(Message message : messages1){
+				message.setProcessed("1");
+				messageService.updateByPrimaryKey(message);
+			}
+
+			
+			
+			Customer customer = customerService.selectByPrimaryKey(gameface.getIssuer());
+			String mes = "";
+			
+			//存到对方用户的消息表中(注意用户身份的转换)
+			Message record = new Message();
+			if("agree".equals(dispose)){
+				record.setContent("为你解蜜了图片");
+				mes =customer.getUsername() + "为你解蜜了图片";
+			}else {
+				record.setContent("拒绝了你的解蜜申请");
+				mes =customer.getUsername() + "拒绝了你的解蜜申请";
+			}
+
+			record.setCreateTime(new Date(System.currentTimeMillis()+28800000));
+			record.setCustomerId(gameface.getProposer());
+			record.setPid(gameface.getPid());
+			record.setType("2");
+			record.setProposer(customer.getCustomerId());
+			messageService.insert(record);
+			
+			//发送系统推送消息
+			try {
+				if("agree".equals(dispose)){
+					IosPushUtil.pushMsgNotification(mes,gameface.getCustomer().getApppushtoken());
+				}
+			} catch (CommunicationException e) {
+				e.printStackTrace();
+			} catch (KeystoreException e) {
+				e.printStackTrace();
+			}
+
+			
+			RestfulResult result = new RestfulResult();
+			result.setSuccess(false);
+		}
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
@@ -106,6 +170,7 @@ public class MessageController {
 		example.setOrderByClause("create_time");
 		example.setSord("desc");
 //		example.put("processed", 0);
+		
 		List<Message> messages = messageService.selectByParams(example);
 		
 		RestfulResult result = new RestfulResult();
@@ -226,7 +291,7 @@ public class MessageController {
 			mes =customer.getUsername() + "拒绝了你的解蜜申请";
 		}
 
-		record.setCreateTime(new Date());
+		record.setCreateTime(new Date(System.currentTimeMillis()+28800000));
 		record.setCustomerId(gameface.getProposer());
 		record.setPid(gameface.getPid());
 		record.setType("2");

@@ -52,7 +52,15 @@
 	</head>
 
 	<body>
-
+		<%-- <form action="<%=basePath %>admin/viewTags" id="formid" method="post">
+		<div style="float:right;">
+		 &nbsp; &nbsp;<input type="text" name="search"/>
+			<input type="hidden"  id="searchid" value="${svalue }" />
+				<button class="btn" type="submit">
+				检索
+				</button><span style="color:red">(请输入你想查询的用户ID)</span>
+		</div>
+		</form> --%>
 		<div class="page-content">
 				<div class="panel panel-default">
                     <div class="panel-heading">
@@ -69,6 +77,7 @@
                         </div>
                         <h4>用户信息</h4>
                     </div>
+                    	
                     <div class="panel-body">
                             <div class="row form-group">
                             	<div class="col-lg-6">
@@ -223,6 +232,7 @@
 										<i class="icon-undo bigger-110"></i>
 										下一个
 									</button>
+								
 								</div>
 							</div>
                     </div>
@@ -476,6 +486,12 @@
              image.src = URL.createObjectURL(event.target.files[0]); 
 
      };
+     function search(){
+    	 
+    var searchid =  $("#searchid").val();
+    window.location="";
+     }
+    
 </script>		
 	</body>
 </html>

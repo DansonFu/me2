@@ -137,7 +137,7 @@
           </if>
           <if test="condition.type == 1" >
 	         <foreach collection="condition.taglist" item="tag"  separator="and" open="and (" close=")">
-	         	 tags like '%${tag}%'
+	         	 tags =tag
 	         </foreach>
           </if>
       </if>

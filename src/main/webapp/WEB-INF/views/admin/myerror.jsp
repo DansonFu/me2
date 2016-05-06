@@ -13,7 +13,7 @@
 <title></title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-
+<META HTTP-EQUIV=REFRESH CONTENT="4;URL=viewTags">
 <link href="<%=basePath %>resources/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace.min.css" />
@@ -27,16 +27,25 @@
 <script src="<%=basePath %>resources/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
-
+<script>
+function countDown(secs){
+  yu.innerText=secs;
+  if(--secs>0){
+       setTimeout("countDown("+secs+")",1000);
+    }
+  }
+ countDown(2);
+ </script>
 </head>
 <body>
+
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">已添加过</h3>
+		<h3 class="header smaller lighter blue"><input type="text" value="${tagslist }">已添加过<input type="text" value="${tag }"></h3>
 		<br>
 		<br>
-		
+		<span id=yu>4秒后自动跳到上一页面</span><a href=javascript:countDown></a>
 	</div>
 	</div>
 </div>

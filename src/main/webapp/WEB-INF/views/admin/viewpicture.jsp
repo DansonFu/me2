@@ -47,7 +47,14 @@
 		<script src="<%=basePath %>resources/assets/js/html5shiv.js"></script>
 		<script src="<%=basePath %>resources/assets/js/respond.min.js"></script>
 		<![endif]-->
-
+<style type="text/css">
+	
+	.box{
+	
+		width:100px;
+		height:100px;
+	}
+</style>
 	</head>
 
 	<body>
@@ -145,32 +152,41 @@
                                        	<span class="dangger" style="color: red">*</span> A面：
                                     </div>
                                     <div class="col-lg-3" style="height: 120px">
-                                    	<input type="file" name="afile"/>
+                                    	<input type="file" name="afile" id="afileid" onchange="loadImageFile(event)"/>
                                     </div>
-                                    <div class="col-lg-6" style="height: 120px">
+                                    <div class="col-lg-6" style="height: 120px" id="apic">
                                     	<a href="${domain}/${picture.qiniukey}" target="_blank" id="afront">
                                         <img  src="${domain}/${picture.qiniukey}" width="100px" height="100px"/>
                                        </a>
                                     </div>
+                                    <div id="imageid">
+                                    	 <img id="image" src="" class="box" ><br>
+                                    </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="col-lg-3 input-column" style="height: 120px">
+                                    <div class="col-lg-3 input-column" style="height: 80px">
                                        	B面：
                                     </div>
-                                    <div class="col-lg-2" style="height: 120px">
+                                    <div class="col-lg-2" style="height: 100px">
                                     	<select name="type" onchange="changetype()">
 											<option value="1" <c:if test="${picture.bpicture.type == '1'}">selected="selected"</c:if>>图片</option>
 											<option value="2" <c:if test="${picture.bpicture.type == '2'}">selected="selected"</c:if>>URL</option>
-										 	<option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>										 
+										 	<%-- <option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>										 
 											<option value="4" <c:if test="${picture.bpicture.type == '4'}">selected="selected"</c:if>>音频</option>
-											 
+											  --%>
 										</select>
                                     </div>
-                                    <div class="col-lg-7" id="fileDiv" style="height: 120px">
-                                    	<input type="file" name="bfile"/>
+                                    <div class="col-lg-7" id="fileDiv" style="height: 300px">
+                                    	<input type="file" name="bfile" id="bfileid" onchange="loadImageFile1(event)"/>
+                                    	<div  style="height: 100px" id="bpic">
                                     	<a href="${picture.bpicture.qiniukey}" target="_blank" id="abpicture">
-                                        <img  src="${picture.bpicture.qiniukey}" width="80px" height="80px" id="imgbpicture"/>
+                                        <img  src="${picture.bpicture.qiniukey}" width="100px" height="100px" id="imgbpicture"/>
                                        </a>
+                                       </div>
+                                       <br>
+                                        <div id="imageid1">
+                                    	 <img id="image1" src="" class="box" ><br>
+                                    </div>
                                     </div>
                                     <div class="col-lg-7" id="textDiv" style="display: none;height: 120px">
                                     	<input type="text" name="content" style="width:80%;" value="${picture.bpicture.qiniukey}"/>
@@ -307,7 +323,7 @@
 					</button>
 
 					&nbsp; &nbsp; &nbsp;
-					<button class="btn" type="reset">
+					<button class="btn" type="button" onclick="breset()">
 						<i class="icon-undo bigger-110"></i>
 						取消
 					</button>
@@ -336,10 +352,13 @@
 		<script src="<%=basePath %>resources/assets/js/ace.min.js"></script>		
 		
 <script type="text/javascript">
+
 //7牛公共资源域名
 var domain = '${domain}';
 $(document).ready(function(){
 	changetype();
+	loadImageFile(event);
+	loadImageFile1(event);
 }); 
 	function changetype(){
 		var type = $("select[name='type']").val();
@@ -363,7 +382,33 @@ $(document).ready(function(){
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
+	function breset(){
+		window.location="<%=basePath %>admin/viewmetoo";
+	}
+function loadImageFile(event){
+	 var image = document.getElementById('image');
 
+     image.src = URL.createObjectURL(event.target.files[0]); 
+     if(image.src!=""){
+    	 $("#apic").css('display','none');
+    	 $("#imageid").css('display','block');
+     }else if(image.src==""){
+    	 $("#imageid").css('display','none');
+    	 $("#apic").css('display','block');
+     }
+}
+function loadImageFile1(event){
+	 var image = document.getElementById('image1');
+
+    image.src = URL.createObjectURL(event.target.files[0]); 
+    if(image.src!=""){
+   	 $("#bpic").css('display','none');
+   	 $("#imageid1").css('display','block');
+    }else if(image.src==""){
+   	 $("#imageid1").css('display','none');
+   	 $("#bpic").css('display','block');
+    }
+}
 </script>		
 	</body>
 </html>

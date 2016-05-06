@@ -85,11 +85,11 @@ public class PictureController {
 				Gson gson=new Gson();
 				Picture A=gson.fromJson(pa,Picture.class);
 					
-					A.setCreatTime(new Date());
+					A.setCreatTime(new Date(System.currentTimeMillis()+28800000));
 					pictureService.insertSelective(A);
 					
 					Picture B=gson.fromJson(pb,Picture.class);
-					B.setCreatTime(new Date());
+					B.setCreatTime(new Date(System.currentTimeMillis()+28800000));
 					B.setParentId(A.getPid());
 					pictureService.insertSelective(B);
 				
@@ -219,6 +219,7 @@ public class PictureController {
 		example.put("plist", plist);
 		//热门标签集合的ID为1
 		example.put("tagslistId", 1);
+		 
 		List<Picturehot> phs = picturehotService.selectByParams4Rand(example);
 		
 		for(Picturehot ph : phs){
@@ -262,7 +263,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pictures/tagslist", method ={RequestMethod.GET})
-	public ModelAndView getTagslistPictures(HttpSession session,String id,String offset,String length){
+	public ModelAndView getTagslistPictures(HttpSession session,String id,String sort,String offset,String length){
 		//客户端已查询的蜜图列表防止重复
 		String attributename = "plist"+id;
 		List<Integer> plist = (List<Integer>)session.getAttribute(attributename);
@@ -296,7 +297,8 @@ public class PictureController {
 		example.put("size", size);
 		example.put("plist", plist);
 		//热门标签集合的ID为1
-		example.put("tagslistId", id);
+		example.put("tagslistId", 1);
+		example.put("sort", sort);
 		List<Picturehot> phs = picturehotService.selectByParams4Rand(example);
 		
 		for(Picturehot ph : phs){

@@ -120,7 +120,7 @@ public class RecommendController {
 	    Criteria example = new Criteria();
 	    
 	    example.setOrderByClause("sort");
-	    example.setSord("asc");
+	    example.setSord("desc");
 	   example.setDistinct(true);
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
