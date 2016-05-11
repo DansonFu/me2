@@ -258,30 +258,37 @@ if(str2==null && str1==null){
         String c = d[i];
         Criteria example =new Criteria();
         example.put("tagslistId", str);
-//        List<Tagsconnection> tagconn= tagsconnectionService.selectByParams(example);
-//        for (Tagsconnection taglist : tagconn) {
-        	Tagshot tag = this.tagshotService.selectByPrimaryKey(Integer.valueOf(c));
-//        	
-//			if(tag.getId().equals(taglist.getTagsId())){
-//				ModelAndView mav = new ModelAndView();
-//				request.getSession().setAttribute("str1",str);
-//				Taglist tagslist=tagListService.selectByPrimaryKey(Integer.valueOf(str));
-//				String title=tagslist.getTitle();
-//				String tags=tag.getTag();
-//				mav.addObject("title",title);
-//				mav.addObject("tsg",tags);
-//				 mav.setViewName("/admin/myerror");
-//				 return mav;
-//			}else{
-				
-				conn.setTagsId(tag.getId());
-				conn.setTagslistId(str);
-				
-				this.tagsconnectionService.insert(conn);
-			}
-//		}
-
-//      }
+        Tagshot tag = this.tagshotService.selectByPrimaryKey(Integer.valueOf(c));
+        List<Tagsconnection> tagconn= tagsconnectionService.selectByParams(example);
+        if(tagconn.size()==0){
+        	conn.setTagsId(tag.getId());
+			conn.setTagslistId(str);
+			
+			this.tagsconnectionService.insert(conn);
+        }else{
+        for (Tagsconnection taglist : tagconn) {
+        	
+			if(tag.getId().equals(taglist.getTagsId())){
+				ModelAndView mav = new ModelAndView();
+				request.getSession().setAttribute("str1",str);
+				Taglist tagslist=tagListService.selectByPrimaryKey(Integer.valueOf(str));
+				String title=tagslist.getTitle();
+				String tags=tag.getTag();
+				mav.addObject("title",title);
+				mav.addObject("tag",tags);
+				mav.setViewName("/admin/myerror");
+				return mav;
+		
+        }
+        }
+        	
+        	conn.setTagsId(tag.getId());
+        	conn.setTagslistId(str);
+        	
+        	this.tagsconnectionService.insert(conn);
+        
+      }
+      }
       String cid = conn.getTagslistId();
       request.getSession().setAttribute("cid", cid);
       // request.getSession().setAttribute("g",g);
@@ -326,17 +333,18 @@ if(str2==null && str1==null){
         List<Recommend> commend =recommendService.selectByParams(example);
         Tagshot tag = this.tagshotService.selectByPrimaryKey(Integer.valueOf(c));
         List list1 = new ArrayList();
+       
         for (Recommend pcs : commend) {
         	
-//        	if(tag.getId().equals(pcs.getTagId())){
-//        		 request.getSession().setAttribute("str2",str);
-//        		String tagslist="热门";
-//        		 mav.addObject("tagslist",tagslist);
-//        		 String tags=tag.getTag();
-//        		 mav.addObject("tag", tags);
-//        		 mav.setViewName("/admin/myerror");
-//        		 return mav;
-//        	}else {
+        	if(tag.getId().equals(pcs.getTagId())){
+        		 request.getSession().setAttribute("str2",str);
+        		String tagslist="热门";
+        		 mav.addObject("title",tagslist);
+        		 String tags=tag.getTag();
+        		 mav.addObject("tag", tags);
+        		 mav.setViewName("/admin/myerror");
+        		 return mav;
+        	}
         		
           Integer b = pcs.getSort();
           if(b==null){

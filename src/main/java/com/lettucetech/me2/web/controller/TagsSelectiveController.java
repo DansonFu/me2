@@ -83,7 +83,7 @@ public class TagsSelectiveController {
 	    if (str == null) {
 	    	if(i==null){
 	    		String tagslistid =(String)session.getAttribute("taglistid");
-		    	session.removeAttribute("taglistid");
+		    	
 		    	conn=tagslistid;
 		    	taglist1 = tagListService.selectByPrimaryKey(Integer.valueOf(tagslistid));
 	    	}else{

@@ -42,7 +42,8 @@ function countDown(secs){
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue"><input type="text" value="${tagslist }">已添加过<input type="text" value="${tag }"></h3>
+		<h3 class="header smaller lighter blue"><input type="text" value="${title }" style="border:0px">已添加过<input type="text" value="${tag }" style="border:0px"></h3>
+		<h3 class="header smaller lighter blue"><input type="text" value="${tag }" style="border:0px"><span>之后的标签要重新添加哦!</span></h3>
 		<br>
 		<br>
 		<span id=yu>4秒后自动跳到上一页面</span><a href=javascript:countDown></a>
