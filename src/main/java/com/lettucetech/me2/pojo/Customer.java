@@ -152,20 +152,38 @@ public class Customer implements Serializable {
      * 是否内部用户 0 否，1 是
      */
     private String inneruser;
+
     /**
      * 手机唯一标识，APP消息推送
      */
     private String apppushtoken;
-    
-    public String getApppushtoken() {
-		return apppushtoken;
-	}
 
-	public void setApppushtoken(String apppushtoken) {
-		this.apppushtoken = apppushtoken;
-	}
+    /**
+     * 用户所在学校
+     */
+    private String school;
 
-	public Integer getCustomerId() {
+    /**
+     * 积分
+     */
+    private Integer score;
+
+    /**
+     * 等级
+     */
+    private Integer grade;
+
+    /**
+     * 普通账户
+     */
+    private Integer generalAccount;
+
+    /**
+     * 众筹账户
+     */
+    private Integer raisePublicAccounts;
+
+    public Integer getCustomerId() {
         return customerId;
     }
 
@@ -606,5 +624,95 @@ public class Customer implements Serializable {
      */
     public void setInneruser(String inneruser) {
         this.inneruser = inneruser;
+    }
+
+    /**
+     * @return 手机唯一标识，APP消息推送
+     */
+    public String getApppushtoken() {
+        return apppushtoken;
+    }
+
+    /**
+     * @param apppushtoken 
+	 *            手机唯一标识，APP消息推送
+     */
+    public void setApppushtoken(String apppushtoken) {
+        this.apppushtoken = apppushtoken;
+    }
+
+    /**
+     * @return 用户所在学校
+     */
+    public String getSchool() {
+        return school;
+    }
+
+    /**
+     * @param school 
+	 *            用户所在学校
+     */
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    /**
+     * @return 积分
+     */
+    public Integer getScore() {
+        return score;
+    }
+
+    /**
+     * @param score 
+	 *            积分
+     */
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    /**
+     * @return 等级
+     */
+    public Integer getGrade() {
+        return grade;
+    }
+
+    /**
+     * @param grade 
+	 *            等级
+     */
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
+
+    /**
+     * @return 普通账户
+     */
+    public Integer getGeneralAccount() {
+        return generalAccount;
+    }
+
+    /**
+     * @param generalAccount 
+	 *            普通账户
+     */
+    public void setGeneralAccount(Integer generalAccount) {
+        this.generalAccount = generalAccount;
+    }
+
+    /**
+     * @return 众筹账户
+     */
+    public Integer getRaisePublicAccounts() {
+        return raisePublicAccounts;
+    }
+
+    /**
+     * @param raisePublicAccounts 
+	 *            众筹账户
+     */
+    public void setRaisePublicAccounts(Integer raisePublicAccounts) {
+        this.raisePublicAccounts = raisePublicAccounts;
     }
 }

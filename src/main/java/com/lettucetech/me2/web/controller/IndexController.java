@@ -21,7 +21,9 @@ import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.MD5;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
+import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.service.CustomerService;
+import com.lettucetech.me2.service.PictureService;
 
 /**
  * 网站首页controller
@@ -35,7 +37,8 @@ public class IndexController {
 	
 	@Autowired
 	private CustomerService customerService;
-	
+	@Autowired
+	private PictureService pictureService;
 	/**
 	 * 手机号唯一性验证
 	 * @param session
@@ -91,23 +94,34 @@ public class IndexController {
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public void register(HttpSession session,HttpServletResponse response,  Customer customer) {
 		Criteria example = new Criteria();
-		example.put("phone", customer.getPhone());
-		List<Customer> list1 = customerService.selectByParams(example);
-		example.clear();
+//		example.put("phone", customer.getPhone());
+//		List<Customer> list1 = customerService.selectByParams(example);
+//		example.clear();
 		example.put("username", customer.getUsername());
 		List<Customer> list2 = customerService.selectByParams(example);
 		
 		RestfulResult result = new RestfulResult();
-		if(list1.size()>0){
-			result.setSuccess(false);
-			result.setMessage("该号码已存在");
-		}else if(list2.size()>0){
+//		if(list1.size()>0){
+//			result.setSuccess(false);
+//			result.setMessage("该号码已存在");
+//		}else 
+		if(list2.size()>0){
 			result.setSuccess(false);
 			result.setMessage("该呢称已存在");
 		}else{
 			customer.setCreatTime(new Date());
 			//MD5加密
-			customer.setPassword(MD5.getMD5(customer.getPassword()));
+			//customer.setPassword(MD5.getMD5(customer.getPassword()));
+			
+			customer.setCity(customer.getCity());
+			
+			customer.setSex(customer.getSex());
+			customer.setHeadimgurl(customer.getHeadimgurl());
+			customer.setSource(customer.getSource());
+			customer.setApppushtoken(customer.getApppushtoken());
+			customer.setSourceid(customer.getSourceid());
+			customer.setUsername(customer.getUsername());
+			
 			if(customerService.insertSelective(customer)>0){
 				result.setSuccess(true);
 				result.setMessage("注册成功");
@@ -177,8 +191,21 @@ public class IndexController {
 		example.put("sourceid", uid);
 		example.put("source", source);
 		List<Customer> list = customerService.selectByParams(example);
-		
 		RestfulResult result = new RestfulResult();
+		for (Customer customer : list) {
+			if(uid.equals(customer.getSourceid())){
+				Customer cust=customerService.selectByParams4Rand(example);
+				example.clear();
+				example.put("customerId",cust);
+				//缺少一个关注
+				List<Picture> pic=pictureService.selectByParams(example);
+				result.setSuccess(true);
+				result.setObj(pic);
+			}else{
+				result.setSuccess(true);
+				result.setMessage("该用户未注册");
+			}
+		}
 		if(list.size()>0){
 			if(!"0".equals(list.get(0).getDel())){
 				result.setSuccess(false);
@@ -189,19 +216,19 @@ public class IndexController {
 				session.setAttribute(Me2Constants.METOOUSER, list.get(0));
 			}
 			
-		}else{
-			Customer customer = new Customer();
-			customer.setSource(source);
-			customer.setSourceid(uid);
-			customer.setCreatTime(new Date());
-			if(customerService.insertSelective(customer)==1){
-				result.setSuccess(true);
-				result.setObj(customer);
-				session.setAttribute(Me2Constants.METOOUSER, customer);
-			}else{
-				result.setSuccess(false);
-				result.setMessage("注册失败请联系管理员");
-			}
+//		}else{
+//			Customer customer = new Customer();
+//			customer.setSource(source);
+//			customer.setSourceid(uid);
+//			customer.setCreatTime(new Date());
+//			if(customerService.insertSelective(customer)==1){
+//				result.setSuccess(true);
+//				result.setObj(customer);
+//				session.setAttribute(Me2Constants.METOOUSER, customer);
+//			}else{
+//				result.setSuccess(false);
+//				result.setMessage("注册失败请联系管理员");
+//			}
 		}
 		
 		ModelAndView mav = new ModelAndView();

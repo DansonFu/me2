@@ -33,6 +33,11 @@
     <result column="del" property="del" jdbcType="CHAR" />
     <result column="inneruser" property="inneruser" jdbcType="CHAR" />
     <result column="apppushtoken" property="apppushtoken" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="general_account" property="generalAccount" jdbcType="INTEGER" />
+    <result column="raise_public_accounts" property="raisePublicAccounts" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -126,15 +131,30 @@
       <if test="condition.apppushtoken != null" >
          and apppushtoken = #{condition.apppushtoken}
       </if>
+      <if test="condition.school != null" >
+         and school = #{condition.school}
+      </if>
+      <if test="condition.score != null" >
+         and score = #{condition.score}
+      </if>
+      <if test="condition.grade != null" >
+         and grade = #{condition.grade}
+      </if>
+      <if test="condition.generalAccount != null" >
+         and general_account = #{condition.generalAccount}
+      </if>
+      <if test="condition.raisePublicAccounts != null" >
+         and raise_public_accounts = #{condition.raisePublicAccounts}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
     customer_id, unionid, openid, subscribe, nickname, sex, city, country, province, 
     language, headimgurl, subscribe_time, remark, groupid, realname, password, total_credit, 
     current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
-    source, creat_time, update_time, login_time, sourceid, del, inneruser, apppushtoken
+    source, creat_time, update_time, login_time, sourceid, del, inneruser, apppushtoken, 
+    school, score, grade, general_account, raise_public_accounts
   </sql>
-  
   <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     SELECT * FROM customer 
     <where>
@@ -187,7 +207,6 @@
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
-  
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >
@@ -225,18 +244,17 @@
       remark, groupid, realname, password, total_credit, current_shop, 
       current_latitude, current_longtitude, current_precision, phone, username, 
       source, creat_time, update_time, login_time, sourceid, del, inneruser, 
-      apppushtoken)
+      apppushtoken, school, score, grade, general_account, raise_public_accounts
+      )
     values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
       #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
       #{remark}, #{groupid}, #{realname}, #{password}, #{totalCredit}, #{currentShop}, 
       #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
       #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}, 
-      #{apppushtoken})
+      #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
-   	<selectKey keyProperty="customerId" order="AFTER" resultType="java.lang.Integer">
-		SELECT LAST_INSERT_ID()
-	</selectKey>
     insert into customer
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -332,6 +350,21 @@
       <if test="apppushtoken != null" >
         apppushtoken,
       </if>
+      <if test="school != null" >
+        school,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="generalAccount != null" >
+        general_account,
+      </if>
+      <if test="raisePublicAccounts != null" >
+        raise_public_accounts,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -426,6 +459,21 @@
       </if>
       <if test="apppushtoken != null" >
         #{apppushtoken},
+      </if>
+      <if test="school != null" >
+        #{school},
+      </if>
+      <if test="score != null" >
+        #{score},
+      </if>
+      <if test="grade != null" >
+        #{grade},
+      </if>
+      <if test="generalAccount != null" >
+        #{generalAccount},
+      </if>
+      <if test="raisePublicAccounts != null" >
+        #{raisePublicAccounts},
       </if>
     </trim>
   </insert>
@@ -531,6 +579,21 @@
       <if test="record.apppushtoken != null" >
         apppushtoken = #{record.apppushtoken},
       </if>
+      <if test="record.school != null" >
+        school = #{record.school},
+      </if>
+      <if test="record.score != null" >
+        score = #{record.score},
+      </if>
+      <if test="record.grade != null" >
+        grade = #{record.grade},
+      </if>
+      <if test="record.generalAccount != null" >
+        general_account = #{record.generalAccount},
+      </if>
+      <if test="record.raisePublicAccounts != null" >
+        raise_public_accounts = #{record.raisePublicAccounts},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -568,7 +631,12 @@
       sourceid = #{record.sourceid},
       del = #{record.del},
       inneruser = #{record.inneruser},
-      apppushtoken = #{record.apppushtoken}
+      apppushtoken = #{record.apppushtoken},
+      school = #{record.school},
+      score = #{record.score},
+      grade = #{record.grade},
+      general_account = #{record.generalAccount},
+      raise_public_accounts = #{record.raisePublicAccounts}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -666,6 +734,21 @@
       <if test="apppushtoken != null" >
         apppushtoken = #{apppushtoken},
       </if>
+      <if test="school != null" >
+        school = #{school},
+      </if>
+      <if test="score != null" >
+        score = #{score},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade},
+      </if>
+      <if test="generalAccount != null" >
+        general_account = #{generalAccount},
+      </if>
+      <if test="raisePublicAccounts != null" >
+        raise_public_accounts = #{raisePublicAccounts},
+      </if>
     </set>
     where customer_id = #{customerId}
   </update>
@@ -700,7 +783,12 @@
       sourceid = #{sourceid},
       del = #{del},
       inneruser = #{inneruser},
-      apppushtoken = #{apppushtoken}
+      apppushtoken = #{apppushtoken},
+      school = #{school},
+      score = #{score},
+      grade = #{grade},
+      general_account = #{generalAccount},
+      raise_public_accounts = #{raisePublicAccounts}
     where customer_id = #{customerId}
   </update>
 </mapper>

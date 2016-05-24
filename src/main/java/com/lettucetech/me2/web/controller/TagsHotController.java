@@ -249,7 +249,7 @@ if(str2==null && str1==null){
 	    return mav;
   }else{
     String str = (String)session.getAttribute("ss");
-    session.removeAttribute("ss");
+    
     
     	String g="1";
       Tagsconnection conn = new Tagsconnection();
@@ -278,7 +278,10 @@ if(str2==null && str1==null){
 				mav.addObject("tag",tags);
 				mav.setViewName("/admin/myerror");
 				return mav;
-		
+//				JOptionPane.showMessageDialog(null, tags+"已添加", title,JOptionPane.ERROR_MESSAGE);
+//				 ModelAndView mav = new ModelAndView();
+//				 mav.setViewName("redirect:/admin/viewTags");
+//				 return mav;
         }
         }
         	

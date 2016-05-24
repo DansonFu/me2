@@ -300,7 +300,7 @@ function see(){
 		
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
-			"bFilter": false,
+			"bFilter":false,
 			"bPaginate":true,
 			//"data": datas,
 			"bInfo":true,
