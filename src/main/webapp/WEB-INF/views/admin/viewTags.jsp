@@ -36,9 +36,11 @@
 <div class="page-content">
 	<div class="row">
 	<div class="col-xs-12">
-		<h3 class="header smaller lighter blue">所有标签</h3>
+		<h3 class="header smaller lighter blue">所有标签<input type="text" name="name" value="${name}" style="border:0px"></h3>
 		<input type="hidden" id="flagid" value="${flag }" name="flag"/>
-		
+		<div style="float:left;">
+		<input type="button" name="" value="查看热门标签页面" onclick="see()"/>
+		</div>
 		</div>
 		<form action="<%=basePath %>admin/getmetooByTags" id="wayid" method="post">
 		 <div class="col-lg-6">
@@ -64,7 +66,7 @@
 		<div style="float:right;">
 			
           		                                                
-				<button class="btn" type="submit" onclick="flash()">
+				<button class="btn" type="submit" id="flashid" onclick="flash()">
 				刷新数据
 				</button>
 		</div>
@@ -112,6 +114,7 @@
 						<th class="center">热度</th>
 						<th class="center">帖子数</th>
 						<th class="center">蜜友</th>
+						<th class="center">密图</th>
 						<th class="center">更新时间</th>
 						<th class="center">添加到精选集合</th>
 						<th class="center">添加到热门标签</th>
@@ -126,6 +129,11 @@
 	<input type="button" style="display: none" id="bu" name="bu" onclick="but()">
 	<input type="hidden"  id="aid" name="aname" value="${avalue }">		
 <script type="text/javascript">
+/* flash();
+function flash(){
+	document.getElementById("flashid").click();
+}
+ */
 //创建一个数组
 var test = [];
 //ad方法接收复选框的id,判断后将选中的复选框的id添加到input标签中,提交到后台的方法
@@ -256,7 +264,9 @@ function sub(){
         currentBtn1.style.display = "none"; //style中的display属性
     }
 	};
-
+function see(){
+	window.location="<%=basePath %>admin/viewrecommend";
+}
 	$(document).ready(function(){
 		
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
@@ -303,9 +313,15 @@ function sub(){
 			              { "asSorting": [ "desc", "asc"] },
 			            ],
 			"aoColumnDefs": [               
-			                
+{
+	     	        	  
+	     	        	   "aTargets": [5],
+	     	        	   "fnRender":function(data,type){
+	     	        		   return  '<img src="'+data.aData[5]+'" width="100px" height="100px">';
+	     	        	   }
+	     	           }, 
     	        	{
-    	        	   "aTargets": [6],
+    	        	   "aTargets": [7],
     	        	 
     	        	   "fnRender":function(data,type){
     	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
@@ -317,7 +333,7 @@ function sub(){
 			    	           }, 
 				
 				{
-					"aTargets" : [7],
+					"aTargets" : [8],
 					 
 					"fnRender" : function(data,type) {
 						var str = '<div  class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
@@ -364,11 +380,11 @@ function sub(){
 				}
 					 if(name==b){
 						//alert(1);
-			oTable1.fnSetColumnVis(7, false);
+			oTable1.fnSetColumnVis(8, false);
 					}
 					 else if(name==a){
 						//alert(1);
-			 oTable1.fnSetColumnVis(6, false);
+			 oTable1.fnSetColumnVis(7, false);
 					}
 					};
 			

@@ -20,6 +20,7 @@ import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil;
 import com.lettucetech.me2.pojo.Criteria;
+import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picturehot;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
@@ -28,6 +29,7 @@ import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
+import com.lettucetech.me2.web.form.MessageForm;
 
 
 @Controller
@@ -75,7 +77,7 @@ public class PicturehotController {
 	  //  TXtUser au = (TXtUser)session.getAttribute("adminuser");
 
 	    ArrayList jsonarray = (ArrayList)JsonUtil.Decode(aoData);
-	    String sEcho = null;
+	   	 String sEcho = null;
 	    int iDisplayStart = 0;
 	    int iDisplayLength = 0;
 
@@ -91,12 +93,12 @@ public class PicturehotController {
 	        iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
 	    Criteria example = new Criteria();
-	    example.setOrderByClause("tagslist_id");
+	    example.setOrderByClause("id");
 	    example.setSord("asc");
 	    example.setMysqlOffset(Integer.valueOf(iDisplayStart));
 	    example.setMysqlLength(Integer.valueOf(iDisplayLength));
-	    example.put("state", "0");
-	    example.put("front", "a");
+//	    example.put("state", "0");
+//	    example.put("front", "a");
 	    if(!"-1".equals(hotid)){
 	    	example.put("tagslistId",hotid);
 	    	
@@ -109,7 +111,7 @@ public class PicturehotController {
 	    List<Picturehot> hot=pictureHotService.selectByParams(example);
 	   
 	    List list = new ArrayList();
-
+	  
 	    for (Picturehot obj : hot) {
 	    	Taglist li=tagListService.selectByPrimaryKey(Integer.valueOf(obj.getTagslistId()));
 	    	String title=li.getTitle();
@@ -119,17 +121,17 @@ public class PicturehotController {
 			          String bmood = "";
 
 			          if (obj.getPicture().getBpicture() != null) {
-			            if (obj.getPicture().getBpicture().getType().equals("1"))
+			            if (obj.getPicture().getBpicture().getType().equals("1")){
 			              burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-			            else {
+			            }else if(obj.getPicture().getBpicture().getType().equals("3") || obj.getPicture().getBpicture().getType().equals("4")){
+			            	burl=QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
+			            }else {
 			              burl = obj.getPicture().getBpicture().getQiniukey();
 			            }
 			            type = obj.getPicture().getBpicture().getType();
-			            if(obj.getPicture().getBpicture().getMood().equals("")){
-			            	bmood="他很懒,没有留下心情!!";
-			            }else{
+			           
 			            	bmood=obj.getPicture().getBpicture().getMood();
-			            }
+			           
 			          }
 			        
 

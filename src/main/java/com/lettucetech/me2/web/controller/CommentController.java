@@ -42,7 +42,7 @@ public class CommentController {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
 		
-		comment.setCreatTime(new Date());
+		comment.setCreatTime(new Date(System.currentTimeMillis()+28800000));
 		int num = commentService.insertSelective(comment);
 		if(num ==1){
 			result.setSuccess(true);
@@ -55,7 +55,7 @@ public class CommentController {
 		Picture picture = pictureService.selectByPrimaryKey(comment.getPid());
 		Message record = new Message();
 		record.setContent(comment.getContent());
-		record.setCreateTime(new Date());
+		record.setCreateTime(new Date(System.currentTimeMillis()+28800000));
 		record.setCustomerId(picture.getCustomerId());
 		record.setPid(comment.getPid());
 		record.setType("5");

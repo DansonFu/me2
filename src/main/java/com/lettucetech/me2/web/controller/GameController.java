@@ -1,7 +1,9 @@
 package com.lettucetech.me2.web.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -105,7 +107,7 @@ public class GameController {
 	public ModelAndView saveGamesFace(HttpSession session,Gameface gameface) {
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
-		gameface.setCreateTime(new Date());
+		gameface.setCreateTime(new Date(System.currentTimeMillis()+28800000));
 		int i = gamefaceService.insertSelective(gameface);
 		if(i==1){
 			result.setSuccess(true);
@@ -114,11 +116,12 @@ public class GameController {
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
 			
-			
+			//picture.getCustomer().getInneruser();
 			//存到用户消息表中
+			
 			Message record = new Message();
 			record.setContent("请求你为他解蜜图片");
-			record.setCreateTime(new Date());
+			record.setCreateTime(new Date(System.currentTimeMillis()+28800000));
 			record.setCustomerId(picture.getCustomerId());
 			record.setPid(gameface.getPid());
 			record.setType("1");
@@ -141,14 +144,9 @@ public class GameController {
 		gamecustomer.setPid(Integer.parseInt(pid));
 		gamecustomer.setCustomerId(-1);
 		 Customer customer =customerService.selectByPrimaryKey(gamecustomer.getCustomerId());
-		    if (customer.getInneruser().equals("1"))
-		    {
+		 
 		      this.gamecustomerService.insertSelective(gamecustomer);
-		    }
-		    else if (customer.getInneruser().equals("0"))
-		    {
-		      this.gamecustomerService.insertSelective(gamecustomer);
-		    }
+		    
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
 		

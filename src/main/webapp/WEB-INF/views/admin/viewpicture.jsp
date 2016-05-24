@@ -47,7 +47,17 @@
 		<script src="<%=basePath %>resources/assets/js/html5shiv.js"></script>
 		<script src="<%=basePath %>resources/assets/js/respond.min.js"></script>
 		<![endif]-->
+<style type="text/css">
+	
+	.box{
+	
+		width:100px;
+		height:100px;
+		border:0;
+	}
+	
 
+</style>
 	</head>
 
 	<body>
@@ -145,32 +155,45 @@
                                        	<span class="dangger" style="color: red">*</span> A面：
                                     </div>
                                     <div class="col-lg-3" style="height: 120px">
-                                    	<input type="file" name="afile"/>
+                                    	<input type="file" name="afile" id="afileid" onchange="loadImageFile(event)"/>
                                     </div>
-                                    <div class="col-lg-6" style="height: 120px">
+                                    <div class="col-lg-6" style="height: 120px" id="apic">
                                     	<a href="${domain}/${picture.qiniukey}" target="_blank" id="afront">
                                         <img  src="${domain}/${picture.qiniukey}" width="100px" height="100px"/>
                                        </a>
                                     </div>
+                                    <div id="imageid">
+                                    	 <img id="image" src="" class="box"  ><br>
+                                    	  <input type="button" value="验证图片的大小" id="aid" onclick="checkfile()">
+               						 <input type="text" name="sname" id="sid" value=""><span>KB</span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="col-lg-3 input-column" style="height: 120px">
+                                    <div class="col-lg-3 input-column" style="height: 80px">
                                        	B面：
                                     </div>
-                                    <div class="col-lg-2" style="height: 120px">
+                                    <div class="col-lg-2" style="height: 100px">
                                     	<select name="type" onchange="changetype()">
 											<option value="1" <c:if test="${picture.bpicture.type == '1'}">selected="selected"</c:if>>图片</option>
 											<option value="2" <c:if test="${picture.bpicture.type == '2'}">selected="selected"</c:if>>URL</option>
-										 	<option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>										 
+										 	<%-- <option value="3" <c:if test="${picture.bpicture.type == '3'}">selected="selected"</c:if>>视频</option>										 
 											<option value="4" <c:if test="${picture.bpicture.type == '4'}">selected="selected"</c:if>>音频</option>
-											 
+											  --%>
 										</select>
                                     </div>
-                                    <div class="col-lg-7" id="fileDiv" style="height: 120px">
-                                    	<input type="file" name="bfile"/>
+                                    <div class="col-lg-7" id="fileDiv" style="height: 300px">
+                                    	<input type="file" name="bfile" id="bfileid" onchange="loadImageFile1(event)"/>
+                                    	<div  style="height: 100px" id="bpic">
                                     	<a href="${picture.bpicture.qiniukey}" target="_blank" id="abpicture">
-                                        <img  src="${picture.bpicture.qiniukey}" width="80px" height="80px" id="imgbpicture"/>
+                                        <img  src="${picture.bpicture.qiniukey}" width="100px" height="100px" id="imgbpicture"/>
                                        </a>
+                                       </div>
+                                       
+                                        <div id="imageid1">
+                                    	 <img id="image1" src="" class="box" ><br>
+                                     <input type="button" value="验证图片的大小" id="aid" onclick="checkfile1()">
+               						 <input type="text" name="bsname" id="bsid" value=""><span>KB</span>
+                                    </div>
                                     </div>
                                     <div class="col-lg-7" id="textDiv" style="display: none;height: 120px">
                                     	<input type="text" name="content" style="width:80%;" value="${picture.bpicture.qiniukey}"/>
@@ -307,7 +330,7 @@
 					</button>
 
 					&nbsp; &nbsp; &nbsp;
-					<button class="btn" type="reset">
+					<button class="btn" type="button" onclick="breset()">
 						<i class="icon-undo bigger-110"></i>
 						取消
 					</button>
@@ -336,11 +359,16 @@
 		<script src="<%=basePath %>resources/assets/js/ace.min.js"></script>		
 		
 <script type="text/javascript">
+
 //7牛公共资源域名
 var domain = '${domain}';
 $(document).ready(function(){
 	changetype();
+	loadImageFile(event);
+	loadImageFile1(event);
 }); 
+
+//判断b面的类型,显示和隐藏元素
 	function changetype(){
 		var type = $("select[name='type']").val();
 		if(type=='1'){
@@ -353,6 +381,7 @@ $(document).ready(function(){
 			$("#bfeelDiv").css('display','none');
 		}
 	}
+	//提交
 	function submitform(){
 
 		if($("input[name='tags']").val()==null||$("input[name='tags']").val()==""){
@@ -363,7 +392,142 @@ $(document).ready(function(){
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
+	//返回
+	function breset(){
+		window.location="<%=basePath %>admin/viewmetoo";
+	}
+	//预览图片的方法
+function loadImageFile(event){
+	 var image = document.getElementById('image');
 
+     image.src = URL.createObjectURL(event.target.files[0]); 
+     if(image.src!=""){
+    	 $("#apic").css('display','none');
+    	 $("#imageid").css('display','block');
+     }else if(image.src==""){
+    	
+    	 $("#apic").css('display','block');
+     }
+}
+$("#imageid").css('display','none');
+$("#imageid1").css('display','none');
+function loadImageFile1(event){
+	 var image = document.getElementById('image1');
+
+    image.src = URL.createObjectURL(event.target.files[0]); 
+    if(image.src!=""){
+   	 $("#bpic").css('display','none');
+   	 $("#imageid1").css('display','block');
+    }else if(image.src==""){
+   	
+   	 $("#bpic").css('display','block');
+    }
+}
+//判断图片大小的方法
+function checkfile(){  
+	 
+	 var maxsize = 2*1024*1024;//2M  
+    var errMsg = "上传的附件文件不能超过2M！！！";  
+    var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过2M，建议使用IE、FireFox、Chrome浏览器。";  
+    var  browserCfg = {};  
+    var ua = window.navigator.userAgent;  
+    if (ua.indexOf("MSIE")>=1){  
+        browserCfg.ie = true;  
+    }else if(ua.indexOf("Firefox")>=1){  
+        browserCfg.firefox = true;  
+    }else if(ua.indexOf("Chrome")>=1){  
+        browserCfg.chrome = true;  
+    }  
+    try{  
+   	
+   		 var obj_file = document.getElementById("afileid");  
+   	 
+   	 if(obj_file.value==""){  
+   	 
+            alert("请先选择上传文件");  
+            return;  
+        }  
+        var filesize = 0;  
+        if(browserCfg.firefox || browserCfg.chrome ){  
+            filesize = obj_file.files[0].size;  
+        }else if(browserCfg.ie){  
+            var obj_img = document.getElementById('tempimg');  
+            obj_img.dynsrc=obj_file.value;  
+            filesize = obj_img.fileSize;  
+        }else{  
+            alert(tipMsg);  
+        return;  
+        }  
+        if(filesize==-1){  
+            alert(tipMsg);  
+            return;  
+        }else if(filesize>maxsize){  
+            alert(errMsg);  
+            return;  
+        }else{  
+            
+            var ssize=filesize/1024;
+           
+            $("#sid").val(ssize);
+          
+            return;  
+        }  
+    }catch(e){  
+        alert(e);  
+    }  
+} ; 
+function checkfile1(){  
+	
+	 var maxsize = 2*1024*1024;//2M  
+    var errMsg = "上传的附件文件不能超过2M！！！";  
+    var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过2M，建议使用IE、FireFox、Chrome浏览器。";  
+    var  browserCfg = {};  
+    var ua = window.navigator.userAgent;  
+    if (ua.indexOf("MSIE")>=1){  
+        browserCfg.ie = true;  
+    }else if(ua.indexOf("Firefox")>=1){  
+        browserCfg.firefox = true;  
+    }else if(ua.indexOf("Chrome")>=1){  
+        browserCfg.chrome = true;  
+    }  
+    try{  
+   	 
+   		 var obj_file = document.getElementById("bfileid");  
+   	 
+   	if(obj_file.value==""){  
+   	 
+            alert("请先选择上传文件");  
+            return;  
+        }  
+        var filesize = 0;  
+        if(browserCfg.firefox || browserCfg.chrome ){  
+            filesize = obj_file.files[0].size;  
+        }else if(browserCfg.ie){  
+            var obj_img = document.getElementById('tempimg');  
+            obj_img.dynsrc=obj_file.value;  
+            filesize = obj_img.fileSize;  
+        }else{  
+            alert(tipMsg);  
+        return;  
+        }  
+        if(filesize==-1){  
+            alert(tipMsg);  
+            return;  
+        }else if(filesize>maxsize){  
+            alert(errMsg);  
+            return;  
+        }else{  
+            
+            var ssize=filesize/1024;
+           
+           	$("#bsid").val(ssize);
+            
+            return;  
+        }  
+    }catch(e){  
+        alert(e);  
+    }  
+}  ;
 </script>		
 	</body>
 </html>

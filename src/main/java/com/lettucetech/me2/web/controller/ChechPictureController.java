@@ -143,8 +143,10 @@ public class ChechPictureController {
 			if(pp.getBpicture()!=null){
 				if("1".equals(pp.getBpicture().getType())){
 					burl = QiniuUtil.getDownUrl(pp.getBpicture().getQiniukey());
+				}else if("3".equals(pp.getBpicture().getType()) || "4".equals(pp.getBpicture().getType())){
+					burl = QiniuUtil.getDownUrl(pp.getBpicture().getQiniukey());
 				}else{
-					burl = pp.getBpicture().getQiniukey();
+					burl=pp.getBpicture().getQiniukey();
 				}
 				type = pp.getBpicture().getType();
 			}

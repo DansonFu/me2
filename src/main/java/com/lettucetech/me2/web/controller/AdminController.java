@@ -1,11 +1,14 @@
 package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -285,6 +288,7 @@ public class AdminController {
 		} catch (QiniuException e) {
 			e.printStackTrace();
 		}
+		
 		//a面
 		Picture ap = new Picture();
 		ap.setQiniukey(akey);
@@ -293,7 +297,8 @@ public class AdminController {
 		ap.setMood(feel);
 		ap.setCustomerId(Integer.valueOf(customerId));
 		ap.setFront("a");
-		ap.setCreatTime(new Date());
+		ap.setGameId(Integer.parseInt(gameid));
+		ap.setCreatTime(new Date(System.currentTimeMillis()+28800000));
 		ap.setLocationTitle(locationTitle);
 		ap.setLocationContent(locationContent);
 		pictureService.insertSelective(ap);
@@ -330,8 +335,8 @@ public class AdminController {
 			bp.setQiniukey(bkey);
 			bp.setFront("b");
 			bp.setType(type);
-			bp.setGameId(Integer.valueOf(gameid));
-			bp.setCreatTime(new Date());
+			//bp.setGameId(Integer.valueOf(gameid));
+			bp.setCreatTime(new Date(System.currentTimeMillis()+28800000));
 			bp.setParentId(ap.getPid());
 			bp.setMood(bfeel);
 			pictureService.insertSelective(bp);
@@ -602,39 +607,7 @@ public class AdminController {
 		          list.add(d);
 		        }
 		      
-//		    } else {
-//		      count = this.metooService.countByParams(example);
-//		      List<TXtMetoo> metoo = this.metooService.selectByParams4MetooPicture(example);
-//
-//		      for (TXtMetoo obj : metoo) {
-//		        String aurl =  Me2Constants.QINIUPUBLICDOMAIN+"/" + obj.getPicture().getQiniukey();
-//		        String burl = "";
-//		        String type = "";
-//		        String bmood = "";
-//
-//		        if (obj.getPicture().getBpicture() != null) {
-//		          if (obj.getPicture().getBpicture().getType().equals("1"))
-//		            burl = QiniuUtil.getDownUrl(obj.getPicture().getBpicture().getQiniukey());
-//		          else {
-//		            burl = obj.getPicture().getBpicture().getQiniukey();
-//		          }
-//		          type = obj.getPicture().getBpicture().getType();
-//	
-//		          if(obj.getPicture().getBpicture().getMood().equals("")){
-//		            	bmood="他很懒,没有留下心情!!";
-//		            }else{
-//		            	bmood=obj.getPicture().getBpicture().getMood();
-//		            }
-//		        }
 
-	
-
-//		        String[] d = { obj.getPicture().getPid().toString(), obj.getPicture().getCustomer().getUsername(), aurl, obj.getPicture().getMood(), burl, type, 
-//		          obj.getPicture().getTags(), bmood, obj.getUser().getName(), 
-//		          DateUtil.dateFormatToString(obj.getPicture().getCreatTime(), "yyyy-MM-dd HH:mm:ss"), "" };
-//		        list.add(d);
-//		      }
-//		    }
 		DataTablePaginationForm dtpf = new DataTablePaginationForm();
 		dtpf.setsEcho(sEcho);
 		dtpf.setiTotalDisplayRecords(count);
@@ -730,6 +703,7 @@ public class AdminController {
 		ap.setTags(tags.replaceAll("\\s*", "").replaceAll("#", ","));
 		ap.setMood(mood);
 		ap.setFront("a");
+		ap.setGameId(Integer.parseInt(gameId));
 		ap.setLocationTitle(locationTitle);
 		ap.setLocationContent(locationContent);
 		pictureService.updateByPrimaryKeySelective(ap);
@@ -756,7 +730,7 @@ public class AdminController {
 			bp.setQiniukey(bkey);
 			bp.setFront("b");
 			bp.setType(type);
-			bp.setGameId(Integer.valueOf(gameId));
+			
 			bp.setParentId(ap.getPid());
 			bp.setMood(bmood);
 			if(bpid==null || bpid==""){
@@ -839,4 +813,5 @@ public class AdminController {
 		}
 		return flag;
 	}
+
 }
