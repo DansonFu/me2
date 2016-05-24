@@ -21,6 +21,7 @@ public class Picture implements Serializable {
      */
     private Integer customerId;
 
+    private Customer customer;
     /**
      * 发布时间
      */
@@ -35,14 +36,19 @@ public class Picture implements Serializable {
      * 心情
      */
     private String mood;
+   
 
-    /**
+	/**
      * a:a面   b:b面
      */
     private String front;
 
     /**
-     * B面类型:1、图片2、文字3、视频4、音频5、URL
+     * B面类型:
+1、图片
+2、文字
+3、视频
+4、音频
      */
     private String type;
 
@@ -97,6 +103,15 @@ public class Picture implements Serializable {
     private Integer gameId;
 
     /**
+     * B面
+     */
+    private Picture bpicture;
+    
+    /**
+     * 评论数
+     */
+    private int commentCount;
+    /**
      * 逻辑删除0否 1 删除
      */
     private String del;
@@ -105,18 +120,66 @@ public class Picture implements Serializable {
      * 是否推荐0 :否 1:是
      */
     private String recommend;
-
+    
     /**
      * 被@的用户
      */
     private Integer atCustomerId;
-
+    private Customer atCustomer;
     /**
      * 是否已查看过 0:否 1:是
      */
     private String atSeen;
+    
+    public Integer getAtCustomerId() {
+		return atCustomerId;
+	}
 
-    /**
+	public Customer getAtCustomer() {
+		return atCustomer;
+	}
+
+	public void setAtCustomer(Customer atCustomer) {
+		this.atCustomer = atCustomer;
+	}
+
+	public void setAtCustomerId(Integer atCustomerId) {
+		this.atCustomerId = atCustomerId;
+	}
+
+	public String getAtSeen() {
+		return atSeen;
+	}
+
+	public void setAtSeen(String atSeen) {
+		this.atSeen = atSeen;
+	}
+
+	public String getDel() {
+		return del;
+	}
+
+	public void setDel(String del) {
+		this.del = del;
+	}
+
+	public String getRecommend() {
+		return recommend;
+	}
+
+	public void setRecommend(String recommend) {
+		this.recommend = recommend;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
+	/**
      * @return 蜜图id
      */
     public Integer getPid() {
@@ -222,7 +285,11 @@ public class Picture implements Serializable {
     }
 
     /**
-     * @return B面类型:1、图片2、文字3、视频4、音频5、URL
+     * @return B面类型:
+1、图片
+2、文字
+3、视频
+4、音频
      */
     public String getType() {
         return type;
@@ -230,7 +297,11 @@ public class Picture implements Serializable {
 
     /**
      * @param type 
-	 *            B面类型:1、图片2、文字3、视频4、音频5、URL
+	 *            B面类型:
+1、图片
+2、文字
+3、视频
+4、音频
      */
     public void setType(String type) {
         this.type = type;
@@ -386,63 +457,20 @@ public class Picture implements Serializable {
         this.gameId = gameId;
     }
 
-    /**
-     * @return 逻辑删除0否 1 删除
-     */
-    public String getDel() {
-        return del;
-    }
+	public Picture getBpicture() {
+		return bpicture;
+	}
 
-    /**
-     * @param del 
-	 *            逻辑删除0否 1 删除
-     */
-    public void setDel(String del) {
-        this.del = del;
-    }
+	public void setBpicture(Picture bpicture) {
+		this.bpicture = bpicture;
+	}
 
-    /**
-     * @return 是否推荐0 :否 1:是
-     */
-    public String getRecommend() {
-        return recommend;
-    }
+	public Customer getCustomer() {
+		return customer;
+	}
 
-    /**
-     * @param recommend 
-	 *            是否推荐0 :否 1:是
-     */
-    public void setRecommend(String recommend) {
-        this.recommend = recommend;
-    }
-
-    /**
-     * @return 被@的用户
-     */
-    public Integer getAtCustomerId() {
-        return atCustomerId;
-    }
-
-    /**
-     * @param atCustomerId 
-	 *            被@的用户
-     */
-    public void setAtCustomerId(Integer atCustomerId) {
-        this.atCustomerId = atCustomerId;
-    }
-
-    /**
-     * @return 是否已查看过 0:否 1:是
-     */
-    public String getAtSeen() {
-        return atSeen;
-    }
-
-    /**
-     * @param atSeen 
-	 *            是否已查看过 0:否 1:是
-     */
-    public void setAtSeen(String atSeen) {
-        this.atSeen = atSeen;
-    }
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+    
 }
