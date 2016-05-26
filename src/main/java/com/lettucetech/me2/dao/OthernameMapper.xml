@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lettucetech.me2.dao.AdventureMapper" >
-  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Adventure" >
+<mapper namespace="com.lettucetech.me2.dao.OthernameMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Othername" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="adpicture" property="adpicture" jdbcType="VARCHAR" />
+    <result column="schoolid" property="schoolid" jdbcType="INTEGER" />
+    <result column="othername" property="othername" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
-      <if test="condition.adpicture != null" >
-         and adpicture = #{condition.adpicture}
+      <if test="condition.schoolid != null" >
+         and schoolid = #{condition.schoolid}
+      </if>
+      <if test="condition.othername != null" >
+         and othername = #{condition.othername}
       </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, adpicture
+    id, schoolid, othername
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -21,7 +25,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from adventure
+    from othername
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -33,56 +37,65 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from adventure
+    from othername
     where id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from adventure
+    delete from othername
     where id = #{id}
   </delete>
   <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    delete from adventure
+    delete from othername
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Adventure" >
-    insert into adventure (id, adpicture)
-    values (#{id}, #{adpicture})
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Othername" >
+    insert into othername (id, schoolid, othername)
+    values (#{id}, #{schoolid}, #{othername})
   </insert>
-  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Adventure" >
-    insert into adventure
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Othername" >
+    insert into othername
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="adpicture != null" >
-        adpicture,
+      <if test="schoolid != null" >
+        schoolid,
+      </if>
+      <if test="othername != null" >
+        othername,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id},
       </if>
-      <if test="adpicture != null" >
-        #{adpicture},
+      <if test="schoolid != null" >
+        #{schoolid},
+      </if>
+      <if test="othername != null" >
+        #{othername},
       </if>
     </trim>
   </insert>
   <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
-    select count(*) from adventure
+    select count(*) from othername
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByParamsSelective" parameterType="map" >
-    update adventure
+    update othername
     <set >
       <if test="record.id != null" >
         id = #{record.id},
       </if>
-      <if test="record.adpicture != null" >
-        adpicture = #{record.adpicture},
+      <if test="record.schoolid != null" >
+        schoolid = #{record.schoolid},
+      </if>
+      <if test="record.othername != null" >
+        othername = #{record.othername},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -90,25 +103,30 @@
     </if>
   </update>
   <update id="updateByParams" parameterType="map" >
-    update adventure
+    update othername
     set id = #{record.id},
-      adpicture = #{record.adpicture}
+      schoolid = #{record.schoolid},
+      othername = #{record.othername}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Adventure" >
-    update adventure
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Othername" >
+    update othername
     <set >
-      <if test="adpicture != null" >
-        adpicture = #{adpicture},
+      <if test="schoolid != null" >
+        schoolid = #{schoolid},
+      </if>
+      <if test="othername != null" >
+        othername = #{othername},
       </if>
     </set>
     where id = #{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Adventure" >
-    update adventure
-    set adpicture = #{adpicture}
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Othername" >
+    update othername
+    set schoolid = #{schoolid},
+      othername = #{othername}
     where id = #{id}
   </update>
 </mapper>

@@ -2,7 +2,7 @@ package com.lettucetech.me2.pojo;
 
 import java.io.Serializable;
 
-public class Adventure implements Serializable {
+public class Advertis implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

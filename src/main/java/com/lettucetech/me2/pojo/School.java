@@ -16,14 +16,14 @@ public class School implements Serializable {
     private String schoolName;
 
     /**
-     * 学校的地址
+     * 学校经度
      */
-    private String schoolAddress;
+    private String schoolLongtitude;
 
     /**
-     * 学校的别名(简称)
+     * 纬度
      */
-    private String schoolOtherName;
+    private String schoolLatitude;
 
     /**
      * 所在的城市
@@ -66,33 +66,33 @@ public class School implements Serializable {
     }
 
     /**
-     * @return 学校的地址
+     * @return 学校经度
      */
-    public String getSchoolAddress() {
-        return schoolAddress;
+    public String getSchoolLongtitude() {
+        return schoolLongtitude;
     }
 
     /**
-     * @param schoolAddress 
-	 *            学校的地址
+     * @param schoolLongtitude 
+	 *            学校经度
      */
-    public void setSchoolAddress(String schoolAddress) {
-        this.schoolAddress = schoolAddress;
+    public void setSchoolLongtitude(String schoolLongtitude) {
+        this.schoolLongtitude = schoolLongtitude;
     }
 
     /**
-     * @return 学校的别名(简称)
+     * @return 纬度
      */
-    public String getSchoolOtherName() {
-        return schoolOtherName;
+    public String getSchoolLatitude() {
+        return schoolLatitude;
     }
 
     /**
-     * @param schoolOtherName 
-	 *            学校的别名(简称)
+     * @param schoolLatitude 
+	 *            纬度
      */
-    public void setSchoolOtherName(String schoolOtherName) {
-        this.schoolOtherName = schoolOtherName;
+    public void setSchoolLatitude(String schoolLatitude) {
+        this.schoolLatitude = schoolLatitude;
     }
 
     /**

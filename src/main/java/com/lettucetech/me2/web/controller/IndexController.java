@@ -1,6 +1,7 @@
 package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,9 +20,15 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.MD5;
+
+import com.lettucetech.me2.pojo.Advertis;
+import com.lettucetech.me2.pojo.Attention;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Picture;
+
+import com.lettucetech.me2.service.AdvertisService;
+import com.lettucetech.me2.service.AttentionService;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.PictureService;
 
@@ -39,6 +46,11 @@ public class IndexController {
 	private CustomerService customerService;
 	@Autowired
 	private PictureService pictureService;
+	@Autowired
+	private AttentionService attentionService;
+	
+	@Autowired
+	private AdvertisService advertisService;
 	/**
 	 * 手机号唯一性验证
 	 * @param session
@@ -121,7 +133,7 @@ public class IndexController {
 			customer.setApppushtoken(customer.getApppushtoken());
 			customer.setSourceid(customer.getSourceid());
 			customer.setUsername(customer.getUsername());
-			
+			customer.setSchool(customer.getSchool());
 			if(customerService.insertSelective(customer)>0){
 				result.setSuccess(true);
 				result.setMessage("注册成功");
@@ -197,10 +209,19 @@ public class IndexController {
 				Customer cust=customerService.selectByParams4Rand(example);
 				example.clear();
 				example.put("customerId",cust);
-				//缺少一个关注
-				List<Picture> pic=pictureService.selectByParams(example);
+				//当前用户所关注的所有人
+				List<Attention> attentions=attentionService.selectByParams(example);
+				List p=new ArrayList();
+				for (Attention attention : attentions) {
+					
+					example.clear();
+					example.put("customerId",attention.getAttentionCustomerId() );
+					List<Picture> pic=pictureService.selectByParams(example);
+					p.add(pic);
+				}
 				result.setSuccess(true);
-				result.setObj(pic);
+				result.setObj(p);
+				result.setObj(attentions);
 			}else{
 				result.setSuccess(true);
 				result.setMessage("该用户未注册");
@@ -236,6 +257,74 @@ public class IndexController {
 		return mav;
 	}
 
+	/**
+	 * 关注指定用户
+	 * @param session
+	 * @param customerId
+	 * @param attentionCustomerId
+	 * @return
+	 */
+	@RequestMapping(value="/attention/{customerId}/{attentionCustomerId}",method=RequestMethod.POST)
+	public ModelAndView Attentionsomebody(HttpSession session,@PathVariable String customerId,@PathVariable String attentionCustomerId){
+		Attention attention=new Attention();
+		attention.setCustomerId(Integer.valueOf(customerId));
+		attention.setAttentionCustomerId(Integer.valueOf(attentionCustomerId));
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setMessage("关注成功");
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	/**
+	 * 取消关注指定用户
+	 * @param session
+	 * @param customerId
+	 * @param attentionCustomerId
+	 * @return
+	 */
+	@RequestMapping(value="/attention/{customerId}/{attentionCustomerId}/del",method=RequestMethod.POST)
+	public ModelAndView AttentionDelsomebody(HttpSession session,@PathVariable String customerId,@PathVariable String attentionCustomerId){
+		Criteria example = new Criteria();
+		example.put("customerId",customerId);
+		example.put("attentionCustomerId",attentionCustomerId);
+		RestfulResult result = new RestfulResult();
+		List<Attention> list=attentionService.selectByParams(example);
+		if(list.size()==0){
+			result.setMessage("该用户未关注");
+			result.setSuccess(false);
+		}else{
+			for (Attention attention : list) {
+			attentionService.deleteByPrimaryKey(Integer.valueOf(attention.getId()));
+			}
+			
+			result.setSuccess(true);
+			result.setMessage("已取消关注");
+		}
+		
+		
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 	
-
+	/**
+	 * 获取广告信息
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/advertis",method=RequestMethod.GET)
+	public ModelAndView adventureAndView (HttpSession session){
+		Criteria example = new Criteria();
+		List<Advertis> advertis=advertisService.selectByParams(example);
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(advertis);
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	
 }

@@ -99,40 +99,7 @@ public class AdminController {
 		return "login";
 	}
 	
-	@RequestMapping({"/h5Test"})
-	  public String h5Test(HttpSession session)
-	  {
-	    TXtUser user = (TXtUser)session.getAttribute("adminuser");
-
-	    if (user != null) {
-	      return "redirect:/admin/H5test";
-	    }
-
-	    return "/admin/H5test1";
-	  }
-
-	  @RequestMapping({"/h5Test1"})
-	  public String h5Test1(HttpSession session) {
-	    TXtUser user = (TXtUser)session.getAttribute("adminuser");
-
-	    if (user != null) {
-	      return "redirect:/admin/H5test";
-	    }
-
-	    return "/admin/H5test1";
-	  }
-
-	  @RequestMapping({"/h5Test2"})
-	  public String h5Test2(HttpSession session)
-	  {
-	    TXtUser user = (TXtUser)session.getAttribute("adminuser");
-
-	    if (user != null) {
-	      return "redirect:/admin/H5test";
-	    }
-
-	    return "/admin/H5test1";
-	  }
+	
 	/**
 	 * 退出
 	 * @param session

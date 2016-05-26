@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.School" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
-    <result column="school_address" property="schoolAddress" jdbcType="VARCHAR" />
-    <result column="school_other_name" property="schoolOtherName" jdbcType="VARCHAR" />
+    <result column="school_longtitude" property="schoolLongtitude" jdbcType="VARCHAR" />
+    <result column="school_latitude" property="schoolLatitude" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
   </resultMap>
@@ -14,11 +14,11 @@
       <if test="condition.schoolName != null" >
          and school_name = #{condition.schoolName}
       </if>
-      <if test="condition.schoolAddress != null" >
-         and school_address = #{condition.schoolAddress}
+      <if test="condition.schoolLongtitude != null" >
+         and school_longtitude = #{condition.schoolLongtitude}
       </if>
-      <if test="condition.schoolOtherName != null" >
-         and school_other_name = #{condition.schoolOtherName}
+      <if test="condition.schoolLatitude != null" >
+         and school_latitude = #{condition.schoolLatitude}
       </if>
       <if test="condition.city != null" >
          and city = #{condition.city}
@@ -29,7 +29,7 @@
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, school_name, school_address, school_other_name, city, province
+    id, school_name, school_longtitude, school_latitude, city, province
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -63,9 +63,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.School" >
-    insert into school (id, school_name, school_address, school_other_name, city, province
+    insert into school (id, school_name, school_longtitude, school_latitude, city, province
       )
-    values (#{id}, #{schoolName}, #{schoolAddress}, #{schoolOtherName}, #{city}, #{province}
+    values (#{id}, #{schoolName}, #{schoolLongtitude}, #{schoolLatitude}, #{city}, #{province}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.School" >
@@ -77,11 +77,11 @@
       <if test="schoolName != null" >
         school_name,
       </if>
-      <if test="schoolAddress != null" >
-        school_address,
+      <if test="schoolLongtitude != null" >
+        school_longtitude,
       </if>
-      <if test="schoolOtherName != null" >
-        school_other_name,
+      <if test="schoolLatitude != null" >
+        school_latitude,
       </if>
       <if test="city != null" >
         city,
@@ -97,11 +97,11 @@
       <if test="schoolName != null" >
         #{schoolName},
       </if>
-      <if test="schoolAddress != null" >
-        #{schoolAddress},
+      <if test="schoolLongtitude != null" >
+        #{schoolLongtitude},
       </if>
-      <if test="schoolOtherName != null" >
-        #{schoolOtherName},
+      <if test="schoolLatitude != null" >
+        #{schoolLatitude},
       </if>
       <if test="city != null" >
         #{city},
@@ -126,11 +126,11 @@
       <if test="record.schoolName != null" >
         school_name = #{record.schoolName},
       </if>
-      <if test="record.schoolAddress != null" >
-        school_address = #{record.schoolAddress},
+      <if test="record.schoolLongtitude != null" >
+        school_longtitude = #{record.schoolLongtitude},
       </if>
-      <if test="record.schoolOtherName != null" >
-        school_other_name = #{record.schoolOtherName},
+      <if test="record.schoolLatitude != null" >
+        school_latitude = #{record.schoolLatitude},
       </if>
       <if test="record.city != null" >
         city = #{record.city},
@@ -147,8 +147,8 @@
     update school
     set id = #{record.id},
       school_name = #{record.schoolName},
-      school_address = #{record.schoolAddress},
-      school_other_name = #{record.schoolOtherName},
+      school_longtitude = #{record.schoolLongtitude},
+      school_latitude = #{record.schoolLatitude},
       city = #{record.city},
       province = #{record.province}
     <if test="_parameter != null" >
@@ -161,11 +161,11 @@
       <if test="schoolName != null" >
         school_name = #{schoolName},
       </if>
-      <if test="schoolAddress != null" >
-        school_address = #{schoolAddress},
+      <if test="schoolLongtitude != null" >
+        school_longtitude = #{schoolLongtitude},
       </if>
-      <if test="schoolOtherName != null" >
-        school_other_name = #{schoolOtherName},
+      <if test="schoolLatitude != null" >
+        school_latitude = #{schoolLatitude},
       </if>
       <if test="city != null" >
         city = #{city},
@@ -179,8 +179,8 @@
   <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.School" >
     update school
     set school_name = #{schoolName},
-      school_address = #{schoolAddress},
-      school_other_name = #{schoolOtherName},
+      school_longtitude = #{schoolLongtitude},
+      school_latitude = #{schoolLatitude},
       city = #{city},
       province = #{province}
     where id = #{id}

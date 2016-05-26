@@ -130,7 +130,10 @@ public class Picture implements Serializable {
      * 是否已查看过 0:否 1:是
      */
     private String atSeen;
-    
+    /**
+     * 令牌道具(悬赏令,投票令,交任务等)
+     */
+    private String token;
     public Integer getAtCustomerId() {
 		return atCustomerId;
 	}
@@ -472,5 +475,18 @@ public class Picture implements Serializable {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-    
+	 /**
+     * @return 令牌道具(悬赏令,投票令,交任务等)
+     */
+    public String getToken() {
+        return token;
+    }
+
+    /**
+     * @param token 
+	 *            令牌道具(悬赏令,投票令,交任务等)
+     */
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

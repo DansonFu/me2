@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.GamepropMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Gameprop" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="flower" property="flower" jdbcType="INTEGER" />
+    <result column="rainbow" property="rainbow" jdbcType="INTEGER" />
+    <result column="bomb" property="bomb" jdbcType="INTEGER" />
+    <result column="alarm" property="alarm" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.customerId != null" >
+         and customer_id = #{condition.customerId}
+      </if>
+      <if test="condition.flower != null" >
+         and flower = #{condition.flower}
+      </if>
+      <if test="condition.rainbow != null" >
+         and rainbow = #{condition.rainbow}
+      </if>
+      <if test="condition.bomb != null" >
+         and bomb = #{condition.bomb}
+      </if>
+      <if test="condition.alarm != null" >
+         and alarm = #{condition.alarm}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, customer_id, flower, rainbow, bomb, alarm, create_time
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gameprop
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gameprop
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gameprop
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from gameprop
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Gameprop" >
+    insert into gameprop (id, customer_id, flower, rainbow, bomb, alarm, create_time
+      )
+    values (#{id}, #{customerId}, #{flower}, #{rainbow}, #{bomb}, #{alarm}, #{createTime}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Gameprop" >
+    insert into gameprop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="flower != null" >
+        flower,
+      </if>
+      <if test="rainbow != null" >
+        rainbow,
+      </if>
+      <if test="bomb != null" >
+        bomb,
+      </if>
+      <if test="alarm != null" >
+        alarm,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="customerId != null" >
+        #{customerId},
+      </if>
+      <if test="flower != null" >
+        #{flower},
+      </if>
+      <if test="rainbow != null" >
+        #{rainbow},
+      </if>
+      <if test="bomb != null" >
+        #{bomb},
+      </if>
+      <if test="alarm != null" >
+        #{alarm},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from gameprop
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update gameprop
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId},
+      </if>
+      <if test="record.flower != null" >
+        flower = #{record.flower},
+      </if>
+      <if test="record.rainbow != null" >
+        rainbow = #{record.rainbow},
+      </if>
+      <if test="record.bomb != null" >
+        bomb = #{record.bomb},
+      </if>
+      <if test="record.alarm != null" >
+        alarm = #{record.alarm},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update gameprop
+    set id = #{record.id},
+      customer_id = #{record.customerId},
+      flower = #{record.flower},
+      rainbow = #{record.rainbow},
+      bomb = #{record.bomb},
+      alarm = #{record.alarm},
+      create_time = #{record.createTime}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Gameprop" >
+    update gameprop
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId},
+      </if>
+      <if test="flower != null" >
+        flower = #{flower},
+      </if>
+      <if test="rainbow != null" >
+        rainbow = #{rainbow},
+      </if>
+      <if test="bomb != null" >
+        bomb = #{bomb},
+      </if>
+      <if test="alarm != null" >
+        alarm = #{alarm},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Gameprop" >
+    update gameprop
+    set customer_id = #{customerId},
+      flower = #{flower},
+      rainbow = #{rainbow},
+      bomb = #{bomb},
+      alarm = #{alarm},
+      create_time = #{createTime}
+    where id = #{id}
+  </update>
+</mapper>

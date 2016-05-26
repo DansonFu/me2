@@ -24,6 +24,7 @@
     <result column="recommend" property="recommend" jdbcType="CHAR" />
     <result column="at_customer_id" property="atCustomerId" jdbcType="INTEGER" />
     <result column="at_seen" property="atSeen" jdbcType="CHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
     <association property="customer" column="customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
     <association property="atCustomer" column="at_customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
     <association property="commentCount" column="{condition.pid=pid}"	select="com.lettucetech.me2.dao.CommentMapper.countByParams"></association>
@@ -94,12 +95,15 @@
       <if test="condition.atSeen != null" >
          and at_seen = #{condition.atSeen}
       </if>
+      <if test="condition.token != null" >
+         and token = #{condition.token}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
     pid, qiniukey, customer_id, creat_time, hits, mood, front, type, parent_id, agree, 
     disagree, location_title, location_content, longitude, latitude, tags, anonymity, 
-    game_id, del, recommend, at_customer_id, at_seen
+    game_id, del, recommend, at_customer_id, at_seen,token
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -173,6 +177,9 @@
       <if test="condition.gameId != null" >
          and a.game_id = #{condition.gameId}
       </if>
+      <if test="condition.gameId != null" >
+         and a.token = #{condition.token}
+      </if>
       <!-- 是否只查包括B面的列表 -->
       <if test="condition.includeb == 'yes'" >
          and b.parent_id is not null
@@ -201,11 +208,11 @@
     insert into picture (pid, qiniukey, customer_id, creat_time, hits, mood, front, 
       type, parent_id, agree, disagree, location_title, location_content, 
       longitude, latitude, tags, anonymity, game_id, del, recommend, 
-      at_customer_id, at_seen)
+      at_customer_id, at_seen,token)
     values (#{pid}, #{qiniukey}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
       #{type}, #{parentId}, #{agree}, #{disagree}, #{locationTitle}, #{locationContent}, 
       #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId}, #{del}, #{recommend}, 
-      #{atCustomerId}, #{atSeen})
+      #{atCustomerId}, #{atSeen},#{token})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
    <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
@@ -279,6 +286,9 @@
       <if test="atSeen != null" >
         at_seen,
       </if>
+      <if test="token != null" >
+        token,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pid != null" >
@@ -346,6 +356,9 @@
       </if>
       <if test="atSeen != null" >
         #{atSeen},
+      </if>
+      <if test="token != null" >
+        #{token},
       </if>
     </trim>
   </insert>
@@ -424,6 +437,9 @@
       <if test="record.atSeen != null" >
         at_seen = #{record.atSeen},
       </if>
+       <if test="record.token != null" >
+        token = #{record.token},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -452,7 +468,8 @@
       del = #{record.del},
       recommend = #{record.recommend},
       at_customer_id = #{record.atCustomerId},
-      at_seen = #{record.atSeen}
+      at_seen = #{record.atSeen},
+      token= #{record.token}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -523,6 +540,9 @@
       <if test="atSeen != null" >
         at_seen = #{atSeen},
       </if>
+      <if test="token != null" >
+        token = #{token},
+      </if>
     </set>
     where pid = #{pid}
   </update>
@@ -548,7 +568,8 @@
       del = #{del},
       recommend = #{recommend},
       at_customer_id = #{atCustomerId},
-      at_seen = #{atSeen}
+      at_seen = #{atSeen},
+      token= #{token}
     where pid = #{pid}
   </update>
 </mapper>
