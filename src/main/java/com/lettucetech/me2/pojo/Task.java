@@ -26,6 +26,11 @@ public class Task implements Serializable {
     private Integer tasktype;
 
     /**
+     * 1,长期任务 2,一次性任务
+     */
+    private Integer taskstyle;
+
+    /**
      * @return 主键id
      */
     public Integer getId() {
@@ -83,5 +88,20 @@ public class Task implements Serializable {
      */
     public void setTasktype(Integer tasktype) {
         this.tasktype = tasktype;
+    }
+
+    /**
+     * @return 1,长期任务 2,一次性任务
+     */
+    public Integer getTaskstyle() {
+        return taskstyle;
+    }
+
+    /**
+     * @param taskstyle 
+	 *            1,长期任务 2,一次性任务
+     */
+    public void setTaskstyle(Integer taskstyle) {
+        this.taskstyle = taskstyle;
     }
 }

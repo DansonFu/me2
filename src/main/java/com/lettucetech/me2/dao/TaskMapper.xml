@@ -6,6 +6,7 @@
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="tasktype" property="tasktype" jdbcType="INTEGER" />
+    <result column="taskstyle" property="taskstyle" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -18,10 +19,13 @@
       <if test="condition.tasktype != null" >
          and tasktype = #{condition.tasktype}
       </if>
+      <if test="condition.taskstyle != null" >
+         and taskstyle = #{condition.taskstyle}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, title, content, tasktype
+    id, title, content, tasktype, taskstyle
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -55,8 +59,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Task" >
-    insert into task (id, title, content, tasktype)
-    values (#{id}, #{title}, #{content}, #{tasktype})
+    insert into task (id, title, content, tasktype, taskstyle)
+    values (#{id}, #{title}, #{content}, #{tasktype}, #{taskstyle})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Task" >
     insert into task
@@ -73,6 +77,9 @@
       <if test="tasktype != null" >
         tasktype,
       </if>
+      <if test="taskstyle != null" >
+        taskstyle,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -86,6 +93,9 @@
       </if>
       <if test="tasktype != null" >
         #{tasktype},
+      </if>
+      <if test="taskstyle != null" >
+        #{taskstyle},
       </if>
     </trim>
   </insert>
@@ -110,6 +120,9 @@
       <if test="record.tasktype != null" >
         tasktype = #{record.tasktype},
       </if>
+      <if test="record.taskstyle != null" >
+        taskstyle = #{record.taskstyle},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -120,7 +133,8 @@
     set id = #{record.id},
       title = #{record.title},
       content = #{record.content},
-      tasktype = #{record.tasktype}
+      tasktype = #{record.tasktype},
+      taskstyle = #{record.taskstyle}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -137,6 +151,9 @@
       <if test="tasktype != null" >
         tasktype = #{tasktype},
       </if>
+      <if test="taskstyle != null" >
+        taskstyle = #{taskstyle},
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -144,7 +161,8 @@
     update task
     set title = #{title},
       content = #{content},
-      tasktype = #{tasktype}
+      tasktype = #{tasktype},
+      taskstyle = #{taskstyle}
     where id = #{id}
   </update>
 </mapper>

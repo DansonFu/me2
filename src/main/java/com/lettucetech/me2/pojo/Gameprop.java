@@ -17,6 +17,11 @@ public class Gameprop implements Serializable {
     private Integer customerId;
 
     /**
+     * 密图id
+     */
+    private Integer pid;
+
+    /**
      * 小红花数量
      */
     private Integer flower;
@@ -69,6 +74,21 @@ public class Gameprop implements Serializable {
      */
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
+    }
+
+    /**
+     * @return 密图id
+     */
+    public Integer getPid() {
+        return pid;
+    }
+
+    /**
+     * @param pid 
+	 *            密图id
+     */
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 
     /**

@@ -20,16 +20,18 @@ import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.common.utils.MD5;
-
 import com.lettucetech.me2.pojo.Advertis;
 import com.lettucetech.me2.pojo.Attention;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
+import com.lettucetech.me2.pojo.CustomerPrivilege;
+import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
-
 import com.lettucetech.me2.service.AdvertisService;
 import com.lettucetech.me2.service.AttentionService;
+import com.lettucetech.me2.service.CustomerPrivilegeService;
 import com.lettucetech.me2.service.CustomerService;
+import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 
 /**
@@ -48,9 +50,12 @@ public class IndexController {
 	private PictureService pictureService;
 	@Autowired
 	private AttentionService attentionService;
-	
+	@Autowired
+	private MessageService messageService;
 	@Autowired
 	private AdvertisService advertisService;
+	@Autowired
+	private CustomerPrivilegeService customerPrivilegeService;
 	/**
 	 * 手机号唯一性验证
 	 * @param session
@@ -134,6 +139,7 @@ public class IndexController {
 			customer.setSourceid(customer.getSourceid());
 			customer.setUsername(customer.getUsername());
 			customer.setSchool(customer.getSchool());
+			
 			if(customerService.insertSelective(customer)>0){
 				result.setSuccess(true);
 				result.setMessage("注册成功");
@@ -206,6 +212,7 @@ public class IndexController {
 		RestfulResult result = new RestfulResult();
 		for (Customer customer : list) {
 			if(uid.equals(customer.getSourceid())){
+				//将仅有的一条数据取出
 				Customer cust=customerService.selectByParams4Rand(example);
 				example.clear();
 				example.put("customerId",cust);
@@ -222,6 +229,7 @@ public class IndexController {
 				result.setSuccess(true);
 				result.setObj(p);
 				result.setObj(attentions);
+				result.setObj(cust);
 			}else{
 				result.setSuccess(true);
 				result.setMessage("该用户未注册");
@@ -264,19 +272,234 @@ public class IndexController {
 	 * @param attentionCustomerId
 	 * @return
 	 */
-	@RequestMapping(value="/attention/{customerId}/{attentionCustomerId}",method=RequestMethod.POST)
-	public ModelAndView Attentionsomebody(HttpSession session,@PathVariable String customerId,@PathVariable String attentionCustomerId){
+	@RequestMapping(value="/attentions",method=RequestMethod.POST)
+	public ModelAndView Attentionsomebody(HttpSession session, Integer customerId, Integer attentionCustomerId,String type){
 		Attention attention=new Attention();
 		attention.setCustomerId(Integer.valueOf(customerId));
 		attention.setAttentionCustomerId(Integer.valueOf(attentionCustomerId));
+		attention.setAttentionType(Integer.valueOf(type));
+		attentionService.insertSelective(attention);
 		
+		
+		Message record=new Message();
+		record.setContent("关注成功");
+		record.setCreateTime(new Date());
+		record.setCustomerId(Integer.valueOf(attentionCustomerId));
+		record.setProcessed("1");
+		record.setProposer(Integer.valueOf(customerId));
+		record.setType("6");
+		messageService.insertSelective(record);
+		
+		Criteria example = new Criteria();
+		
+		example.put("attentionCustomerId",attentionCustomerId);
+		Customer customer=customerService.selectByPrimaryKey(Integer.valueOf(attentionCustomerId));
+		customer.setScore(customer.getScore()+1);
+		
+		customerService.updateByPrimaryKeySelective(customer);
+		String content="";
+		String messagetype="";
+		switch (customer.getScore()) {
+		case 100:
+			customer.setGrade(1);
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+			content="恭喜你升到1级";
+			messagetype="8";
+			break;
+		case 200:
+			customer.setGrade(2);
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+			content="恭喜你升到2级";
+			messagetype="8";
+			break;
+		case 500:
+			customer.setGrade(3);
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+			content="恭喜你升到3级";
+			messagetype="8";
+			break;
+		case 1000:
+			customer.setGrade(4);
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+			content="恭喜你升到4级";
+			messagetype="8";
+			break;
+		case 2000:
+			customer.setGrade(5);
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+			content="恭喜你升到5级";
+			messagetype="8";
+			break;
+		case 3000:
+			customer.setGrade(6);
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="恭喜你升到6级";
+			messagetype="8";
+			break;
+		case 5000:
+			customer.setGrade(7);
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="恭喜你升到7级";
+			messagetype="8";
+			
+			break;
+		case 8000:
+			customer.setGrade(8);
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="恭喜你升到8级";
+			messagetype="8";
+			break;
+		case 15000:
+			customer.setGrade(9);
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="恭喜你升到9级";
+			messagetype="8";
+			break;
+		case 20000:
+			customer.setGrade(10);
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="恭喜你升到10级";
+			messagetype="8";
+			break;
+		case 25000:
+			customer.setGrade(11);
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="恭喜你升到11级";
+			messagetype="8";
+			break;
+		case 30000:
+			customer.setGrade(12);
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="恭喜你升到12级";
+			messagetype="8";
+			break;
+		case 35000:
+			customer.setGrade(13);
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="恭喜你升到13级";
+			messagetype="8";
+			break;
+		case 40000:
+			customer.setGrade(14);
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="恭喜你升到14级";
+			messagetype="8";
+			break;
+		case 50000:
+			customer.setGrade(15);
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="恭喜你升到15级";
+			messagetype="8";
+			break;
+		case 60000:
+			customer.setGrade(16);
+			customer.setGeneralAccount(customer.getGeneralAccount()+100);
+			content="恭喜你升到16级";
+			messagetype="8";
+			break;
+		case 80000:
+			customer.setGrade(17);
+			customer.setGeneralAccount(customer.getGeneralAccount()+100);
+			content="恭喜你升到17级";
+			messagetype="8";
+			break;
+		case 100000:
+			customer.setGrade(18);
+			customer.setGeneralAccount(customer.getGeneralAccount()+100);
+			content="恭喜你升到18级";
+			messagetype="8";
+			break;
+		case 120000:
+			customer.setGrade(19);
+			customer.setGeneralAccount(customer.getGeneralAccount()+100);
+			content="恭喜你升到19级";
+			messagetype="8";
+			break;
+		case 200000:
+			customer.setGrade(20);
+			customer.setGeneralAccount(customer.getGeneralAccount()+100);
+			content="恭喜你升到20级";
+			messagetype="8";
+			break;
+			
+		default:
+			customer.setGrade(0);
+			break;
+		}		
+		customerService.updateByPrimaryKeySelective(customer);
+		
+		if (customer.getGrade()==5) {
+			content="恭喜你,开启了使用悬赏令的特权";
+			messagetype="11";
+			
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(attentionCustomerId);
+			cp.setPrivilegeid(7);
+			customerPrivilegeService.insertSelective(cp);
+			
+			Message record2=new Message();
+			record2.setContent(content);
+			record2.setCreateTime(new Date());
+			record2.setCustomerId(attentionCustomerId);
+			
+			record2.setType(messagetype);
+			record2.setProcessed("1");
+			record2.setProposer(Integer.valueOf(customerId));
+			messageService.insertSelective(record2);
+		}
+		
+		//存到用户消息表中
+		
+		Message record1 = new Message();
+		record1.setContent(content);
+		record1.setCreateTime(new Date());
+		record1.setCustomerId(Integer.valueOf(attentionCustomerId));
+		
+		record1.setType(messagetype);
+		record1.setProcessed("1");
+		record1.setProposer(Integer.valueOf(customerId));
+		messageService.insertSelective(record1);
+	
+	
+	
+	
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
-		result.setMessage("关注成功");
+		
+		result.setObj(customer.getGeneralAccount());
+		result.setObj(customer.getScore());
+		result.setObj(customer.getGrade());
+		
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
 		return mav;
 	}
+	
+	/**
+	 * 判断是否已关注
+	 * @param pid
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}", method ={RequestMethod.GET})
+	public ModelAndView checkagree(@PathVariable Integer attentionCustomerId,@PathVariable Integer customerId){
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(false);
+		
+		Criteria example = new Criteria();
+		example.put("attentionCustomerId", attentionCustomerId);
+		example.put("customerId", customerId);
+		example.put("attentionType", 1);
+		
+		if(attentionService.selectByParams(example).size()>0){
+			result.setSuccess(true);
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
 	/**
 	 * 取消关注指定用户
 	 * @param session
@@ -284,27 +507,64 @@ public class IndexController {
 	 * @param attentionCustomerId
 	 * @return
 	 */
-	@RequestMapping(value="/attention/{customerId}/{attentionCustomerId}/del",method=RequestMethod.POST)
-	public ModelAndView AttentionDelsomebody(HttpSession session,@PathVariable String customerId,@PathVariable String attentionCustomerId){
+	@RequestMapping(value="/attention/del",method=RequestMethod.DELETE)
+	public ModelAndView AttentionDelsomebody(HttpSession session, String customerId, String attentionCustomerId,String type){
 		Criteria example = new Criteria();
 		example.put("customerId",customerId);
 		example.put("attentionCustomerId",attentionCustomerId);
-		RestfulResult result = new RestfulResult();
-		List<Attention> list=attentionService.selectByParams(example);
-		if(list.size()==0){
-			result.setMessage("该用户未关注");
-			result.setSuccess(false);
-		}else{
-			for (Attention attention : list) {
-			attentionService.deleteByPrimaryKey(Integer.valueOf(attention.getId()));
-			}
+		example.put("attentionType",type);
+		attentionService.deleteByParams(example);
 			
+			Message record=new Message();
+			record.setContent("已取消关注");
+			record.setCreateTime(new Date());
+			record.setCustomerId(Integer.valueOf(attentionCustomerId));
+			record.setProcessed("1");
+			record.setProposer(Integer.valueOf(customerId));
+			record.setType("7");
+			messageService.insertSelective(record);
+		
+			
+		
+			//关注会增加热度,用户热度=所有帖子的热度+被关注数
+			example.clear();
+			example.put("attentionCustomerId",attentionCustomerId);
+			Customer customer=customerService.selectByPrimaryKey(Integer.valueOf(attentionCustomerId));
+			customer.setScore(customer.getScore()-1);
+			
+			customerService.updateByPrimaryKeySelective(customer);
+			
+			RestfulResult result = new RestfulResult();
 			result.setSuccess(true);
-			result.setMessage("已取消关注");
+			result.setObj(customer.getScore());
+		result.setObj(customer.getGeneralAccount());
+		result.setObj(customer.getGrade());
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	/**
+	 * 判断是否已取消关注
+	 * @param pid
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}", method ={RequestMethod.GET})
+	public ModelAndView checkdisagree(@PathVariable Integer customerId,@PathVariable Integer attentionCustomerId){
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(false);
+		
+		Criteria example = new Criteria();
+		example.put("attentionCustomerId", attentionCustomerId);
+		example.put("customerId", customerId);
+		example.put("type", 0);
+		
+		if(attentionService.selectByParams(example).size()>0){
+			result.setSuccess(true);
 		}
 		
-		
-		ModelAndView mav=new ModelAndView();
+		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;
 	}
@@ -315,7 +575,7 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/advertis",method=RequestMethod.GET)
-	public ModelAndView adventureAndView (HttpSession session){
+	public ModelAndView advertis (HttpSession session){
 		Criteria example = new Criteria();
 		List<Advertis> advertis=advertisService.selectByParams(example);
 		RestfulResult result = new RestfulResult();
@@ -326,5 +586,27 @@ public class IndexController {
 		return mav;
 	}
 	
+	
+	/**
+	 * 推荐小红人,根据积分的大小排序
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/recommend/customer",method=RequestMethod.GET)
+	public ModelAndView recommendcustomer (HttpSession session,String score,String offset,String length){
+		Criteria example = new Criteria();
+		example.setOrderByClause(score);
+		example.setSord("asc");
+		example.setMysqlOffset(Integer.parseInt(offset));
+		example.setMysqlLength(Integer.parseInt(length));
+		List<Customer> customers=customerService.selectByParams(example);
+		
+		RestfulResult result = new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(customers);
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
 	
 }

@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lettucetech.me2.dao.AttentionMapper" >
-  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Attention" >
+<mapper namespace="com.lettucetech.me2.dao.CustomerPrivilegeMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.CustomerPrivilege" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-    <result column="attention_customer_id" property="attentionCustomerId" jdbcType="INTEGER" />
-    <result column="attention_type" property="attentionType" jdbcType="INTEGER" />
+    <result column="privilegeid" property="privilegeid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.customerId != null" >
          and customer_id = #{condition.customerId}
       </if>
-      <if test="condition.attentionCustomerId != null" >
-         and attention_customer_id = #{condition.attentionCustomerId}
-      </if>
-      <if test="condition.attentionType != null" >
-         and attention_type = #{condition.attentionType}
+      <if test="condition.privilegeid != null" >
+         and privilegeid = #{condition.privilegeid}
       </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, attention_customer_id, attention_type
+    id, customer_id, privilegeid
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -29,7 +25,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from attention
+    from customer_privilege
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -41,25 +37,25 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from attention
+    from customer_privilege
     where id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from attention
+    delete from customer_privilege
     where id = #{id}
   </delete>
   <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    delete from attention
+    delete from customer_privilege
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Attention" >
-    insert into attention (id, customer_id, attention_customer_id, attention_type)
-    values (#{id}, #{customerId}, #{attentionCustomerId}, #{attentionType})
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.CustomerPrivilege" >
+    insert into customer_privilege (id, customer_id, privilegeid)
+    values (#{id}, #{customerId}, #{privilegeid})
   </insert>
-  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Attention" >
-    insert into attention
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.CustomerPrivilege" >
+    insert into customer_privilege
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -67,11 +63,8 @@
       <if test="customerId != null" >
         customer_id,
       </if>
-      <if test="attentionCustomerId != null" >
-        attention_customer_id,
-      </if>
-      <if test="attentionType != null" >
-        attention_type,
+      <if test="privilegeid != null" >
+        privilegeid,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -81,22 +74,19 @@
       <if test="customerId != null" >
         #{customerId},
       </if>
-      <if test="attentionCustomerId != null" >
-        #{attentionCustomerId},
-      </if>
-      <if test="attentionType != null" >
-        #{attentionType},
+      <if test="privilegeid != null" >
+        #{privilegeid},
       </if>
     </trim>
   </insert>
   <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
-    select count(*) from attention
+    select count(*) from customer_privilege
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByParamsSelective" parameterType="map" >
-    update attention
+    update customer_privilege
     <set >
       <if test="record.id != null" >
         id = #{record.id},
@@ -104,11 +94,8 @@
       <if test="record.customerId != null" >
         customer_id = #{record.customerId},
       </if>
-      <if test="record.attentionCustomerId != null" >
-        attention_customer_id = #{record.attentionCustomerId},
-      </if>
-      <if test="record.attentionType != null" >
-        attention_type = #{record.attentionType},
+      <if test="record.privilegeid != null" >
+        privilegeid = #{record.privilegeid},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -116,35 +103,30 @@
     </if>
   </update>
   <update id="updateByParams" parameterType="map" >
-    update attention
+    update customer_privilege
     set id = #{record.id},
       customer_id = #{record.customerId},
-      attention_customer_id = #{record.attentionCustomerId},
-      attention_type = #{record.attentionType}
+      privilegeid = #{record.privilegeid}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Attention" >
-    update attention
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.CustomerPrivilege" >
+    update customer_privilege
     <set >
       <if test="customerId != null" >
         customer_id = #{customerId},
       </if>
-      <if test="attentionCustomerId != null" >
-        attention_customer_id = #{attentionCustomerId},
-      </if>
-      <if test="attentionType != null" >
-        attention_type = #{attentionType},
+      <if test="privilegeid != null" >
+        privilegeid = #{privilegeid},
       </if>
     </set>
     where id = #{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Attention" >
-    update attention
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.CustomerPrivilege" >
+    update customer_privilege
     set customer_id = #{customerId},
-      attention_customer_id = #{attentionCustomerId},
-      attention_type = #{attentionType}
+      privilegeid = #{privilegeid}
     where id = #{id}
   </update>
 </mapper>

@@ -21,6 +21,11 @@ public class Attention implements Serializable {
     private Integer attentionCustomerId;
 
     /**
+     * 0,取消关注 1已关注
+     */
+    private Integer attentionType;
+
+    /**
      * @return 主键id
      */
     public Integer getId() {
@@ -63,5 +68,20 @@ public class Attention implements Serializable {
      */
     public void setAttentionCustomerId(Integer attentionCustomerId) {
         this.attentionCustomerId = attentionCustomerId;
+    }
+
+    /**
+     * @return 0,取消关注 1已关注
+     */
+    public Integer getAttentionType() {
+        return attentionType;
+    }
+
+    /**
+     * @param attentionType 
+	 *            0,取消关注 1已关注
+     */
+    public void setAttentionType(Integer attentionType) {
+        this.attentionType = attentionType;
     }
 }

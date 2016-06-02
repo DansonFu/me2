@@ -32,6 +32,7 @@ import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
+import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PictureagreeService;
@@ -60,6 +61,8 @@ public class PictureController {
 	private TaglistService taglistService;
 	@Autowired
 	private RecommendService recommendService;
+	@Autowired
+	private CustomerService customerService;
 	
 	/**
 	 * 保存蜜图AB面
@@ -69,27 +72,15 @@ public class PictureController {
 	 */
 	@RequestMapping(value = "/pictures", method ={RequestMethod.POST})
 	public ModelAndView addPicture(HttpSession session,String pa,String pb){
-		
-//		JSONObject jsonObject = JSONObject.fromObject(pa);
-//		Picture A =(Picture)JSONObject.toBean(jsonObject);
-//		A.setCreatTime(new Date());
-//		pictureService.insertSelective(A);
-//		
-//		JSONObject json = JSONObject.fromObject(pb);
-//		Picture B=(Picture)JSONObject.toBean(json);
-//		B.setCreatTime(new Date());
-//		B.setParentId(A.getPid());
-//		pictureService.insertSelective(B);
-		
-		
+	
 				Gson gson=new Gson();
 				Picture A=gson.fromJson(pa,Picture.class);
 					
-					A.setCreatTime(new Date(System.currentTimeMillis()+28800000));
+					A.setCreatTime(new Date());
 					pictureService.insertSelective(A);
 					
 					Picture B=gson.fromJson(pb,Picture.class);
-					B.setCreatTime(new Date(System.currentTimeMillis()+28800000));
+					B.setCreatTime(new Date());
 					B.setParentId(A.getPid());
 					pictureService.insertSelective(B);
 				
@@ -105,6 +96,32 @@ public class PictureController {
 		
 		return mav;
 	
+	}
+	
+	/**
+	 * 判断某用户的发帖总数,并给出相应的奖励
+	 * @param session
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value="/pictures/{customerId}",method=RequestMethod.GET)
+	public ModelAndView pictureOne(HttpSession session,@PathVariable Integer customerId){
+		Criteria example=new Criteria();
+		example.put("customerId",customerId);
+		List<Picture> pictures=pictureService.selectByParams(example);
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		if (pictures.size()==1) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+		}else if (pictures.size()==5) {
+			
+		}
+		
+		
+		RestfulResult result=new RestfulResult();
+		
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
 	}
 	/**
 	 * 增加蜜图热度
@@ -396,15 +413,135 @@ public class PictureController {
 		picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
 		
 		pictureService.updateByPrimaryKeySelective(picture);
+		//存到用户消息表中
+				Message record = new Message();
+				record.setContent(content);
+				record.setCreateTime(new Date());
+				record.setCustomerId(picture.getCustomerId());
+				record.setPid(pid);
+				record.setType(messagetype);
+				record.setProposer(customerId);
+				messageService.insertSelective(record);
+		Customer customer=customerService.selectByPrimaryKey(picture.getCustomerId());
+		customer.setScore(customer.getScore()+1);
+		customerService.updateByPrimaryKeySelective(customer);
+		switch (customer.getScore()) {
+		case 100:
+			customer.setGrade(1);
+			content="恭喜你升到1级";
+			messagetype="8";
+			break;
+		case 200:
+			customer.setGrade(2);
+			content="恭喜你升到2级";
+			messagetype="8";
+			break;
+		case 500:
+			customer.setGrade(3);
+			content="恭喜你升到3级";
+			messagetype="8";
+			break;
+		case 1000:
+			customer.setGrade(4);
+			content="恭喜你升到4级";
+			messagetype="8";
+			break;
+		case 2000:
+			customer.setGrade(5);
+			content="恭喜你升到5级";
+			messagetype="8";
+			break;
+		case 3000:
+			customer.setGrade(6);
+			content="恭喜你升到6级";
+			messagetype="8";
+			break;
+		case 5000:
+			customer.setGrade(7);
+			content="恭喜你升到7级";
+			messagetype="8";
+			
+			break;
+		case 8000:
+			customer.setGrade(8);
+			content="恭喜你升到8级";
+			messagetype="8";
+			break;
+		case 15000:
+			customer.setGrade(9);
+			content="恭喜你升到9级";
+			messagetype="8";
+			break;
+		case 20000:
+			customer.setGrade(10);
+			content="恭喜你升到10级";
+			messagetype="8";
+			break;
+		case 25000:
+			customer.setGrade(11);
+			content="恭喜你升到11级";
+			messagetype="8";
+			break;
+		case 30000:
+			customer.setGrade(12);
+			content="恭喜你升到12级";
+			messagetype="8";
+			break;
+		case 35000:
+			customer.setGrade(13);
+			content="恭喜你升到13级";
+			messagetype="8";
+			break;
+		case 40000:
+			customer.setGrade(14);
+			content="恭喜你升到14级";
+			messagetype="8";
+			break;
+		case 50000:
+			customer.setGrade(15);
+			content="恭喜你升到15级";
+			messagetype="8";
+			break;
+		case 60000:
+			customer.setGrade(16);
+			content="恭喜你升到16级";
+			messagetype="8";
+			break;
+		case 80000:
+			customer.setGrade(17);
+			content="恭喜你升到17级";
+			messagetype="8";
+			break;
+		case 100000:
+			customer.setGrade(18);
+			content="恭喜你升到18级";
+			messagetype="8";
+			break;
+		case 120000:
+			customer.setGrade(19);
+			content="恭喜你升到19级";
+			messagetype="8";
+			break;
+		case 200000:
+			customer.setGrade(20);
+			content="恭喜你升到20级";
+			messagetype="8";
+			break;
+			
+		default:
+			customer.setGrade(0);
+			break;
+		}
+		customerService.updateByPrimaryKeySelective(customer);
 		
 		//存到用户消息表中
-		Message record = new Message();
-		record.setContent(content);
-		record.setCreateTime(new Date());
-		record.setCustomerId(picture.getCustomerId());
-		record.setPid(pid);
-		record.setType(messagetype);
-		record.setProposer(customerId);
+		Message record1 = new Message();
+		record1.setContent(content);
+		record1.setCreateTime(new Date());
+		record1.setCustomerId(picture.getCustomerId());
+		record1.setPid(pid);
+		record1.setType(messagetype);
+		record1.setProposer(customerId);
 		messageService.insertSelective(record);
 		
 		RestfulResult result = new RestfulResult();
@@ -442,10 +579,14 @@ public class PictureController {
 		picture.setHits(picture.getHits()-Me2Constants.METOOHOTVALUE);
 		
 		pictureService.updateByPrimaryKeySelective(picture);
-		
+		Customer customer=customerService.selectByPrimaryKey(picture.getCustomerId());
+		customer.setScore(customer.getScore()-1);
+		customerService.updateByPrimaryKeySelective(customer);
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
-		
+		result.setObj(customer.getScore());
+		result.setObj(customer.getGeneralAccount());
+		result.setObj(customer.getGrade());
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return mav;

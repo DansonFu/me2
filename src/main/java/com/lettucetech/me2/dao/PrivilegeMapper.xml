@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.PrivilegeMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Privilege" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="privilege" property="privilege" jdbcType="VARCHAR" />
+    <result column="privilege_type" property="privilegeType" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.privilege != null" >
+         and privilege = #{condition.privilege}
+      </if>
+      <if test="condition.privilegeType != null" >
+         and privilege_type = #{condition.privilegeType}
+      </if>
+      <if test="condition.grade != null" >
+         and grade = #{condition.grade}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, privilege, privilege_type, grade
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from privilege
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from privilege
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from privilege
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from privilege
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Privilege" >
+    insert into privilege (id, privilege, privilege_type, grade)
+    values (#{id}, #{privilege}, #{privilegeType}, #{grade})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Privilege" >
+    insert into privilege
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="privilege != null" >
+        privilege,
+      </if>
+      <if test="privilegeType != null" >
+        privilege_type,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="privilege != null" >
+        #{privilege},
+      </if>
+      <if test="privilegeType != null" >
+        #{privilegeType},
+      </if>
+      <if test="grade != null" >
+        #{grade},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from privilege
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update privilege
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.privilege != null" >
+        privilege = #{record.privilege},
+      </if>
+      <if test="record.privilegeType != null" >
+        privilege_type = #{record.privilegeType},
+      </if>
+      <if test="record.grade != null" >
+        grade = #{record.grade},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update privilege
+    set id = #{record.id},
+      privilege = #{record.privilege},
+      privilege_type = #{record.privilegeType},
+      grade = #{record.grade}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Privilege" >
+    update privilege
+    <set >
+      <if test="privilege != null" >
+        privilege = #{privilege},
+      </if>
+      <if test="privilegeType != null" >
+        privilege_type = #{privilegeType},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Privilege" >
+    update privilege
+    set privilege = #{privilege},
+      privilege_type = #{privilegeType},
+      grade = #{grade}
+    where id = #{id}
+  </update>
+</mapper>

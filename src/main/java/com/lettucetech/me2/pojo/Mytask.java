@@ -22,19 +22,29 @@ public class Mytask implements Serializable {
     private Integer taskType;
 
     /**
-     * 任务名称
+     * 任务id
      */
-    private String taskTitle;
-
-    /**
-     * 任务说明
-     */
-    private String taskContent;
+    private Integer taskid;
 
     /**
      * 领取时间
      */
     private Date createTime;
+
+    /**
+     * 1,长期任务 2,一次性任务
+     */
+    private Integer taskstyle;
+
+    /**
+     * 是否完成,0否, 1是
+     */
+    private Integer complete;
+
+    /**
+     * 图片id
+     */
+    private Integer pid;
 
     /**
      * @return 主键id
@@ -82,33 +92,18 @@ public class Mytask implements Serializable {
     }
 
     /**
-     * @return 任务名称
+     * @return 任务id
      */
-    public String getTaskTitle() {
-        return taskTitle;
+    public Integer getTaskid() {
+        return taskid;
     }
 
     /**
-     * @param taskTitle 
-	 *            任务名称
+     * @param taskid 
+	 *            任务id
      */
-    public void setTaskTitle(String taskTitle) {
-        this.taskTitle = taskTitle;
-    }
-
-    /**
-     * @return 任务说明
-     */
-    public String getTaskContent() {
-        return taskContent;
-    }
-
-    /**
-     * @param taskContent 
-	 *            任务说明
-     */
-    public void setTaskContent(String taskContent) {
-        this.taskContent = taskContent;
+    public void setTaskid(Integer taskid) {
+        this.taskid = taskid;
     }
 
     /**
@@ -124,5 +119,50 @@ public class Mytask implements Serializable {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * @return 1,长期任务 2,一次性任务
+     */
+    public Integer getTaskstyle() {
+        return taskstyle;
+    }
+
+    /**
+     * @param taskstyle 
+	 *            1,长期任务 2,一次性任务
+     */
+    public void setTaskstyle(Integer taskstyle) {
+        this.taskstyle = taskstyle;
+    }
+
+    /**
+     * @return 是否完成,0否, 1是
+     */
+    public Integer getComplete() {
+        return complete;
+    }
+
+    /**
+     * @param complete 
+	 *            是否完成,0否, 1是
+     */
+    public void setComplete(Integer complete) {
+        this.complete = complete;
+    }
+
+    /**
+     * @return 图片id
+     */
+    public Integer getPid() {
+        return pid;
+    }
+
+    /**
+     * @param pid 
+	 *            图片id
+     */
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 }

@@ -141,7 +141,7 @@
           </if>
           <if test="condition.type == 1" >
 	         <foreach collection="condition.taglist" item="tag"  separator="and" open="and (" close=")">
-	         	 tags =tag
+	         	 tags =#{tag}
 	         </foreach>
           </if>
       </if>

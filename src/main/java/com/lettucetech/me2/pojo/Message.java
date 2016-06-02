@@ -24,7 +24,7 @@ public class Message implements Serializable {
     private Integer pid;
     private Picture picture;
     /**
-     * 消息类型：1、申请解蜜消息 2、解蜜达成 3、点赞 4、踩 5、评论
+     * 消息类型：1、申请解蜜消息 2、解蜜达成 3、点赞 4、踩 5、评论 6,关注成功 7,取消关注,8,升级,9,送花成功
      */
     private String type;
 
