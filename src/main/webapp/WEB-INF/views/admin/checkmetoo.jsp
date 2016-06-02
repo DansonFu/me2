@@ -57,6 +57,8 @@ td{
 	<div class="col-xs-12">
 		<h3 class="header smaller lighter blue">审核蜜图</h3>
 		<br>
+		
+		<!-- 
 		<form class="form-horizontal" role="form" id="me2form" action="<%=basePath %>admin/commendcheckmetoo" method="post" enctype="multipart/form-data">
 		<input type="text"   name="tag"   style="width:20%;" class="form-control search-query" placeholder="请输入蜜图id" />
 		<input type="hidden"  id="tag" value="${tag }" />
@@ -74,6 +76,32 @@ td{
 																			<i class="icon-search icon-on-right bigger-110"></i>
 																		</button>
 		</form>
+		 -->
+		<form action="" method="post" id="actionForm">
+		
+		
+
+                          <div class="row form-group">
+                              <div class="col-xs-6">
+                                  <div class="col-xs-3 input-column">蜜图ID：</div>
+                                  <div class="col-xs-9">
+                                      <input type="text" class="form-control" id="id"/>
+                                  </div>
+                              </div><!-- col-xs-4 -->
+                              <div class="col-xs-6">
+                                  <div class="col-xs-3 input-column">标签：</div>
+                                  <div class="col-xs-9">
+                                      <input type="text" class="form-control" id="tag"/>
+                                  </div>
+                              </div><!-- col-xs-4 -->
+                          </div> <!-- row -->
+
+
+                         <div class="search-more-btn" style="clear: both;">
+                            <a href="#" class="btn btn-default" style="margin-right: 10px;" id="search">搜索</a>
+                            <a href="javascript:;" class="btn btn-default btn-clear" id="reset">取消</a>
+                        </div>
+                 
 		
 		<br>
 		<div class="table-responsive">
@@ -103,6 +131,7 @@ td{
 				</tbody>
 			</table>
 		</div>
+		</form>
 	</div>
 	</div>
 </div>
@@ -127,16 +156,24 @@ td{
 	function comment(pid){
 		window.location="<%=basePath %>admin/checkview/comment?pid="+pid;
 	}
-	function submitform(){
-		$("#me2form").submit();
-		$(":button").attr("disabled", true);  
-	}
-	function submitforma(){
-		$("#me2form").submit();
-		$(":button").attr("disabled", true);  
-	}
+	//function submitform(){
+	//	$("#me2form").submit();
+	//	$(":button").attr("disabled", true);  
+//	}
+//	function submitforma(){
+//		$("#me2form").submit();
+//		$(":button").attr("disabled", true);  
+// 	}
     
 	$(document).ready(function(){
+		
+		$("#search").bind("click", function(){
+			  search();
+		  }); 
+		  $("#reset").bind("click", function(){
+			  $("#actionForm")[0].reset();
+		  });
+		
 		var oTable1 = $('#sample-table-2').dataTable( {
 			"bSort":false,
 			"bFilter": false,
@@ -210,11 +247,11 @@ td{
    	        		   if(data.aData[6]=="1"){
    	        				str = "图片";
    	        		   }else if(data.aData[6]=="2"){
-   	        				str = "URL";
+   	        				str = '<a href="'+data.aData[4]+'">URL</a>';
    	        		   }else if(data.aData[6]=="3"){
-   	        				str = "视频";
+   	        			    str = '<a href="'+data.aData[4]+'">视频</a>';
    	        		   }else if(data.aData[6]=="4"){
-   	        			   str = "音频";
+   	        			   str = '<a href="'+data.aData[4]+'">音频</a>';
    	        		   }
    	        		   return  str;
    	        	   }
@@ -288,7 +325,9 @@ td{
 			 // oTable1.fnPageChange('first');
 		 // });
 		  
-		  
+		  function search(){
+			  oTable1.fnPageChange('first');
+		  }
 
 	});
 	 

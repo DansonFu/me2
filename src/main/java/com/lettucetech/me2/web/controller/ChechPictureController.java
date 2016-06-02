@@ -65,12 +65,12 @@ public class ChechPictureController {
 //		example.setOrderByClause("creat_time");
 //		example.setSord("desc");
 //		List<Picture> ps = pictureService.selectByParams(example);
-		String tag = request.getParameter("tag");
-		String id = request.getParameter("id");
+//		String tag = request.getParameter("tag");
+//		String id = request.getParameter("id");
 		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("tag",tag);
-		mav.addObject("id",id);
+//		mav.addObject("tag",tag);
+//		mav.addObject("id",id);
 		mav.setViewName("/admin/checkmetoo");
 		return mav;
 		
@@ -101,6 +101,9 @@ public class ChechPictureController {
 	  
 	         if (obj.get("name").equals("iDisplayLength"))
 	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
+	         
+	         if (obj.get("name").equals("search"))
+	             iDisplayLength = Integer.parseInt(obj.get("value").toString());
 	    }
 	    
 	    
@@ -113,14 +116,14 @@ public class ChechPictureController {
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
 
-	    if(!"".equals(tag)){
-	    	example.put("pid",Integer.valueOf(tag));
-	    	//example.put("type", "0");
-	    }
-	    if(!"".equals(id)){
-	    	example.put("tags",id);
-	    	//example.put("type", "0");
-	    }
+	    if(!"".equals(id)&&null !=id){
+			example.put("pid",id);
+		}
+		
+		if(!"".equals(tag)&&null !=tag){
+			example.put("tags",tag);
+		}
+		
 	    //是否有查看所有人权限
 
 //		if(!"-1".equals(userId)){
@@ -141,13 +144,11 @@ public class ChechPictureController {
 			String type="";
 			//如果有B面
 			if(pp.getBpicture()!=null){
-				if("1".equals(pp.getBpicture().getType())){
+				//if("1".equals(pp.getBpicture().getType())){
 					burl = QiniuUtil.getDownUrl(pp.getBpicture().getQiniukey());
-				}else if("3".equals(pp.getBpicture().getType()) || "4".equals(pp.getBpicture().getType())){
-					burl = QiniuUtil.getDownUrl(pp.getBpicture().getQiniukey());
-				}else{
-					burl=pp.getBpicture().getQiniukey();
-				}
+				//}else{
+					//burl = pp.getBpicture().getQiniukey();
+				//}
 				type = pp.getBpicture().getType();
 			}
 			String mood = "";

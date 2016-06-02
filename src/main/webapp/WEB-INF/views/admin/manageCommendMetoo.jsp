@@ -16,7 +16,10 @@
 <meta name="keywords" content="">
 
 <link href="<%=basePath %>resources/assets/css/bootstrap.min.css" rel="stylesheet" />
+<link href="<%=basePath %>resources/assets/css/responsive.bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min1.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/assets/css/dataTables.bootstrap.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-rtl.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-skins.min.css" />
@@ -36,6 +39,18 @@
 		<h3 class="header smaller lighter blue">滚播蜜图</h3>
 		<br>
 		<br>
+		<!-- 
+		<div class="input-append">
+                                    <input type="text" placeholder="模糊查询" id="fuzzy-search">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn" id="btn-simple-search"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn" title="高级查询" id="toggle-advanced-search">
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            -->
+		
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
@@ -116,7 +131,7 @@ $(document).ready(function(){
 			
 			"bSort":false,
 			"bFilter": false,
-			"pagingType":   "full_numbers",
+			//"pagingType":   "full_numbers",
 			"aoColumnDefs": [
 			                 
              //{"aTargets": [7],
@@ -205,14 +220,14 @@ $(document).ready(function(){
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource1113,aoData1113, fnCallback1113) {
 			 // var ps = $('#ps').val();
-			 
+			var fuzzy = $("#fuzzy-search").val();
 			// alert(aoData1113);
 	       
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
 		          data : {"aoData":JSON.stringify(aoData1113),
 		        	 // "ps":ps
-		        	   
+		        	  "fuzzy":fuzzy
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -229,6 +244,14 @@ $(document).ready(function(){
 		//$("#ps").bind("change", function(){
 			 // oTable1.fnPageChange('first');
 		 // });
+		  $("#btn-simple-search").click(function(){
+		        //userManage.fuzzySearch = true;
+		 
+		        //reload效果与draw(true)或者draw()类似,draw(false)则可在获取新数据的同时停留在当前页码,可自行试验
+//		      _table.ajax.reload();
+//		      _table.draw(false);
+		        oTable1.draw();
+		    });
 	});
 </script>		
 	</body>

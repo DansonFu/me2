@@ -257,7 +257,7 @@ h3 {
 			</button>
 
 			&nbsp; &nbsp; &nbsp;
-			<button class="btn" type="reset">
+			<button class="btn" type="button"  id="aaa" >
 				<i class="icon-undo bigger-110"></i> 取消
 			</button>
 		</div>
@@ -363,19 +363,26 @@ laydate({
 
 	function submitform(){
 
-		if($("input[name='period']").val()==""){
-			$("input[name='period']").focus();
-			return;
-		}
+		//if($("input[name='period']").val()==""){
+			//$("input[name='period']").focus();
+			//return;
+		//}
 		
-		if($("input[name='period']").val()==null||$("input[name='period']").val()==""){
-			$("input[name='period']").focus();
-			return;
-		}
+		//if($("input[name='period']").val()==null||$("input[name='period']").val()==""){
+			//$("input[name='period']").focus();
+			//return;
+		//}
 
 		$("#me2form").submit();
 		$(":button").attr("disabled", true);  
 	}
+	
+	//function a(){
+	// }
+	$("#aaa").on("click",function(){
+		window.location=  "<%=basePath %>/admin/showcommendcheck";
+	});
+	
 
 </script>
 </body>
