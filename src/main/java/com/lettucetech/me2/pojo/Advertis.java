@@ -16,6 +16,11 @@ public class Advertis implements Serializable {
     private String adpicture;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * @return 主键id
      */
     public Integer getId() {
@@ -43,5 +48,20 @@ public class Advertis implements Serializable {
      */
     public void setAdpicture(String adpicture) {
         this.adpicture = adpicture;
+    }
+
+    /**
+     * @return 排序
+     */
+    public Integer getSort() {
+        return sort;
+    }
+
+    /**
+     * @param sort 
+	 *            排序
+     */
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

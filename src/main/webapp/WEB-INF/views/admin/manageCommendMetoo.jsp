@@ -16,7 +16,10 @@
 <meta name="keywords" content="">
 
 <link href="<%=basePath %>resources/assets/css/bootstrap.min.css" rel="stylesheet" />
+<link href="<%=basePath %>resources/assets/css/responsive.bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/assets/css/font-awesome.min1.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/assets/css/dataTables.bootstrap.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-rtl.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/assets/css/ace-skins.min.css" />
@@ -36,25 +39,61 @@
 		<h3 class="header smaller lighter blue">滚播蜜图</h3>
 		<br>
 		<br>
+		<!-- 
+		<div class="input-append">
+                                    <input type="text" placeholder="模糊查询" id="fuzzy-search">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn" id="btn-simple-search"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn" title="高级查询" id="toggle-advanced-search">
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            -->
+		
 		<div class="table-responsive">
 			<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
-					   <th class="center">主键ID</th>
+					    
+					   <th class="center">id</th>
 						<th class="center" >
-							密图ID
+							pid
 						</th>
 						<th class="center">A面</th>
 						<th class="center">排序</th>
 						
-						<th class="center">有效期</th>
+						<th class="center">截止有效期</th>
 						<th class="center">操作</th>
-						<th class="center">有效期限</th>
+						<th class="center">有效期限(天)</th>
+						<!-- 
+						 <th class="table-checkbox">
+                            选择
+                        </th>
+                         -->
 					</tr>
 				</thead>
 	
 				<tbody>
 				</tbody>
+				
+				<!-- 
+				<tfoot>
+        <tr role="row">
+            <th>主键ID</th>
+            <th>蜜图ID</th>
+            <th>A面</th>
+            <th>排序</th>
+            <th>截止有效期</th>
+            <th>操作</th>
+            <th>有效期限(天)</th>
+            <th class="table-checkbox">
+                <input type="checkbox" class="group-checkable" data-set="#sample-table-2 .checkboxes" />
+            </th>
+        </tr>
+    </tfoot>
+              -->
+    
 			</table>
 		</div>
 	</div>
@@ -86,10 +125,27 @@ function view(pid){
 }
 
 $(document).ready(function(){
+	 
+	    // alert("skjafffffffffffffffffffff");
 		var oTable1 = $('#sample-table-2').dataTable( {
+			
 			"bSort":false,
 			"bFilter": false,
+			//"pagingType":   "full_numbers",
 			"aoColumnDefs": [
+			                 
+             //{"aTargets": [7],
+                         //"fnRender": function (data, type, full, meta) {
+                            //return '<input type="checkbox" class="checkboxes" value="' + data + '"/>';
+                         // }
+              //},
+
+             //{
+	            // "aTargets": [1],
+	             // orderData: [ 1, 0 ]  //如果第一列进行排序，有相同数据则按照第二列顺序排列
+            // },
+	
+              
    	           {
    	        	   "aTargets": [2],
    	        	   "fnRender":function(data,type){
@@ -111,6 +167,14 @@ $(document).ready(function(){
  	        		    return  str;
  	        	   }
    	           },
+   	           
+   	        //{
+   	        	  // "aTargets": [4],
+   	        	 //  "fnRender":function(data,type){
+   	        		
+   	        	  //}
+   	          // },
+   	           
    	        {
    	        	   "aTargets": [5],
    	        	   "fnRender":function(data,type){
@@ -134,28 +198,36 @@ $(document).ready(function(){
    	        	 "aTargets": [6],
    	        	"fnRender":function(data,type){
 	        		   var str = " ";
-	        		   if(data.aData[6]!="0"){
+	        		   if(data.aData[6]!="0"&&data.aData[6]!="-1"){
 	        				str = data.aData[6];
 	        		   }else if(data.aData[6]=="0"){
 	        				str = "已过有效期";
-	        		   }
+	        		   }else if(data.aData[6]=="-1"){
+			                 str = "永不过期";
+		               }
 	        		   return  str;
 	        	   }
    	           }
-   	        	
+   	       
    	         ],
 		     "bServerSide": true,//这个用来指明是通过服务端来取数据
 		     "sAjaxSource": "<%=basePath %>/admin/showcommendmetoo",//这个是请求的地址
 		     "fnServerData": retrieveData, // 获取数据的处理函数
+		    
 		} );
+		// oTable1 .bSort( [[ 1, 'desc' ]] )  .draw( false );
+		 //alert("skjaf");
 		//3个参数的名字可以随便命名,但必须是3个参数,少一个都不行
 		  function retrieveData( sSource1113,aoData1113, fnCallback1113) {
 			 // var ps = $('#ps').val();
-
+			var fuzzy = $("#fuzzy-search").val();
+			// alert(aoData1113);
+	       
 		      $.ajax({
 		          url : sSource1113,//这个就是请求地址对应sAjaxSource
-		          data : {"aoData":JSON.stringify(aoData1113)
+		          data : {"aoData":JSON.stringify(aoData1113),
 		        	 // "ps":ps
+		        	  "fuzzy":fuzzy
 		        	  },//这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
 		          type : 'post',
 		          dataType : 'json',
@@ -166,10 +238,20 @@ $(document).ready(function(){
 		          error : function(msg) {
 		          }
 		      });
+		      
+		     // alert("000000000000000");
 		  }
 		//$("#ps").bind("change", function(){
 			 // oTable1.fnPageChange('first');
 		 // });
+		  $("#btn-simple-search").click(function(){
+		        //userManage.fuzzySearch = true;
+		 
+		        //reload效果与draw(true)或者draw()类似,draw(false)则可在获取新数据的同时停留在当前页码,可自行试验
+//		      _table.ajax.reload();
+//		      _table.draw(false);
+		        oTable1.draw();
+		    });
 	});
 </script>		
 	</body>

@@ -4,16 +4,20 @@
   <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Advertis" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="adpicture" property="adpicture" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
       <if test="condition.adpicture != null" >
          and adpicture = #{condition.adpicture}
       </if>
+      <if test="condition.sort != null" >
+         and sort = #{condition.sort}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, adpicture
+    id, adpicture, sort
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -47,8 +51,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Advertis" >
-    insert into advertis (id, adpicture)
-    values (#{id}, #{adpicture})
+    insert into advertis (id, adpicture, sort)
+    values (#{id}, #{adpicture}, #{sort})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Advertis" >
     insert into advertis
@@ -59,6 +63,9 @@
       <if test="adpicture != null" >
         adpicture,
       </if>
+      <if test="sort != null" >
+        sort,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -66,6 +73,9 @@
       </if>
       <if test="adpicture != null" >
         #{adpicture},
+      </if>
+      <if test="sort != null" >
+        #{sort},
       </if>
     </trim>
   </insert>
@@ -84,6 +94,9 @@
       <if test="record.adpicture != null" >
         adpicture = #{record.adpicture},
       </if>
+      <if test="record.sort != null" >
+        sort = #{record.sort},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -92,7 +105,8 @@
   <update id="updateByParams" parameterType="map" >
     update advertis
     set id = #{record.id},
-      adpicture = #{record.adpicture}
+      adpicture = #{record.adpicture},
+      sort = #{record.sort}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -103,12 +117,16 @@
       <if test="adpicture != null" >
         adpicture = #{adpicture},
       </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
     </set>
     where id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Advertis" >
     update advertis
-    set adpicture = #{adpicture}
+    set adpicture = #{adpicture},
+      sort = #{sort}
     where id = #{id}
   </update>
 </mapper>

@@ -266,6 +266,7 @@ public class IndexController {
 	}
 
 	/**
+
 	 * 关注指定用户
 	 * @param session
 	 * @param customerId
@@ -609,4 +610,26 @@ public class IndexController {
 		return mav;
 	}
 	
+
+	/* * 用户关注的接口
+	 * @param session
+	 * @param uid
+	 * @return
+	 */
+	@RequestMapping(value="/attention/{uid}",method=RequestMethod.GET)
+	public ModelAndView attention(HttpSession session,@PathVariable String uid){
+		Criteria example = new Criteria();
+		example.put("customer",uid);
+		
+		RestfulResult result = new RestfulResult();
+//		result.setObj(obj);
+		
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject(result);
+		return null;
+		
+	}
+
+
 }
