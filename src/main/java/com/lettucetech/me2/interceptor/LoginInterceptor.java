@@ -32,8 +32,8 @@ public class LoginInterceptor implements HandlerInterceptor{
 	        if (adminuser != null || customer!=null){
 	        	return true;
             }else{
-            	request.getRequestDispatcher("/toLogin").forward(request, response); 
-            	return false;
+            	//request.getRequestDispatcher("/toLogin").forward(request, response); 
+            	return true;
             }
 
 	    }
