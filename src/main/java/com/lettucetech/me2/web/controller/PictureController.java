@@ -3,7 +3,6 @@ package com.lettucetech.me2.web.controller;
 
 
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,8 +22,9 @@ import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
-import com.lettucetech.me2.pojo.Gamecustomer;
+import com.lettucetech.me2.pojo.CustomerPrivilege;
 import com.lettucetech.me2.pojo.Message;
+import com.lettucetech.me2.pojo.Mytask;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Pictureagree;
 import com.lettucetech.me2.pojo.Picturehot;
@@ -32,8 +32,11 @@ import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagshot;
+import com.lettucetech.me2.pojo.Task;
+import com.lettucetech.me2.service.CustomerPrivilegeService;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.MessageService;
+import com.lettucetech.me2.service.MytaskService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PictureagreeService;
 import com.lettucetech.me2.service.PicturehotService;
@@ -41,7 +44,7 @@ import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.RecommendService;
 import com.lettucetech.me2.service.TaglistService;
 import com.lettucetech.me2.service.TagshotService;
-import com.mysql.jdbc.log.Log;
+import com.lettucetech.me2.service.TaskService;
 
 @Controller
 public class PictureController {
@@ -63,6 +66,12 @@ public class PictureController {
 	private RecommendService recommendService;
 	@Autowired
 	private CustomerService customerService;
+	@Autowired
+	private CustomerPrivilegeService customerprivilegeService;
+	@Autowired
+	private MytaskService mytaskService;
+	@Autowired
+	private TaskService taskService;
 	
 	/**
 	 * 保存蜜图AB面
@@ -110,19 +119,79 @@ public class PictureController {
 		example.put("customerId",customerId);
 		List<Picture> pictures=pictureService.selectByParams(example);
 		Customer customer=customerService.selectByPrimaryKey(customerId);
+		String content="";
+		String messagetype="";
 		if (pictures.size()==1) {
 			customer.setGeneralAccount(customer.getGeneralAccount()+10);
-		}else if (pictures.size()==5) {
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(customerId);
+			cp.setPrivilegeid(1);
+			 customerprivilegeService.insertSelective(cp);
+			content="开启任务8-11";
+			messagetype="12";
+			Mytask task=new Mytask();
+			task.setComplete(0);
+			task.setCreateTime(new Date());
+			task.setCustomerId(customerId);
+			task.setTaskid(8);
+			task.setTaskstyle(2);
+			task.setTaskType(1);//系统任务
+			Mytask task1=new Mytask();
+			task1.setComplete(0);
+			task1.setCreateTime(new Date());
+			task1.setCustomerId(customerId);
+			task1.setTaskid(9);
+			task1.setTaskstyle(2);
+			task1.setTaskType(1);//系统任务
+			Mytask task2=new Mytask();
+			task2.setComplete(0);
+			task2.setCreateTime(new Date());
+			task2.setCustomerId(customerId);
+			task2.setTaskid(10);
+			task2.setTaskstyle(2);
+			task2.setTaskType(1);//系统任务
+			Mytask task3=new Mytask();
+			task3.setComplete(0);
+			task3.setCreateTime(new Date());
+			task3.setCustomerId(customerId);
+			task3.setTaskid(11);
+			task3.setTaskstyle(2);
+			task3.setTaskType(1);//系统任务
 			
+		}else if (pictures.size()==5) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(customerId);
+			cp.setPrivilegeid(2);
+			 customerprivilegeService.insertSelective(cp);
+			content="开启使用炸弹的特权";
+			messagetype="12";
+		}else if (pictures.size()==20) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+		}else if (pictures.size()==50) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+		}else if (pictures.size()==100) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
 		}
+		
+		Message record=new Message();
+		record.setContent(content);
+		record.setCreateTime(new Date());
+		record.setCustomer(customer);
+		record.setType(messagetype);
+		record.setProcessed("1");
+		messageService.insertSelective(record);
 		
 		
 		RestfulResult result=new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(customer);
 		
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
 		return mav;
 	}
+
 	/**
 	 * 增加蜜图热度
 	 * @param session
@@ -413,7 +482,7 @@ public class PictureController {
 		picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
 		
 		pictureService.updateByPrimaryKeySelective(picture);
-		//存到用户消息表中
+		//存到用户消息表中 
 				Message record = new Message();
 				record.setContent(content);
 				record.setCreateTime(new Date());
@@ -714,4 +783,131 @@ public class PictureController {
 		mav.addObject(result);
 		return mav;
 	}
+	
+	
+	/**
+	 * 判断某用户的帖子被赞或踩的总数,并给出相应的奖励
+	 * @param session
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value="/pictures/{customerId}/dispose",method=RequestMethod.GET)
+	public ModelAndView pictureAgreeOrDisagree(HttpSession session,@PathVariable Integer customerId){
+		Criteria example=new Criteria();
+		example.put("customerId",customerId);
+		List<Picture> pictures=pictureService.selectByParams(example);
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		String content="";
+		String messagetype="";
+		int sum=0;
+		int count=0;
+		for (Picture picture : pictures) {
+			sum+=picture.getAgree();
+			count+=picture.getDisagree();
+		}
+		if (sum==1 || count==1) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+			
+		}else if (sum==10 ||count==10) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(customerId);
+			cp.setPrivilegeid(3);
+			 customerprivilegeService.insertSelective(cp);
+			content="开启投票令特权";
+			messagetype="13";
+		}else if (sum==50) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(customerId);
+			cp.setPrivilegeid(4);
+			 customerprivilegeService.insertSelective(cp);
+			content="开启任务6";
+			messagetype="14";
+			Mytask mytask=new Mytask();
+			mytask.setComplete(0);
+			mytask.setCreateTime(new Date());
+			mytask.setCustomerId(customerId);
+			mytask.setTaskid(6);
+			mytask.setTaskstyle(1);//长期任务
+			mytask.setTaskType(1);//系统任务
+			
+		}else if (count==50) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(customerId);
+			cp.setPrivilegeid(5);
+			 customerprivilegeService.insertSelective(cp);
+			content="开启任务7";
+			messagetype="15";
+			
+			
+			Mytask mytask=new Mytask();
+			mytask.setComplete(0);
+			mytask.setCreateTime(new Date());
+			mytask.setCustomerId(customerId);
+			mytask.setTaskid(7);
+			mytask.setTaskstyle(1);//长期任务
+			mytask.setTaskType(1);//系统任务
+		}
+		else if (sum==100 ||count==100) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+		}else if (sum==500 ||count==500) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+		}
+		
+		Message message=new Message();
+		message.setContent(content);
+		message.setCreateTime(new Date());
+		message.setCustomer(customer);
+		message.setCustomerId(customerId);
+		message.setProcessed("1");
+		message.setType(messagetype);
+		messageService.insertSelective(message);
+		
+		RestfulResult result=new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(customer);
+		
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+/**
+	 * 交任务
+	 * @param session
+	 * @param pid
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value="/pictures/{pid}/{customerId}/{taskid}/token",method=RequestMethod.GET)
+	public ModelAndView checkpictures(HttpSession session,@PathVariable Integer pid,@PathVariable Integer customerId,@PathVariable Integer taskid) {
+		Task task=taskService.selectByPrimaryKey(taskid);
+		
+		Criteria example=new Criteria();
+		example.put("customerId",customerId);
+		example.put("taskid",taskid);
+		List<Mytask> mytasks=mytaskService.selectByParams(example);
+		RestfulResult result = new RestfulResult();
+		if (mytasks.size()>0) {
+			
+			for (Mytask mytask : mytasks) {
+				mytask.setComplete(1);
+				mytask.setPid(pid);
+				mytaskService.updateByParamsSelective(mytask, example);
+			}
+			result.setSuccess(true);
+			result.setMessage("提交成功");
+		}else{
+			result.setSuccess(false);
+			result.setMessage("提交失败");
+		}
+	
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+
+
 }

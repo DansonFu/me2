@@ -1,3 +1,4 @@
+
 package com.lettucetech.me2.web.controller;
 
 import java.text.ParseException;
@@ -9,12 +10,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSON;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
@@ -75,7 +79,7 @@ public class SearchController {
 	 * @param customerId
 	 * @return
 	 */
-	@RequestMapping(value="/search/{customerId}",method=RequestMethod.GET)
+	@RequestMapping(value="/searchCustomerid/{customerId}",method=RequestMethod.GET)
 	public ModelAndView Searchbody(HttpSession session,@PathVariable String customerId){
 		Customer customer=customerService.selectByPrimaryKey(Integer.valueOf(customerId));
 		
@@ -120,8 +124,8 @@ public class SearchController {
 	 * @param username
 	 * @return
 	 */
-	@RequestMapping(value="/search/{username}",method=RequestMethod.GET)
-	public ModelAndView Search4at(HttpSession session,@PathVariable String username){
+	@RequestMapping(value="/searchUsername/{username}",method=RequestMethod.GET)
+	public @ResponseBody List Search4at(HttpSession session,@PathVariable String username){
 		List list=new ArrayList();
 		Criteria example=new Criteria();
 		example.put("username",username);
@@ -136,7 +140,7 @@ public class SearchController {
 		result.setObj(list);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return list;
 	}
 	
 	/**
@@ -148,7 +152,7 @@ public class SearchController {
 	 * @param length
 	 * @return
 	 */
-	@RequestMapping(value = "/search/{schoolname}", method ={RequestMethod.GET})
+	@RequestMapping(value = "/searchSchoolName/{schoolname}", method ={RequestMethod.GET})
 	public ModelAndView getPicturesBySchool(HttpSession session,@PathVariable String schoolname,String offset,String length){
 		
 		Criteria example = new Criteria();
@@ -164,7 +168,7 @@ public class SearchController {
 		
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
-		result .setObj(customers);
+		result.setObj(customers);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
@@ -533,27 +537,13 @@ public class SearchController {
 				customer.setGeneralAccount(customer.getGeneralAccount()+1);
 				content="送花成功";
 				messagetype="9";
-				//判断时间是否超过一个小时,否则拒绝操作
-				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time=sdf.format(game.getCreateTime());
-				long a =System.currentTimeMillis();
-				long b=0;
-				try {
-					b=(a-sdf.parse(time).getTime())/3600000;
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (b>=1) {
+				
 					
 					game.setCreateTime(new Date());
 					game.setCustomerId(Integer.valueOf(customerId));
 					game.setPid(Integer.valueOf(pid));
 					game.setFlower(game.getFlower()+1);
-				}else{
-					content="送花失败";
-					messagetype="10";
-				}
+				
 			}else if("2".equals(present.getPresentType())){
 				//判断该用户是否有足够的虚拟币
 				if(customer.getGeneralAccount()>10){
@@ -813,4 +803,33 @@ public class SearchController {
 		mav.addObject(result);
 		return mav;
 	}
+	
+	/**
+	 * 根据用户的位置获取附近的大学信息 根据精度从小到大排序
+	 * @param session
+	 * @param longitude
+	 * @param latitude
+	 * @param precision
+	 * @return
+	 */
+	@RequestMapping(value="/searchs/{longitude}/{latitude}/{precision}",method=RequestMethod.GET)
+	public ModelAndView getSchool(HttpSession session,@PathVariable String longitude,@PathVariable String latitude,@PathVariable String precision){
+		
+		Criteria example=new Criteria();
+		example.put("current_longitude",longitude);
+		example.put("current_latitude", latitude);
+		example.setOrderByClause(precision);
+		example.setSord("asc");
+		
+		List<Customer> list=customerService.selectByParams(example);
+		
+		
+		RestfulResult result=new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(list);
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
 }

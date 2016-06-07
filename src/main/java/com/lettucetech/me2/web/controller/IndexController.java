@@ -27,12 +27,14 @@ import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.CustomerPrivilege;
 import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Privilege;
 import com.lettucetech.me2.service.AdvertisService;
 import com.lettucetech.me2.service.AttentionService;
 import com.lettucetech.me2.service.CustomerPrivilegeService;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.PrivilegeService;
 
 /**
  * 网站首页controller
@@ -56,6 +58,9 @@ public class IndexController {
 	private AdvertisService advertisService;
 	@Autowired
 	private CustomerPrivilegeService customerPrivilegeService;
+	@Autowired
+	private PrivilegeService privilegeService;
+	
 	/**
 	 * 手机号唯一性验证
 	 * @param session
@@ -245,19 +250,19 @@ public class IndexController {
 				session.setAttribute(Me2Constants.METOOUSER, list.get(0));
 			}
 			
-//		}else{
-//			Customer customer = new Customer();
-//			customer.setSource(source);
-//			customer.setSourceid(uid);
-//			customer.setCreatTime(new Date());
-//			if(customerService.insertSelective(customer)==1){
-//				result.setSuccess(true);
-//				result.setObj(customer);
-//				session.setAttribute(Me2Constants.METOOUSER, customer);
-//			}else{
-//				result.setSuccess(false);
-//				result.setMessage("注册失败请联系管理员");
-//			}
+		}else{
+			Customer customer = new Customer();
+			customer.setSource(source);
+			customer.setSourceid(uid);
+			customer.setCreatTime(new Date());
+			if(customerService.insertSelective(customer)==1){
+				result.setSuccess(true);
+				result.setObj(customer);
+				session.setAttribute(Me2Constants.METOOUSER, customer);
+			}else{
+				result.setSuccess(false);
+				result.setMessage("注册失败请联系管理员");
+			}
 		}
 		
 		ModelAndView mav = new ModelAndView();
@@ -265,7 +270,8 @@ public class IndexController {
 		return mav;
 	}
 
-	/**
+
+/**
 
 	 * 关注指定用户
 	 * @param session
@@ -477,13 +483,77 @@ public class IndexController {
 	}
 	
 	/**
+	 * 判断被关注总数,以此分发奖励
+	 * @param attentionCustomerId
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "/attentions/{customerId}", method ={RequestMethod.GET})
+	public ModelAndView checkattention(HttpSession session,@PathVariable Integer customerId){
+		Criteria example=new Criteria();
+		example.put("attentionCustomerId",customerId);
+		List<Attention> attentions=attentionService.selectByParams(example);
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		String content="";
+		String messagetype="";
+		if (attentions.size()==1) {
+			customer.setGeneralAccount(customer.getGeneralAccount()+10);
+		}else if (attentions.size()==10) {
+			
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+		}else if (attentions.size()==50) {
+			
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+		}else if (attentions.size()==100) {
+			
+			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+		}else if (attentions.size()==500) {
+			
+			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="开启密码解密特权";
+			messagetype="16";
+			CustomerPrivilege cp=new CustomerPrivilege();
+			cp.setCustomerId(customerId);;
+			cp.setPrivilegeid(6);
+			customerPrivilegeService.insertSelective(cp);
+		}else if (attentions.size()==2000) {
+			
+			customer.setGeneralAccount(customer.getGeneralAccount()+100);
+		}else if (attentions.size()==5000) {
+		
+			customer.setGeneralAccount(customer.getGeneralAccount()+150);
+		}else if (attentions.size()==10000) {
+			
+			customer.setGeneralAccount(customer.getGeneralAccount()+500);
+		}
+		
+		Message record=new Message();
+		record.setContent(content);
+		record.setCreateTime(new Date());
+		record.setCustomer(customer);
+		record.setCustomerId(customerId);
+		record.setProcessed("1");
+		record.setType(messagetype);
+		
+		RestfulResult result=new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(customer);
+		
+		
+		ModelAndView mav=new ModelAndView();
+		mav.addObject(result);
+		return mav;
+	}
+	
+	
+	/**
 	 * 判断是否已关注
 	 * @param pid
 	 * @param customerId
 	 * @return
 	 */
 	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}", method ={RequestMethod.GET})
-	public ModelAndView checkagree(@PathVariable Integer attentionCustomerId,@PathVariable Integer customerId){
+	public ModelAndView checkagree(HttpSession session,@PathVariable Integer attentionCustomerId,@PathVariable Integer customerId){
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
 		
@@ -545,14 +615,16 @@ public class IndexController {
 		return mav;
 	}
 	
+	
+	
 	/**
 	 * 判断是否已取消关注
 	 * @param pid
 	 * @param customerId
 	 * @return
 	 */
-	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}", method ={RequestMethod.GET})
-	public ModelAndView checkdisagree(@PathVariable Integer customerId,@PathVariable Integer attentionCustomerId){
+	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}/del", method ={RequestMethod.GET})
+	public ModelAndView checkdisagree(HttpSession session,@PathVariable Integer customerId,@PathVariable Integer attentionCustomerId){
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
 		
@@ -610,26 +682,40 @@ public class IndexController {
 		return mav;
 	}
 	
-
-	/* * 用户关注的接口
-	 * @param session
-	 * @param uid
+	
+	
+	
+	/**
+	 * 判断某用户是否有某种特权
 	 * @return
 	 */
-	@RequestMapping(value="/attention/{uid}",method=RequestMethod.GET)
-	public ModelAndView attention(HttpSession session,@PathVariable String uid){
-		Criteria example = new Criteria();
-		example.put("customer",uid);
+	@RequestMapping(value="/privilege/{customerId}",method=RequestMethod.GET)
+	public ModelAndView attention(@PathVariable Integer customerId){
+		Criteria example=new Criteria();
+		example.put("customerId",customerId);
+		List<CustomerPrivilege> list=customerPrivilegeService.selectByParams(example);
+		List list2=new ArrayList();
+		for (CustomerPrivilege cp: list) {
+			Privilege privilege=privilegeService.selectByPrimaryKey(cp.getPrivilegeid());
+			list2.add(privilege);
+			
+		}
 		
-		RestfulResult result = new RestfulResult();
-//		result.setObj(obj);
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		RestfulResult result=new RestfulResult();
+		result.setSuccess(true);
+		result.setObj(list2);
+		result.setObj(customer);
 		
 		ModelAndView mav = new ModelAndView();
-		
 		mav.addObject(result);
-		return null;
-		
+		return mav;
 	}
+
+
+
+
+
 
 
 }
