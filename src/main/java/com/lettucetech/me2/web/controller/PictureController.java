@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -114,7 +115,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value="/pictures/{customerId}",method=RequestMethod.GET)
-	public ModelAndView pictureOne(HttpSession session,@PathVariable Integer customerId){
+	public @ResponseBody RestfulResult pictureOne(HttpSession session,@PathVariable Integer customerId){
 		Criteria example=new Criteria();
 		example.put("customerId",customerId);
 		List<Picture> pictures=pictureService.selectByParams(example);
@@ -168,16 +169,22 @@ public class PictureController {
 			messagetype="12";
 		}else if (pictures.size()==20) {
 			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="获得糖块奖励";
+			messagetype="17";
 		}else if (pictures.size()==50) {
 			customer.setGeneralAccount(customer.getGeneralAccount()+20);
+			content="获得糖块奖励";
+			messagetype="17";
 		}else if (pictures.size()==100) {
 			customer.setGeneralAccount(customer.getGeneralAccount()+50);
+			content="获得糖块奖励";
+			messagetype="17";
 		}
 		
 		Message record=new Message();
 		record.setContent(content);
 		record.setCreateTime(new Date());
-		record.setCustomer(customer);
+		record.setCustomerId(customerId);
 		record.setType(messagetype);
 		record.setProcessed("1");
 		messageService.insertSelective(record);
@@ -186,10 +193,10 @@ public class PictureController {
 		RestfulResult result=new RestfulResult();
 		result.setSuccess(true);
 		result.setObj(customer);
-		
+		result.setObj(pictures);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 
 	/**
@@ -599,6 +606,8 @@ public class PictureController {
 			
 		default:
 			customer.setGrade(0);
+			content="未升级";
+			messagetype="8";
 			break;
 		}
 		customerService.updateByPrimaryKeySelective(customer);
@@ -792,7 +801,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value="/pictures/{customerId}/dispose",method=RequestMethod.GET)
-	public ModelAndView pictureAgreeOrDisagree(HttpSession session,@PathVariable Integer customerId){
+	public @ResponseBody RestfulResult pictureAgreeOrDisagree(HttpSession session,@PathVariable Integer customerId){
 		Criteria example=new Criteria();
 		example.put("customerId",customerId);
 		List<Picture> pictures=pictureService.selectByParams(example);
@@ -871,7 +880,7 @@ public class PictureController {
 		
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 /**
@@ -882,7 +891,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value="/pictures/{pid}/{customerId}/{taskid}/token",method=RequestMethod.GET)
-	public ModelAndView checkpictures(HttpSession session,@PathVariable Integer pid,@PathVariable Integer customerId,@PathVariable Integer taskid) {
+	public @ResponseBody RestfulResult checkpictures(HttpSession session,@PathVariable Integer pid,@PathVariable Integer customerId,@PathVariable Integer taskid) {
 		Task task=taskService.selectByPrimaryKey(taskid);
 		
 		Criteria example=new Criteria();
@@ -906,7 +915,7 @@ public class PictureController {
 	
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 
 

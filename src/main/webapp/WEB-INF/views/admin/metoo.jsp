@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="col-lg-3 input-column" >
-                                       	<span class="dangger" style="color: red">*</span>标签<span style="color:red">(半角符号 # 分隔，最多五个标签，每标签最多7个字)：</span>
+                                       	<span class="dangger" style="color: red">*</span>标签<span style="color:red"></span>
                                     </div>
                                     <div class="col-lg-9">
                                     	<input type="text" name="tags" style="width:80%;" value="${customer.username } #"/>
@@ -198,7 +198,7 @@
                                        	A面心情：
                                     </div>
                                     <div class="col-lg-9">
-                                    	<input type="text" name="feel" style="width:80%;"  placeholder="A面心情不能超过77个字"/>
+                                    	<input type="text" name="feel" style="width:80%;"  />
                                     </div>
                                 </div>
                                 <!-- col-lg-6 -->
@@ -248,7 +248,7 @@
                                     <div class="col-lg-3 input-column">
                                        	B面心情：
                                     </div>
-                                    <div class="col-lg-9"><span style="color:red">心情文字最多77个字(包括标点符号)</span>
+                                    <div class="col-lg-9"><span style="color:red"></span>
 										<input type="text" name="bfeel" id="feelid" placeholder="B面心情必须有图片或者URL才可以添加哦!" style="width:80%;"/>
 										
                                     </div>
@@ -351,7 +351,7 @@
 			return;
 		}
 		
-		var arr = $("input[name='tags']").val().split("#"); 
+		/* var arr = $("input[name='tags']").val().split("#"); 
 		var username=$("#username").text().trim();
 		if(arr.length>5){
 			$("input[name='tags']").focus();
@@ -377,7 +377,7 @@
 			$("input[name='bfeel']").focus();
 			alert("心情文字最多77个字");
 			return;
-		}
+		} */
 		$("#me2form").submit();
 		$(":button").attr("disabled", true); 
 		

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
@@ -209,7 +210,7 @@ public class IndexController {
  * @return
  */
 	@RequestMapping(value="/thirdPartyLogin/{uid}/{source}",method=RequestMethod.GET)
-	public ModelAndView thirdPartyLogin(HttpSession session,@PathVariable String uid,@PathVariable String source) {
+	public @ResponseBody RestfulResult thirdPartyLogin(HttpSession session,@PathVariable String uid,@PathVariable String source) {
 		Criteria example = new Criteria();
 		example.put("sourceid", uid);
 		example.put("source", source);
@@ -267,7 +268,7 @@ public class IndexController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 
 
@@ -280,11 +281,11 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/attentions",method=RequestMethod.POST)
-	public ModelAndView Attentionsomebody(HttpSession session, Integer customerId, Integer attentionCustomerId,String type){
+	public @ResponseBody RestfulResult Attentionsomebody(HttpSession session, Integer customerId, Integer attentionCustomerId){
 		Attention attention=new Attention();
 		attention.setCustomerId(Integer.valueOf(customerId));
 		attention.setAttentionCustomerId(Integer.valueOf(attentionCustomerId));
-		attention.setAttentionType(Integer.valueOf(type));
+		attention.setAttentionType(1);
 		attentionService.insertSelective(attention);
 		
 		
@@ -431,10 +432,22 @@ public class IndexController {
 			
 		default:
 			customer.setGrade(0);
+			content="未升级";
+			messagetype="8";
 			break;
 		}		
 		customerService.updateByPrimaryKeySelective(customer);
+		//存到用户消息表中
 		
+				Message record1 = new Message();
+				record1.setContent(content);
+				record1.setCreateTime(new Date());
+				record1.setCustomerId(Integer.valueOf(attentionCustomerId));
+				
+				record1.setType(messagetype);
+				record1.setProcessed("1");
+				record1.setProposer(Integer.valueOf(customerId));
+				messageService.insertSelective(record1);
 		if (customer.getGrade()==5) {
 			content="恭喜你,开启了使用悬赏令的特权";
 			messagetype="11";
@@ -455,31 +468,16 @@ public class IndexController {
 			messageService.insertSelective(record2);
 		}
 		
-		//存到用户消息表中
 		
-		Message record1 = new Message();
-		record1.setContent(content);
-		record1.setCreateTime(new Date());
-		record1.setCustomerId(Integer.valueOf(attentionCustomerId));
-		
-		record1.setType(messagetype);
-		record1.setProcessed("1");
-		record1.setProposer(Integer.valueOf(customerId));
-		messageService.insertSelective(record1);
-	
-	
-	
-	
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(true);
 		
-		result.setObj(customer.getGeneralAccount());
-		result.setObj(customer.getScore());
-		result.setObj(customer.getGrade());
+		result.setObj(customer);
+		
 		
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -489,7 +487,8 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value = "/attentions/{customerId}", method ={RequestMethod.GET})
-	public ModelAndView checkattention(HttpSession session,@PathVariable Integer customerId){
+	public @ResponseBody RestfulResult checkattention(HttpSession session,@PathVariable Integer customerId){
+		RestfulResult result=new RestfulResult();
 		Criteria example=new Criteria();
 		example.put("attentionCustomerId",customerId);
 		List<Attention> attentions=attentionService.selectByParams(example);
@@ -525,6 +524,8 @@ public class IndexController {
 		}else if (attentions.size()==10000) {
 			
 			customer.setGeneralAccount(customer.getGeneralAccount()+500);
+		}else if (attentions.size()==0) {
+			result.setMessage("未被任何人关注");
 		}
 		
 		Message record=new Message();
@@ -535,14 +536,14 @@ public class IndexController {
 		record.setProcessed("1");
 		record.setType(messagetype);
 		
-		RestfulResult result=new RestfulResult();
+		
 		result.setSuccess(true);
 		result.setObj(customer);
 		
 		
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	
@@ -553,7 +554,7 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}", method ={RequestMethod.GET})
-	public ModelAndView checkagree(HttpSession session,@PathVariable Integer attentionCustomerId,@PathVariable Integer customerId){
+	public @ResponseBody RestfulResult checkagree(HttpSession session,@PathVariable Integer attentionCustomerId,@PathVariable Integer customerId){
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
 		
@@ -564,11 +565,15 @@ public class IndexController {
 		
 		if(attentionService.selectByParams(example).size()>0){
 			result.setSuccess(true);
+			result.setMessage("已关注");
+		}else{
+			result.setSuccess(true);
+			result.setMessage("未关注");
 		}
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -579,11 +584,11 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/attention/del",method=RequestMethod.DELETE)
-	public ModelAndView AttentionDelsomebody(HttpSession session, String customerId, String attentionCustomerId,String type){
+	public @ResponseBody RestfulResult AttentionDelsomebody(HttpSession session, String customerId, String attentionCustomerId){
 		Criteria example = new Criteria();
 		example.put("customerId",customerId);
 		example.put("attentionCustomerId",attentionCustomerId);
-		example.put("attentionType",type);
+		
 		attentionService.deleteByParams(example);
 			
 			Message record=new Message();
@@ -610,9 +615,11 @@ public class IndexController {
 			result.setObj(customer.getScore());
 		result.setObj(customer.getGeneralAccount());
 		result.setObj(customer.getGrade());
+		result.setMessage("已取消关注");
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		
+		return result;
 	}
 	
 	
@@ -624,7 +631,7 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value = "/attention/{customerId}/{attentionCustomerId}/del", method ={RequestMethod.GET})
-	public ModelAndView checkdisagree(HttpSession session,@PathVariable Integer customerId,@PathVariable Integer attentionCustomerId){
+	public @ResponseBody RestfulResult checkdisagree(HttpSession session,@PathVariable Integer customerId,@PathVariable Integer attentionCustomerId){
 		RestfulResult result = new RestfulResult();
 		result.setSuccess(false);
 		
@@ -635,11 +642,15 @@ public class IndexController {
 		
 		if(attentionService.selectByParams(example).size()>0){
 			result.setSuccess(true);
+			result.setMessage("未取消关注");
+		}else{
+			result.setSuccess(false);
+			result.setMessage("已取消关注");
 		}
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -648,7 +659,7 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/advertis",method=RequestMethod.GET)
-	public ModelAndView advertis (HttpSession session){
+	public @ResponseBody RestfulResult advertis (HttpSession session){
 		Criteria example = new Criteria();
 		List<Advertis> advertis=advertisService.selectByParams(example);
 		RestfulResult result = new RestfulResult();
@@ -656,7 +667,7 @@ public class IndexController {
 		result.setObj(advertis);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	
@@ -666,9 +677,9 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/recommend/customer",method=RequestMethod.GET)
-	public ModelAndView recommendcustomer (HttpSession session,String score,String offset,String length){
+	public @ResponseBody RestfulResult recommendcustomer (HttpSession session,String offset,String length){
 		Criteria example = new Criteria();
-		example.setOrderByClause(score);
+		example.setOrderByClause("score");
 		example.setSord("asc");
 		example.setMysqlOffset(Integer.parseInt(offset));
 		example.setMysqlLength(Integer.parseInt(length));
@@ -679,7 +690,7 @@ public class IndexController {
 		result.setObj(customers);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	
@@ -690,13 +701,13 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/privilege/{customerId}",method=RequestMethod.GET)
-	public ModelAndView attention(@PathVariable Integer customerId){
+	public @ResponseBody RestfulResult attention(@PathVariable Integer customerId){
 		Criteria example=new Criteria();
 		example.put("customerId",customerId);
 		List<CustomerPrivilege> list=customerPrivilegeService.selectByParams(example);
 		List list2=new ArrayList();
 		for (CustomerPrivilege cp: list) {
-			Privilege privilege=privilegeService.selectByPrimaryKey(cp.getPrivilegeid());
+			Privilege privilege=privilegeService.selectByPrimaryKey(cp.getId());
 			list2.add(privilege);
 			
 		}
@@ -705,11 +716,11 @@ public class IndexController {
 		RestfulResult result=new RestfulResult();
 		result.setSuccess(true);
 		result.setObj(list2);
-		result.setObj(customer);
+		//result.setObj(customer);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 
 

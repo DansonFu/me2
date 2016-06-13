@@ -80,7 +80,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value="/searchCustomerid/{customerId}",method=RequestMethod.GET)
-	public ModelAndView Searchbody(HttpSession session,@PathVariable String customerId){
+	public @ResponseBody RestfulResult Searchbody(HttpSession session,@PathVariable String customerId){
 		Customer customer=customerService.selectByPrimaryKey(Integer.valueOf(customerId));
 		
 		Criteria example=new Criteria();
@@ -93,7 +93,7 @@ public class SearchController {
 		result.setObj(customer);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 //	/**
 //	 * 精确搜索用户信息
@@ -125,7 +125,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value="/searchUsername/{username}",method=RequestMethod.GET)
-	public @ResponseBody List Search4at(HttpSession session,@PathVariable String username){
+	public @ResponseBody RestfulResult Search4at(HttpSession session,@PathVariable String username){
 		List list=new ArrayList();
 		Criteria example=new Criteria();
 		example.put("username",username);
@@ -140,7 +140,7 @@ public class SearchController {
 		result.setObj(list);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return list;
+		return result;
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value = "/searchSchoolName/{schoolname}", method ={RequestMethod.GET})
-	public ModelAndView getPicturesBySchool(HttpSession session,@PathVariable String schoolname,String offset,String length){
+	public @ResponseBody RestfulResult getPicturesBySchool(HttpSession session,@PathVariable String schoolname,String offset,String length){
 		
 		Criteria example = new Criteria();
 		example.put("school",schoolname);
@@ -172,7 +172,7 @@ public class SearchController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -183,11 +183,11 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value = "/search/{customerId}/{pictype}", method ={RequestMethod.GET})
-	public ModelAndView getPicturesBypictype(HttpSession session,@PathVariable String customerId,@PathVariable String pictype){
+	public @ResponseBody RestfulResult getPicturesBypictype(HttpSession session,@PathVariable String customerId,@PathVariable String pictype){
 		
 		Criteria example = new Criteria();
 		example.put("customerId",customerId);
-		example.put("pictype", pictype);
+		example.put("token", pictype);
 		
 		
 		List<Picture> picture=pictureService.selectByParams(example);
@@ -199,7 +199,7 @@ public class SearchController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -209,7 +209,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value = "/task/{customerId}", method ={RequestMethod.GET})
-	public ModelAndView getMyTask(HttpSession session,@PathVariable String customerId){
+	public @ResponseBody RestfulResult getMyTask(HttpSession session,@PathVariable String customerId){
 		
 		Criteria example = new Criteria();
 		example.put("customerId",customerId);
@@ -224,7 +224,7 @@ public class SearchController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	
@@ -234,7 +234,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value = "/tasks", method ={RequestMethod.GET})
-	public ModelAndView getTask(HttpSession session){
+	public @ResponseBody RestfulResult getTask(HttpSession session){
 		
 		Criteria example = new Criteria();
 		List<Task> tasks=taskService.selectByParams(example);
@@ -246,7 +246,7 @@ public class SearchController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -255,7 +255,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value = "/props", method ={RequestMethod.GET})
-	public ModelAndView getProp(HttpSession session){
+	public @ResponseBody RestfulResult getProp(HttpSession session){
 		
 		Criteria example = new Criteria();
 		List<Prop> props=propService.selectByParams(example);
@@ -267,7 +267,7 @@ public class SearchController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -279,7 +279,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value = "/props/{customerId}/{pid}/{proptype}", method ={RequestMethod.POST})
-	public ModelAndView getPropBybody(HttpSession session,@PathVariable String customerId,@PathVariable String pid,@PathVariable String proptype){
+	public @ResponseBody RestfulResult getPropBybody(HttpSession session,@PathVariable String customerId,@PathVariable String pid,@PathVariable String proptype){
 		Present present=new Present();
 		present.setCreateTime(new Date());
 		present.setCustomerId(Integer.valueOf(customerId));
@@ -363,7 +363,7 @@ public class SearchController {
 			
 		}
 		picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
-		gamepropService.insertSelective(game);
+		gamepropService.insert(game);
 		customerService.updateByPrimaryKeySelective(customer);
 		pictureService.updateByPrimaryKeySelective(picture);
 		//存到用户消息表中
@@ -578,7 +578,7 @@ public class SearchController {
 				
 			}
 			picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
-			gamepropService.insertSelective(game);
+			gamepropService.insert(game);
 			customerService.updateByPrimaryKeySelective(customer);
 			pictureService.updateByPrimaryKeySelective(picture);
 			//存到用户消息表中
@@ -770,7 +770,7 @@ public class SearchController {
 		result.setObj(customer.getGrade());
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -780,7 +780,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value="/pictures/{pid}/bean",method=RequestMethod.GET)
-	public ModelAndView bean(HttpSession session,@PathVariable String pid){
+	public @ResponseBody RestfulResult bean(HttpSession session,@PathVariable String pid){
 		Criteria example=new Criteria();
 		example.put("pid",pid);
 		example .setOrderByClause("create_time");
@@ -801,7 +801,7 @@ public class SearchController {
 		
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**
@@ -813,7 +813,7 @@ public class SearchController {
 	 * @return
 	 */
 	@RequestMapping(value="/searchs/{longitude}/{latitude}/{precision}",method=RequestMethod.GET)
-	public ModelAndView getSchool(HttpSession session,@PathVariable String longitude,@PathVariable String latitude,@PathVariable String precision){
+	public @ResponseBody RestfulResult getSchool(HttpSession session,@PathVariable String longitude,@PathVariable String latitude,@PathVariable String precision){
 		
 		Criteria example=new Criteria();
 		example.put("current_longitude",longitude);
@@ -829,7 +829,7 @@ public class SearchController {
 		result.setObj(list);
 		ModelAndView mav=new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 }
