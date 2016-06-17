@@ -17,7 +17,7 @@ public class Mytask implements Serializable {
     private Integer customerId;
 
     /**
-     * 任务类型
+     * 任务类型,1系统任务 2个性任务
      */
     private Integer taskType;
 
@@ -45,6 +45,11 @@ public class Mytask implements Serializable {
      * 图片id
      */
     private Integer pid;
+
+    /**
+     * 提交任务时间
+     */
+    private Date lastTime;
 
     /**
      * @return 主键id
@@ -77,7 +82,7 @@ public class Mytask implements Serializable {
     }
 
     /**
-     * @return 任务类型
+     * @return 任务类型,1系统任务 2个性任务
      */
     public Integer getTaskType() {
         return taskType;
@@ -85,7 +90,7 @@ public class Mytask implements Serializable {
 
     /**
      * @param taskType 
-	 *            任务类型
+	 *            任务类型,1系统任务 2个性任务
      */
     public void setTaskType(Integer taskType) {
         this.taskType = taskType;
@@ -164,5 +169,20 @@ public class Mytask implements Serializable {
      */
     public void setPid(Integer pid) {
         this.pid = pid;
+    }
+
+    /**
+     * @return 提交任务时间
+     */
+    public Date getLastTime() {
+        return lastTime;
+    }
+
+    /**
+     * @param lastTime 
+	 *            提交任务时间
+     */
+    public void setLastTime(Date lastTime) {
+        this.lastTime = lastTime;
     }
 }

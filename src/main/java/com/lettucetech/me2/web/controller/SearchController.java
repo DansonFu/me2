@@ -4,13 +4,10 @@ package com.lettucetech.me2.web.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSON;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,7 @@ import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Present;
 import com.lettucetech.me2.pojo.Prop;
 import com.lettucetech.me2.pojo.Task;
+import com.lettucetech.me2.pojo.Vote;
 import com.lettucetech.me2.service.CustomerPrivilegeService;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.GamepropService;
@@ -43,6 +41,7 @@ import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PresentService;
 import com.lettucetech.me2.service.PropService;
 import com.lettucetech.me2.service.TaskService;
+import com.lettucetech.me2.service.VoteService;
 /**
  * 搜索页面的方法
  * @author 付大海
@@ -72,6 +71,10 @@ public class SearchController {
 	private GradeService gradeService;
 	@Autowired
 	private CustomerPrivilegeService customerPrivilegeService;
+	@Autowired
+	private VoteService voteService;
+	
+	
 	
 	/**
 	 * 搜索用户的详细信息和发布的所有密图信息
@@ -831,5 +834,124 @@ public class SearchController {
 		mav.addObject(result);
 		return result;
 	}
+	/**
+	 * 判断是否有足够的糖块购买个性任务
+	 * @param session
+	 * @param customerId
+	 * @param taskid
+	 * @return
+	 */
+	@RequestMapping(value="/tasks/{customerId}/{taskid}/different",method=RequestMethod.POST)
+	public @ResponseBody RestfulResult checkTaskByDifferent(HttpSession session,@PathVariable Integer customerId,@PathVariable Integer taskid ){
+		RestfulResult result=new RestfulResult();
+		Task task=taskService.selectByPrimaryKey(taskid);
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		if (task.getTasktype()==2 && task.getCustom()>0) {
+			if (customer.getGeneralAccount()>10) {
+				result.setMessage("可以购买");
+			}else{
+				result.setMessage("糖块不足");
+			}
+		}
+		
+		
+		
+		return result;
+	}
 	
+	
+	/**
+	 * 领取个性任务
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/tasks/different",method=RequestMethod.GET)
+	public @ResponseBody RestfulResult getTaskByDifferent(HttpSession session, Integer customerId, Integer taskid){
+		Task task=taskService.selectByPrimaryKey(taskid);
+		Criteria example=new Criteria();
+		example.put("taskid",taskid);
+		example.put("customerId", customerId);
+		
+		List<Mytask> lists=mytaskService.selectByParams(example);
+		String messagetype="";
+		String content="";
+		if(lists.size()>0 && task.getTasktype()==2){
+			content="已领取过此任务";
+			messagetype="17";
+		}else{
+			
+			Mytask mytask=new Mytask();
+			mytask.setComplete(0);
+			mytask.setCreateTime(new Date());
+			mytask.setCustomerId(customerId);
+			mytask.setTaskid(taskid);
+			mytask.setTaskstyle(2);//2一次性任务
+			mytask.setTaskType(2);//2个性任务
+			
+			mytaskService.insertSelective(mytask);
+			content="领取个性任务成功";
+			messagetype="17";
+		}
+		Message record=new Message();
+		record.setContent(content);
+		record.setCreateTime(new Date());
+		record.setCustomerId(customerId);
+		record.setProcessed("1");
+		record.setType(messagetype);
+		messageService.insertSelective(record);
+		
+		RestfulResult result=new RestfulResult();
+		return result;
+	}
+	
+	/**
+	 * 判断是否有足够的糖块购投票贴或者悬赏令
+	 * @param session
+	 * @param customerId
+	 * @param taskid
+	 * @return
+	 */
+	@RequestMapping(value="/votes/check",method=RequestMethod.POST)
+	public @ResponseBody RestfulResult checkvote(HttpSession session,Integer customerId){
+		RestfulResult result=new RestfulResult();
+		
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		if (customer.getGeneralAccount()>10) {
+			result.setMessage("糖块足够");
+		}else{
+			result.setMessage("糖块不足");
+		}
+		
+		
+		
+		return result;
+	}
+	
+	/**
+	 * 生成投票令
+	 * @param session
+	 * @param customerId
+	 * @param tokentype
+	 * @param va
+	 * @param vb
+	 * @return
+	 */
+	@RequestMapping(value="/votes/{customerId}/check",method=RequestMethod.GET)
+	public @ResponseBody RestfulResult checkvoteBy(HttpSession session,@PathVariable Integer customerId,String va,String vb){
+		RestfulResult result=new RestfulResult();
+		Customer customer=customerService.selectByPrimaryKey(customerId);
+		
+			
+			Vote vote=new Vote();
+			vote.setCustomerid(customerId);
+			vote.setVa(va);
+			vote.setVb(vb);
+			voteService.insertSelective(vote);
+			
+			result.setObj(customer);
+			result.setObj(vote);
+			result.setMessage("生成投票令成功");
+		
+		return result;
+	}
 }

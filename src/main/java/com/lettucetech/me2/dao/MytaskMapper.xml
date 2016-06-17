@@ -1,175 +1,188 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lettucetech.me2.dao.MytaskMapper" >
-  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Mytask" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-    <result column="task_type" property="taskType" jdbcType="INTEGER" />
-    <result column="taskid" property="taskid" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="taskstyle" property="taskstyle" jdbcType="INTEGER" />
-    <result column="complete" property="complete" jdbcType="INTEGER" />
-    <result column="pid" property="pid" jdbcType="INTEGER" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lettucetech.me2.dao.MytaskMapper">
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Mytask">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="task_type" jdbcType="INTEGER" property="taskType" />
+    <result column="taskid" jdbcType="INTEGER" property="taskid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="taskstyle" jdbcType="INTEGER" property="taskstyle" />
+    <result column="complete" jdbcType="INTEGER" property="complete" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <trim prefix="where" prefixOverrides="and|or" >
-      <if test="condition.customerId != null" >
+  <sql id="Example_Where_Clause">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="condition.customerId != null">
          and customer_id = #{condition.customerId}
       </if>
-      <if test="condition.taskType != null" >
+      <if test="condition.taskType != null">
          and task_type = #{condition.taskType}
       </if>
-      <if test="condition.taskid != null" >
+      <if test="condition.taskid != null">
          and taskid = #{condition.taskid}
       </if>
-      <if test="condition.createTime != null" >
+      <if test="condition.createTime != null">
          and create_time = #{condition.createTime}
       </if>
-      <if test="condition.taskstyle != null" >
+      <if test="condition.taskstyle != null">
          and taskstyle = #{condition.taskstyle}
       </if>
-      <if test="condition.complete != null" >
+      <if test="condition.complete != null">
          and complete = #{condition.complete}
       </if>
-      <if test="condition.pid != null" >
+      <if test="condition.pid != null">
          and pid = #{condition.pid}
+      </if>
+      <if test="condition.lastTime != null">
+         and last_time = #{condition.lastTime}
       </if>
     </trim>
   </sql>
-  <sql id="Base_Column_List" >
-    id, customer_id, task_type, taskid, create_time, taskstyle, complete, pid
+  <sql id="Base_Column_List">
+    id, customer_id, task_type, taskid, create_time, taskstyle, complete, pid, last_time
   </sql>
-  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+  <select id="selectByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from mytask
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from mytask
     where id = #{id}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mytask
     where id = #{id}
   </delete>
-  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria">
     delete from mytask
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Mytask" >
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Mytask">
     insert into mytask (id, customer_id, task_type, taskid, create_time, taskstyle, 
-      complete, pid)
+      complete, pid, last_time)
     values (#{id}, #{customerId}, #{taskType}, #{taskid}, #{createTime}, #{taskstyle}, 
-      #{complete}, #{pid})
+      #{complete}, #{pid}, #{lastTime})
   </insert>
-  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Mytask" >
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Mytask">
     insert into mytask
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="customerId != null" >
+      <if test="customerId != null">
         customer_id,
       </if>
-      <if test="taskType != null" >
+      <if test="taskType != null">
         task_type,
       </if>
-      <if test="taskid != null" >
+      <if test="taskid != null">
         taskid,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="taskstyle != null" >
+      <if test="taskstyle != null">
         taskstyle,
       </if>
-      <if test="complete != null" >
+      <if test="complete != null">
         complete,
       </if>
-      <if test="pid != null" >
+      <if test="pid != null">
         pid,
       </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id},
       </if>
-      <if test="customerId != null" >
+      <if test="customerId != null">
         #{customerId},
       </if>
-      <if test="taskType != null" >
+      <if test="taskType != null">
         #{taskType},
       </if>
-      <if test="taskid != null" >
+      <if test="taskid != null">
         #{taskid},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime},
       </if>
-      <if test="taskstyle != null" >
+      <if test="taskstyle != null">
         #{taskstyle},
       </if>
-      <if test="complete != null" >
+      <if test="complete != null">
         #{complete},
       </if>
-      <if test="pid != null" >
+      <if test="pid != null">
         #{pid},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime},
       </if>
     </trim>
   </insert>
-  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer">
     select count(*) from mytask
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByParamsSelective" parameterType="map" >
+  <update id="updateByParamsSelective" parameterType="map">
     update mytask
-    <set >
-      <if test="record.id != null" >
+    <set>
+      <if test="record.id != null">
         id = #{record.id},
       </if>
-      <if test="record.customerId != null" >
+      <if test="record.customerId != null">
         customer_id = #{record.customerId},
       </if>
-      <if test="record.taskType != null" >
+      <if test="record.taskType != null">
         task_type = #{record.taskType},
       </if>
-      <if test="record.taskid != null" >
+      <if test="record.taskid != null">
         taskid = #{record.taskid},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime},
       </if>
-      <if test="record.taskstyle != null" >
+      <if test="record.taskstyle != null">
         taskstyle = #{record.taskstyle},
       </if>
-      <if test="record.complete != null" >
+      <if test="record.complete != null">
         complete = #{record.complete},
       </if>
-      <if test="record.pid != null" >
+      <if test="record.pid != null">
         pid = #{record.pid},
       </if>
+      <if test="record.lastTime != null">
+        last_time = #{record.lastTime},
+      </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByParams" parameterType="map" >
+  <update id="updateByParams" parameterType="map">
     update mytask
     set id = #{record.id},
       customer_id = #{record.customerId},
@@ -178,39 +191,43 @@
       create_time = #{record.createTime},
       taskstyle = #{record.taskstyle},
       complete = #{record.complete},
-      pid = #{record.pid}
-    <if test="_parameter != null" >
+      pid = #{record.pid},
+      last_time = #{record.lastTime}
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Mytask" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Mytask">
     update mytask
-    <set >
-      <if test="customerId != null" >
+    <set>
+      <if test="customerId != null">
         customer_id = #{customerId},
       </if>
-      <if test="taskType != null" >
+      <if test="taskType != null">
         task_type = #{taskType},
       </if>
-      <if test="taskid != null" >
+      <if test="taskid != null">
         taskid = #{taskid},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime},
       </if>
-      <if test="taskstyle != null" >
+      <if test="taskstyle != null">
         taskstyle = #{taskstyle},
       </if>
-      <if test="complete != null" >
+      <if test="complete != null">
         complete = #{complete},
       </if>
-      <if test="pid != null" >
+      <if test="pid != null">
         pid = #{pid},
+      </if>
+      <if test="lastTime != null">
+        last_time = #{lastTime},
       </if>
     </set>
     where id = #{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Mytask" >
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Mytask">
     update mytask
     set customer_id = #{customerId},
       task_type = #{taskType},
@@ -218,7 +235,9 @@
       create_time = #{createTime},
       taskstyle = #{taskstyle},
       complete = #{complete},
-      pid = #{pid}
+      pid = #{pid},
+      last_time = #{lastTime}
     where id = #{id}
   </update>
+  
 </mapper>

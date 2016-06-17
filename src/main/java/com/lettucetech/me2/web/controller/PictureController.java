@@ -904,6 +904,7 @@ public class PictureController {
 			for (Mytask mytask : mytasks) {
 				mytask.setComplete(1);
 				mytask.setPid(pid);
+				mytask.setLastTime(new Date());
 				mytaskService.updateByParamsSelective(mytask, example);
 			}
 			result.setSuccess(true);

@@ -1,6 +1,7 @@
 package com.lettucetech.me2.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -29,6 +30,26 @@ public class Task implements Serializable {
      * 1,长期任务 2,一次性任务
      */
     private Integer taskstyle;
+
+    /**
+     * 任务发布时间
+     */
+    private Date createTime;
+
+    /**
+     * 任务过期时间
+     */
+    private Date lastTime;
+
+    /**
+     * 消费的糖块
+     */
+    private Integer custom;
+
+    /**
+     * 奖励的糖块
+     */
+    private Integer award;
 
     /**
      * @return 主键id
@@ -103,5 +124,65 @@ public class Task implements Serializable {
      */
     public void setTaskstyle(Integer taskstyle) {
         this.taskstyle = taskstyle;
+    }
+
+    /**
+     * @return 任务发布时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime 
+	 *            任务发布时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * @return 任务过期时间
+     */
+    public Date getLastTime() {
+        return lastTime;
+    }
+
+    /**
+     * @param lastTime 
+	 *            任务过期时间
+     */
+    public void setLastTime(Date lastTime) {
+        this.lastTime = lastTime;
+    }
+
+    /**
+     * @return 消费的糖块
+     */
+    public Integer getCustom() {
+        return custom;
+    }
+
+    /**
+     * @param custom 
+	 *            消费的糖块
+     */
+    public void setCustom(Integer custom) {
+        this.custom = custom;
+    }
+
+    /**
+     * @return 奖励的糖块
+     */
+    public Integer getAward() {
+        return award;
+    }
+
+    /**
+     * @param award 
+	 *            奖励的糖块
+     */
+    public void setAward(Integer award) {
+        this.award = award;
     }
 }

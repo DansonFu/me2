@@ -7,6 +7,10 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="tasktype" property="tasktype" jdbcType="INTEGER" />
     <result column="taskstyle" property="taskstyle" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
+    <result column="custom" property="custom" jdbcType="INTEGER" />
+    <result column="award" property="award" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -22,10 +26,22 @@
       <if test="condition.taskstyle != null" >
          and taskstyle = #{condition.taskstyle}
       </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime}
+      </if>
+      <if test="condition.lastTime != null" >
+         and last_time = #{condition.lastTime}
+      </if>
+      <if test="condition.custom != null" >
+         and custom = #{condition.custom}
+      </if>
+      <if test="condition.award != null" >
+         and award = #{condition.award}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, title, content, tasktype, taskstyle
+    id, title, content, tasktype, taskstyle, create_time, last_time, custom, award
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -59,8 +75,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Task" >
-    insert into task (id, title, content, tasktype, taskstyle)
-    values (#{id}, #{title}, #{content}, #{tasktype}, #{taskstyle})
+    insert into task (id, title, content, tasktype, taskstyle, create_time, last_time, 
+      custom, award)
+    values (#{id}, #{title}, #{content}, #{tasktype}, #{taskstyle}, #{createTime}, #{lastTime}, 
+      #{custom}, #{award})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Task" >
     insert into task
@@ -80,6 +98,18 @@
       <if test="taskstyle != null" >
         taskstyle,
       </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastTime != null" >
+        last_time,
+      </if>
+      <if test="custom != null" >
+        custom,
+      </if>
+      <if test="award != null" >
+        award,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -96,6 +126,18 @@
       </if>
       <if test="taskstyle != null" >
         #{taskstyle},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="lastTime != null" >
+        #{lastTime},
+      </if>
+      <if test="custom != null" >
+        #{custom},
+      </if>
+      <if test="award != null" >
+        #{award},
       </if>
     </trim>
   </insert>
@@ -123,6 +165,18 @@
       <if test="record.taskstyle != null" >
         taskstyle = #{record.taskstyle},
       </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime},
+      </if>
+      <if test="record.lastTime != null" >
+        last_time = #{record.lastTime},
+      </if>
+      <if test="record.custom != null" >
+        custom = #{record.custom},
+      </if>
+      <if test="record.award != null" >
+        award = #{record.award},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -134,7 +188,11 @@
       title = #{record.title},
       content = #{record.content},
       tasktype = #{record.tasktype},
-      taskstyle = #{record.taskstyle}
+      taskstyle = #{record.taskstyle},
+      create_time = #{record.createTime},
+      last_time = #{record.lastTime},
+      custom = #{record.custom},
+      award = #{record.award}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -154,6 +212,18 @@
       <if test="taskstyle != null" >
         taskstyle = #{taskstyle},
       </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="lastTime != null" >
+        last_time = #{lastTime},
+      </if>
+      <if test="custom != null" >
+        custom = #{custom},
+      </if>
+      <if test="award != null" >
+        award = #{award},
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -162,7 +232,11 @@
     set title = #{title},
       content = #{content},
       tasktype = #{tasktype},
-      taskstyle = #{taskstyle}
+      taskstyle = #{taskstyle},
+      create_time = #{createTime},
+      last_time = #{lastTime},
+      custom = #{custom},
+      award = #{award}
     where id = #{id}
   </update>
 </mapper>

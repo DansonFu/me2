@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lettucetech.me2.dao.VoteMapper" >
+  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Vote" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customerId" property="customerid" jdbcType="INTEGER" />
+    <result column="vA" property="va" jdbcType="VARCHAR" />
+    <result column="vB" property="vb" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.customerid != null" >
+         and customerId = #{condition.customerid}
+      </if>
+      <if test="condition.va != null" >
+         and vA = #{condition.va}
+      </if>
+      <if test="condition.vb != null" >
+         and vB = #{condition.vb}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, customerId, vA, vB
+  </sql>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from vote
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from vote
+    where id = #{id}
+  </delete>
+  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    delete from vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Vote" >
+    insert into vote (id, customerId, vA, vB)
+    values (#{id}, #{customerid}, #{va}, #{vb})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Vote" >
+    insert into vote
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerid != null" >
+        customerId,
+      </if>
+      <if test="va != null" >
+        vA,
+      </if>
+      <if test="vb != null" >
+        vB,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="customerid != null" >
+        #{customerid},
+      </if>
+      <if test="va != null" >
+        #{va},
+      </if>
+      <if test="vb != null" >
+        #{vb},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
+    select count(*) from vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByParamsSelective" parameterType="map" >
+    update vote
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.customerid != null" >
+        customerId = #{record.customerid},
+      </if>
+      <if test="record.va != null" >
+        vA = #{record.va},
+      </if>
+      <if test="record.vb != null" >
+        vB = #{record.vb},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByParams" parameterType="map" >
+    update vote
+    set id = #{record.id},
+      customerId = #{record.customerid},
+      vA = #{record.va},
+      vB = #{record.vb}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Vote" >
+    update vote
+    <set >
+      <if test="customerid != null" >
+        customerId = #{customerid},
+      </if>
+      <if test="va != null" >
+        vA = #{va},
+      </if>
+      <if test="vb != null" >
+        vB = #{vb},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Vote" >
+    update vote
+    set customerId = #{customerid},
+      vA = #{va},
+      vB = #{vb}
+    where id = #{id}
+  </update>
+</mapper>
