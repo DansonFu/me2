@@ -26,6 +26,7 @@ import com.lettucetech.me2.pojo.Advertis;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Picture;
 import com.lettucetech.me2.pojo.Picturerecommend;
+import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtMetoo;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.service.AdvertisService;
@@ -39,6 +40,8 @@ public class AdvertisController {
 
 	@Autowired 
 	private AdvertisService advertis;
+	@Autowired
+	private AdvertisService advertisService;
 	/**
 	 * 
 	 * @return
@@ -83,8 +86,8 @@ public class AdvertisController {
 	    }
 		
 		Criteria example = new Criteria();
-		//example.setOrderByClause("sort");
-		//example.setSord("desc");
+		example.setOrderByClause("sort");
+		example.setSord("desc");
 		//example.put("picture","pid" );
 	    example.setMysqlOffset(iDisplayStart);
 	    example.setMysqlLength(iDisplayLength);
@@ -96,8 +99,8 @@ public class AdvertisController {
 		String aa ="";
 		for(Advertis g : games){
 			String burl = "";
-			burl = QiniuUtil.getDownUrl(g.getAdpicture());
-			String[] d = {g.getId().toString(),burl,g.getSort().toString(),aa,aa};
+			burl =  Me2Constants.QINIUPUBLICDOMAIN+"/"+g.getAdpicture();
+			String[] d = {g.getId().toString(),burl,aa};
 			list.add(d);
 		}
 		
@@ -203,6 +206,80 @@ public class AdvertisController {
 //		picurerecommendService.insert(pc);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/admin/advertis");
+		return mav;
+	}
+	
+	/**
+	 * 精选集合当中顺序上调的方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/upadvertis")
+	public  ModelAndView upcommend(HttpSession session,String id){
+		
+		ModelAndView mav = new ModelAndView();
+		Advertis list=advertisService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = list.getSort();
+		Integer b = null;
+		if(a==1){
+			mav.setViewName("/admin/advertis");
+		}else{
+		Criteria example = new Criteria();
+		example.put("sort", a-1);
+		List<Advertis> taglist = advertisService.selectByParams(example);
+		for(Advertis tagslist:taglist){
+			if(tagslist.getSort().equals(a-1)){
+				b = tagslist.getId();
+				break;
+			}
+		}
+		Advertis list1 = advertisService.selectByPrimaryKey(b);
+		list1.setSort(a);
+		advertisService.updateByPrimaryKeySelective(list1);
+		list.setSort(a-1);
+		advertisService.updateByPrimaryKeySelective(list);
+		
+
+		mav.setViewName("/admin/advertis");
+		}
+		return mav;
+	}
+
+	/**
+	 * 精选集合当中顺序下调的方法
+	 * @param session
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping("admin/downadvertis")
+	public  ModelAndView downcommend(HttpSession session,String id){
+		ModelAndView mav = new ModelAndView();
+		Advertis list=advertisService.selectByPrimaryKey(Integer.valueOf(id));
+		Integer a = list.getSort();
+		Integer b = null;
+		
+		Criteria example = new Criteria();
+		example.put("sort", a+1);
+		List<Advertis> taglist = advertisService.selectByParams(example);
+		for(Advertis tagslist:taglist){
+			if(tagslist.getSort().equals(a+1)){
+				b = tagslist.getId();
+				break;
+			}
+		}
+		if(b==null){
+			mav.setViewName("/admin/advertis");
+		}else{
+			Advertis list1 = advertisService.selectByPrimaryKey(b);
+		list1.setSort(a);
+		advertisService.updateByPrimaryKeySelective(list1);
+		list.setSort(a+1);
+		advertisService.updateByPrimaryKeySelective(list);
+		}
+		
+		mav.setViewName("/admin/advertis");
+		
 		return mav;
 	}
 	

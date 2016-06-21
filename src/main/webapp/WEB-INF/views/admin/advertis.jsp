@@ -31,6 +31,14 @@
 <script src="<%=basePath %>resources/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath %>resources/assets/js/ace.min.js"></script>
+<style type="text/css">
+	
+	.box{
+	
+		width:100px;
+		height:100px;
+	}
+</style>
 </head>
 <body>
 <div class="page-content">
@@ -94,14 +102,11 @@
 						<th class="center" >
 							图片
 						</th>
-						<th class="center">排序</th>
+						
 						
 						<th class="center">操作</th>
 						
-						 <th class="table-checkbox">
-                            选择
-                        </th>
-                        
+				
 					</tr>
 				</thead>
 	
@@ -141,11 +146,11 @@ function del(id){
 }
 
 function up(id){
-	window.location="<%=basePath %>admin/?id="+id;
+	window.location="<%=basePath %>admin/upadvertis?id="+id;
 }
 
 function down(id){
-	window.location="<%=basePath %>admin/?id="+id;
+	window.location="<%=basePath %>admin/downadvertis?id="+id;
 }
 
 function loadImageFile(event){
@@ -236,15 +241,15 @@ $(document).ready(function(){
    	        	   }
    	           },
    	           {
-   	        	 "aTargets": [3],
+   	        	 "aTargets": [2],
  	        	   "fnRender":function(data,type){
  	        		   var str = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">';
  	        			//str += '<a class="blue" href="javascript:;" onclick="view('+"'"+data.aData[0]+"'"+')">';
  	        			//str += '<i class="icon-zoom-in bigger-130"></i>';
  	        			//str += '</a>';
- 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[2]+"'"+')"/>';
+ 	        			str += '<input type="button"  value="上调"  onclick="up('+"'"+data.aData[0]+"'"+')"/>';
  	        			str += '<br>';
-   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[2]+"'"+')"/>';
+   	        			str += '<input type="button"  value="下调"  onclick="down('+"'"+data.aData[0]+"'"+')"/>';
    	        			str += '<br>';
    	        			str += '<input type="button"  value="删除"  onclick="del('+"'"+data.aData[0]+"'"+')"/>';
    	        			str += '</div>';
@@ -252,14 +257,7 @@ $(document).ready(function(){
  	        		    return  str;
  	        	   }
    	           },
-   	           
-   	           {"aTargets": [4],
-                   "fnRender": function (data, type, full, meta) {
-                     return '<input type="checkbox" class="checkboxes" value="' + data + '"/>';
-                    }
-              },
-   	         
-   	       
+   	          
    	         ],
 		     "bServerSide": true,//这个用来指明是通过服务端来取数据
 		     "sAjaxSource": "<%=basePath %>/admin/getAdvertis",//这个是请求的地址
