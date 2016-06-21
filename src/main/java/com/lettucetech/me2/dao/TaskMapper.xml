@@ -11,6 +11,7 @@
     <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
     <result column="custom" property="custom" jdbcType="INTEGER" />
     <result column="award" property="award" jdbcType="INTEGER" />
+    <result column="del" property="del" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -38,10 +39,13 @@
       <if test="condition.award != null" >
          and award = #{condition.award}
       </if>
+       <if test="condition.del != null" >
+         and del = #{condition.del}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
-    id, title, content, tasktype, taskstyle, create_time, last_time, custom, award
+    id, title, content, tasktype, taskstyle, create_time, last_time, custom, award, del
   </sql>
   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
@@ -76,9 +80,9 @@
   </delete>
   <insert id="insert" parameterType="com.lettucetech.me2.pojo.Task" >
     insert into task (id, title, content, tasktype, taskstyle, create_time, last_time, 
-      custom, award)
+      custom, award ,del)
     values (#{id}, #{title}, #{content}, #{tasktype}, #{taskstyle}, #{createTime}, #{lastTime}, 
-      #{custom}, #{award})
+      #{custom}, #{award} ,#{del})
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Task" >
     insert into task
@@ -110,6 +114,9 @@
       <if test="award != null" >
         award,
       </if>
+      <if test="del != null" >
+        del,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -138,6 +145,9 @@
       </if>
       <if test="award != null" >
         #{award},
+      </if>
+      <if test="del != null" >
+        #{del},
       </if>
     </trim>
   </insert>
@@ -177,6 +187,9 @@
       <if test="record.award != null" >
         award = #{record.award},
       </if>
+       <if test="record.del != null" >
+        del = #{record.del},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -192,7 +205,8 @@
       create_time = #{record.createTime},
       last_time = #{record.lastTime},
       custom = #{record.custom},
-      award = #{record.award}
+      award = #{record.award},
+      del = #{record.del}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -224,6 +238,9 @@
       <if test="award != null" >
         award = #{award},
       </if>
+       <if test="del != null" >
+        del = #{del},
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -236,7 +253,8 @@
       create_time = #{createTime},
       last_time = #{lastTime},
       custom = #{custom},
-      award = #{award}
+      award = #{award},
+      del = #{del}
     where id = #{id}
   </update>
 </mapper>

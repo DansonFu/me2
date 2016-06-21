@@ -52,6 +52,10 @@ public class Task implements Serializable {
     private Integer award;
 
     /**
+     * 是否逻辑删除
+     */
+    private Integer del;
+    /**
      * @return 主键id
      */
     public Integer getId() {
@@ -73,6 +77,9 @@ public class Task implements Serializable {
         return title;
     }
 
+    public Integer getDel() {
+        return del;
+    }
     /**
      * @param title 
 	 *            任务名称
@@ -184,5 +191,8 @@ public class Task implements Serializable {
      */
     public void setAward(Integer award) {
         this.award = award;
+    }
+    public void setDel(Integer del) {
+        this.del = del;
     }
 }
