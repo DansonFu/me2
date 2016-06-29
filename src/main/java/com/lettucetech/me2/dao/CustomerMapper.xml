@@ -38,6 +38,9 @@
     <result column="grade" property="grade" jdbcType="INTEGER" />
     <result column="general_account" property="generalAccount" jdbcType="INTEGER" />
     <result column="raise_public_accounts" property="raisePublicAccounts" jdbcType="INTEGER" />
+    <result column="isinfoComplete" property="isinfoComplete" jdbcType="INTEGER" />
+    <result column="isNameDuplicated" property="isNameDuplicated" jdbcType="INTEGER" />
+    <result column="yearEnterSchool" property="yearEnterSchool" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -146,6 +149,15 @@
       <if test="condition.raisePublicAccounts != null" >
          and raise_public_accounts = #{condition.raisePublicAccounts}
       </if>
+       <if test="condition.isinfoComplete != null" >
+         and isinfoComplete = #{condition.isinfoComplete}
+      </if>
+       <if test="condition.isNameDuplicated != null" >
+         and isNameDuplicated = #{condition.isNameDuplicated}
+      </if>
+       <if test="condition.yearEnterSchool != null" >
+         and yearEnterSchool = #{condition.yearEnterSchool}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
@@ -153,7 +165,7 @@
     language, headimgurl, subscribe_time, remark, groupid, realname, password, total_credit, 
     current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
     source, creat_time, update_time, login_time, sourceid, del, inneruser, apppushtoken, 
-    school, score, grade, general_account, raise_public_accounts
+    school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool
   </sql>
   <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     SELECT * FROM customer 
@@ -262,14 +274,14 @@
       remark, groupid, realname, password, total_credit, current_shop, 
       current_latitude, current_longtitude, current_precision, phone, username, 
       source, creat_time, update_time, login_time, sourceid, del, inneruser, 
-      apppushtoken, school, score, grade, general_account, raise_public_accounts
+      apppushtoken, school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool
       )
     values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
       #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
       #{remark}, #{groupid}, #{realname}, #{password}, #{totalCredit}, #{currentShop}, 
       #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
       #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}, 
-      #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts}
+      #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts},#{isinfoComplete} ,#{isNameDuplicated},#{yearEnterSchool}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
@@ -383,6 +395,15 @@
       <if test="raisePublicAccounts != null" >
         raise_public_accounts,
       </if>
+       <if test="condition.isinfoComplete != null" >
+         and isinfoComplete = #{condition.isinfoComplete}
+      </if>
+       <if test="condition.isNameDuplicated != null" >
+         and isNameDuplicated = #{condition.isNameDuplicated}
+      </if>
+       <if test="condition.yearEnterSchool != null" >
+         and yearEnterSchool = #{condition.yearEnterSchool}
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -492,6 +513,15 @@
       </if>
       <if test="raisePublicAccounts != null" >
         #{raisePublicAccounts},
+      </if>
+       <if test="isinfoComplete != null" >
+          #{condition.isinfoComplete}
+      </if>
+       <if test="isNameDuplicated != null" >
+          #{condition.isNameDuplicated}
+      </if>
+       <if test="yearEnterSchool != null" >
+         #{condition.yearEnterSchool}
       </if>
     </trim>
   </insert>
@@ -612,6 +642,15 @@
       <if test="record.raisePublicAccounts != null" >
         raise_public_accounts = #{record.raisePublicAccounts},
       </if>
+       <if test="record.isinfoComplete != null" >
+          isinfoComplete = #{record.isinfoComplete}
+      </if>
+       <if test="record.isNameDuplicated != null" >
+          isNameDuplicated = #{record.isNameDuplicated}
+      </if>
+       <if test="record.yearEnterSchool != null" >
+          yearEnterSchool = #{record.yearEnterSchool}
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -654,7 +693,10 @@
       score = #{record.score},
       grade = #{record.grade},
       general_account = #{record.generalAccount},
-      raise_public_accounts = #{record.raisePublicAccounts}
+      raise_public_accounts = #{record.raisePublicAccounts},
+      isinfoComplete = #{record.isinfoComplete},
+      isNameDuplicated = #{record.isNameDuplicated},
+      yearEnterSchool = #{record.yearEnterSchool}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -767,6 +809,15 @@
       <if test="raisePublicAccounts != null" >
         raise_public_accounts = #{raisePublicAccounts},
       </if>
+      <if test="isinfoComplete != null" >
+          isinfoComplete = #{isinfoComplete}
+      </if>
+       <if test="isNameDuplicated != null" >
+          isNameDuplicated = #{isNameDuplicated}
+      </if>
+       <if test="yearEnterSchool != null" >
+          yearEnterSchool = #{yearEnterSchool}
+      </if>
     </set>
     where customer_id = #{customerId}
   </update>
@@ -806,7 +857,10 @@
       score = #{score},
       grade = #{grade},
       general_account = #{generalAccount},
-      raise_public_accounts = #{raisePublicAccounts}
+      raise_public_accounts = #{raisePublicAccounts},
+      isinfoComplete = #{record.isinfoComplete},
+      isNameDuplicated = #{record.isNameDuplicated},
+      yearEnterSchool = #{record.yearEnterSchool}
     where customer_id = #{customerId}
   </update>
 </mapper>

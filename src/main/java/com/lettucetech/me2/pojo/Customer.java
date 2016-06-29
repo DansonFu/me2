@@ -182,7 +182,40 @@ public class Customer implements Serializable {
      * 众筹账户
      */
     private Integer raisePublicAccounts;
+    /**
+     * 是否补全个人信息 0未补全 1补全
+     */
+    private Integer isinfoComplete;
+    /**
+     * 昵称是否重复 0未重复 1重复
+     */
+    private Integer isNameDuplicated;
+    /**
+     * 入学年份
+     */
+    private String yearEnterSchool;
+    
+    public Integer getIsinfoComplete() {
+        return isinfoComplete;
+    }
 
+    public void setIsinfoComplete(Integer isinfoComplete) {
+        this.isinfoComplete = isinfoComplete;
+    }
+    public Integer getIsNameDuplicated() {
+        return isNameDuplicated;
+    }
+
+    public void setIsNameDuplicated(Integer isNameDuplicated) {
+        this.isNameDuplicated = isNameDuplicated;
+    }
+    public String getYearEnterSchool() {
+        return yearEnterSchool;
+    }
+
+    public void setYearEnterSchool(String yearEnterSchool) {
+        this.yearEnterSchool = yearEnterSchool;
+    }
     public Integer getCustomerId() {
         return customerId;
     }

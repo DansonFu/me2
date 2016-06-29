@@ -1,13 +1,17 @@
 
 package com.lettucetech.me2.web.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSON;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lettucetech.me2.common.constant.Me2Constants;
 import com.lettucetech.me2.common.pojo.RestfulResult;
+import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.CustomerPrivilege;
@@ -918,8 +923,10 @@ public class SearchController {
 		Customer customer=customerService.selectByPrimaryKey(customerId);
 		if (customer.getGeneralAccount()>10) {
 			result.setMessage("糖块足够");
+			result.setObj(customer);
 		}else{
 			result.setMessage("糖块不足");
+			result.setObj(customer);
 		}
 		
 		
@@ -946,6 +953,7 @@ public class SearchController {
 			vote.setCustomerid(customerId);
 			vote.setVa(va);
 			vote.setVb(vb);
+			
 			voteService.insertSelective(vote);
 			
 			result.setObj(customer);

@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.PictureService;
 import com.lettucetech.me2.service.PrivilegeService;
+import com.squareup.okhttp.Request;
 
 /**
  * 网站首页controller
@@ -116,42 +119,55 @@ public class IndexController {
 	 */
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public void register(HttpSession session,HttpServletResponse response,  Customer customer) {
-		Criteria example = new Criteria();
-//		example.put("phone", customer.getPhone());
-//		List<Customer> list1 = customerService.selectByParams(example);
-//		example.clear();
-		example.put("username", customer.getUsername());
-		List<Customer> list2 = customerService.selectByParams(example);
 		
 		RestfulResult result = new RestfulResult();
+		if (customer.getCity()==null || customer.getSex()==null || customer.getSchool()==null || customer.getYearEnterSchool()==null) {
+			result.setSuccess(false);
+			customer.setIsinfoComplete(1);
+			result.setObj(customer);
+			result.setMessage("用户信息不全");
+		}else{
+		
+		Criteria example = new Criteria();
+		
+//		example.put("phone", customer.getPhone());
+//		List<Customer> list1 = customerService.selectByParams(example);
+		example.clear();
+		example.put("username", customer.getUsername());
+	
+		List<Customer> list2 = customerService.selectByParams(example);
+		
+		
 //		if(list1.size()>0){
 //			result.setSuccess(false);
 //			result.setMessage("该号码已存在");
 //		}else 
 		if(list2.size()>0){
 			result.setSuccess(false);
+			customer.setIsNameDuplicated(1);
+			result.setObj(customer);
 			result.setMessage("该呢称已存在");
 		}else{
-			customer.setCreatTime(new Date());
-			//MD5加密
-			//customer.setPassword(MD5.getMD5(customer.getPassword()));
+			Customer cust=customerService.selectByPrimaryKey(customer.getCustomerId());
+				
+			cust.setCreatTime(new Date());
+			cust.setCity(customer.getCity());
+			cust.setSex(customer.getSex());
+			cust.setHeadimgurl(customer.getHeadimgurl());
+			cust.setSource(customer.getSource());
+			cust.setApppushtoken(customer.getApppushtoken());
+			cust.setSourceid(customer.getSourceid());
+			cust.setUsername(customer.getUsername());
+			cust.setSchool(customer.getSchool());
+			cust.setYearEnterSchool(customer.getYearEnterSchool());
+				if(customerService.updateByPrimaryKeySelective(cust)>0){
+					result.setSuccess(true);
+					result.setMessage("注册成功");
+					result.setObj(cust);
+					session.setAttribute(Me2Constants.METOOUSER, cust);
+				}
 			
-			customer.setCity(customer.getCity());
-			
-			customer.setSex(customer.getSex());
-			customer.setHeadimgurl(customer.getHeadimgurl());
-			customer.setSource(customer.getSource());
-			customer.setApppushtoken(customer.getApppushtoken());
-			customer.setSourceid(customer.getSourceid());
-			customer.setUsername(customer.getUsername());
-			customer.setSchool(customer.getSchool());
-			
-			if(customerService.insertSelective(customer)>0){
-				result.setSuccess(true);
-				result.setMessage("注册成功");
-				result.setObj(customer);
-				session.setAttribute(Me2Constants.METOOUSER, customer);
-			}
+		}
 		}
 		String jsonArray = JsonUtil.Encode(result);
 		
@@ -210,12 +226,13 @@ public class IndexController {
  * @return
  */
 	@RequestMapping(value="/thirdPartyLogin/{uid}/{source}",method=RequestMethod.GET)
-	public @ResponseBody RestfulResult thirdPartyLogin(HttpSession session,@PathVariable String uid,@PathVariable String source) {
+	public @ResponseBody RestfulResult thirdPartyLogin(HttpServletRequest request,HttpSession session,@PathVariable String uid,@PathVariable String source) {
 		Criteria example = new Criteria();
 		example.put("sourceid", uid);
 		example.put("source", source);
 		List<Customer> list = customerService.selectByParams(example);
 		RestfulResult result = new RestfulResult();
+		
 		for (Customer customer : list) {
 			if(uid.equals(customer.getSourceid())){
 				//将仅有的一条数据取出
@@ -256,6 +273,8 @@ public class IndexController {
 			customer.setSource(source);
 			customer.setSourceid(uid);
 			customer.setCreatTime(new Date());
+			
+			
 			if(customerService.insertSelective(customer)==1){
 				result.setSuccess(true);
 				result.setObj(customer);
