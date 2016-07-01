@@ -43,9 +43,11 @@ public class CustomerController {
 		RestfulResult result = new RestfulResult();
 		if(rows>0){
 			result.setSuccess(true);
+			result.setObj(customer);
 			result.setMessage("修改成功");
 		}else {
 			result.setSuccess(false);
+			result.setObj(customer);
 			result.setMessage("修改失败");
 		}
 		String jsonArray = JsonUtil.Encode(result);

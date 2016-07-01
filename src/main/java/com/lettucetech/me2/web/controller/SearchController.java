@@ -304,18 +304,15 @@ public class SearchController {
 		List<Gameprop> list=gamepropService.selectByParams(example);
 		Gameprop game=null;
 		Customer customer=customerService.selectByPrimaryKey(Integer.valueOf(customerId));
-		if(list.size()>0){
-		for (Gameprop gameprop : list) {
-			 game=gamepropService.selectByPrimaryKey(gameprop.getId());
-		}
+		
 		String content = "";
 		String messagetype =null;
 		//判断赠送的是什么礼物 1,小红花 2,彩虹 3,炸弹
 		if("1".equals(present.getPresentType())){
-			//如果是小红花,
-			customer.setGeneralAccount(customer.getGeneralAccount()+1);
-			content="送花成功";
-			messagetype="9";
+			if(list.size()>0){
+				for (Gameprop gameprop : list) {
+					 game=gamepropService.selectByPrimaryKey(gameprop.getId());
+				}
 			//判断时间是否超过一个小时,否则拒绝操作
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String time=sdf.format(game.getCreateTime());
@@ -328,7 +325,10 @@ public class SearchController {
 				e.printStackTrace();
 			}
 			if (b>=1) {
-				
+				//如果是小红花,
+				customer.setGeneralAccount(customer.getGeneralAccount()+1);
+				content="送花成功";
+				messagetype="9";
 				game.setCreateTime(new Date());
 				game.setCustomerId(Integer.valueOf(customerId));
 				game.setPid(Integer.valueOf(pid));
@@ -337,6 +337,7 @@ public class SearchController {
 				content="送花失败";
 				messagetype="10";
 			}
+			
 		}else if("2".equals(present.getPresentType())){
 			//判断该用户是否有足够的虚拟币
 			if(customer.getGeneralAccount()>10){
@@ -523,221 +524,214 @@ public class SearchController {
 			break;
 		}
 		customerService.updateByPrimaryKeySelective(customer);
-		//存到用户消息表中
-		Message record1 = new Message();
-		record1.setContent(content);
-		record1.setCreateTime(new Date());
-		record1.setCustomerId(picture.getCustomerId());
-		record1.setPid(Integer.valueOf(pid));
-		record1.setType(messagetype);
-		record1.setProcessed("1");
-		record1.setProposer(Integer.valueOf(customerId));
-		messageService.insertSelective(record1);
 		
-		}else {
-			
-			String content = "";
-			String messagetype =null;
-			//判断赠送的是什么礼物 1,小红花 2,彩虹 3,炸弹
+//		
+
 		
-			if("1".equals(present.getPresentType())){
-				//如果是小红花,
-				customer.setGeneralAccount(customer.getGeneralAccount()+1);
-				content="送花成功";
-				messagetype="9";
-				
-					
-					game.setCreateTime(new Date());
-					game.setCustomerId(Integer.valueOf(customerId));
-					game.setPid(Integer.valueOf(pid));
-					game.setFlower(game.getFlower()+1);
-				
-			}else if("2".equals(present.getPresentType())){
-				//判断该用户是否有足够的虚拟币
-				if(customer.getGeneralAccount()>10){
-					customer.setGeneralAccount(customer.getGeneralAccount()-10);
-					//如果是彩虹,增加十个赞
-					picture.setAgree(picture.getAgree()+10);
-					content="觉得有料";
-					messagetype="3";
-					game.setCreateTime(new Date());
-					game.setCustomerId(Integer.valueOf(customerId));
-					game.setPid(Integer.valueOf(pid));
-					game.setRainbow(game.getRainbow()+1);
-				}else{
-					result.setSuccess(false);
-					result.setMessage("虚拟币不足");
-				}
-				
-			}else if("3".equals(present.getPresentType())){
-				if(customer.getGeneralAccount()>10){
-					customer.setGeneralAccount(customer.getGeneralAccount()-10);
-					picture.setAgree(picture.getAgree()-10);
-					content="觉得无料";
-					messagetype="4";
-					game.setCreateTime(new Date());
-					game.setCustomerId(Integer.valueOf(customerId));
-					game.setPid(Integer.valueOf(pid));
-					game.setBomb(game.getBomb()+1);
-				}else{
-					result.setSuccess(false);
-					result.setMessage("虚拟币不足");
-				}
-				
-			}
-			picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
-			gamepropService.insert(game);
-			customerService.updateByPrimaryKeySelective(customer);
-			pictureService.updateByPrimaryKeySelective(picture);
-			//存到用户消息表中
-			Message record = new Message();
-			record.setContent(content);
-			record.setCreateTime(new Date());
-			record.setCustomerId(picture.getCustomerId());
-			record.setPid(Integer.valueOf(pid));
-			record.setType(messagetype);
-			record.setProcessed("1");
-			record.setProposer(Integer.valueOf(customerId));
-			messageService.insertSelective(record);
-			example.clear();
-			example.put("customerId", customerId);
-			List<Picture> pictures=pictureService.selectByParams(example);
-			int sum=0;
-			//获取该用户的所有密图的热度综合,作为积分
-			for (Picture picture2 : pictures) {
-				int a =picture2.getHits();
-				sum+=a;
-			}
-			customer.setScore(customer.getScore()+sum);
-			customerService.updateByPrimaryKeySelective(customer);
-			switch (customer.getScore()) {
-			case 100:
-				customer.setGrade(1);
-				customer.setGeneralAccount(customer.getGeneralAccount()+10);
-				content="恭喜你升到1级";
-				messagetype="8";
-				break;
-			case 200:
-				customer.setGrade(2);
-				customer.setGeneralAccount(customer.getGeneralAccount()+10);
-				content="恭喜你升到2级";
-				messagetype="8";
-				break;
-			case 500:
-				customer.setGrade(3);
-				customer.setGeneralAccount(customer.getGeneralAccount()+10);
-				content="恭喜你升到3级";
-				messagetype="8";
-				break;
-			case 1000:
-				customer.setGrade(4);
-				customer.setGeneralAccount(customer.getGeneralAccount()+10);
-				content="恭喜你升到4级";
-				messagetype="8";
-				break;
-			case 2000:
-				customer.setGrade(5);
-				customer.setGeneralAccount(customer.getGeneralAccount()+10);
-				content="恭喜你升到5级";
-				messagetype="8";
-				break;
-			case 3000:
-				customer.setGrade(6);
-				customer.setGeneralAccount(customer.getGeneralAccount()+20);
-				content="恭喜你升到6级";
-				messagetype="8";
-				break;
-			case 5000:
-				customer.setGrade(7);
-				customer.setGeneralAccount(customer.getGeneralAccount()+20);
-				content="恭喜你升到7级";
-				messagetype="8";
-				
-				break;
-			case 8000:
-				customer.setGrade(8);
-				customer.setGeneralAccount(customer.getGeneralAccount()+20);
-				content="恭喜你升到8级";
-				messagetype="8";
-				break;
-			case 15000:
-				customer.setGrade(9);
-				customer.setGeneralAccount(customer.getGeneralAccount()+20);
-				content="恭喜你升到9级";
-				messagetype="8";
-				break;
-			case 20000:
-				customer.setGrade(10);
-				customer.setGeneralAccount(customer.getGeneralAccount()+20);
-				content="恭喜你升到10级";
-				messagetype="8";
-				break;
-			case 25000:
-				customer.setGrade(11);
-				customer.setGeneralAccount(customer.getGeneralAccount()+50);
-				content="恭喜你升到11级";
-				messagetype="8";
-				break;
-			case 30000:
-				customer.setGrade(12);
-				customer.setGeneralAccount(customer.getGeneralAccount()+50);
-				content="恭喜你升到12级";
-				messagetype="8";
-				break;
-			case 35000:
-				customer.setGrade(13);
-				customer.setGeneralAccount(customer.getGeneralAccount()+50);
-				content="恭喜你升到13级";
-				messagetype="8";
-				break;
-			case 40000:
-				customer.setGrade(14);
-				customer.setGeneralAccount(customer.getGeneralAccount()+50);
-				content="恭喜你升到14级";
-				messagetype="8";
-				break;
-			case 50000:
-				customer.setGrade(15);
-				customer.setGeneralAccount(customer.getGeneralAccount()+50);
-				content="恭喜你升到15级";
-				messagetype="8";
-				break;
-			case 60000:
-				customer.setGrade(16);
-				customer.setGeneralAccount(customer.getGeneralAccount()+100);
-				content="恭喜你升到16级";
-				messagetype="8";
-				break;
-			case 80000:
-				customer.setGrade(17);
-				customer.setGeneralAccount(customer.getGeneralAccount()+100);
-				content="恭喜你升到17级";
-				messagetype="8";
-				break;
-			case 100000:
-				customer.setGrade(18);
-				customer.setGeneralAccount(customer.getGeneralAccount()+100);
-				content="恭喜你升到18级";
-				messagetype="8";
-				break;
-			case 120000:
-				customer.setGrade(19);
-				customer.setGeneralAccount(customer.getGeneralAccount()+100);
-				content="恭喜你升到19级";
-				messagetype="8";
-				break;
-			case 200000:
-				customer.setGrade(20);
-				customer.setGeneralAccount(customer.getGeneralAccount()+100);
-				content="恭喜你升到20级";
-				messagetype="8";
-				break;
-				
-			default:
-				customer.setGrade(0);
-				break;
-			}
-			customerService.updateByPrimaryKeySelective(customer);
+//		}else {
+//			
+//			String content = "";
+//			String messagetype =null;
+//			//判断赠送的是什么礼物 1,小红花 2,彩虹 3,炸弹
+//		
+//			if("1".equals(present.getPresentType())){
+//				//如果是小红花,
+//				customer.setGeneralAccount(customer.getGeneralAccount()+1);
+//				content="送花成功";
+//				messagetype="9";
+//				
+//					
+//					game.setCreateTime(new Date());
+//					game.setCustomerId(Integer.valueOf(customerId));
+//					game.setPid(Integer.valueOf(pid));
+//					game.setFlower(game.getFlower()+1);
+//				
+//			}else if("2".equals(present.getPresentType())){
+//				//判断该用户是否有足够的虚拟币
+//				if(customer.getGeneralAccount()>10){
+//					customer.setGeneralAccount(customer.getGeneralAccount()-10);
+//					//如果是彩虹,增加十个赞
+//					picture.setAgree(picture.getAgree()+10);
+//					content="觉得有料";
+//					messagetype="3";
+//					game.setCreateTime(new Date());
+//					game.setCustomerId(Integer.valueOf(customerId));
+//					game.setPid(Integer.valueOf(pid));
+//					game.setRainbow(game.getRainbow()+1);
+//				}else{
+//					result.setSuccess(false);
+//					result.setMessage("虚拟币不足");
+//				}
+//				
+//			}else if("3".equals(present.getPresentType())){
+//				if(customer.getGeneralAccount()>10){
+//					customer.setGeneralAccount(customer.getGeneralAccount()-10);
+//					picture.setAgree(picture.getAgree()-10);
+//					content="觉得无料";
+//					messagetype="4";
+//					game.setCreateTime(new Date());
+//					game.setCustomerId(Integer.valueOf(customerId));
+//					game.setPid(Integer.valueOf(pid));
+//					game.setBomb(game.getBomb()+1);
+//				}else{
+//					result.setSuccess(false);
+//					result.setMessage("虚拟币不足");
+//				}
+//				
+//			}
+//			picture.setHits(picture.getHits()+Me2Constants.METOOHOTVALUE);
+//			gamepropService.insert(game);
+//			customerService.updateByPrimaryKeySelective(customer);
+//			pictureService.updateByPrimaryKeySelective(picture);
+//			//存到用户消息表中
+//			Message record = new Message();
+//			record.setContent(content);
+//			record.setCreateTime(new Date());
+//			record.setCustomerId(picture.getCustomerId());
+//			record.setPid(Integer.valueOf(pid));
+//			record.setType(messagetype);
+//			record.setProcessed("1");
+//			record.setProposer(Integer.valueOf(customerId));
+//			messageService.insertSelective(record);
+//			example.clear();
+//			example.put("customerId", customerId);
+//			List<Picture> pictures=pictureService.selectByParams(example);
+//			int sum=0;
+//			//获取该用户的所有密图的热度综合,作为积分
+//			for (Picture picture2 : pictures) {
+//				int a =picture2.getHits();
+//				sum+=a;
+//			}
+//			customer.setScore(customer.getScore()+sum);
+//			customerService.updateByPrimaryKeySelective(customer);
+//			switch (customer.getScore()) {
+//			case 100:
+//				customer.setGrade(1);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+10);
+//				content="恭喜你升到1级";
+//				messagetype="8";
+//				break;
+//			case 200:
+//				customer.setGrade(2);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+10);
+//				content="恭喜你升到2级";
+//				messagetype="8";
+//				break;
+//			case 500:
+//				customer.setGrade(3);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+10);
+//				content="恭喜你升到3级";
+//				messagetype="8";
+//				break;
+//			case 1000:
+//				customer.setGrade(4);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+10);
+//				content="恭喜你升到4级";
+//				messagetype="8";
+//				break;
+//			case 2000:
+//				customer.setGrade(5);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+10);
+//				content="恭喜你升到5级";
+//				messagetype="8";
+//				break;
+//			case 3000:
+//				customer.setGrade(6);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+20);
+//				content="恭喜你升到6级";
+//				messagetype="8";
+//				break;
+//			case 5000:
+//				customer.setGrade(7);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+20);
+//				content="恭喜你升到7级";
+//				messagetype="8";
+//				
+//				break;
+//			case 8000:
+//				customer.setGrade(8);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+20);
+//				content="恭喜你升到8级";
+//				messagetype="8";
+//				break;
+//			case 15000:
+//				customer.setGrade(9);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+20);
+//				content="恭喜你升到9级";
+//				messagetype="8";
+//				break;
+//			case 20000:
+//				customer.setGrade(10);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+20);
+//				content="恭喜你升到10级";
+//				messagetype="8";
+//				break;
+//			case 25000:
+//				customer.setGrade(11);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+50);
+//				content="恭喜你升到11级";
+//				messagetype="8";
+//				break;
+//			case 30000:
+//				customer.setGrade(12);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+50);
+//				content="恭喜你升到12级";
+//				messagetype="8";
+//				break;
+//			case 35000:
+//				customer.setGrade(13);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+50);
+//				content="恭喜你升到13级";
+//				messagetype="8";
+//				break;
+//			case 40000:
+//				customer.setGrade(14);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+50);
+//				content="恭喜你升到14级";
+//				messagetype="8";
+//				break;
+//			case 50000:
+//				customer.setGrade(15);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+50);
+//				content="恭喜你升到15级";
+//				messagetype="8";
+//				break;
+//			case 60000:
+//				customer.setGrade(16);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+100);
+//				content="恭喜你升到16级";
+//				messagetype="8";
+//				break;
+//			case 80000:
+//				customer.setGrade(17);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+100);
+//				content="恭喜你升到17级";
+//				messagetype="8";
+//				break;
+//			case 100000:
+//				customer.setGrade(18);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+100);
+//				content="恭喜你升到18级";
+//				messagetype="8";
+//				break;
+//			case 120000:
+//				customer.setGrade(19);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+100);
+//				content="恭喜你升到19级";
+//				messagetype="8";
+//				break;
+//			case 200000:
+//				customer.setGrade(20);
+//				customer.setGeneralAccount(customer.getGeneralAccount()+100);
+//				content="恭喜你升到20级";
+//				messagetype="8";
+//				break;
+//				
+//			default:
+//				customer.setGrade(0);
+//				break;
+//			}
+//			customerService.updateByPrimaryKeySelective(customer);
 			if (customer.getGrade()==5) {
 				content="恭喜你,开启了使用悬赏令的特权";
 				messagetype="11";
