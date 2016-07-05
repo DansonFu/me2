@@ -337,6 +337,9 @@ public class SearchController {
 				content="送花失败";
 				messagetype="10";
 			}
+			}else if (list.size()==0) {
+				
+			}
 			
 		}else if("2".equals(present.getPresentType())){
 			//判断该用户是否有足够的虚拟币
@@ -751,6 +754,7 @@ public class SearchController {
 				record2.setProposer(Integer.valueOf(customerId));
 				messageService.insertSelective(record2);
 			}
+	
 			//存到用户消息表中
 			Message record1 = new Message();
 			record1.setContent(content);
@@ -761,19 +765,21 @@ public class SearchController {
 			record1.setProcessed("1");
 			record1.setProposer(Integer.valueOf(customerId));
 			messageService.insertSelective(record1);
+			
+			result.setSuccess(true);
+			
+			result.setObj(customer.getGeneralAccount());
+			result.setObj(customer.getScore());
+			result.setObj(customer.getGrade());
+			ModelAndView mav = new ModelAndView();
+			mav.addObject(result);
+			return result;
 		}
+
 		
 		
-		
-		result.setSuccess(true);
-		
-		result.setObj(customer.getGeneralAccount());
-		result.setObj(customer.getScore());
-		result.setObj(customer.getGrade());
-		ModelAndView mav = new ModelAndView();
-		mav.addObject(result);
-		return result;
-	}
+	
+
 	
 	/**
 	 * 获取送花的小红豆
