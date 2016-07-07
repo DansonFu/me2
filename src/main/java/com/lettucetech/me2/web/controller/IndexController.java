@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -143,10 +144,27 @@ public class IndexController {
 //			result.setMessage("该号码已存在");
 //		}else 
 		if(list2.size()>0){
-			result.setSuccess(false);
+			Customer cust=customerService.selectByPrimaryKey(customer.getCustomerId());
+			
+			cust.setCreatTime(new Date());
+			cust.setCity(customer.getCity());
+			cust.setSex(customer.getSex());
+			cust.setHeadimgurl(customer.getHeadimgurl());
+			cust.setSource(customer.getSource());
+			cust.setApppushtoken(customer.getApppushtoken());
+			cust.setSourceid(customer.getSourceid());
+			cust.setUsername(customer.getUsername());
+			cust.setSchool(customer.getSchool());
 			customer.setIsNameDuplicated(1);
-			result.setObj(customer);
-			result.setMessage("该呢称已存在");
+			cust.setIsinfoComplete(1);
+			cust.setYearEnterSchool(customer.getYearEnterSchool());
+				if(customerService.updateByPrimaryKeySelective(cust)>0){
+					result.setSuccess(true);
+					result.setMessage("注册成功");
+					result.setObj(cust);
+					session.setAttribute(Me2Constants.METOOUSER, cust);
+				}
+		
 		}else{
 			Customer cust=customerService.selectByPrimaryKey(customer.getCustomerId());
 				
@@ -160,6 +178,7 @@ public class IndexController {
 			cust.setUsername(customer.getUsername());
 			cust.setSchool(customer.getSchool());
 			cust.setYearEnterSchool(customer.getYearEnterSchool());
+			cust.setIsinfoComplete(1);
 				if(customerService.updateByPrimaryKeySelective(cust)>0){
 					result.setSuccess(true);
 					result.setMessage("注册成功");
@@ -233,63 +252,99 @@ public class IndexController {
 		List<Customer> list = customerService.selectByParams(example);
 		RestfulResult result = new RestfulResult();
 		
-		for (Customer customer : list) {
-			if(uid.equals(customer.getSourceid())){
-				//将仅有的一条数据取出
-				Customer cust=customerService.selectByParams4Rand(example);
-				example.clear();
-				example.put("customerId",cust);
-				//当前用户所关注的所有人
-				List<Attention> attentions=attentionService.selectByParams(example);
-				List p=new ArrayList();
-				for (Attention attention : attentions) {
-					
-					example.clear();
-					example.put("customerId",attention.getAttentionCustomerId() );
-					List<Picture> pic=pictureService.selectByParams(example);
-					p.add(pic);
+//		for (Customer customer : list) {
+//			if(uid.equals(customer.getSourceid())){
+//				//将仅有的一条数据取出
+//				Customer cust=customerService.selectByParams4Rand(example);
+//				example.clear();
+//				example.put("customerId",cust);
+//				//当前用户所关注的所有人
+//				List<Attention> attentions=attentionService.selectByParams(example);
+//				List p=new ArrayList();
+//				for (Attention attention : attentions) {
+//					
+//					example.clear();
+//					example.put("customerId",attention.getAttentionCustomerId() );
+//					List<Picture> pic=pictureService.selectByParams(example);
+//					p.add(pic);
+//				}
+//				result.setSuccess(true);
+//				result.setObj(p);
+//				result.setObj(attentions);
+//				result.setObj(cust);
+//			}else{
+//				result.setSuccess(true);
+//				result.setMessage("该用户未注册");
+//			}
+		
+//		if(list.size()>0){
+//			if(!"0".equals(list.get(0).getDel())){
+//				result.setSuccess(false);
+//				result.setMessage("该用户已被封");
+//			}else{
+//				result.setSuccess(true);
+//				result.setObj(list.get(0));
+//				session.setAttribute(Me2Constants.METOOUSER, list.get(0));
+//			}
+			if (list.size()>0) {
+				result.setMessage("该账户已存在");
+				result.setObj(list);
+				result.setSuccess(true);
+			}else {
+				
+				Customer customer = new Customer();
+				customer.setSource(source);
+				customer.setSourceid(uid);
+				customer.setCreatTime(new Date());
+				
+				if(customerService.insert(customer)==1){
+					result.setSuccess(true);
+					result.setObj(customer);
+					session.setAttribute(Me2Constants.METOOUSER, customer);
+				}else{
+					result.setSuccess(false);
+					result.setMessage("注册失败请联系管理员");
 				}
-				result.setSuccess(true);
-				result.setObj(p);
-				result.setObj(attentions);
-				result.setObj(cust);
-			}else{
-				result.setSuccess(true);
-				result.setMessage("该用户未注册");
 			}
-		}
-		if(list.size()>0){
-			if(!"0".equals(list.get(0).getDel())){
-				result.setSuccess(false);
-				result.setMessage("该用户已被封");
-			}else{
-				result.setSuccess(true);
-				result.setObj(list.get(0));
-				session.setAttribute(Me2Constants.METOOUSER, list.get(0));
-			}
-			
-		}else{
-			Customer customer = new Customer();
-			customer.setSource(source);
-			customer.setSourceid(uid);
-			customer.setCreatTime(new Date());
-			
-			
-			if(customerService.insertSelective(customer)==1){
-				result.setSuccess(true);
-				result.setObj(customer);
-				session.setAttribute(Me2Constants.METOOUSER, customer);
-			}else{
-				result.setSuccess(false);
-				result.setMessage("注册失败请联系管理员");
-			}
-		}
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
 		return result;
 	}
-
+	
+	/**
+	 * 三方登录之后查询用户关注的所有人发表的帖子数
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value="/attentions/{customerId}/login",method=RequestMethod.POST)
+	public @ResponseBody RestfulResult AttentionBysomebody(@PathVariable String customerId,String offset,String length){
+		Customer customer = customerService.selectByPrimaryKey(Integer.valueOf(customerId));
+		Criteria example = new Criteria();
+		example.put("customerId",customerId );
+		
+		List<Attention> list=attentionService.selectByParams(example);
+		List list2=new ArrayList();
+		for (Attention attention : list) {
+			if (attention.getAttentionType()==1) {
+				example.clear();
+				example.put("customerId",attention.getAttentionCustomerId());
+				example.setOrderByClause("creatTime");
+				example.setSord("desc");
+				example.setMysqlOffset(Integer.parseInt(offset));
+				example.setMysqlLength(Integer.parseInt(length));
+				List<Picture> pictures  =pictureService.selectByParams(example);
+				list2.add(pictures);
+			}
+		}
+		RestfulResult result = new RestfulResult();
+		result .setObj(list2);
+		result.setSuccess(true);
+		result.setMessage("被关注人的所有消息");
+		ModelAndView mav = new ModelAndView();
+		mav.addObject(result);
+		return result;
+	}
 
 /**
 
