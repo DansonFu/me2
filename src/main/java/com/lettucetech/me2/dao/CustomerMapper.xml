@@ -284,7 +284,27 @@
       #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts},#{isinfoComplete} ,#{isNameDuplicated},#{yearEnterSchool}
       )
   </insert>
+  <insert id="insertSelect" parameterType="com.lettucetech.me2.pojo.Customer" >
+   <selectKey keyProperty="customerId" order="AFTER" resultType="java.lang.Integer">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+    insert into customer (customer_id, unionid, openid, subscribe, nickname, sex, 
+      city, country, province, language, headimgurl, subscribe_time, 
+      remark, groupid, realname, password, total_credit, current_shop, 
+      current_latitude, current_longtitude, current_precision, phone, username, 
+      source, creat_time, update_time, login_time, sourceid, del, inneruser, 
+      apppushtoken, school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool
+      )
+    values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
+      #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
+      #{remark}, #{groupid}, #{realname}, #{password}, #{totalCredit}, #{currentShop}, 
+      #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
+      #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}, 
+      #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts},#{isinfoComplete} ,#{isNameDuplicated},#{yearEnterSchool}
+      )
+  </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
+ 
     insert into customer
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >

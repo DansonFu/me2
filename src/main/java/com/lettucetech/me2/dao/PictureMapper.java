@@ -32,6 +32,7 @@ public interface PictureMapper {
      */
     int insertSelective(Picture record);
 
+
     /**
      * 根据条件查询记录集
      */
@@ -70,4 +71,6 @@ public interface PictureMapper {
 	List<Picture> selectByParams4Rand(Criteria example);
 
 	List<Picture> selectByParamsTagSearch(Criteria example);
+	
+	List<Picture> selectByParamsCustomerIdSearch(Criteria example);
 }

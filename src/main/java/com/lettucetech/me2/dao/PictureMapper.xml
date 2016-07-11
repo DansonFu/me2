@@ -120,7 +120,19 @@
     </if>
     <include refid="common.Mysql_Pagination_Limit" />
   </select>
-  
+  <select id="selectByParamsCustomerIdSearch" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from picture
+    <where>
+    	<if test="condition.customerId != null" >
+    	customer_id=#{condition.customerId}
+    	</if>
+    </where>
+    </select>
   <select id="selectByParamsTagSearch" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     select
     <if test="distinct" >
@@ -214,6 +226,7 @@
       #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId}, #{del}, #{recommend}, 
       #{atCustomerId}, #{atSeen},#{token})
   </insert>
+  
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
    <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
 		SELECT LAST_INSERT_ID()

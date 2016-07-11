@@ -63,6 +63,10 @@ public class CustomerServiceImpl implements CustomerService {
         return this.customerMapper.insertSelective(record);
     }
 
+    public int insertSelect(Customer record) {
+        return this.customerMapper.insertSelect(record);
+    }
+    
 	public List<Customer> selectByPhoneOrUsername(Criteria example) {
 		return this.customerMapper.selectByPhoneOrUsername(example);
 	}

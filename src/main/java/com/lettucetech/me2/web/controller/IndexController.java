@@ -251,31 +251,7 @@ public class IndexController {
 		example.put("source", source);
 		List<Customer> list = customerService.selectByParams(example);
 		RestfulResult result = new RestfulResult();
-		
-//		for (Customer customer : list) {
-//			if(uid.equals(customer.getSourceid())){
-//				//将仅有的一条数据取出
-//				Customer cust=customerService.selectByParams4Rand(example);
-//				example.clear();
-//				example.put("customerId",cust);
-//				//当前用户所关注的所有人
-//				List<Attention> attentions=attentionService.selectByParams(example);
-//				List p=new ArrayList();
-//				for (Attention attention : attentions) {
-//					
-//					example.clear();
-//					example.put("customerId",attention.getAttentionCustomerId() );
-//					List<Picture> pic=pictureService.selectByParams(example);
-//					p.add(pic);
-//				}
-//				result.setSuccess(true);
-//				result.setObj(p);
-//				result.setObj(attentions);
-//				result.setObj(cust);
-//			}else{
-//				result.setSuccess(true);
-//				result.setMessage("该用户未注册");
-//			}
+
 		
 //		if(list.size()>0){
 //			if(!"0".equals(list.get(0).getDel())){
@@ -297,7 +273,7 @@ public class IndexController {
 				customer.setSourceid(uid);
 				customer.setCreatTime(new Date());
 				
-				if(customerService.insert(customer)==1){
+				if(customerService.insertSelect(customer)==1){
 					result.setSuccess(true);
 					result.setObj(customer);
 					session.setAttribute(Me2Constants.METOOUSER, customer);
@@ -317,32 +293,40 @@ public class IndexController {
 	 * @param customerId
 	 * @return
 	 */
-	@RequestMapping(value="/attentions/{customerId}/login",method=RequestMethod.POST)
+	@RequestMapping(value="/attentions/{customerId}/login",method=RequestMethod.GET)
 	public @ResponseBody RestfulResult AttentionBysomebody(@PathVariable String customerId,String offset,String length){
-		Customer customer = customerService.selectByPrimaryKey(Integer.valueOf(customerId));
+		//Customer customer = customerService.selectByPrimaryKey(Integer.valueOf(customerId));
+		RestfulResult result = new RestfulResult();
 		Criteria example = new Criteria();
 		example.put("customerId",customerId );
 		
 		List<Attention> list=attentionService.selectByParams(example);
 		List list2=new ArrayList();
-		for (Attention attention : list) {
-			if (attention.getAttentionType()==1) {
-				example.clear();
-				example.put("customerId",attention.getAttentionCustomerId());
-				example.setOrderByClause("creatTime");
-				example.setSord("desc");
-				example.setMysqlOffset(Integer.parseInt(offset));
-				example.setMysqlLength(Integer.parseInt(length));
-				List<Picture> pictures  =pictureService.selectByParams(example);
-				list2.add(pictures);
+		if (list.size()>0) {
+			for (Attention attention : list) {
+				
+				if (attention.getAttentionType()==1) {
+					Criteria example1 = new Criteria();
+					
+					example1.put("customer_id",attention.getAttentionCustomerId());
+//					example.setOrderByClause("creat_time");
+//					example.setSord("desc");
+					example1.setMysqlOffset(Integer.valueOf(offset));
+					example1.setMysqlLength(Integer.valueOf(length));
+					List<Picture> pictures  =pictureService.selectByParams4Rand(example1);
+					list2.add(pictures);
+				}
 			}
+			
+			result .setObj(list2);
+			result.setSuccess(true);
+			result.setMessage("被关注人的所有消息");
+		}else {
+			
+			result.setSuccess(true);
+			result.setMessage("未关注任何人");
 		}
-		RestfulResult result = new RestfulResult();
-		result .setObj(list2);
-		result.setSuccess(true);
-		result.setMessage("被关注人的所有消息");
-		ModelAndView mav = new ModelAndView();
-		mav.addObject(result);
+		
 		return result;
 	}
 

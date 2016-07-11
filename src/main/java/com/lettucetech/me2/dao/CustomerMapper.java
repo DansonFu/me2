@@ -26,6 +26,7 @@ public interface CustomerMapper {
      * 保存记录,不管记录里面的属性是否为空
      */
     int insert(Customer record);
+    int insertSelect(Customer record);
 
     /**
      * 保存属性不为空的记录
