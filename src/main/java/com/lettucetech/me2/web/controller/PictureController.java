@@ -436,7 +436,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(value = "/customers/{customerId}/pictures", method ={RequestMethod.GET})
-	public ModelAndView getPicturesByCustomer(HttpSession session,@PathVariable String customerId,String offset,String length){
+	public @ResponseBody RestfulResult getPicturesByCustomer(HttpSession session,@PathVariable String customerId,String offset,String length){
 		Criteria example = new Criteria();
 //		example.setMysqlOffset(Integer.parseInt(offset));
 //		example.setMysqlLength(Integer.parseInt(length));
@@ -453,7 +453,7 @@ public class PictureController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(result);
-		return mav;
+		return result;
 	}
 	
 	/**

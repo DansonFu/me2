@@ -294,7 +294,7 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping(value="/attentions/{customerId}/login",method=RequestMethod.GET)
-	public @ResponseBody RestfulResult AttentionBysomebody(@PathVariable String customerId,String offset,String length){
+	public @ResponseBody RestfulResult AttentionBysomebody(HttpSession session, @PathVariable String customerId,String offset,String length){
 		//Customer customer = customerService.selectByPrimaryKey(Integer.valueOf(customerId));
 		RestfulResult result = new RestfulResult();
 		Criteria example = new Criteria();
@@ -306,19 +306,20 @@ public class IndexController {
 			for (Attention attention : list) {
 				
 				if (attention.getAttentionType()==1) {
-					Criteria example1 = new Criteria();
 					
-					example1.put("customer_id",attention.getAttentionCustomerId());
-//					example.setOrderByClause("creat_time");
-//					example.setSord("desc");
-					example1.setMysqlOffset(Integer.valueOf(offset));
-					example1.setMysqlLength(Integer.valueOf(length));
-					List<Picture> pictures  =pictureService.selectByParams4Rand(example1);
+					example.clear();
+					example.put("customerId",attention.getAttentionCustomerId());
+					example.setOrderByClause("creat_time");
+					example.setSord("desc");
+					example.put("front", "a");
+					example.setMysqlOffset(Integer.valueOf(offset));
+					example.setMysqlLength(Integer.valueOf(length));
+					List<Picture> pictures  =pictureService.selectByParams(example);
 					list2.add(pictures);
 				}
 			}
-			
 			result .setObj(list2);
+			
 			result.setSuccess(true);
 			result.setMessage("被关注人的所有消息");
 		}else {
