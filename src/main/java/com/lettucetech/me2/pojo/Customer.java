@@ -21,7 +21,7 @@ public class Customer implements Serializable {
     /**
      * 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
      */
-    private Boolean subscribe;
+    private Integer subscribe;
 
     /**
      * 用户的昵称
@@ -31,7 +31,7 @@ public class Customer implements Serializable {
     /**
      * 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
      */
-    private Byte sex;
+    private int sex;
 
     /**
      * 用户所在城市
@@ -257,7 +257,7 @@ public class Customer implements Serializable {
     /**
      * @return 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
      */
-    public Boolean getSubscribe() {
+    public Integer getSubscribe() {
         return subscribe;
     }
 
@@ -265,7 +265,7 @@ public class Customer implements Serializable {
      * @param subscribe 
 	 *            用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
      */
-    public void setSubscribe(Boolean subscribe) {
+    public void setSubscribe(Integer subscribe) {
         this.subscribe = subscribe;
     }
 
@@ -287,16 +287,16 @@ public class Customer implements Serializable {
     /**
      * @return 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
      */
-    public Byte getSex() {
+    public int getSex() {
         return sex;
     }
 
     /**
-     * @param sex 
+     * @param i 
 	 *            用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
      */
-    public void setSex(Byte sex) {
-        this.sex = sex;
+    public void setSex(int i) {
+        this.sex = i;
     }
 
     /**

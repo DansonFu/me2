@@ -122,7 +122,7 @@ public class IndexController {
 	public void register(HttpSession session,HttpServletResponse response,  Customer customer) {
 		
 		RestfulResult result = new RestfulResult();
-		if (customer.getCity()==null || customer.getSex()==null || customer.getSchool()==null || customer.getYearEnterSchool()==null) {
+		if (customer.getCity()==null || customer.getSex()==0 || customer.getSchool()==null || customer.getYearEnterSchool()==null) {
 			result.setSuccess(false);
 			customer.setIsinfoComplete(1);
 			result.setObj(customer);

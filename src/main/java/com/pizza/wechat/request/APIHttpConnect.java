@@ -28,12 +28,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.lettucetech.me2.common.pojo.MyX509TrustManager;
 import com.pizza.wechat.APIException;
 import com.pizza.wechat.APIRuntimeException;
 import com.pizza.wechat.OpenAccountConfig;
 import com.pizza.wechat.request.bean.DataMap;
 import com.pizza.wechat.util.MessageUtil;
-import com.pizza.wechat.util.MyX509TrustManager;
 
 /**
  * 微信接口请求工具类

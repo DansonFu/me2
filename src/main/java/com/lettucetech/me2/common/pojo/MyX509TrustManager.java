@@ -1,4 +1,4 @@
-package com.pizza.wechat.util;
+package com.lettucetech.me2.common.pojo;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 

@@ -5,9 +5,9 @@
     <id column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="unionid" property="unionid" jdbcType="CHAR" />
     <result column="openid" property="openid" jdbcType="CHAR" />
-    <result column="subscribe" property="subscribe" jdbcType="BIT" />
+    <result column="subscribe" property="subscribe" jdbcType="INTEGER" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
@@ -41,6 +41,7 @@
     <result column="isinfoComplete" property="isinfoComplete" jdbcType="INTEGER" />
     <result column="isNameDuplicated" property="isNameDuplicated" jdbcType="INTEGER" />
     <result column="yearEnterSchool" property="yearEnterSchool" jdbcType="VARCHAR" />
+    <result column="isGame" property="isGame" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <trim prefix="where" prefixOverrides="and|or" >
@@ -158,6 +159,9 @@
        <if test="condition.yearEnterSchool != null" >
          and yearEnterSchool = #{condition.yearEnterSchool}
       </if>
+      <if test="condition.isGame != null" >
+         and isGame = #{condition.isGame}
+      </if>
     </trim>
   </sql>
   <sql id="Base_Column_List" >
@@ -165,7 +169,8 @@
     language, headimgurl, subscribe_time, remark, groupid, realname, password, total_credit, 
     current_shop, current_latitude, current_longtitude, current_precision, phone, username, 
     source, creat_time, update_time, login_time, sourceid, del, inneruser, apppushtoken, 
-    school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool
+    school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool,
+    isGame
   </sql>
   <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
     SELECT * FROM customer 
@@ -274,7 +279,7 @@
       remark, groupid, realname, password, total_credit, current_shop, 
       current_latitude, current_longtitude, current_precision, phone, username, 
       source, creat_time, update_time, login_time, sourceid, del, inneruser, 
-      apppushtoken, school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool
+      apppushtoken, school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool,isGame
       )
     values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
       #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
@@ -282,7 +287,7 @@
       #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
       #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}, 
       #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts},#{isinfoComplete} ,#{isNameDuplicated},#{yearEnterSchool}
-      )
+      ,#{isGame})
   </insert>
   <insert id="insertSelect" parameterType="com.lettucetech.me2.pojo.Customer" >
    <selectKey keyProperty="customerId" order="AFTER" resultType="java.lang.Integer">
@@ -293,7 +298,7 @@
       remark, groupid, realname, password, total_credit, current_shop, 
       current_latitude, current_longtitude, current_precision, phone, username, 
       source, creat_time, update_time, login_time, sourceid, del, inneruser, 
-      apppushtoken, school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool
+      apppushtoken, school, score, grade, general_account, raise_public_accounts ,isinfoComplete ,isNameDuplicated,yearEnterSchool,isGame
       )
     values (#{customerId}, #{unionid}, #{openid}, #{subscribe}, #{nickname}, #{sex}, 
       #{city}, #{country}, #{province}, #{language}, #{headimgurl}, #{subscribeTime}, 
@@ -301,6 +306,7 @@
       #{currentLatitude}, #{currentLongtitude}, #{currentPrecision}, #{phone}, #{username}, 
       #{source}, #{creatTime}, #{updateTime}, #{loginTime}, #{sourceid}, #{del}, #{inneruser}, 
       #{apppushtoken}, #{school}, #{score}, #{grade}, #{generalAccount}, #{raisePublicAccounts},#{isinfoComplete} ,#{isNameDuplicated},#{yearEnterSchool}
+      ,#{isGame}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Customer" >
@@ -424,6 +430,9 @@
        <if test="condition.yearEnterSchool != null" >
          and yearEnterSchool = #{condition.yearEnterSchool}
       </if>
+      <if test="condition.isGame != null" >
+         and isGame = #{condition.isGame}
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -542,6 +551,9 @@
       </if>
        <if test="yearEnterSchool != null" >
          #{condition.yearEnterSchool}
+      </if>
+      <if test="isGame != null" >
+         #{condition.isGame}
       </if>
     </trim>
   </insert>
@@ -671,6 +683,9 @@
        <if test="record.yearEnterSchool != null" >
           yearEnterSchool = #{record.yearEnterSchool}
       </if>
+      <if test="record.isGame != null" >
+          isGame = #{record.isGame}
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -716,7 +731,8 @@
       raise_public_accounts = #{record.raisePublicAccounts},
       isinfoComplete = #{record.isinfoComplete},
       isNameDuplicated = #{record.isNameDuplicated},
-      yearEnterSchool = #{record.yearEnterSchool}
+      yearEnterSchool = #{record.yearEnterSchool},
+      isGame =#{record.isGame}
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -838,6 +854,9 @@
        <if test="yearEnterSchool != null" >
           yearEnterSchool = #{yearEnterSchool}
       </if>
+      <if test="isGame != null" >
+          isGame = #{isGame}
+      </if>
     </set>
     where customer_id = #{customerId}
   </update>
@@ -880,7 +899,8 @@
       raise_public_accounts = #{raisePublicAccounts},
       isinfoComplete = #{record.isinfoComplete},
       isNameDuplicated = #{record.isNameDuplicated},
-      yearEnterSchool = #{record.yearEnterSchool}
+      yearEnterSchool = #{record.yearEnterSchool},
+      isGame = #{record.isGame}
     where customer_id = #{customerId}
   </update>
 </mapper>
