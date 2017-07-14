@@ -17,16 +17,16 @@ import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.StringUtil;
 import com.lettucetech.me2.pojo.Collect;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.service.CollectService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 
 @Controller
 public class CollectController {
 	@Autowired
 	private CollectService collectService;
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	/**
 	 * 收藏蜜图
 	 * @param session
@@ -49,7 +49,7 @@ public class CollectController {
 			if(num ==1){
 				result.setSuccess(true);
 				//增加热度
-				Picture picture = pictureService.selectByPrimaryKey(collect.getPid());
+				Picture1 picture = pictureService.selectByPrimaryKey(collect.getPid());
 				picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 				pictureService.updateByPrimaryKeySelective(picture);
 			}

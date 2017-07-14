@@ -37,7 +37,7 @@ import com.lettucetech.me2.pojo.Comment;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Game;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.pojo.TXtMenu;
 import com.lettucetech.me2.pojo.TXtMetoo;
 import com.lettucetech.me2.pojo.TXtRoleMenu;
@@ -46,7 +46,7 @@ import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.service.CommentService;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.GameService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.TXtMenuService;
 import com.lettucetech.me2.service.TXtMetooService;
 import com.lettucetech.me2.service.TXtRoleMenuService;
@@ -61,7 +61,7 @@ import com.qiniu.http.Response;
 public class AdminController {
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
@@ -79,7 +79,7 @@ public class AdminController {
 	@Autowired
 	private TXtMetooService metooService;
 	//随机蜜图使用
-	private List<Picture> pictures;
+	private List<Picture1> pictures;
 
 	/**
 	 * 进入登录界面
@@ -257,7 +257,7 @@ public class AdminController {
 		}
 		
 		//a面
-		Picture ap = new Picture();
+		Picture1 ap = new Picture1();
 		ap.setQiniukey(akey);
 		//去除空格、制表符、换页符等空白字符,#号换成逗号
 		ap.setTags(tags.replaceAll("\\s*", "").replaceAll("#", ","));
@@ -297,7 +297,7 @@ public class AdminController {
 			}
 			
 			//B面
-			Picture bp = new Picture();
+			Picture1 bp = new Picture1();
 			bp.setCustomerId(Integer.valueOf(customerId));
 			bp.setQiniukey(bkey);
 			bp.setFront("b");
@@ -379,7 +379,7 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "/admin/nextmetoo/{id}", method ={RequestMethod.GET})
 	public void nextmetoo(HttpSession session,HttpServletResponse response,@PathVariable String id){
-		Picture picture=null;
+		Picture1 picture=null;
 		Criteria example = new Criteria();
 		//如果是最后一条则重新取一个集合
 		for(int i=0;i<pictures.size();i++){
@@ -600,7 +600,7 @@ public class AdminController {
 	 */
 	@RequestMapping("/admin/viewpicture")
 	public ModelAndView viewpicture(HttpSession session,String pid) {
-		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
+		Picture1 picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
 		picture.setTags(picture.getTags().replace(",", "#"));
 		if(picture.getBpicture()!=null && ("1".equals(picture.getBpicture().getType())||
 				"3".equals(picture.getBpicture().getType())||"4".equals(picture.getBpicture().getType())))
@@ -662,7 +662,7 @@ public class AdminController {
 			}
 		}
 		//a面
-		Picture ap = new Picture();
+		Picture1 ap = new Picture1();
 		
 		ap.setPid(Integer.valueOf(pid));
 		ap.setQiniukey(akey);
@@ -693,7 +693,7 @@ public class AdminController {
 			}
 			
 			//B面
-			Picture bp = new Picture();
+			Picture1 bp = new Picture1();
 			bp.setQiniukey(bkey);
 			bp.setFront("b");
 			bp.setType(type);

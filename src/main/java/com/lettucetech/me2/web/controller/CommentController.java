@@ -18,17 +18,17 @@ import com.lettucetech.me2.pojo.Collect;
 import com.lettucetech.me2.pojo.Comment;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Message;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.service.CommentService;
 import com.lettucetech.me2.service.MessageService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 
 @Controller
 public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private MessageService messageService;
 	/**
@@ -47,12 +47,12 @@ public class CommentController {
 		if(num ==1){
 			result.setSuccess(true);
 			//增加热度
-			Picture picture = pictureService.selectByPrimaryKey(comment.getPid());
+			Picture1 picture = pictureService.selectByPrimaryKey(comment.getPid());
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
 		}
 		//存到用户消息表中
-		Picture picture = pictureService.selectByPrimaryKey(comment.getPid());
+		Picture1 picture = pictureService.selectByPrimaryKey(comment.getPid());
 		Message record = new Message();
 		record.setContent(comment.getContent());
 		record.setCreateTime(new Date(System.currentTimeMillis()+28800000));

@@ -14,8 +14,6 @@ public class SignUtil {
 	 */
 
 	    
-	    // 与接口配置信息中的Token要一致
-	    private static String token = "redPeopleWechat";
 
 	    /**
 	    * 方法名：checkSignature</br>
@@ -28,6 +26,8 @@ public class SignUtil {
 	    * @return
 	    * @throws
 	     */
+		// 与接口配置信息中的Token要一致
+		private static String token = "redPeopleWechat";
 	    public static boolean checkSignature(String signature, String timestamp,String nonce) {
 	        // 1.将token、timestamp、nonce三个参数进行字典序排序
 	        String[] arr = new String[] { token, timestamp, nonce };
@@ -53,6 +53,7 @@ public class SignUtil {
 	        // 3.将sha1加密后的字符串可与signature对比，标识该请求来源于微信
 	        return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
 	    }
+	    
 
 	    /**
 	    * 方法名：byteToStr</br>

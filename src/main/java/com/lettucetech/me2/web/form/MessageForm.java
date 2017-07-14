@@ -3,18 +3,18 @@ package com.lettucetech.me2.web.form;
 import java.util.List;
 
 import com.lettucetech.me2.pojo.Customer;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 
 public class MessageForm {
-	private Picture picture;
+	private Picture1 picture;
 
 	private List<Customer> proposers;
 
-	public Picture getPicture() {
+	public Picture1 getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(Picture1 picture) {
 		this.picture = picture;
 	}
 

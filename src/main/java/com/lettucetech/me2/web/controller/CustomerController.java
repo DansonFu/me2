@@ -19,16 +19,16 @@ import com.lettucetech.me2.common.pojo.RestfulResult;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.service.CustomerService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 
 @Controller
 public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	/**
 	 * 修改用户
 	 * @param session
@@ -132,7 +132,7 @@ public class CustomerController {
 		Criteria example = new Criteria();
 		example.put("customerId", id);
 		example.put("front", "a");
-		List<Picture> pictures = pictureService.selectByParams(example);
+		List<Picture1> pictures = pictureService.selectByParams(example);
 		
 		//热度
 		int hits = 0;
@@ -140,7 +140,7 @@ public class CustomerController {
 		int agree = 0;
 		//踩
 		int disagree = 0;
-		for(Picture picture :pictures){
+		for(Picture1 picture :pictures){
 			hits += picture.getHits();
 			agree += picture.getAgree();
 			disagree += picture.getDisagree();

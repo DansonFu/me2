@@ -25,7 +25,7 @@ import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.RecommendService;

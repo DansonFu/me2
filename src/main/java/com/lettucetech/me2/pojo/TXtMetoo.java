@@ -19,7 +19,7 @@ public class TXtMetoo implements Serializable {
      */
     private Integer metoo;
     
-    private Picture picture;
+    private Picture1 picture;
     
     private Comment comment;
 
@@ -101,11 +101,11 @@ public class TXtMetoo implements Serializable {
         this.state = state;
     }
 
-	public Picture getPicture() {
+	public Picture1 getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(Picture1 picture) {
 		this.picture = picture;
 	}
 	public Comment getComment() {

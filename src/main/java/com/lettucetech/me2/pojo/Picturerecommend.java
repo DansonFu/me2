@@ -12,7 +12,7 @@ public class Picturerecommend implements Serializable {
      * 蜜图id
      */
     private Integer pid;
-    private Picture picture;
+    private Picture1 picture;
     /**
      * 排序
      */
@@ -76,11 +76,11 @@ public class Picturerecommend implements Serializable {
         this.period = period;
     }
 
-	public Picture getPicture() {
+	public Picture1 getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(Picture1 picture) {
 		this.picture = picture;
 	}
     

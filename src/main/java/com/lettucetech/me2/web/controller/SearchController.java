@@ -31,7 +31,7 @@ import com.lettucetech.me2.pojo.CustomerPrivilege;
 import com.lettucetech.me2.pojo.Gameprop;
 import com.lettucetech.me2.pojo.Message;
 import com.lettucetech.me2.pojo.Mytask;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.pojo.Present;
 import com.lettucetech.me2.pojo.Prop;
 import com.lettucetech.me2.pojo.Task;
@@ -42,7 +42,7 @@ import com.lettucetech.me2.service.GamepropService;
 import com.lettucetech.me2.service.GradeService;
 import com.lettucetech.me2.service.MessageService;
 import com.lettucetech.me2.service.MytaskService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.PresentService;
 import com.lettucetech.me2.service.PropService;
 import com.lettucetech.me2.service.TaskService;
@@ -59,7 +59,7 @@ public class SearchController {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private TaskService taskService;
 	@Autowired
@@ -93,7 +93,7 @@ public class SearchController {
 		
 		Criteria example=new Criteria();
 		example.put("customerId",customerId);
-		List<Picture> list=pictureService.selectByParams(example);
+		List<Picture1> list=pictureService.selectByParams(example);
 		
 		RestfulResult result=new RestfulResult();
 		result.setSuccess(true);
@@ -198,7 +198,7 @@ public class SearchController {
 		example.put("token", pictype);
 		
 		
-		List<Picture> picture=pictureService.selectByParams(example);
+		List<Picture1> picture=pictureService.selectByParams(example);
 		
 		
 		RestfulResult result = new RestfulResult();
@@ -291,7 +291,7 @@ public class SearchController {
 		Present present=new Present();
 		present.setCreateTime(new Date());
 		present.setCustomerId(Integer.valueOf(customerId));
-		Picture picture=pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		Picture1 picture=pictureService.selectByPrimaryKey(Integer.valueOf(pid));
 		present.setPresentCustomerId(picture.getCustomerId());
 		present.setPresentType(Integer.valueOf(proptype));
 		presentService.insertSelective(present);
@@ -390,10 +390,10 @@ public class SearchController {
 				messageService.insertSelective(record);
 		example.clear();
 		example.put("customerId", customerId);
-		List<Picture> pictures=pictureService.selectByParams(example);
+		List<Picture1> pictures=pictureService.selectByParams(example);
 		int sum=0;
 		//获取该用户的所有密图的热度综合,作为积分
-		for (Picture picture2 : pictures) {
+		for (Picture1 picture2 : pictures) {
 			int a =picture2.getHits();
 			sum+=a;
 		}

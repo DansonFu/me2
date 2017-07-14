@@ -2,11 +2,15 @@ package com.lettucetech.me2.web.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
+
 
 import com.lettucetech.me2.common.utils.SignUtil;
 
@@ -15,14 +19,16 @@ import com.lettucetech.me2.common.utils.SignUtil;
 
 public class CoreServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 4323197796926899691L;
+    private static final long serialVersionUID = 5323197796959899692L;
 
     /**
      * 确认请求来自微信服务器
      */
+    
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+    	Collection<String> url =response.getHeaders(getServletName());
         // 微信加密签名
         String signature = request.getParameter("signature");
         // 时间戳

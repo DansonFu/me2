@@ -30,14 +30,14 @@ import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.CustomerPrivilege;
 import com.lettucetech.me2.pojo.Message;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.pojo.Privilege;
 import com.lettucetech.me2.service.AdvertisService;
 import com.lettucetech.me2.service.AttentionService;
 import com.lettucetech.me2.service.CustomerPrivilegeService;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.MessageService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.PrivilegeService;
 import com.squareup.okhttp.Request;
 
@@ -54,7 +54,7 @@ public class IndexController {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private AttentionService attentionService;
 	@Autowired
@@ -314,7 +314,7 @@ public class IndexController {
 					example.put("front", "a");
 					example.setMysqlOffset(Integer.valueOf(offset));
 					example.setMysqlLength(Integer.valueOf(length));
-					List<Picture> pictures  =pictureService.selectByParams(example);
+					List<Picture1> pictures  =pictureService.selectByParams(example);
 					list2.add(pictures);
 				}
 			}

@@ -9,7 +9,7 @@ public class Picturehot implements Serializable {
 
     private Integer pid;
     
-    private Picture picture;
+    private Picture1 picture;
     
     private Integer tagslistId;
 
@@ -37,11 +37,11 @@ public class Picturehot implements Serializable {
         this.pid = pid;
     }
 
-	public Picture getPicture() {
+	public Picture1 getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(Picture1 picture) {
 		this.picture = picture;
 	}
     

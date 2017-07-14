@@ -18,18 +18,18 @@ public class Collect implements Serializable {
      */
     private Integer pid;
     
-    private Picture picture;
+    private Picture1 picture;
     
     /**
      * 收藏时间
      */
     private Date createTime;
 
-    public Picture getPicture() {
+    public Picture1 getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(Picture1 picture) {
 		this.picture = picture;
 	}
 

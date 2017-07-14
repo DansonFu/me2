@@ -1,588 +1,200 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lettucetech.me2.dao.PictureMapper" >
-  <resultMap id="BaseResultMap" type="com.lettucetech.me2.pojo.Picture" >
-    <id column="pid" property="pid" jdbcType="INTEGER" />
-    <result column="qiniukey" property="qiniukey" jdbcType="VARCHAR" />
-    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
-    <result column="hits" property="hits" jdbcType="INTEGER" />
-    <result column="mood" property="mood" jdbcType="VARCHAR" />
-    <result column="front" property="front" jdbcType="CHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
-    <result column="agree" property="agree" jdbcType="INTEGER" />
-    <result column="disagree" property="disagree" jdbcType="INTEGER" />
-    <result column="location_title" property="locationTitle" jdbcType="VARCHAR" />
-    <result column="location_content" property="locationContent" jdbcType="VARCHAR" />
-    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
-    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
-    <result column="tags" property="tags" jdbcType="VARCHAR" />
-    <result column="anonymity" property="anonymity" jdbcType="CHAR" />
-    <result column="game_id" property="gameId" jdbcType="INTEGER" />
-    <result column="del" property="del" jdbcType="CHAR" />
-    <result column="recommend" property="recommend" jdbcType="CHAR" />
-    <result column="at_customer_id" property="atCustomerId" jdbcType="INTEGER" />
-    <result column="at_seen" property="atSeen" jdbcType="CHAR" />
-    <result column="token" property="token" jdbcType="VARCHAR" />
-    <association property="customer" column="customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
-    <association property="atCustomer" column="at_customer_id"	select="com.lettucetech.me2.dao.CustomerMapper.selectByPrimaryKey"></association>
-    <association property="commentCount" column="{condition.pid=pid}"	select="com.lettucetech.me2.dao.CommentMapper.countByParams"></association>
-    <collection property="bpicture" column="pid" select="getChild"></collection>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanson.dao.PictureMapper">
+  <resultMap id="BaseResultMap" type="cn.lanson.pojo.Picture">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="qiniuKey" jdbcType="VARCHAR" property="qiniukey" />
+    <result column="picUrl" jdbcType="VARCHAR" property="picurl" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <trim prefix="where" prefixOverrides="and|or" >
-      <if test="condition.qiniukey != null" >
-         and qiniukey = #{condition.qiniukey}
-      </if>
-      <if test="condition.customerId != null" >
-         and customer_id = #{condition.customerId}
-      </if>
-      <if test="condition.creatTime != null" >
-         and creat_time = #{condition.creatTime}
-      </if>
-      <if test="condition.hits != null" >
-         and hits = #{condition.hits}
-      </if>
-      <if test="condition.mood != null" >
-         and mood = #{condition.mood}
-      </if>
-      <if test="condition.front != null" >
-         and front = #{condition.front}
-      </if>
-      <if test="condition.type != null" >
-         and type = #{condition.type}
-      </if>
-      <if test="condition.parentId != null" >
-         and parent_id = #{condition.parentId}
-      </if>
-      <if test="condition.agree != null" >
-         and agree = #{condition.agree}
-      </if>
-      <if test="condition.disagree != null" >
-         and disagree = #{condition.disagree}
-      </if>
-      <if test="condition.locationTitle != null" >
-         and location_title = #{condition.locationTitle}
-      </if>
-      <if test="condition.locationContent != null" >
-         and location_content = #{condition.locationContent}
-      </if>
-      <if test="condition.longitude != null" >
-         and longitude = #{condition.longitude}
-      </if>
-      <if test="condition.latitude != null" >
-         and latitude = #{condition.latitude}
-      </if>
-      <if test="condition.tags != null" >
-         and tags = #{condition.tags}
-      </if>
-      <if test="condition.anonymity != null" >
-         and anonymity = #{condition.anonymity}
-      </if>
-      <if test="condition.gameId != null" >
-         and game_id = #{condition.gameId}
-      </if>
-      <if test="condition.del != null" >
-         and del = #{condition.del}
-      </if>
-      <if test="condition.recommend != null" >
-         and recommend = #{condition.recommend}
-      </if>
-      <if test="condition.atCustomerId != null" >
-         and at_customer_id = #{condition.atCustomerId}
-      </if>
-      <if test="condition.atSeen != null" >
-         and at_seen = #{condition.atSeen}
-      </if>
-      <if test="condition.token != null" >
-         and token = #{condition.token}
-      </if>
-    </trim>
+  <sql id="Base_Column_List">
+    id, name, qiniuKey, picUrl, status, createtime, updatetime
   </sql>
-  <sql id="Base_Column_List" >
-    pid, qiniukey, customer_id, creat_time, hits, mood, front, type, parent_id, agree, 
-    disagree, location_title, location_content, longitude, latitude, tags, anonymity, 
-    game_id, del, recommend, at_customer_id, at_seen,token
-  </sql>
-  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from picture
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause} ${sord}
-    </if>
-    <include refid="common.Mysql_Pagination_Limit" />
-  </select>
-  <select id="selectByParamsCustomerIdSearch" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from picture
-    <where>
-    	<if test="condition.customerId != null" >
-    	customer_id=#{condition.customerId}
-    	</if>
-    </where>
-    </select>
-  <select id="selectByParamsTagSearch" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from picture
-    <where>
-    	front='a'
-    <if test="condition.del != null" >
-         and del = #{condition.del}
-      </if>
-      <if test="condition.taglist != null" >
-      	  <if test="condition.type == 0" >
-	         <foreach collection="condition.taglist" item="tag"  separator="or" open="and (" close=")">
-	         	 tags like '%${tag}%'
-	         </foreach>
-          </if>
-          <if test="condition.type == 1" >
-	         <foreach collection="condition.taglist" item="tag"  separator="and" open="and (" close=")">
-	         	 tags =#{tag}
-	         </foreach>
-          </if>
-      </if>
-    </where>
-    <if test="orderByClause != null" >
-      order by ${orderByClause} desc
-    </if>
-    <include refid="common.Mysql_Pagination_Limit" />
-  </select>
-  
-  <select id="getChild" resultMap="BaseResultMap" parameterType="int" >
-    select * from picture where parent_id=#{pid}
-  </select>
-  <select id="selectByParams4Rand" resultMap="BaseResultMap" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    SELECT a.* FROM picture a left join picture b on a.pid=b.parent_id
-    <where>
-    	a.pid>=(SELECT floor( RAND() * ((SELECT MAX(pid) FROM picture)-(SELECT MIN(pid) FROM picture)) + (SELECT MIN(pid) FROM picture)))
-       <if test="condition.front != null" >
-         and a.front = #{condition.front}
-      </if>
-      <if test="condition.qiniukey != null" >
-         and a.qiniukey = #{condition.qiniukey}
-      </if>
-      <if test="condition.customerId != null" >
-         and a.customer_id = #{condition.customerId}
-      </if>
-      <if test="condition.tags != null" >
-         and a.tags = #{condition.tags}
-      </if>
-      <if test="condition.anonymity != null" >
-         and a.anonymity = #{condition.anonymity}
-      </if>
-      <if test="condition.gameId != null" >
-         and a.game_id = #{condition.gameId}
-      </if>
-      <if test="condition.gameId != null" >
-         and a.token = #{condition.token}
-      </if>
-      <!-- 是否只查包括B面的列表 -->
-      <if test="condition.includeb == 'yes'" >
-         and b.parent_id is not null
-      </if>
-    </where>
-	LIMIT 10
-  </select>
-  
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from picture
-    where pid = #{pid}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from picture
-    where pid = #{pid}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByParams" parameterType="com.lettucetech.me2.pojo.Criteria" >
-    delete from picture
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.lettucetech.me2.pojo.Picture" >
-    insert into picture (pid, qiniukey, customer_id, creat_time, hits, mood, front, 
-      type, parent_id, agree, disagree, location_title, location_content, 
-      longitude, latitude, tags, anonymity, game_id, del, recommend, 
-      at_customer_id, at_seen,token)
-    values (#{pid}, #{qiniukey}, #{customerId}, #{creatTime}, #{hits}, #{mood}, #{front}, 
-      #{type}, #{parentId}, #{agree}, #{disagree}, #{locationTitle}, #{locationContent}, 
-      #{longitude}, #{latitude}, #{tags}, #{anonymity}, #{gameId}, #{del}, #{recommend}, 
-      #{atCustomerId}, #{atSeen},#{token})
+  <insert id="insert" parameterType="cn.lanson.pojo.Picture">
+    insert into picture (id, name, qiniuKey, 
+      picUrl, status, createtime, 
+      updatetime)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{qiniukey,jdbcType=VARCHAR}, 
+      #{picurl,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
   </insert>
-  
-  <insert id="insertSelective" parameterType="com.lettucetech.me2.pojo.Picture" >
-   <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
-		SELECT LAST_INSERT_ID()
-	</selectKey>
+  <insert id="insertSelective" parameterType="cn.lanson.pojo.Picture">
     insert into picture
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="pid != null" >
-        pid,
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
       </if>
-      <if test="qiniukey != null" >
-        qiniukey,
+      <if test="name != null">
+        name,
       </if>
-      <if test="customerId != null" >
-        customer_id,
+      <if test="qiniukey != null">
+        qiniuKey,
       </if>
-      <if test="creatTime != null" >
-        creat_time,
+      <if test="picurl != null">
+        picUrl,
       </if>
-      <if test="hits != null" >
-        hits,
+      <if test="status != null">
+        status,
       </if>
-      <if test="mood != null" >
-        mood,
+      <if test="createtime != null">
+        createtime,
       </if>
-      <if test="front != null" >
-        front,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="parentId != null" >
-        parent_id,
-      </if>
-      <if test="agree != null" >
-        agree,
-      </if>
-      <if test="disagree != null" >
-        disagree,
-      </if>
-      <if test="locationTitle != null" >
-        location_title,
-      </if>
-      <if test="locationContent != null" >
-        location_content,
-      </if>
-      <if test="longitude != null" >
-        longitude,
-      </if>
-      <if test="latitude != null" >
-        latitude,
-      </if>
-      <if test="tags != null" >
-        tags,
-      </if>
-      <if test="anonymity != null" >
-        anonymity,
-      </if>
-      <if test="gameId != null" >
-        game_id,
-      </if>
-      <if test="del != null" >
-        del,
-      </if>
-      <if test="recommend != null" >
-        recommend,
-      </if>
-      <if test="atCustomerId != null" >
-        at_customer_id,
-      </if>
-      <if test="atSeen != null" >
-        at_seen,
-      </if>
-      <if test="token != null" >
-        token,
+      <if test="updatetime != null">
+        updatetime,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="pid != null" >
-        #{pid},
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
       </if>
-      <if test="qiniukey != null" >
-        #{qiniukey},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
-      <if test="customerId != null" >
-        #{customerId},
+      <if test="qiniukey != null">
+        #{qiniukey,jdbcType=VARCHAR},
       </if>
-      <if test="creatTime != null" >
-        #{creatTime},
+      <if test="picurl != null">
+        #{picurl,jdbcType=VARCHAR},
       </if>
-      <if test="hits != null" >
-        #{hits},
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
       </if>
-      <if test="mood != null" >
-        #{mood},
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="front != null" >
-        #{front},
-      </if>
-      <if test="type != null" >
-        #{type},
-      </if>
-      <if test="parentId != null" >
-        #{parentId},
-      </if>
-      <if test="agree != null" >
-        #{agree},
-      </if>
-      <if test="disagree != null" >
-        #{disagree},
-      </if>
-      <if test="locationTitle != null" >
-        #{locationTitle},
-      </if>
-      <if test="locationContent != null" >
-        #{locationContent},
-      </if>
-      <if test="longitude != null" >
-        #{longitude},
-      </if>
-      <if test="latitude != null" >
-        #{latitude},
-      </if>
-      <if test="tags != null" >
-        #{tags},
-      </if>
-      <if test="anonymity != null" >
-        #{anonymity},
-      </if>
-      <if test="gameId != null" >
-        #{gameId},
-      </if>
-      <if test="del != null" >
-        #{del},
-      </if>
-      <if test="recommend != null" >
-        #{recommend},
-      </if>
-      <if test="atCustomerId != null" >
-        #{atCustomerId},
-      </if>
-      <if test="atSeen != null" >
-        #{atSeen},
-      </if>
-      <if test="token != null" >
-        #{token},
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByParams" parameterType="com.lettucetech.me2.pojo.Criteria" resultType="java.lang.Integer" >
-    select count(*) from picture
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.lanson.pojo.Picture">
+    update picture
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="qiniukey != null">
+        qiniuKey = #{qiniukey,jdbcType=VARCHAR},
+      </if>
+      <if test="picurl != null">
+        picUrl = #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.lanson.pojo.Picture">
+    update picture
+    set name = #{name,jdbcType=VARCHAR},
+      qiniuKey = #{qiniukey,jdbcType=VARCHAR},
+      picUrl = #{picurl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="cn.lanson.pojo.Picture">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="qiniuKey" jdbcType="VARCHAR" property="qiniukey" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, qiniuKey, createtime, updatetime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from picture
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <update id="updateByParamsSelective" parameterType="map" >
+  <select id="findAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from picture
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from picture
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.lanson.pojo.Picture">
+    insert into picture (id, qiniuKey, createtime, 
+      updatetime)
+    values (#{id,jdbcType=INTEGER}, #{qiniukey,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.lanson.pojo.Picture">
+    insert into picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="qiniukey != null">
+        qiniuKey,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="qiniukey != null">
+        #{qiniukey,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.lanson.pojo.Picture">
     update picture
-    <set >
-      <if test="record.pid != null" >
-        pid = #{record.pid},
+    <set>
+      <if test="qiniukey != null">
+        qiniuKey = #{qiniukey,jdbcType=VARCHAR},
       </if>
-      <if test="record.qiniukey != null" >
-        qiniukey = #{record.qiniukey},
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.customerId != null" >
-        customer_id = #{record.customerId},
-      </if>
-      <if test="record.creatTime != null" >
-        creat_time = #{record.creatTime},
-      </if>
-      <if test="record.hits != null" >
-        hits = #{record.hits},
-      </if>
-      <if test="record.mood != null" >
-        mood = #{record.mood},
-      </if>
-      <if test="record.front != null" >
-        front = #{record.front},
-      </if>
-      <if test="record.type != null" >
-        type = #{record.type},
-      </if>
-      <if test="record.parentId != null" >
-        parent_id = #{record.parentId},
-      </if>
-      <if test="record.agree != null" >
-        agree = #{record.agree},
-      </if>
-      <if test="record.disagree != null" >
-        disagree = #{record.disagree},
-      </if>
-      <if test="record.locationTitle != null" >
-        location_title = #{record.locationTitle},
-      </if>
-      <if test="record.locationContent != null" >
-        location_content = #{record.locationContent},
-      </if>
-      <if test="record.longitude != null" >
-        longitude = #{record.longitude},
-      </if>
-      <if test="record.latitude != null" >
-        latitude = #{record.latitude},
-      </if>
-      <if test="record.tags != null" >
-        tags = #{record.tags},
-      </if>
-      <if test="record.anonymity != null" >
-        anonymity = #{record.anonymity},
-      </if>
-      <if test="record.gameId != null" >
-        game_id = #{record.gameId},
-      </if>
-      <if test="record.del != null" >
-        del = #{record.del},
-      </if>
-      <if test="record.recommend != null" >
-        recommend = #{record.recommend},
-      </if>
-      <if test="record.atCustomerId != null" >
-        at_customer_id = #{record.atCustomerId},
-      </if>
-      <if test="record.atSeen != null" >
-        at_seen = #{record.atSeen},
-      </if>
-       <if test="record.token != null" >
-        token = #{record.token},
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
+    where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByParams" parameterType="map" >
+  <update id="updateByPrimaryKey" parameterType="cn.lanson.pojo.Picture">
     update picture
-    set pid = #{record.pid},
-      qiniukey = #{record.qiniukey},
-      customer_id = #{record.customerId},
-      creat_time = #{record.creatTime},
-      hits = #{record.hits},
-      mood = #{record.mood},
-      front = #{record.front},
-      type = #{record.type},
-      parent_id = #{record.parentId},
-      agree = #{record.agree},
-      disagree = #{record.disagree},
-      location_title = #{record.locationTitle},
-      location_content = #{record.locationContent},
-      longitude = #{record.longitude},
-      latitude = #{record.latitude},
-      tags = #{record.tags},
-      anonymity = #{record.anonymity},
-      game_id = #{record.gameId},
-      del = #{record.del},
-      recommend = #{record.recommend},
-      at_customer_id = #{record.atCustomerId},
-      at_seen = #{record.atSeen},
-      token= #{record.token}
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lettucetech.me2.pojo.Picture" >
-    update picture
-    <set >
-      <if test="qiniukey != null" >
-        qiniukey = #{qiniukey},
-      </if>
-      <if test="customerId != null" >
-        customer_id = #{customerId},
-      </if>
-      <if test="creatTime != null" >
-        creat_time = #{creatTime},
-      </if>
-      <if test="hits != null" >
-        hits = #{hits},
-      </if>
-      <if test="mood != null" >
-        mood = #{mood},
-      </if>
-      <if test="front != null" >
-        front = #{front},
-      </if>
-      <if test="type != null" >
-        type = #{type},
-      </if>
-      <if test="parentId != null" >
-        parent_id = #{parentId},
-      </if>
-      <if test="agree != null" >
-        agree = #{agree},
-      </if>
-      <if test="disagree != null" >
-        disagree = #{disagree},
-      </if>
-      <if test="locationTitle != null" >
-        location_title = #{locationTitle},
-      </if>
-      <if test="locationContent != null" >
-        location_content = #{locationContent},
-      </if>
-      <if test="longitude != null" >
-        longitude = #{longitude},
-      </if>
-      <if test="latitude != null" >
-        latitude = #{latitude},
-      </if>
-      <if test="tags != null" >
-        tags = #{tags},
-      </if>
-      <if test="anonymity != null" >
-        anonymity = #{anonymity},
-      </if>
-      <if test="gameId != null" >
-        game_id = #{gameId},
-      </if>
-      <if test="del != null" >
-        del = #{del},
-      </if>
-      <if test="recommend != null" >
-        recommend = #{recommend},
-      </if>
-      <if test="atCustomerId != null" >
-        at_customer_id = #{atCustomerId},
-      </if>
-      <if test="atSeen != null" >
-        at_seen = #{atSeen},
-      </if>
-      <if test="token != null" >
-        token = #{token},
-      </if>
-    </set>
-    where pid = #{pid}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.lettucetech.me2.pojo.Picture" >
-    update picture
-    set qiniukey = #{qiniukey},
-      customer_id = #{customerId},
-      creat_time = #{creatTime},
-      hits = #{hits},
-      mood = #{mood},
-      front = #{front},
-      type = #{type},
-      parent_id = #{parentId},
-      agree = #{agree},
-      disagree = #{disagree},
-      location_title = #{locationTitle},
-      location_content = #{locationContent},
-      longitude = #{longitude},
-      latitude = #{latitude},
-      tags = #{tags},
-      anonymity = #{anonymity},
-      game_id = #{gameId},
-      del = #{del},
-      recommend = #{recommend},
-      at_customer_id = #{atCustomerId},
-      at_seen = #{atSeen},
-      token= #{token}
-    where pid = #{pid}
+    set qiniuKey = #{qiniukey,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

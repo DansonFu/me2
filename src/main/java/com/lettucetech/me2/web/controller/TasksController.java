@@ -21,7 +21,7 @@ import com.lettucetech.me2.common.utils.DateUtil;
 import com.lettucetech.me2.common.utils.JsonUtil;
 import com.lettucetech.me2.dao.TagshotMapper;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;

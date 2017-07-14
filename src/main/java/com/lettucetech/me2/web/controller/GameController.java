@@ -23,12 +23,12 @@ import com.lettucetech.me2.pojo.Game;
 import com.lettucetech.me2.pojo.Gamecustomer;
 import com.lettucetech.me2.pojo.Gameface;
 import com.lettucetech.me2.pojo.Message;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.service.CustomerService;
 import com.lettucetech.me2.service.GamecustomerService;
 import com.lettucetech.me2.service.GamefaceService;
 import com.lettucetech.me2.service.MessageService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.impl.GameServiceImpl;
 
 
@@ -41,7 +41,7 @@ public class GameController {
 	@Autowired
 	private GamefaceService gamefaceService;
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private MessageService messageService;
 	@Autowired
@@ -112,7 +112,7 @@ public class GameController {
 		if(i==1){
 			result.setSuccess(true);
 			//增加热度
-			Picture picture = pictureService.selectByPrimaryKey(gameface.getPid());
+			Picture1 picture = pictureService.selectByPrimaryKey(gameface.getPid());
 			picture.setHits(picture.getHits() + Me2Constants.METOOHOTVALUE);
 			pictureService.updateByPrimaryKeySelective(picture);
 			

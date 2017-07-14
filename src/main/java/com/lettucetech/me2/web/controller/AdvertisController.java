@@ -24,7 +24,7 @@ import com.lettucetech.me2.common.utils.StringUtil;
 import com.lettucetech.me2.common.utils.QiniuUtil.MyRet;
 import com.lettucetech.me2.pojo.Advertis;
 import com.lettucetech.me2.pojo.Criteria;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.Recommend;
 import com.lettucetech.me2.pojo.TXtMetoo;

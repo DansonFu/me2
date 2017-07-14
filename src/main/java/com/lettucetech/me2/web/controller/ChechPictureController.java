@@ -31,13 +31,13 @@ import com.lettucetech.me2.pojo.Comment;
 import com.lettucetech.me2.pojo.Criteria;
 import com.lettucetech.me2.pojo.Customer;
 import com.lettucetech.me2.pojo.Game;
-import com.lettucetech.me2.pojo.Picture;
+import com.lettucetech.me2.pojo.Picture1;
 import com.lettucetech.me2.pojo.Picturerecommend;
 import com.lettucetech.me2.pojo.TXtMetoo;
 import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.service.CommentService;
 import com.lettucetech.me2.service.GameService;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TXtMetooService;
 import com.lettucetech.me2.web.form.DataTablePaginationForm;
@@ -46,7 +46,7 @@ import com.qiniu.http.Response;
 @Controller
 public class ChechPictureController {
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private TXtMetooService metooService;
 	@Autowired
@@ -131,11 +131,11 @@ public class ChechPictureController {
 //		}
 //	    
         int count = pictureService.countByParams(example);
-        List<Picture> ps = pictureService.selectByParams(example);
+        List<Picture1> ps = pictureService.selectByParams(example);
 	    
 	    //拼接翻页数据
 	    List list = new ArrayList();
-		for(Picture pp : ps){
+		for(Picture1 pp : ps){
 			
 			//if(pp.getTags().contains(id)){
 			
@@ -343,7 +343,7 @@ public class ChechPictureController {
 	@RequestMapping("/admin/save/commend")
 	public ModelAndView savecommendmetoo(HttpSession session,String pid){
 	    
-		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		Picture1 p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
 		String a = p.getRecommend();
 		
 		if("0".equals(a)){
@@ -409,7 +409,7 @@ public class ChechPictureController {
 	 */
 	@RequestMapping("/admin/delcheckmetoo/commend")
 	public  ModelAndView delcheckdmetoo(HttpSession session,String pid){
-		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		Picture1 p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
 //		if("0".equals(p.getDel())){
 			  p.setDel("1");
 			  pictureService.updateByPrimaryKeySelective(p);
@@ -432,7 +432,7 @@ public class ChechPictureController {
 	 */
 	@RequestMapping("/admin/delcheckmetooa/commend")
 	public  ModelAndView delcheckdmetooa(HttpSession session,String pid){
-		Picture p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
+		Picture1 p = pictureService.selectByPrimaryKey(Integer.valueOf(pid));
 //		if("1".equals(p.getDel())){
 			p.setDel("0");
 			  pictureService.updateByPrimaryKeySelective(p);
@@ -736,7 +736,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	 */
 	@RequestMapping("/admin/viewcheckpicture")
 	public ModelAndView viewmetoopicture(HttpSession session,String pid) {
-		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
+		Picture1 picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
 		picture.setTags(picture.getTags().replace(",", "#"));
 		if(picture.getBpicture()!=null && ("1".equals(picture.getBpicture().getType())||
 				"3".equals(picture.getBpicture().getType())||"4".equals(picture.getBpicture().getType())))
@@ -799,7 +799,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 			}
 		}
 		//a面
-		Picture ap = new Picture();
+		Picture1 ap = new Picture1();
 		
 		ap.setPid(Integer.valueOf(pid));
 		ap.setQiniukey(akey);
@@ -829,7 +829,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 			}
 			
 			//B面
-			Picture bp = new Picture();
+			Picture1 bp = new Picture1();
 			bp.setQiniukey(bkey);
 			bp.setFront("b");
 			bp.setType(type);
@@ -885,7 +885,7 @@ public void  getCommentContent(HttpSession session,HttpServletResponse response,
 	 */
 	@RequestMapping("admin/viewcheckmetoopicture")
 	public ModelAndView viewcheckmetoopicture(HttpSession session,String pid) {
-		Picture picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
+		Picture1 picture = pictureService.selectByPrimaryKey(Integer.parseInt(pid));
 		picture.setTags(picture.getTags().replace(",", "#"));
 		if(picture.getBpicture()!=null && ("1".equals(picture.getBpicture().getType())||
 				"3".equals(picture.getBpicture().getType())||"4".equals(picture.getBpicture().getType())))

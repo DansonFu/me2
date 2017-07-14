@@ -22,7 +22,7 @@ public class Message implements Serializable {
      * 蜜图ID
      */
     private Integer pid;
-    private Picture picture;
+    private Picture1 picture;
     /**
      * 消息类型：1、申请解蜜消息 2、解蜜达成 3、点赞 4、踩 5、评论 6,关注成功 7,取消关注,8,升级,9,送花成功
      */
@@ -157,11 +157,11 @@ public class Message implements Serializable {
         this.content = content;
     }
 
-	public Picture getPicture() {
+	public Picture1 getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(Picture1 picture) {
 		this.picture = picture;
 	}
 

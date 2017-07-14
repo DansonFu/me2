@@ -28,7 +28,7 @@ import com.lettucetech.me2.pojo.TXtUser;
 import com.lettucetech.me2.pojo.Taglist;
 import com.lettucetech.me2.pojo.Tagsconnection;
 import com.lettucetech.me2.pojo.Tagshot;
-import com.lettucetech.me2.service.PictureService;
+import com.lettucetech.me2.service.Picture1Service;
 import com.lettucetech.me2.service.PicturehotService;
 import com.lettucetech.me2.service.PicturerecommendService;
 import com.lettucetech.me2.service.TaglistService;
@@ -40,7 +40,7 @@ import com.lettucetech.me2.web.form.DataTablePaginationForm;
 @Controller
 public class TagsSelectiveController {
 	@Autowired
-	private PictureService pictureService;
+	private Picture1Service pictureService;
 	@Autowired
 	private PicturehotService picturehotService;
 	@Autowired
